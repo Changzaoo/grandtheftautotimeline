@@ -511,6 +511,13 @@ select:focus{
 .dossier-cover-media figcaption,
 .dossier-mugshot-media figcaption,
 .dossier-city-media figcaption,
+.dossier-faction-media figcaption,
+.dossier-universe-media figcaption,
+.dossier-rockstar-media figcaption,
+.dossier-founder-media figcaption,
+.dossier-online-hero-media figcaption,
+.dossier-online-update-media figcaption,
+.dossier-glossary-media figcaption,
 .dossier-leonida-media figcaption{left:auto;right:8px;top:8px;bottom:auto;max-width:80%;font-size:8px}
 .dossier-cover-art span,
 .dossier-cover-art strong,
@@ -561,9 +568,18 @@ select:focus{
 
 .dossier-faction-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .dossier-faction-card{padding:18px}
+.dossier-faction-visual{position:relative;height:150px;margin-bottom:14px;border:1px solid rgba(255,255,255,.12);border-radius:6px;overflow:hidden;background:linear-gradient(135deg,#171014,#0b0b10);display:flex;align-items:flex-end;padding:10px}
+.dossier-faction-visual.has-official{padding:0}
+.dossier-faction-visual.has-official::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.16) 40%,rgba(0,0,0,.76))}
+.dossier-faction-media{position:absolute;inset:0;z-index:0;border:0;border-radius:0}
+.dossier-faction-media img{filter:saturate(1.08) contrast(1.06)}
 .dossier-faction-mark{width:54px;height:54px;border-radius:8px;border:1px solid rgba(255,42,42,.4);display:grid;place-items:center;color:var(--siren);font-weight:900;background:rgba(255,42,42,.08);margin-bottom:14px}
+.dossier-faction-visual .dossier-faction-mark{position:relative;z-index:2;margin:0;background:rgba(10,10,13,.78);backdrop-filter:blur(8px)}
 
 .dossier-universe-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.dossier-universe-card{overflow:hidden}
+.dossier-universe-media{height:170px;border:0;border-radius:0;border-bottom:1px solid var(--line)}
+.dossier-universe-media img{filter:saturate(1.1) contrast(1.04)}
 .dossier-universe-top{padding:22px;border-bottom:1px solid var(--line)}
 .dossier-universe-top span{font-family:"Space Mono",monospace;color:var(--grit);font-size:11px}
 .dossier-universe-top h3{font-size:40px;margin:8px 0}
@@ -576,19 +592,25 @@ select:focus{
 
 .dossier-rockstar-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:24px}
 .dossier-rockstar-timeline{display:grid;gap:14px}
-.dossier-rockstar-row{display:grid;grid-template-columns:120px 1fr;gap:18px;padding:18px}
+.dossier-rockstar-row{display:grid;grid-template-columns:120px 170px 1fr;gap:18px;padding:18px;align-items:start}
 .dossier-rockstar-year{color:var(--evidence);font-size:28px;font-weight:900}
+.dossier-rockstar-media{height:120px;border-radius:6px}
 .dossier-founder-panel{position:sticky;top:92px;align-self:start;padding:22px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(180deg,rgba(28,28,34,.92),rgba(15,15,19,.92))}
+.dossier-founder-media{height:180px;margin:12px 0 14px;border-radius:6px}
 .dossier-founder-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:16px 0}
 .dossier-founder-grid span{padding:10px;border:1px solid rgba(245,197,24,.18);border-radius:6px;background:rgba(245,197,24,.06);color:#ffe69a;font-size:13px}
 
 .dossier-online-intro{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:stretch;margin-bottom:22px}
 .dossier-online-intro h3{font-size:42px;margin-bottom:10px}
+.dossier-online-side{display:grid;gap:10px}
+.dossier-online-hero-media{height:190px;border-radius:8px}
 .dossier-online-metrics{display:grid;gap:10px}
 .dossier-online-metrics span{display:flex;justify-content:space-between;gap:10px;padding:14px;border:1px solid rgba(74,222,128,.22);border-radius:8px;background:rgba(74,222,128,.06);color:var(--bone-2)}
 .dossier-online-metrics strong{color:var(--money)}
 .dossier-online-timeline{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .dossier-online-timeline article{padding:18px}
+.dossier-online-update-media{height:124px;margin:-18px -18px 14px;border:0;border-bottom:1px solid var(--line);border-radius:8px 8px 0 0}
+.dossier-online-update-media img{filter:saturate(1.1) contrast(1.04)}
 .dossier-online-timeline span{color:var(--money);font-weight:900}
 .dossier-online-timeline h3{font-size:24px;margin:6px 0}
 
@@ -612,7 +634,9 @@ select:focus{
 .dossier-fact-columns .unconfirmed{border-color:rgba(255,42,42,.35)}
 
 .dossier-glossary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.dossier-glossary-item{padding:18px}
+.dossier-glossary-item{padding:18px;overflow:hidden}
+.dossier-glossary-media{height:96px;margin:-18px -18px 14px;border:0;border-bottom:1px solid var(--line);border-radius:8px 8px 0 0}
+.dossier-glossary-media img{filter:saturate(1.08) contrast(1.05)}
 .dossier-glossary-item h3{font-size:24px;color:var(--evidence);margin-bottom:8px}
 .dossier-extra-block{padding-top:42px}
 .dossier-extra-block.compact{padding-top:32px}

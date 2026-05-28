@@ -3227,6 +3227,14 @@ const officialMediaData = {
     caption: "Rockstar Games - GTA VI Artwork & Wallpapers",
     source: rsgVIArtwork
   },
+  gtaOnlineHero: {
+    src: "https://media-rockstargames-com.akamaized.net/tina-uploads/tina-modules/gta-online/7ec5f9605b1524c2fe73e655f053725b05359458.jpg",
+    alt: "Imagem oficial de Grand Theft Auto Online",
+    credit: mediaCredit,
+    caption: "Rockstar Games - GTA Online",
+    source: rsgOnlineSource,
+    position: "center"
+  },
   sources: [
     { label: "GTA VI - pagina oficial", url: rsgVI, note: "Hero, personagens e sinopse de Lucia/Jason." },
     { label: "GTA VI - screenshots oficiais", url: rsgVIScreens, note: "Screenshots de Lucia, Jason, Vice City, Leonida e regioes." },
@@ -3275,6 +3283,27 @@ const officialMediaByGameId = {
   "gta-online": officialImage("https://media-rockstargames-com.akamaized.net/tina-uploads/tina-modules/gta-online/7ec5f9605b1524c2fe73e655f053725b05359458.jpg", "Imagem oficial de Grand Theft Auto Online", rsgOnlineSource),
   "trilogy-definitive": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/fabc3ff8a64105c4d8ac1aadbeffb3a9.jpg", "Box art oficial de Grand Theft Auto: The Trilogy - The Definitive Edition", rsgTrilogySource),
   "gta-vi": officialImage("https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_01_landscape.0e2a6544.jpg", "Arte oficial de GTA VI com Lucia e Jason", rsgVIArtwork, "Rockstar Games - GTA VI Artwork & Wallpapers")
+};
+
+const gtaWikiGameMediaById = {
+  "gta-1": gtaWikiImage("Grand Theft Auto (1997 game)", "https://static.wikia.nocookie.net/gtawiki/images/8/80/GTA1_Box_Art.jpg/revision/latest/scale-to-width-down/972?cb=20240224110526", { fit: "contain" }),
+  "london-1969": gtaWikiImage("Grand Theft Auto: London 1969", "https://static.wikia.nocookie.net/gtawiki/images/f/fc/GTA_London_1969_Box_Art.jpg/revision/latest/scale-to-width-down/972?cb=20240225010807", { fit: "contain" }),
+  "london-1961": gtaWikiImage("Grand Theft Auto: London 1961", "https://static.wikia.nocookie.net/gtawiki/images/7/7a/GTALondon1961-InfoboxImage.jpg/revision/latest/scale-to-width-down/972?cb=20250831025636", { fit: "contain" }),
+  "gta-2": gtaWikiImage("Grand Theft Auto 2", "https://static.wikia.nocookie.net/gtawiki/images/4/40/GTA2_Box_Art.jpg/revision/latest/scale-to-width-down/972?cb=20240225005506", { fit: "contain" }),
+  "gta-iii": gtaWikiImage("Grand Theft Auto III", "https://static.wikia.nocookie.net/gtawiki/images/f/f6/GTA3_Box_Art.jpg/revision/latest/scale-to-width-down/972?cb=20200723205441", { fit: "contain" }),
+  "vice-city": gtaWikiImage("Grand Theft Auto: Vice City", "https://static.wikia.nocookie.net/gtawiki/images/3/36/GTA_Vice_City_Box_Art.jpg/revision/latest/scale-to-width-down/972?cb=20240224223852", { fit: "contain" }),
+  "san-andreas": gtaWikiImage("Grand Theft Auto: San Andreas", "https://static.wikia.nocookie.net/gtawiki/images/2/23/CoverArt-GTASA.png/revision/latest/scale-to-width-down/972?cb=20260330025010", { fit: "contain" }),
+  "gta-advance": gtaWikiImage("Grand Theft Auto Advance", "https://static.wikia.nocookie.net/gtawiki/images/f/f6/GTAA-SocialClubCover.jpg/revision/latest/scale-to-width-down/972?cb=20190524102713", { fit: "contain" }),
+  "liberty-city-stories": gtaWikiImage("Grand Theft Auto: Liberty City Stories", "https://static.wikia.nocookie.net/gtawiki/images/4/43/CoverArt-GTALCS.png/revision/latest/scale-to-width-down/972?cb=20240503114247", { fit: "contain" }),
+  "vice-city-stories": gtaWikiImage("Grand Theft Auto: Vice City Stories", "https://static.wikia.nocookie.net/gtawiki/images/f/fb/GTAVCS-Cover.jpg/revision/latest/scale-to-width-down/972?cb=20230718045517", { fit: "contain" }),
+  "gta-iv": gtaWikiImage("Grand Theft Auto IV", "https://static.wikia.nocookie.net/gtawiki/images/4/44/GTAIV-Boxart.jpg/revision/latest/scale-to-width-down/972?cb=20260330025009", { fit: "contain" }),
+  "lost-and-damned": gtaWikiImage("The Lost and Damned", "https://static.wikia.nocookie.net/gtawiki/images/b/bc/Tlad_boxart.JPG/revision/latest/scale-to-width-down/1095?cb=20110914153831", { fit: "contain" }),
+  "chinatown-wars": gtaWikiImage("Grand Theft Auto: Chinatown Wars", "https://static.wikia.nocookie.net/gtawiki/images/7/7d/CoverArt-GTACW.png/revision/latest/scale-to-width-down/972?cb=20220311140351", { fit: "contain" }),
+  "ballad-gay-tony": gtaWikiImage("The Ballad of Gay Tony", "https://static.wikia.nocookie.net/gtawiki/images/d/db/CoverArt-TBoGT.JPG/revision/latest?cb=20250907163031", { fit: "contain" }),
+  "gta-v": gtaWikiImage("Grand Theft Auto V", "https://static.wikia.nocookie.net/gtawiki/images/7/76/CoverArt-GTAV.png/revision/latest/scale-to-width-down/972?cb=20250708181846", { fit: "contain" }),
+  "gta-online": gtaWikiImage("Grand Theft Auto Online", "https://static.wikia.nocookie.net/gtawiki/images/6/65/GTAOnline-BoxArt.jpg/revision/latest/scale-to-width-down/972?cb=20260330025009", { fit: "contain" }),
+  "trilogy-definitive": gtaWikiImage("Grand Theft Auto: The Trilogy - The Definitive Edition", "https://static.wikia.nocookie.net/gtawiki/images/2/26/GTATheTrilogy-TheDefinitiveEdition-MicrosoftStoreBoxArt.jpg/revision/latest?cb=20211026162226", { fit: "contain" }),
+  "gta-vi": gtaWikiImage("Grand Theft Auto VI", "https://static.wikia.nocookie.net/gtawiki/images/a/a5/Artwork-Trailer2Thumbnail2-GTAVI.jpg/revision/latest/scale-to-width-down/1200?cb=20260330025009", { position: "center" })
 };
 
 const officialMediaByCharacterId = {
@@ -3395,6 +3424,113 @@ const gtaWikiCityMediaById = {
   "leonida": gtaWikiImage("State of Leonida", "https://static.wikia.nocookie.net/gtawiki/images/8/89/LeonidaStateFlag-GTAVI-RockstarWebsiteCinematic.png/revision/latest?cb=20250506203041")
 };
 
+const curatedCityMediaById = {
+  "liberty-city": gtaWikiCityMediaById["liberty-city"],
+  "vice-city": officialMediaByCityId["vice-city"],
+  "san-andreas": gtaWikiCityMediaById["san-andreas"],
+  "los-santos": officialMediaByCityId["los-santos"],
+  "san-fierro": officialMediaByCityId["san-fierro"],
+  "las-venturas": officialMediaByCityId["las-venturas"],
+  "blaine-county": officialMediaByCityId["blaine-county"],
+  "north-yankton": gtaWikiCityMediaById["north-yankton"],
+  "anywhere-city": gtaWikiCityMediaById["anywhere-city"],
+  "london": gtaWikiCityMediaById["london"],
+  "leonida": officialMediaByCityId["leonida"]
+};
+
+const gtaWikiFactionMediaById = {
+  "leone-family": gtaWikiImage("Leone Crime Family", "https://static.wikia.nocookie.net/gtawiki/images/c/c4/LeoneMafia-GTALCS.png/revision/latest?cb=20170421032044"),
+  "forelli-family": gtaWikiImage("Forelli Crime Family", "https://static.wikia.nocookie.net/gtawiki/images/0/05/ForelliBrothers-GTAIII.png/revision/latest/scale-to-width-down/1200?cb=20230713103043"),
+  "sindacco-family": gtaWikiImage("Sindacco Crime Family", "https://static.wikia.nocookie.net/gtawiki/images/5/5e/Sindaccos-GTALCS-members.jpg/revision/latest?cb=20100120183816"),
+  "yakuza": gtaWikiImage("Yakuza (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/1/1e/Yakuza_Member_LCS.JPG/revision/latest?cb=20110217003226"),
+  "colombian-cartel": gtaWikiImage("Colombian Cartel", "https://static.wikia.nocookie.net/gtawiki/images/b/b5/ColombianCartel-GTA3-members.jpg/revision/latest?cb=20091123104112"),
+  "yardies": gtaWikiImage("Uptown Yardies", "https://static.wikia.nocookie.net/gtawiki/images/8/8a/Yardies-GTALCS-members.jpg/revision/latest/scale-to-width-down/1200?cb=20220430185033"),
+  "diablos": gtaWikiImage("Diablos", "https://static.wikia.nocookie.net/gtawiki/images/0/0d/Diablos-GTALCS.png/revision/latest/scale-to-width-down/1200?cb=20230407115112"),
+  "triads": gtaWikiImage("Liberty City Triads (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/5/53/Triads-GTALCS-members.jpg/revision/latest?cb=20100120182018"),
+  "grove-street": gtaWikiImage("Grove Street Families", "https://static.wikia.nocookie.net/gtawiki/images/4/48/GroveStreetFamilies-GTASA.png/revision/latest/scale-to-width-down/1200?cb=20241109215215"),
+  "ballas": gtaWikiImage("Ballas (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/d/de/Ballas-GTASA.png/revision/latest/scale-to-width-down/1200?cb=20250806180928"),
+  "vagos": gtaWikiImage("Los Santos Vagos (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/5/5e/LosSantosVagos-GTASA-members.jpg/revision/latest?cb=20100424224004"),
+  "aztecas": gtaWikiImage("Varrios Los Aztecas (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/c/cd/VarriosLosAztecas-GTASA.jpg/revision/latest/scale-to-width-down/1200?cb=20241109213359"),
+  "rifa": gtaWikiImage("San Fierro Rifa", "https://static.wikia.nocookie.net/gtawiki/images/4/41/SanFierroRifa-GTASA-Screenshot.jpg/revision/latest?cb=20210812060147"),
+  "da-nang-boys": gtaWikiImage("Da Nang Boys", "https://static.wikia.nocookie.net/gtawiki/images/4/4e/DaNangBoys-GTASA-Members.jpg/revision/latest?cb=20190112110820"),
+  "lost-mc": gtaWikiImage("The Lost MC", "https://static.wikia.nocookie.net/gtawiki/images/3/34/LostMC-GTAIV-Patch.png/revision/latest/scale-to-width-down/1200?cb=20200316125420", { fit: "contain" }),
+  "angels-of-death": gtaWikiImage("Angels of Death", "https://static.wikia.nocookie.net/gtawiki/images/d/d3/AngelsOfDeath-GTAIV-Patch.png/revision/latest?cb=20200316180551", { fit: "contain" }),
+  "russian-mafia": gtaWikiImage("Faustin Mafiya", "https://static.wikia.nocookie.net/gtawiki/images/7/7f/FaustinMafiya-GTA4.png/revision/latest/scale-to-width-down/1200?cb=20250502083914"),
+  "pegorino-family": gtaWikiImage("Pegorino Crime Family", "https://static.wikia.nocookie.net/gtawiki/images/4/49/PegorinoCrimeFamily-GTAIV.jpg/revision/latest?cb=20121230090259"),
+  "mcreary-family": gtaWikiImage("McReary Crime Family", "https://static.wikia.nocookie.net/gtawiki/images/8/85/McRearyCrimeFamily-GTAIV-Members.jpg/revision/latest/scale-to-width-down/1200?cb=20230901042858"),
+  "five-families": gtaWikiImage("The Commission", "https://static.wikia.nocookie.net/gtawiki/images/a/a2/GambettiCrimeFamily-GTAIV.png/revision/latest/scale-to-width-down/1200?cb=20230904010908"),
+  "madrazo-cartel": gtaWikiImage("Madrazo Cartel", "https://static.wikia.nocookie.net/gtawiki/images/8/8c/Madrazo-beat-Michael-GTAV.png/revision/latest/scale-to-width-down/1200?cb=20210604172412"),
+  "merryweather": gtaWikiImage("Merryweather Security", "https://static.wikia.nocookie.net/gtawiki/images/1/1c/MerryweatherSecurity-GTAV-Logo.png/revision/latest/scale-to-width-down/1200?cb=20200707082416", { fit: "contain" }),
+  "fib": gtaWikiImage("Federal Investigation Bureau", "https://static.wikia.nocookie.net/gtawiki/images/e/e3/FIB-GTAIV-Logo.png/revision/latest?cb=20240514140746", { fit: "contain" }),
+  "iaa": gtaWikiImage("International Affairs Agency", "https://static.wikia.nocookie.net/gtawiki/images/d/df/ULPHQ-Exterior-GTAIV.png/revision/latest/scale-to-width-down/1200?cb=20220529210118"),
+  "noose": gtaWikiImage("National Office of Security Enforcement", "https://static.wikia.nocookie.net/gtawiki/images/0/0a/NOOSE-GTAV-Logo.png/revision/latest?cb=20190409192026", { fit: "contain" }),
+  "lspd": gtaWikiImage("Los Santos Police Department (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/e/e9/Gta5-police-station-map_03.png/revision/latest/scale-to-width-down/1200?cb=20140325120451"),
+  "lcpd": gtaWikiImage("Liberty City Police Department (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/b/b8/LCPDHQ-GTAIII-Portland.jpg/revision/latest/scale-to-width-down/1200?cb=20230506160310"),
+  "crash": gtaWikiImage("Community Resources Against Street Hoodlums", "https://static.wikia.nocookie.net/gtawiki/images/b/b5/C.R.A.S.H.-GTASA.jpg/revision/latest?cb=20130104144200"),
+  "epsilon": gtaWikiImage("Epsilon Program (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/f/f3/EpsilonProgram-GTAV-Logo.png/revision/latest?cb=20130424083420", { fit: "contain" }),
+  "zaibatsu": gtaWikiImage("Zaibatsu Corporation (2D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/0/0a/ZaibatsuCorporation-GTA2-YellowSymbol.jpg/revision/latest?cb=20110404063015", { fit: "contain" }),
+  "loonies": gtaWikiImage("Loonies", "https://static.wikia.nocookie.net/gtawiki/images/0/0d/Loonies-GTA2.PNG/revision/latest?cb=20130731102131"),
+  "scientists": gtaWikiImage("Scientists", "https://static.wikia.nocookie.net/gtawiki/images/4/43/SRS-GTA2.PNG/revision/latest?cb=20130731103707", { fit: "contain" }),
+  "krishna": gtaWikiImage("Hare Krishna", "https://static.wikia.nocookie.net/gtawiki/images/6/69/Krishnas-GTA2.PNG/revision/latest?cb=20140327142350"),
+  "rednecks": gtaWikiImage("Rednecks", "https://static.wikia.nocookie.net/gtawiki/images/d/d7/Rednecks-GTA2.PNG/revision/latest?cb=20130731103543"),
+  "online-orgs": gtaWikiImage("Organizations", "https://static.wikia.nocookie.net/gtawiki/images/1/13/Organizations-GTAO.png/revision/latest?cb=20160203172000")
+};
+
+const gtaWikiUniverseMediaById = {
+  "2d": gtaWikiImage("2D Universe", "https://static.wikia.nocookie.net/gtawiki/images/b/bb/2DUniverse-Montage.jpg/revision/latest/scale-to-width-down/1200?cb=20230907095749"),
+  "3d": gtaWikiImage("3D Universe", "https://static.wikia.nocookie.net/gtawiki/images/6/6b/3DUniverse-Montage.jpg/revision/latest/scale-to-width-down/1200?cb=20230830090342"),
+  "hd": gtaWikiImage("HD Universe", "https://static.wikia.nocookie.net/gtawiki/images/e/ec/HDUniverse-Montage.jpg/revision/latest/scale-to-width-down/1200?cb=20250507211150")
+};
+
+const rockstarHistoryMedia = [
+  gtaWikiImage("Rockstar North", "https://static.wikia.nocookie.net/gtawiki/images/d/d4/RockstarNorthandDMADesign.png/revision/latest?cb=20240304054229", { fit: "contain" }),
+  gtaWikiImage("Race'n'Chase", "https://static.wikia.nocookie.net/gtawiki/images/0/0b/RaceNChase-PossibleScreenshot.jpg/revision/latest?cb=20140927111915"),
+  gtaWikiGameMediaById["gta-1"],
+  gtaWikiImage("Rockstar Games", "https://static.wikia.nocookie.net/gtawiki/images/f/fe/SentinelClassic-GTAO-front-RockstarGamesLivery.png/revision/latest/scale-to-width-down/1200?cb=20190531084843"),
+  gtaWikiImage("Rockstar North", "https://static.wikia.nocookie.net/gtawiki/images/d/d4/RockstarNorthandDMADesign.png/revision/latest?cb=20240304054229", { fit: "contain" }),
+  gtaWikiGameMediaById["gta-iii"],
+  gtaWikiGameMediaById["san-andreas"],
+  gtaWikiGameMediaById["gta-iv"],
+  gtaWikiGameMediaById["gta-v"],
+  gtaWikiGameMediaById["gta-vi"]
+];
+
+const gtaOnlineTimelineMedia = [
+  gtaWikiGameMediaById["gta-online"],
+  gtaWikiImage("GTA Online: Heists", "https://static.wikia.nocookie.net/gtawiki/images/0/02/HeistsUpdate-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20180518131251"),
+  gtaWikiImage("GTA Online: Further Adventures in Finance and Felony", "https://static.wikia.nocookie.net/gtawiki/images/7/7c/GTAOFAFF-Artwork-GTAO.jpg/revision/latest/scale-to-width-down/1200?cb=20160602140947"),
+  gtaWikiImage("GTA Online: Gunrunning", "https://static.wikia.nocookie.net/gtawiki/images/3/39/Gunrunning-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20170607144656"),
+  gtaWikiImage("GTA Online: After Hours", "https://static.wikia.nocookie.net/gtawiki/images/1/1c/AfterHours-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20180724205006"),
+  gtaWikiImage("The Diamond Casino & Resort", "https://static.wikia.nocookie.net/gtawiki/images/3/3a/TheDiamondCasino%26Resort-GTAO-DayView.png/revision/latest/scale-to-width-down/1200?cb=20200603043756"),
+  gtaWikiImage("The Cayo Perico Heist", "https://static.wikia.nocookie.net/gtawiki/images/b/b3/Jorge-GTAO-Cutscene.png/revision/latest/scale-to-width-down/1200?cb=20201217021541"),
+  gtaWikiImage("GTA Online: The Contract", "https://static.wikia.nocookie.net/gtawiki/images/1/1c/GTAOnline-TheContract-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20211215141321"),
+  gtaWikiImage("GTA Online: Los Santos Drug Wars", "https://static.wikia.nocookie.net/gtawiki/images/7/7d/LosSantosDrugWars-GTAOe-AnnouncementArtwork.jpg/revision/latest/scale-to-width-down/1200?cb=20221208141044"),
+  gtaWikiImage("GTA Online: San Andreas Mercenaries", "https://static.wikia.nocookie.net/gtawiki/images/1/17/SanAndreasMercenaries-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20230606141219"),
+  gtaWikiImage("GTA Online: Money Fronts", "https://static.wikia.nocookie.net/gtawiki/images/6/61/MoneyFronts-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20250617140448"),
+  gtaWikiImage("Career Builder", "https://static.wikia.nocookie.net/gtawiki/images/3/3c/CareerBuilder-GTAOee-ExecutiveOption.jpg/revision/latest/scale-to-width-down/1200?cb=20220317091052")
+];
+
+const gtaWikiGlossaryMediaByTerm = {
+  "2D Universe": gtaWikiUniverseMediaById["2d"],
+  "3D Universe": gtaWikiUniverseMediaById["3d"],
+  "HD Universe": gtaWikiUniverseMediaById["hd"],
+  "Wanted Level": gtaWikiImage("Wanted Level in GTA V", "https://static.wikia.nocookie.net/gtawiki/images/c/c6/TrevorNaked-GTAV.jpg/revision/latest/scale-to-width-down/1200?cb=20130801091403"),
+  "Heist": gtaWikiImage("Heists", "https://static.wikia.nocookie.net/gtawiki/images/c/c1/PestControl-GTAV.png/revision/latest?cb=20111104103445"),
+  "C.R.A.S.H.": gtaWikiFactionMediaById["crash"],
+  "FIB": gtaWikiFactionMediaById["fib"],
+  "IAA": gtaWikiFactionMediaById["iaa"],
+  "NOOSE": gtaWikiFactionMediaById["noose"],
+  "RAGE": gtaWikiImage("Rockstar Advanced Game Engine", "https://static.wikia.nocookie.net/gtawiki/images/0/0b/Rockstar_Advanced_Game_Engine.png/revision/latest?cb=20111211083454", { fit: "contain" }),
+  "Euphoria": gtaWikiImage("Euphoria", "https://static.wikia.nocookie.net/gtawiki/images/5/59/Euphoria-Logo.jpg/revision/latest?cb=20140123003050", { fit: "contain" }),
+  "Canon": gtaWikiImage("Universes", "https://static.wikia.nocookie.net/gtawiki/images/0/0f/Universes-RockstarNorthTimelineMap.png/revision/latest/scale-to-width-down/1200?cb=20240320143131"),
+  "Easter egg": gtaWikiImage("Secrets and Easter Eggs in GTA V", "https://static.wikia.nocookie.net/gtawiki/images/1/1c/Alien-Egg-GTAV.png/revision/latest?cb=20150110124654", { fit: "contain" }),
+  "Prequel": gtaWikiGameMediaById["liberty-city-stories"],
+  "Spin-off": gtaWikiGameMediaById["gta-advance"],
+  "GTA Online Organization": gtaWikiFactionMediaById["online-orgs"],
+  "Leonida": gtaWikiCityMediaById["leonida"],
+  "Vice City": gtaWikiCityMediaById["vice-city"]
+};
+
 const mediaArray = (value) => Array.isArray(value) ? value : value ? [value] : [];
 const mediaKey = (value) => String(value || "")
   .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -3421,7 +3557,12 @@ const findGameMediaForCharacter = (character) => {
 };
 
 gamesData.forEach((item) => {
-  if (officialMediaByGameId[item.id]) item.media = officialMediaByGameId[item.id];
+  if (gtaWikiGameMediaById[item.id]) item.media = gtaWikiGameMediaById[item.id];
+  else if (officialMediaByGameId[item.id]) item.media = officialMediaByGameId[item.id];
+});
+
+universeData.forEach((item) => {
+  if (gtaWikiUniverseMediaById[item.id]) item.media = gtaWikiUniverseMediaById[item.id];
 });
 
 charactersData.forEach((item) => {
@@ -3441,8 +3582,25 @@ charactersData.forEach((item) => {
 });
 
 citiesData.forEach((item) => {
-  if (gtaWikiCityMediaById[item.id]) item.media = gtaWikiCityMediaById[item.id];
+  if (curatedCityMediaById[item.id]) item.media = curatedCityMediaById[item.id];
+  else if (gtaWikiCityMediaById[item.id]) item.media = gtaWikiCityMediaById[item.id];
   else if (officialMediaByCityId[item.id]) item.media = officialMediaByCityId[item.id];
+});
+
+factionsData.forEach((item) => {
+  if (gtaWikiFactionMediaById[item.id]) item.media = gtaWikiFactionMediaById[item.id];
+});
+
+rockstarHistoryData.forEach((item, index) => {
+  if (rockstarHistoryMedia[index]) item.media = rockstarHistoryMedia[index];
+});
+
+onlineTimelineData.forEach((item, index) => {
+  if (gtaOnlineTimelineMedia[index]) item.media = gtaOnlineTimelineMedia[index];
+});
+
+glossaryData.forEach((item) => {
+  if (gtaWikiGlossaryMediaByTerm[item.term]) item.media = gtaWikiGlossaryMediaByTerm[item.term];
 });
 
 Object.assign(window, {

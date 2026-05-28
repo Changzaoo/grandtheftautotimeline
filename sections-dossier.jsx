@@ -623,7 +623,10 @@ const FactionsDossierSection = ({ onOpenDossier }) => {
           {filtered.map((faction) => (
             <article key={faction.id} className="card dossier-faction-card">
               <Corners />
-              <div className="dossier-faction-mark">{faction.name.split(/[ /]/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("")}</div>
+              <div className={`dossier-faction-visual ${faction.media ? "has-official" : ""}`}>
+                {faction.media && <OfficialMedia media={faction.media} className="dossier-faction-media" />}
+                <div className="dossier-faction-mark">{faction.name.split(/[ /]/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("")}</div>
+              </div>
               <div className="dossier-card-kicker">{faction.category} · {faction.city}</div>
               <h3>{faction.name}</h3>
               <p>{faction.narrativeImportance}</p>
@@ -651,6 +654,7 @@ const UniversesDossierSection = () => (
         {universeData.map((universe) => (
           <article key={universe.id} className={`card dossier-universe-card ${universe.tone}`}>
             <Corners />
+            {universe.media && <OfficialMedia media={universe.media} className="dossier-universe-media" />}
             <div className="dossier-universe-top">
               <span>{universe.period}</span>
               <h3>{universe.name}</h3>
@@ -683,6 +687,7 @@ const RockstarDossierSection = () => (
             <article key={`${item.year}-${item.title}`} className="card dossier-rockstar-row">
               <Corners />
               <div className="dossier-rockstar-year">{item.year}</div>
+              {item.media && <OfficialMedia media={item.media} className="dossier-rockstar-media" />}
               <div>
                 <div className="dossier-card-kicker">{item.type}</div>
                 <h3>{item.title}</h3>
@@ -698,6 +703,7 @@ const RockstarDossierSection = () => (
         <aside className="dossier-founder-panel">
           <div className="dossier-card-kicker">Fundadores da Rockstar Games</div>
           <h3>Sam Houser, Dan Houser, Terry Donovan, Jamie King e Gary Foreman</h3>
+          <OfficialMedia media={rockstarHistoryData.find((item) => item.title.includes("Rockstar North"))?.media} className="dossier-founder-media" />
           <p>
             A Rockstar nasce em 1998 como selo da Take-Two depois da aquisição de ativos da BMG Interactive. A antiga DMA Design, depois Rockstar North, se torna o principal motor criativo e técnico de GTA.
           </p>
@@ -714,36 +720,43 @@ const RockstarDossierSection = () => (
   </section>
 );
 
-const GTAOnlineDossierSection = () => (
-  <section id="gtaonline" className="dossier-section dossier-shell">
-    <div className="wrap">
-      <DossierSectionHead eyebrow="Plataforma viva" title="GTA Online" accent="var(--money)" right="Los Santos depois de 2013" />
-      <div className="dossier-online-intro">
-        <div>
-          <h3>Não é apenas multiplayer: é uma carreira criminal contínua.</h3>
-          <p>
-            GTA Online transforma o jogador em operador de uma economia criminosa. O progresso atravessa apartamentos, heists, CEOs, motoclubes, bunkers, nightclubs, cassino, Cayo Perico, agências, guerras de drogas, mercenários e frentes de lavagem.
-          </p>
+const GTAOnlineDossierSection = () => {
+  const onlineHero = window.officialMediaData?.gtaOnlineHero || gamesData.find((game) => game.id === "gta-online")?.media;
+  return (
+    <section id="gtaonline" className="dossier-section dossier-shell">
+      <div className="wrap">
+        <DossierSectionHead eyebrow="Plataforma viva" title="GTA Online" accent="var(--money)" right="Los Santos depois de 2013" />
+        <div className="dossier-online-intro">
+          <div>
+            <h3>Não é apenas multiplayer: é uma carreira criminal contínua.</h3>
+            <p>
+              GTA Online transforma o jogador em operador de uma economia criminosa. O progresso atravessa apartamentos, heists, CEOs, motoclubes, bunkers, nightclubs, cassino, Cayo Perico, agências, guerras de drogas, mercenários e frentes de lavagem.
+            </p>
+          </div>
+          <div className="dossier-online-side">
+            <OfficialMedia media={onlineHero} className="dossier-online-hero-media" />
+            <div className="dossier-online-metrics">
+              <span><strong>2013</strong> estreia</span>
+              <span><strong>10+ anos</strong> atualizações</span>
+              <span><strong>Los Santos</strong> plataforma</span>
+            </div>
+          </div>
         </div>
-        <div className="dossier-online-metrics">
-          <span><strong>2013</strong> estreia</span>
-          <span><strong>10+ anos</strong> atualizações</span>
-          <span><strong>Los Santos</strong> plataforma</span>
+        <div className="dossier-online-timeline">
+          {onlineTimelineData.map((item) => (
+            <article key={`${item.year}-${item.title}`} className="card">
+              <Corners />
+              {item.media && <OfficialMedia media={item.media} className="dossier-online-update-media" />}
+              <span>{item.year}</span>
+              <h3>{item.title}</h3>
+              <p>{item.theme}</p>
+            </article>
+          ))}
         </div>
       </div>
-      <div className="dossier-online-timeline">
-        {onlineTimelineData.map((item) => (
-          <article key={`${item.year}-${item.title}`} className="card">
-            <Corners />
-            <span>{item.year}</span>
-            <h3>{item.title}</h3>
-            <p>{item.theme}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const GTA6DossierSection = () => {
   const gta6Media = gamesData.find((game) => game.id === "gta-vi")?.media || window.officialMediaData?.hero;
@@ -792,6 +805,7 @@ const GlossaryDossierSection = () => {
           {filtered.map((item) => (
             <article key={item.term} className="card dossier-glossary-item">
               <Corners />
+              {item.media && <OfficialMedia media={item.media} className="dossier-glossary-media" />}
               <h3>{item.term}</h3>
               <p>{item.definition}</p>
             </article>
