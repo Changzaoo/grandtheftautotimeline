@@ -40,6 +40,26 @@ const dossierSourcesData = [
     label: "Grand Theft Auto series - releases and chronology",
     url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto",
     note: "Lista de lancamentos e organizacao dos universos narrativos."
+  },
+  {
+    label: "Grand Theft Wiki - Race'n'Chase",
+    url: "https://www.grandtheftwiki.com/Race%27n%27Chase",
+    note: "Documento, escopo e transformacao do prototipo que antecedeu GTA 1."
+  },
+  {
+    label: "GTA Wiki / Fandom - paginas de jogos e lore",
+    url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_Wiki",
+    note: "Apoio para detalhes de personagens, locais, faccoes, motores e cronologia secundaria."
+  },
+  {
+    label: "ESRB - caso Hot Coffee",
+    url: "https://www.esrb.org/blog/esrb-concludes-investigation-into-grand-theft-auto-san-andreas-revokes-m-mature-rating/",
+    note: "Registro oficial da reclassificacao de GTA San Andreas em 2005."
+  },
+  {
+    label: "FTC - acordo Take-Two/Rockstar sobre San Andreas",
+    url: "https://www.ftc.gov/news-events/news/press-releases/2006/06/makers-grand-theft-auto-san-andreas-settle-ftc-charges",
+    note: "Contexto publico sobre disclosure, patch e relancamento apos Hot Coffee."
   }
 ];
 
@@ -2933,7 +2953,16 @@ const developmentData = [
     summary:
       "Nasce da mudanca de foco de Race'n'Chase para crime urbano livre. Top-down, radios, policia e caos viram a base da franquia.",
     facts: ["Criado na DMA Design.", "Associado a David Jones e Mike Dailly.", "A liberdade sistemica foi mais importante que uma trama fechada."],
-    uncertainty: "Detalhes de prototipos variam por entrevista e memoria de desenvolvimento."
+    uncertainty: [
+      "Race'n'Chase era um projeto da DMA Design com foco original em corridas, perseguicoes policiais e multiplayer; o DNA de GTA surge quando a equipe percebe que liberdade, colisao e caos urbano eram mais fortes que uma corrida linear.",
+      "Documentos e relatos citam janelas internas de 1995-1996 e plataformas planejadas que mudaram bastante; trate essas datas como fase de prototipo, nao como lancamento publico.",
+      "David Jones e Mike Dailly sao centrais na origem, mas o primeiro GTA nasce como producao coletiva da DMA Design. A formula de 'dois criadores' simplifica uma equipe maior.",
+      "Liberty City, Vice City e San Andreas ja aparecem em 1997, mas ainda sem a geografia, continuidade e densidade narrativa que ganhariam nas eras 3D e HD."
+    ],
+    sources: [
+      { label: "Grand Theft Wiki - Race'n'Chase", url: "https://www.grandtheftwiki.com/Race%27n%27Chase" },
+      { label: "GTA Wiki - Race'n'Chase Engine", url: "https://gta.fandom.com/wiki/Race%27n%27Chase_Game_Engine" }
+    ]
   },
   {
     id: "dev-gta3",
@@ -2942,7 +2971,17 @@ const developmentData = [
     summary:
       "Transforma GTA em cidade 3D jogavel em terceira pessoa, com missoes dubladas, radio e sistemas urbanos sobrepostos.",
     facts: ["Liberty City vira espaco tridimensional.", "Modelo influencia a industria inteira.", "A identidade moderna da franquia se consolida."],
-    uncertainty: "Nao foi o primeiro mundo aberto, mas e amplamente tratado como marco do formato urbano moderno."
+    uncertainty: [
+      "GTA III e o primeiro GTA principal em 3D e a primeira Liberty City plenamente navegavel em terceira pessoa; a base tecnica usa RenderWare.",
+      "Nao inventou o mundo aberto. O marco foi combinar cidade 3D, veiculos, tiro, radio, dublagem, nivel de procurado e missoes cinematograficas em um sandbox urbano coeso.",
+      "Fontes historicas registram um nucleo de desenvolvimento pequeno para padroes atuais, com a DMA Design em Edimburgo trabalhando de perto com a Rockstar em Nova York.",
+      "Apos os ataques de 11 de setembro de 2001, Rockstar adiou o lancamento e revisou referencias sensiveis, incluindo viaturas, rota de aviao, dialogos/radio e capa norte-americana.",
+      "Darkel foi cortado antes do lancamento; ligacoes diretas com 11/9 aparecem em especulacao de fas e devem ser marcadas como nao confirmadas."
+    ],
+    sources: [
+      { label: "GTA III - desenvolvimento", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto_III" },
+      { label: "GTA Wiki - GTA III", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_III" }
+    ]
   },
   {
     id: "dev-vice",
@@ -2951,7 +2990,17 @@ const developmentData = [
     summary:
       "Desenvolvimento rapido apos GTA III. A ideia cresceu de expansao/mission pack para jogo completo com protagonista falante e identidade de anos 80.",
     facts: ["Inspiracao forte em cinema criminal dos anos 80.", "Trilha sonora licenciada virou parte da experiencia.", "Tommy Vercetti cria um centro narrativo mais definido."],
-    uncertainty: "A classificacao inicial como expansao e citada em relatos historicos, nao como premissa unica oficial."
+    uncertainty: [
+      "Relatos de desenvolvimento indicam que a equipe discutiu um mission pack para GTA III antes do escopo crescer para um jogo completo.",
+      "O ciclo foi curto: producao plena no inicio de 2002 e lancamento no fim do mesmo ano. Por isso Vice City reaproveita a base tecnica de GTA III enquanto muda tom, cidade e protagonista.",
+      "A escolha de 1986 e de uma Miami ficcional permitiu satirizar uma epoca historica, em contraste com a Liberty City contemporanea de GTA III.",
+      "Tommy Vercetti, com voz e personalidade explicita, muda o centro narrativo depois do silencio de Claude.",
+      "Scarface, Miami Vice e o cinema policial dos anos 80 sao inspiracoes culturais amplas; nao equivalem a adaptacao direta cena a cena."
+    ],
+    sources: [
+      { label: "Vice City - desenvolvimento", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto:_Vice_City" },
+      { label: "GTA Wiki - Vice City", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto:_Vice_City" }
+    ]
   },
   {
     id: "dev-sa",
@@ -2960,7 +3009,18 @@ const developmentData = [
     summary:
       "Expande a formula com tres cidades, campo, deserto, customizacao, habilidades, territorio, academias e aviação.",
     facts: ["Mapa muito maior que entradas anteriores.", "RPG leve e customizacao corporal.", "Temas de gangues, familia e corrupcao policial."],
-    uncertainty: "Inspiracoes culturais sao amplas; nem toda referencia visual equivale a adaptacao direta."
+    uncertainty: [
+      "San Andreas muda de sentido dentro da serie: na era 2D era uma cidade inspirada em San Francisco; em 2004 vira um estado com Los Santos, San Fierro, Las Venturas, interior e deserto.",
+      "Sistemas de corpo, habilidade, respeito, territorios e customizacao aproximam o jogo de um RPG leve, mas a estrutura central continua sendo acao-aventura em mundo aberto.",
+      "Gangues, rap, disturbios urbanos, corrupcao policial e crise social ecoam a Costa Oeste dos anos 1990; personagens e eventos seguem ficcionalizados.",
+      "Hot Coffee e fato documentado: conteudo inacessivel no disco foi reativado por mod, levou a reclassificacao AO pela ESRB e a patch/reedicao posterior.",
+      "A controversia pertence ao desenvolvimento, distribuicao e classificacao real do jogo; nao faz parte da cronologia da historia de CJ."
+    ],
+    sources: [
+      { label: "ESRB - Hot Coffee", url: "https://www.esrb.org/blog/esrb-concludes-investigation-into-grand-theft-auto-san-andreas-revokes-m-mature-rating/" },
+      { label: "FTC - acordo Take-Two/Rockstar", url: "https://www.ftc.gov/news-events/news/press-releases/2006/06/makers-grand-theft-auto-san-andreas-settle-ftc-charges" },
+      { label: "GTA Wiki - San Andreas", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto:_San_Andreas" }
+    ]
   },
   {
     id: "dev-gta4",
@@ -2969,7 +3029,17 @@ const developmentData = [
     summary:
       "Entrada na era RAGE/HD, com Liberty City mais realista, fisica Euphoria e narrativa mais sombria.",
     facts: ["Reboot de continuidade.", "Tom dramatico e noir.", "Foco em imigracao, trauma e capitalismo."],
-    uncertainty: "A nacionalidade exata de Niko e intencionalmente ambigua no jogo."
+    uncertainty: [
+      "GTA IV inaugura o HD Universe: marcas e ecos retornam, mas a continuidade principal nao e a mesma da era 3D.",
+      "A troca para RAGE com Euphoria/NaturalMotion altera fisica, animacao procedural, reacoes corporais e densidade urbana em relacao aos GTA de RenderWare.",
+      "O desenvolvimento passa a operar em escala global, com Rockstar North como nucleo e outros estudios Rockstar contribuindo em areas tecnicas, arte, audio e QA.",
+      "Niko e apresentado como veterano dos Balcas/Leste Europeu; a nacionalidade exata fica ambigua no jogo. 'Servio' e leitura comum de fas, nao confirmacao textual absoluta.",
+      "The Lost and Damned e The Ballad of Gay Tony cruzam eventos, personagens e a trama dos diamantes; a melhor leitura e de arcos paralelos na mesma Liberty City de 2008."
+    ],
+    sources: [
+      { label: "GTA Wiki - GTA IV features", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_IV/Features" },
+      { label: "GTA IV - desenvolvimento", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto_IV" }
+    ]
   },
   {
     id: "dev-gtav",
@@ -2978,7 +3048,18 @@ const developmentData = [
     summary:
       "Tres protagonistas jogaveis, assaltos planejados e Los Santos/Blaine County em escala massiva. GTA Online nasce do mesmo ecossistema.",
     facts: ["Michael, Franklin e Trevor alternam perspectiva.", "Assaltos estruturam a campanha.", "GTA Online transformou o ciclo de vida do jogo."],
-    uncertainty: "Numeros de equipe e receita variam por fonte publica e estimativa."
+    uncertainty: [
+      "A estrutura de tres protagonistas foi objetivo de design arriscado; fontes indicam que ideias parecidas existiam antes, mas o hardware da era San Andreas nao sustentava esse modelo.",
+      "O foco em assaltos foi reforcado pela recepcao positiva de Three Leaf Clover em GTA IV e pela vontade de fazer planejamento criminal virar eixo de campanha.",
+      "A producao envolveu cerca de mil pessoas no ecossistema Rockstar, mas orcamento, marketing e receita aparecem em fontes publicas como estimativas ou recortes financeiros.",
+      "GTA Online lancou duas semanas depois de GTA V e virou plataforma persistente; sua cronologia conversa com a campanha, mas atualizacoes posteriores funcionam como continuidade viva e elastica.",
+      "A Opcao C/Deathwish e geralmente tratada como final canonico por GTA Online e referencias posteriores, mas o single-player ainda preserva finais alternativos como escolhas do jogador."
+    ],
+    sources: [
+      { label: "GTA V - desenvolvimento", url: "https://en.wikipedia.org/wiki/Development_of_Grand_Theft_Auto_V" },
+      { label: "GTA Wiki - GTA V development", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_V/Development" },
+      { label: "GTA Online - GTA Wiki", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_Online" }
+    ]
   },
   {
     id: "dev-gtavi",
@@ -2987,7 +3068,17 @@ const developmentData = [
     summary:
       "A Rockstar apresenta Leonida e Vice City moderna, com Lucia e Jason como dupla central. Data oficial atual: 19 de novembro de 2026.",
     facts: ["Ambientado no estado de Leonida.", "Vice City retorna.", "Lucia e Jason sao protagonistas.", "PS5 e Xbox Series X|S confirmados."],
-    uncertainty: "Antagonistas, estrutura de missoes, mapa completo e GTA Online futuro ainda nao estao plenamente confirmados."
+    uncertainty: [
+      "Confirmado oficialmente: data atual de 19 de novembro de 2026, plataformas PS5 e Xbox Series X|S, estado de Leonida, Vice City, Lucia Caminos e Jason Duval.",
+      "A pagina oficial descreve Jason com passado no Exercito e trabalho com traficantes locais nas Keys; Lucia saiu da Penitenciaria de Leonida depois de lutar pela familia.",
+      "A sinopse oficial fala em um servico simples que da errado e empurra a dupla para uma conspiracao criminal em Leonida.",
+      "Antagonistas centrais, estrutura de missoes, mapa completo, versao de PC, expansoes e futuro de GTA Online seguem nao confirmados.",
+      "Trailers e pagina oficial indicam redes sociais, cultura viral, praias, pantanos, vida noturna e crime moderno; leituras de casal criminoso tipo Bonnie and Clyde e satira da Florida ainda sao interpretacoes ate o lancamento."
+    ],
+    sources: [
+      { label: "Rockstar - GTA VI", url: "https://www.rockstargames.com/VI" },
+      { label: "Newswire - nova data", url: "https://www.rockstargames.com/newswire/article/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026" }
+    ]
   }
 ];
 

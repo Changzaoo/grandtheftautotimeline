@@ -114,6 +114,24 @@ const BulletList = ({ items }) => (
   </ul>
 );
 
+const SourceLinks = ({ items }) => {
+  const links = asList(items);
+  if (!links.length) return null;
+  return (
+    <div className="dossier-source-row">
+      {links.map((source, index) => {
+        const href = typeof source === "string" ? source : source.url;
+        const label = typeof source === "string" ? source : (source.label || source.url);
+        return (
+          <a key={`${href || label}-${index}`} href={href} target="_blank" rel="noreferrer">
+            {label}
+          </a>
+        );
+      })}
+    </div>
+  );
+};
+
 const titleKey = (value) => normalizeText(value)
   .replace(/grand theft auto/g, "gta")
   .replace(/[^a-z0-9]+/g, " ")
@@ -414,7 +432,8 @@ const DevelopmentDossierSection = () => (
               <BulletList items={item.facts} />
               <details className="dossier-details">
                 <summary>Notas de precisão</summary>
-                <p>{item.uncertainty}</p>
+                {Array.isArray(item.uncertainty) ? <BulletList items={item.uncertainty} /> : <p>{item.uncertainty}</p>}
+                <SourceLinks items={item.sources} />
               </details>
             </div>
           </article>
