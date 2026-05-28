@@ -449,6 +449,7 @@ select:focus{
 .dossier-details{margin-top:12px;padding:10px;border:1px solid rgba(255,255,255,.1);border-radius:6px;background:rgba(255,255,255,.025)}
 .dossier-details summary{cursor:pointer;color:var(--evidence);font-weight:800}
 .dossier-details p{margin-top:10px;font-size:13px}
+.dossier-details p+p{margin-top:8px}
 .dossier-details .dossier-list{margin-top:10px;font-size:13px}
 .dossier-source-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .dossier-source-row a{display:inline-flex;align-items:center;min-height:26px;padding:5px 8px;border:1px solid rgba(255,221,43,.28);border-radius:6px;background:rgba(255,221,43,.07);color:var(--evidence);font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:0;overflow-wrap:anywhere}

@@ -132,8 +132,16 @@ const rockstarHistoryData = [
     type: "Estudio",
     summary:
       "David Jones forma a DMA Design em Dundee, Escocia. Algumas fontes usam 1987 para a atividade inicial e 1988 para a fundacao formal; por isso o dossie registra as duas datas.",
-    details:
-      "A DMA ganhou reputacao com Lemmings antes de mudar a cultura do mundo aberto. Mike Dailly, Russell Kay e Steve Hammond fazem parte do nucleo historico associado ao periodo inicial do estudio."
+    details: [
+      "A DMA Design nasce em Dundee, na Escocia, muito antes de existir Rockstar North. David Jones organiza o estudio em torno de uma cultura de programadores jovens, computadores domesticos, experimentacao tecnica e jogos com forte identidade propria.",
+      "O primeiro grande salto vem com Lemmings, publicado pela Psygnosis em 1991. O jogo transforma a DMA em nome respeitado no mercado europeu e prova que o estudio sabia criar sistemas simples, legiveis e caoticos o bastante para gerar historias emergentes.",
+      "Esse DNA importa para GTA: antes de pensar em cinema criminal, a DMA ja pensava em simulacao, regras, reacao em cadeia e pequenos personagens presos em sistemas maiores que eles. A diferenca e que, anos depois, os lemmings dariam lugar a carros, pedestres, policia e ruas.",
+      "Mike Dailly, Russell Kay, Steve Hammond e outros nomes aparecem ligados ao nucleo historico da DMA. O dossie evita tratar uma franquia desse tamanho como obra de uma unica pessoa: GTA nasce de uma equipe, de uma tecnologia e de um momento muito especifico da industria britanica."
+    ],
+    sources: [
+      { label: "Rockstar North - historico", url: "https://en.wikipedia.org/wiki/Rockstar_North" },
+      { label: "DMA Design - historico", url: "https://en.wikipedia.org/wiki/DMA_Design" }
+    ]
   },
   {
     year: "1995-1997",
@@ -141,8 +149,16 @@ const rockstarHistoryData = [
     type: "Origem de GTA",
     summary:
       "O conceito de perseguicoes e crimes urbanos evolui para Grand Theft Auto, criado na DMA Design por David Jones e Mike Dailly com a equipe do estudio.",
-    details:
-      "A ideia central que sobreviveria por decadas era simples e poderosa: uma cidade como brinquedo sistemico, carros como ferramenta, policia como pressao e crime como motor de liberdade."
+    details: [
+      "Race'n'Chase e o elo entre a DMA experimental e GTA. O projeto partia de uma ideia de corridas, perseguicoes, ladroes e policia em cidades vistas de cima. Era menos 'drama criminal' e mais brinquedo sistemico: carros, ruas, colisoes e regras de perseguicao.",
+      "Durante o desenvolvimento, a equipe percebeu que o comportamento caotico da policia, a liberdade de roubar veiculos e a possibilidade de quebrar a ordem da cidade eram mais interessantes do que cumprir uma corrida tradicional. A diversao estava no desvio.",
+      "A transformacao em Grand Theft Auto tambem aproxima a DMA da BMG Interactive, onde Sam Houser ajudaria a defender o potencial cultural e comercial da ideia. A provocacao publica, a linguagem de crime urbano e o tom de jornal sensacionalista comecam a se consolidar nesse periodo.",
+      "E importante separar fato e lenda: ha relatos diferentes sobre bugs de policia, prototipos e decisoes de design. O ponto seguro e que a franquia nasce quando uma estrutura de corrida vira uma fantasia de liberdade criminal em cidade aberta."
+    ],
+    sources: [
+      { label: "Grand Theft Wiki - Race'n'Chase", url: "https://www.grandtheftwiki.com/Race%27n%27Chase" },
+      { label: "GTA Wiki - Race'n'Chase Engine", url: "https://gta.fandom.com/wiki/Race%27n%27Chase_Game_Engine" }
+    ]
   },
   {
     year: "1997",
@@ -150,8 +166,16 @@ const rockstarHistoryData = [
     type: "Lancamento",
     summary:
       "GTA nasce antes de existir Rockstar North. O primeiro jogo e publicado no periodo BMG Interactive/DMA Design.",
-    details:
-      "Mesmo limitado tecnicamente, o jogo ja traz Liberty City, Vice City e San Andreas, alem de radio, humor agressivo e missoes de crime urbano."
+    details: [
+      "Grand Theft Auto chega em 1997 como jogo de perspectiva top-down, missao criminosa e liberdade urbana. Ele nao tem a densidade narrativa dos titulos posteriores, mas ja apresenta a gramatica essencial: roubar carros, aceitar trabalhos ilegais, fugir da policia e transformar cidade em tabuleiro.",
+      "Liberty City, Vice City e San Andreas ja aparecem como nomes, mas ainda em versoes abstratas. Elas funcionam mais como zonas de jogabilidade e identidade visual do que como cidades-personagem com memoria, bairros e continuidade profunda.",
+      "A radio, os crimes, o humor acido e a busca deliberada por controversia ajudam o jogo a se destacar. Parte do impacto vem da sensacao de que o jogador podia quebrar regras urbanas de um jeito que poucos jogos comerciais permitiam naquela epoca.",
+      "O primeiro GTA tambem mostra uma diferenca importante para o dossie: ele pertence a fase DMA/BMG. A marca Rockstar ainda nao existia como conhecemos, e Rockstar North ainda nao era o nome do estudio."
+    ],
+    sources: [
+      { label: "GTA Wiki - Grand Theft Auto 1997", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_(1997_game)" },
+      { label: "Grand Theft Auto - serie", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto" }
+    ]
   },
   {
     year: "1998",
@@ -159,8 +183,16 @@ const rockstarHistoryData = [
     type: "Negocio",
     summary:
       "A Take-Two adquire ativos da BMG Interactive. Em dezembro de 1998, Rockstar Games e fundada por Sam Houser, Dan Houser, Terry Donovan, Jamie King e Gary Foreman.",
-    details:
-      "A Rockstar nasce como selo editorial de atitude: cinema criminal, musica, design urbano, provocacao cultural e controle de marca passam a guiar a franquia."
+    details: [
+      "A virada empresarial acontece quando a Take-Two compra ativos da BMG Interactive. GTA deixa de ser apenas um jogo estranho da DMA publicado pela BMG e passa a estar dentro de uma estrutura que queria transformar marcas autorais em eventos culturais.",
+      "Rockstar Games e fundada em 1998 por Sam Houser, Dan Houser, Terry Donovan, Jamie King e Gary Foreman. A proposta nao era soar como uma publicadora neutra: era construir um selo com atitude, musica, cinema, design urbano e provocacao calculada.",
+      "Sam Houser e Dan Houser se tornam figuras centrais da identidade editorial: dialogo afiado, radios satiricas, referencias a cinema criminal, obsessao por trilha sonora e mundos que parecem comentar a cultura popular enquanto o jogador atravessa a cidade.",
+      "A Rockstar nao cria GTA do zero, mas reposiciona GTA. O jogo deixa de ser apenas um produto de nicho caotico e vira uma franquia com branding, marketing, controle de tom e ambicao de ser reconhecida fora do publico tradicional de videogames."
+    ],
+    sources: [
+      { label: "Rockstar Games - historico", url: "https://en.wikipedia.org/wiki/Rockstar_Games" },
+      { label: "Take-Two Interactive", url: "https://en.wikipedia.org/wiki/Take-Two_Interactive" }
+    ]
   },
   {
     year: "1999-2002",
@@ -168,8 +200,16 @@ const rockstarHistoryData = [
     type: "Estudio",
     summary:
       "A antiga DMA passa por reestruturacoes e se torna Rockstar North, principal estudio de desenvolvimento da franquia GTA.",
-    details:
-      "O estudio sai da era top-down e assume a missao tecnica de transformar GTA em mundo aberto 3D com GTA III."
+    details: [
+      "Depois do sucesso inicial de GTA, a DMA atravessa uma fase de mudancas corporativas. O estudio passa por aquisicoes e reestruturacoes ate ficar sob a orbita da Take-Two/Rockstar, consolidando sua funcao como o nucleo tecnico da franquia.",
+      "A transicao nao e apenas troca de placa na porta. Ela marca a passagem de um estudio escoces independente para uma operacao alinhada a uma editora global, com ambicoes maiores, marketing mais agressivo e exigencia tecnica muito mais alta.",
+      "A equipe precisava resolver uma pergunta enorme: como transformar o caos top-down de GTA em uma cidade 3D onde dirigir, atirar, caminhar, ouvir radio e seguir historia acontecessem no mesmo espaco sem parecerem sistemas separados?",
+      "Rockstar North surge como o nome associado a essa resposta. A antiga DMA se torna, na pratica, o laboratorio principal de GTA: um estudio capaz de combinar engenharia de mundo aberto, design de missoes, cultura urbana e satira."
+    ],
+    sources: [
+      { label: "Rockstar North", url: "https://en.wikipedia.org/wiki/Rockstar_North" },
+      { label: "GTA Wiki - Rockstar North", url: "https://gta.fandom.com/wiki/Rockstar_North" }
+    ]
   },
   {
     year: "2001",
@@ -177,8 +217,16 @@ const rockstarHistoryData = [
     type: "Virada tecnica",
     summary:
       "A camera em terceira pessoa, a cidade 3D, as radios e as missoes cinematograficas criam um modelo que influencia toda a industria.",
-    details:
-      "GTA III nao inventa sozinho o mundo aberto, mas estabelece o molde urbano moderno: dirigir, atirar, explorar, ouvir radio, provocar sistemas e seguir uma narrativa criminal no mesmo espaco."
+    details: [
+      "GTA III e a virada que transforma uma ideia forte em linguagem dominante. Liberty City deixa de ser um mapa visto de cima e vira uma cidade tridimensional, com ruas, pontes, ilhas, pedestres, trafego, radio, faccoes e missao cinematografica.",
+      "O jogo nao foi o primeiro mundo aberto da historia, mas foi o ponto em que muitos sistemas passaram a parecer uma mesma fantasia urbana: dirigir, caminhar, atirar, aceitar trabalhos, fugir da policia e simplesmente se perder pela cidade.",
+      "A producao tambem atravessa um momento historico delicado. Depois dos ataques de 11 de setembro de 2001, o lancamento e ajustado e parte do conteudo e revisada para evitar referencias sensiveis. Esse contexto ajuda a explicar por que GTA III parece agressivo e, ao mesmo tempo, cuidadosamente reposicionado.",
+      "O resultado redefiniu expectativa de mercado. A partir de GTA III, varias editoras passaram a procurar seu proprio 'GTA-like'. Para a Rockstar, o jogo prova que a franquia podia ser mais que controversia: podia ser arquitetura de mundo aberto."
+    ],
+    sources: [
+      { label: "GTA III - desenvolvimento", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto_III" },
+      { label: "GTA Wiki - GTA III", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_III" }
+    ]
   },
   {
     year: "2002-2006",
@@ -186,8 +234,18 @@ const rockstarHistoryData = [
     type: "Escala",
     summary:
       "Vice City, San Andreas, Liberty City Stories e Vice City Stories consolidam uma continuidade criminal cheia de personagens recorrentes.",
-    details:
-      "Vice City transforma atmosfera em identidade. San Andreas expande escala, customizacao, territorio, RPG leve e comentario social."
+    details: [
+      "Depois de GTA III, a Rockstar entende que cidade nao era so mapa: era tom. Vice City usa Miami ficcional, neon, drogas, praia, radio licenciada e cinema criminal dos anos 80 para criar uma identidade quase musical.",
+      "Tommy Vercetti muda a relacao do jogador com a historia. Depois de Claude, um protagonista praticamente silencioso, Vice City coloca voz, ambicao e personalidade no centro do crime. A campanha passa a parecer ascensao de um chefe, nao apenas uma sucessao de trabalhos.",
+      "San Andreas leva a formula ao limite da era PlayStation 2: tres cidades, campo, deserto, Las Venturas, avioes, academias, territorio, customizacao, habilidades e uma narrativa de familia, gangues e corrupcao policial nos anos 1990.",
+      "Liberty City Stories e Vice City Stories fecham lacunas de continuidade, especialmente em PSP, mostrando que a Rockstar passou a tratar GTA como uma rede de personagens, mafias e cidades com passado. Esse periodo cristaliza o chamado 3D Universe.",
+      "Tambem e a fase em que o debate publico sobre GTA cresce muito. A serie vira fenomeno comercial e alvo recorrente de discussoes sobre violencia, classificacao indicativa, satira e representacao."
+    ],
+    sources: [
+      { label: "Vice City - historico", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto:_Vice_City" },
+      { label: "San Andreas - historico", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto:_San_Andreas" },
+      { label: "GTA Wiki - 3D Universe", url: "https://gta.fandom.com/wiki/3D_Universe" }
+    ]
   },
   {
     year: "2008",
@@ -195,8 +253,17 @@ const rockstarHistoryData = [
     type: "Engine",
     summary:
       "GTA IV inaugura a fase HD com RAGE, Euphoria e uma Liberty City mais realista, densa e sombria.",
-    details:
-      "A serie troca o exagero da era PS2 por drama de imigracao, trauma de guerra, corrupcao e desencanto com o sonho americano."
+    details: [
+      "GTA IV reinicia a continuidade principal no HD Universe. A Rockstar mantem marcas, radios, humor e ecos culturais, mas separa a nova fase da linha narrativa da era 3D.",
+      "A troca tecnica e decisiva: RAGE e Euphoria dao peso fisico, animacao procedural e uma Liberty City mais densa. O jogo passa a buscar uma cidade menos caricata e mais observada, com pontes, bairros, celular, internet interna e vida urbana mais crua.",
+      "Niko Bellic leva GTA para um tom mais dramatico: imigração, trauma de guerra, vinganca, divida, familia e desencanto com o sonho americano. A satira ainda existe, mas convive com melancolia e violencia menos cartunesca.",
+      "The Lost and Damned e The Ballad of Gay Tony expandem a mesma cidade por outras classes sociais e subculturas: motoclube em decadencia, vida noturna, diamantes, mafia, celebridade e excesso. Juntos, os episodios mostram a ambicao da Rockstar de contar uma cidade por angulos paralelos.",
+      "GTA IV tambem confirma que a franquia poderia sobreviver a um reboot de tom. O publico ainda reconhecia GTA, mas agora com fisica, realismo e uma escrita mais sombria."
+    ],
+    sources: [
+      { label: "GTA IV - desenvolvimento", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto_IV" },
+      { label: "GTA Wiki - HD Universe", url: "https://gta.fandom.com/wiki/HD_Universe" }
+    ]
   },
   {
     year: "2013",
@@ -204,8 +271,18 @@ const rockstarHistoryData = [
     type: "Fenomeno",
     summary:
       "GTA V combina tres protagonistas, assaltos e uma Los Santos gigantesca; GTA Online cresce de modo multiplayer para plataforma viva.",
-    details:
-      "A estrutura de assaltos, negocios, propriedades, eventos e atualizacoes transforma GTA Online em um dos pilares comerciais da Rockstar por mais de uma decada."
+    details: [
+      "GTA V e a sintese comercial e tecnica da Rockstar moderna. Los Santos retorna como espelho de Los Angeles, mas agora cercada por Blaine County, midia digital, celebridade, desigualdade, paranoia estatal e economia de espetaculo.",
+      "A escolha de tres protagonistas muda o ritmo da campanha. Michael representa o passado criminal domesticado, Franklin a tentativa de mobilidade social e Trevor o caos que a propria serie sempre prometeu. O sistema permite alternar classe, tom e geografia dentro de uma mesma historia.",
+      "Os assaltos viram estrutura central, com planejamento, equipe, preparacao e execucao. A campanha usa FIB, IAA, Merryweather, Devin Weston, gangues e cartéis para mostrar uma Los Santos onde crime privado e poder institucional se confundem.",
+      "GTA Online, lancado em 2013, comeca turbulento, mas cresce para algo maior que modo multiplayer. Heists, CEOs, motoclubes, bunkers, nightclubs, cassino, Cayo Perico, agencias e atualizacoes de economia transformam Los Santos em plataforma persistente.",
+      "Esse ciclo muda a historia da Rockstar: GTA V continua vendendo por multiplas geracoes de console, GTA Online sustenta uma comunidade gigantesca e a expectativa por GTA VI passa a existir sob a sombra de um jogo que se recusou a sair de cena."
+    ],
+    sources: [
+      { label: "GTA V - desenvolvimento", url: "https://en.wikipedia.org/wiki/Development_of_Grand_Theft_Auto_V" },
+      { label: "GTA Online", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_Online" },
+      { label: "Rockstar - GTA Online", url: "https://www.rockstargames.com/gta-online" }
+    ]
   },
   {
     year: "2026",
@@ -213,8 +290,17 @@ const rockstarHistoryData = [
     type: "Proximo capitulo",
     summary:
       "GTA VI esta oficialmente marcado para 19 de novembro de 2026, ambientado em Leonida/Vice City, com Lucia Caminos e Jason Duval.",
-    details:
-      "A comunicacao oficial aponta para uma historia de casal criminoso, conspiracao estadual e satira do lugar mais ensolarado dos EUA em sua face mais sombria."
+    details: [
+      "GTA VI chega depois do periodo mais longo entre jogos principais da franquia. O intervalo e explicado por uma combinacao de escala tecnica, longevidade de GTA Online, mudancas internas na Rockstar e a expectativa criada por GTA V.",
+      "O que e confirmado pela Rockstar: GTA VI esta marcado para 19 de novembro de 2026, anunciado para PlayStation 5 e Xbox Series X|S, ambientado no estado de Leonida e com Vice City como centro mais reconhecivel.",
+      "Lucia Caminos e Jason Duval formam a dupla central divulgada oficialmente. A pagina da Rockstar descreve Lucia saindo da Penitenciaria de Leonida e Jason envolvido com traficantes locais nas Keys, ate um servico aparentemente simples dar errado.",
+      "O material oficial sugere crime moderno, redes sociais, cultura viral, praias, pantanos, policia, vida noturna e uma versao contemporanea da satira da Florida. Ainda assim, antagonistas, mapa completo, estrutura de missoes, PC e futuro de GTA Online seguem nao confirmados.",
+      "Historicamente, GTA VI representa uma prova dupla: continuar a linhagem single-player cinematografica da Rockstar e, ao mesmo tempo, responder a uma decada em que GTA Online redefiniu o que a franquia significa para milhoes de jogadores."
+    ],
+    sources: [
+      { label: "Rockstar - GTA VI", url: "https://www.rockstargames.com/VI" },
+      { label: "Newswire - data oficial de GTA VI", url: "https://www.rockstargames.com/newswire/article/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026" }
+    ]
   }
 ];
 

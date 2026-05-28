@@ -694,7 +694,8 @@ const RockstarDossierSection = () => (
                 <p>{item.summary}</p>
                 <details className="dossier-details">
                   <summary>Contexto</summary>
-                  <p>{item.details}</p>
+                  {asList(item.details).map((paragraph, index) => <p key={`${item.title}-context-${index}`}>{paragraph}</p>)}
+                  <SourceLinks items={item.sources} />
                 </details>
               </div>
             </article>
