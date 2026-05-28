@@ -5,6 +5,18 @@ const gtaWikiWeaponSource = (page, label = "GTA Wiki") => ({
   url: `https://gta.fandom.com/wiki/${page.replaceAll(" ", "_")}`
 });
 
+const gtaWikiWeaponCredit = "Imagem via GTA Wiki / Fandom; direitos dos assets pertencem aos respectivos titulares.";
+const gtaWikiWeaponImage = (page, src, label = page, options = {}) => ({
+  src,
+  alt: `Imagem de ${label}`,
+  source: gtaWikiWeaponSource(page).url,
+  caption: `GTA Wiki - ${label}`,
+  credit: gtaWikiWeaponCredit,
+  fit: "contain",
+  position: "center",
+  ...options
+});
+
 const weaponDossierData = [
   {
     id: "gta-1",
@@ -403,6 +415,34 @@ const weaponDossierData = [
     tags: ["HD Universe", "GTA VI", "Leonida", "não confirmado", "monitoramento"]
   }
 ];
+
+const weaponMediaById = {
+  "gta-1": gtaWikiWeaponImage("Pistol (2D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/d/d5/Pistol-GTA1-icon.png/revision/latest?cb=20090915141222", "Pistol em Grand Theft Auto"),
+  "london-1969": gtaWikiWeaponImage("Rocket Launcher (2D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/0/05/RocketLauncher-GTAL-icon.png/revision/latest?cb=20090915141731", "Rocket Launcher no pacote London"),
+  "london-1961": gtaWikiWeaponImage("Pistol (2D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/f/f3/Pistol-GTAL-icon.png/revision/latest?cb=20090915141917", "Pistol no pacote London"),
+  "gta-2": gtaWikiWeaponImage("ElectroGun", "https://static.wikia.nocookie.net/gtawiki/images/0/0a/ElectroGun-GTA2-icon.png/revision/latest?cb=20091122100500", "ElectroGun em GTA 2"),
+  "gta-iii": gtaWikiWeaponImage("AK47", "https://static.wikia.nocookie.net/gtawiki/images/3/3e/AK-47-GTA3-icon.png/revision/latest?cb=20210524100050", "AK-47 em GTA III"),
+  "vice-city": gtaWikiWeaponImage("Chainsaw", "https://static.wikia.nocookie.net/gtawiki/images/c/c2/Chainsaw-GTAVC.png/revision/latest?cb=20240609020851", "Chainsaw em GTA: Vice City"),
+  "san-andreas": gtaWikiWeaponImage("Desert Eagle", "https://static.wikia.nocookie.net/gtawiki/images/1/1b/DesertEagle-GTASA.png/revision/latest?cb=20240609060938", "Desert Eagle em GTA: San Andreas"),
+  "gta-advance": gtaWikiWeaponImage("Flamethrower", "https://static.wikia.nocookie.net/gtawiki/images/b/b4/Flamethrower-GTAA.png/revision/latest?cb=20240624202557", "Flamethrower em GTA Advance"),
+  "liberty-city-stories": gtaWikiWeaponImage("M60", "https://static.wikia.nocookie.net/gtawiki/images/7/74/M60-GTALCS.png/revision/latest?cb=20240609200217", "M60 em Liberty City Stories"),
+  "vice-city-stories": gtaWikiWeaponImage("M249", "https://static.wikia.nocookie.net/gtawiki/images/1/12/M249-GTAVCS.png/revision/latest?cb=20240702183727", "M249 em Vice City Stories"),
+  "gta-iv": gtaWikiWeaponImage("Carbine Rifle", "https://static.wikia.nocookie.net/gtawiki/images/1/15/CarbineRifle-GTAIV.png/revision/latest?cb=20250916010014", "Carbine Rifle em GTA IV"),
+  "lost-and-damned": gtaWikiWeaponImage("Pipe Bomb", "https://static.wikia.nocookie.net/gtawiki/images/4/4c/PipeBomb-TLAD.png/revision/latest?cb=20250916093853", "Pipe Bomb em The Lost and Damned"),
+  "ballad-gay-tony": gtaWikiWeaponImage("Advanced MG", "https://static.wikia.nocookie.net/gtawiki/images/9/92/AdvancedMG-TBOGT.png/revision/latest?cb=20250916094416", "Advanced MG em The Ballad of Gay Tony"),
+  "chinatown-wars": gtaWikiWeaponImage("Chainsaw", "https://static.wikia.nocookie.net/gtawiki/images/7/7d/Chainsaw-GTACW-Android.png/revision/latest?cb=20150305191800", "Chainsaw em Chinatown Wars"),
+  "gta-v": gtaWikiWeaponImage("Railgun", "https://static.wikia.nocookie.net/gtawiki/images/2/2e/Railgun-GTAV.png/revision/latest?cb=20180108210857", "Railgun em GTA V"),
+  "gta-online": gtaWikiWeaponImage("Up-n-Atomizer", "https://static.wikia.nocookie.net/gtawiki/images/0/08/UpnAtomizer-GTAO-RGSC.png/revision/latest?cb=20190110134620", "Up-n-Atomizer em GTA Online"),
+  "trilogy-definitive": gtaWikiWeaponImage("Minigun", "https://static.wikia.nocookie.net/gtawiki/images/4/4f/Minigun-GTASA.png/revision/latest?cb=20240609061425", "Minigun da era 3D remasterizada"),
+  "gta-vi": gtaWikiWeaponImage("Weapons in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/1/17/Pistol-GTAVI-Trailer1Artwork.jpg/revision/latest?cb=20250816021143", "Pistol vista em material de GTA VI", {
+    alt: "Arma vista em material promocional de GTA VI; arsenal completo ainda nao confirmado",
+    caption: "GTA Wiki - GTA VI, arma vista em trailer"
+  })
+};
+
+weaponDossierData.forEach((item) => {
+  if (weaponMediaById[item.id]) item.media = weaponMediaById[item.id];
+});
 
 Object.assign(window, {
   weaponDossierData

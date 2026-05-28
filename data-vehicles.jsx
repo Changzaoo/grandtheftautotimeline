@@ -5,6 +5,18 @@ const gtaWikiVehicleSource = (page, label = "GTA Wiki") => ({
   url: `https://gta.fandom.com/wiki/${page.replaceAll(" ", "_")}`
 });
 
+const gtaWikiVehicleCredit = "Imagem via GTA Wiki / Fandom; direitos dos assets pertencem aos respectivos titulares.";
+const gtaWikiVehicleImage = (page, src, label = page, options = {}) => ({
+  src,
+  alt: `Imagem de ${label}`,
+  source: gtaWikiVehicleSource(page).url,
+  caption: `GTA Wiki - ${label}`,
+  credit: gtaWikiVehicleCredit,
+  fit: "contain",
+  position: "center",
+  ...options
+});
+
 const vehicleDossierData = [
   {
     id: "gta-1",
@@ -419,6 +431,34 @@ const vehicleDossierData = [
     tags: ["HD Universe", "GTA VI", "Leonida", "não confirmado", "Rockstar"]
   }
 ];
+
+const vehicleMediaById = {
+  "gta-1": gtaWikiVehicleImage("Mamba", "https://static.wikia.nocookie.net/gtawiki/images/2/21/Mamba-GTA1.png/revision/latest?cb=20091013164934", "Mamba em Grand Theft Auto"),
+  "london-1969": gtaWikiVehicleImage("James Bomb", "https://static.wikia.nocookie.net/gtawiki/images/b/b9/JamesBomb-GTAL69.png/revision/latest?cb=20091011035848", "James Bomb em GTA: London 1969"),
+  "london-1961": gtaWikiVehicleImage("Myni", "https://static.wikia.nocookie.net/gtawiki/images/9/91/Myni-GTAL.png/revision/latest?cb=20090929153104", "Myni no pacote London"),
+  "gta-2": gtaWikiVehicleImage("Furore GT", "https://static.wikia.nocookie.net/gtawiki/images/5/50/FuroreGT-GTA2.png/revision/latest?cb=20091114141306", "Furore GT em GTA 2"),
+  "gta-iii": gtaWikiVehicleImage("Banshee (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/3/3a/Banshee-GTA3-front.jpg/revision/latest?cb=20230709090037", "Banshee em GTA III"),
+  "vice-city": gtaWikiVehicleImage("Infernus", "https://static.wikia.nocookie.net/gtawiki/images/f/f0/Infernus-GTAVC-FrontQuarter.png/revision/latest?cb=20240911013848", "Infernus em GTA: Vice City"),
+  "san-andreas": gtaWikiVehicleImage("Hydra", "https://static.wikia.nocookie.net/gtawiki/images/7/7f/Hydra-GTASA-inflight.jpg/revision/latest?cb=20240109134005", "Hydra em GTA: San Andreas"),
+  "gta-advance": gtaWikiVehicleImage("Banshee (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/1/11/Banshee-GTAA.png/revision/latest?cb=20190603083804", "Banshee em GTA Advance"),
+  "liberty-city-stories": gtaWikiVehicleImage("Hellenbach GT", "https://static.wikia.nocookie.net/gtawiki/images/4/44/HellenbachGT-GTALCS-front.jpg/revision/latest?cb=20100119111858", "Hellenbach GT em Liberty City Stories"),
+  "vice-city-stories": gtaWikiVehicleImage("Armadillo", "https://static.wikia.nocookie.net/gtawiki/images/d/da/Armadillo-GTAVCS-front.png/revision/latest?cb=20240727125705", "Armadillo em Vice City Stories"),
+  "gta-iv": gtaWikiVehicleImage("Sultan RS", "https://static.wikia.nocookie.net/gtawiki/images/8/83/SultanRS-GTAIV-front.png/revision/latest?cb=20160523142419", "Sultan RS em GTA IV"),
+  "lost-and-damned": gtaWikiVehicleImage("Hexer", "https://static.wikia.nocookie.net/gtawiki/images/d/d0/Hexer-TLAD-front.png/revision/latest?cb=20170921192709", "Hexer em The Lost and Damned"),
+  "ballad-gay-tony": gtaWikiVehicleImage("Buzzard", "https://static.wikia.nocookie.net/gtawiki/images/4/4e/Buzzard-TBoGT-front.png/revision/latest?cb=20160207232138", "Buzzard em The Ballad of Gay Tony"),
+  "chinatown-wars": gtaWikiVehicleImage("Infernus", "https://static.wikia.nocookie.net/gtawiki/images/8/82/Infernus-GTACW-front.jpg/revision/latest?cb=20181006001640", "Infernus em Chinatown Wars"),
+  "gta-v": gtaWikiVehicleImage("Adder", "https://static.wikia.nocookie.net/gtawiki/images/9/9e/Adder-GTAV-front.png/revision/latest?cb=20230402200727", "Adder em GTA V"),
+  "gta-online": gtaWikiVehicleImage("Oppressor Mk II", "https://static.wikia.nocookie.net/gtawiki/images/8/85/OppressorMkII-GTAO-front.png/revision/latest?cb=20180725181109", "Oppressor Mk II em GTA Online"),
+  "trilogy-definitive": gtaWikiVehicleImage("Banshee (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/6/6b/Banshee-GTAIII-FrontQuarter.png/revision/latest?cb=20240824134033", "Banshee da era 3D remasterizada"),
+  "gta-vi": gtaWikiVehicleImage("Vehicles in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/6/64/Banshee-GTAVI-Trailer2.png/revision/latest?cb=20250506212454", "Banshee visto em material de GTA VI", {
+    alt: "Veiculo visto em material promocional de GTA VI; lista completa ainda nao confirmada",
+    caption: "GTA Wiki - GTA VI, veiculo visto em trailer"
+  })
+};
+
+vehicleDossierData.forEach((item) => {
+  if (vehicleMediaById[item.id]) item.media = vehicleMediaById[item.id];
+});
 
 Object.assign(window, {
   vehicleDossierData
