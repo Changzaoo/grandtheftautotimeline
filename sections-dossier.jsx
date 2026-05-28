@@ -6,17 +6,18 @@ const dossierNav = () => window.dossierNavData || window.NAV || [
   { id: "overview", label: "Visão Geral", k: "01" },
   { id: "timeline", label: "Timeline Cronológica", k: "02" },
   { id: "games", label: "Jogos", k: "03" },
-  { id: "vehicles", label: "Veículos", k: "04" },
-  { id: "weapons", label: "Armas", k: "05" },
-  { id: "development", label: "Desenvolvimento", k: "06" },
-  { id: "characters", label: "Personagens", k: "07" },
-  { id: "cities", label: "Cidades", k: "08" },
-  { id: "gangs", label: "Gangues e Organizações", k: "09" },
-  { id: "universes", label: "Universos GTA", k: "10" },
-  { id: "rockstar", label: "Rockstar Games", k: "11" },
-  { id: "gtaonline", label: "GTA Online", k: "12" },
-  { id: "gta6", label: "GTA VI", k: "13" },
-  { id: "glossary", label: "Glossário", k: "14" }
+  { id: "missions", label: "Missões", k: "04" },
+  { id: "vehicles", label: "Veículos", k: "05" },
+  { id: "weapons", label: "Armas", k: "06" },
+  { id: "development", label: "Desenvolvimento", k: "07" },
+  { id: "characters", label: "Personagens", k: "08" },
+  { id: "cities", label: "Cidades", k: "09" },
+  { id: "gangs", label: "Gangues e Organizações", k: "10" },
+  { id: "universes", label: "Universos GTA", k: "11" },
+  { id: "rockstar", label: "Rockstar Games", k: "12" },
+  { id: "gtaonline", label: "GTA Online", k: "13" },
+  { id: "gta6", label: "GTA VI", k: "14" },
+  { id: "glossary", label: "Glossário", k: "15" }
 ];
 
 const asList = (value) => Array.isArray(value) ? value : value ? [value] : [];
@@ -260,6 +261,7 @@ const DossierHero = () => {
   const quick = [
     ["Timeline", "timeline", "map"],
     ["Jogos", "games", "file"],
+    ["Missões", "missions", "database"],
     ["Veículos", "vehicles", "car"],
     ["Armas", "weapons", "weapon"],
     ["Personagens", "characters", "users"],
@@ -455,6 +457,270 @@ const GamesDossierSection = ({ onOpenDossier }) => {
         </div>
         <div className="dossier-games-grid">
           {filtered.map((game) => <GameDossierCard key={game.id} game={game} onOpen={onOpenDossier} />)}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const missionGroupCache = new Map();
+
+const cleanMissionMarkup = (value = "") => String(value)
+  .replace(/\{\{([^{}]+)\}\}/g, (_, inner) => {
+    const parts = inner.split("|").map((part) => part.trim()).filter(Boolean);
+    return parts.length > 1 ? parts[parts.length - 1] : "";
+  })
+  .replace(/\[\[:?(File|Image|Category|[a-z]{2}):[^\]]+\]\]/gi, "")
+  .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, "$2")
+  .replace(/\[\[([^\]]+)\]\]/g, "$1")
+  .replace(/<br\s*\/?\s*>/gi, " ")
+  .replace(/<ref[^>]*>.*?<\/ref>/gi, "")
+  .replace(/<[^>]+>/g, "")
+  .replace(/''+/g, "")
+  .replace(/&amp;/g, "&")
+  .replace(/&nbsp;/g, " ")
+  .replace(/\s+/g, " ")
+  .trim();
+
+const cleanMissionHeading = (line = "") => {
+  let label = String(line).trim().replace(/^=+|=+$/g, "").replace(/^;+/, "");
+  label = label.replace(/\[\[:?(File|Image):[^\]]+\]\]/gi, "");
+  label = cleanMissionMarkup(label).replace(/^'+|'+$/g, "").trim();
+  if (/^(navigation|references|gallery|see also|trivia|video walkthrough|reward|rewards|description|contents)$/i.test(label)) return "";
+  return label || "Missões";
+};
+
+const extractMissionNameFromText = (value = "") => {
+  const cleaned = String(value).replace(/\[\[(File|Image):[^\]]+\]\]/gi, "");
+  const matches = [...cleaned.matchAll(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g)]
+    .map((match) => {
+      const target = cleanMissionMarkup(match[1]);
+      const label = cleanMissionMarkup(match[2] || match[1]);
+      return { target, label };
+    })
+    .filter((entry) => entry.label)
+    .filter((entry) => !/^(money|file:|image:|category:|playstation|pc|xbox|grand theft auto|gta online|rockstar editor|director mode)$/i.test(entry.label));
+  const chosen = matches.length ? matches[0] : null;
+  const name = chosen && /^(mission \d+|phone \d+)$/i.test(chosen.label) ? chosen.target : (chosen?.label || "");
+  if (/^(n\/a|none|safehouse|ammu-nation)$/i.test(name)) return "";
+  return name;
+};
+
+const addMissionGroupItem = (groups, area, context, name) => {
+  if (!name) return;
+  const groupLabel = [area, context].filter(Boolean).join(" / ") || "Missões";
+  if (!groups.has(groupLabel)) groups.set(groupLabel, new Set());
+  groups.get(groupLabel).add(name);
+};
+
+const parseMissionWikitext = (rawText = "") => {
+  const groups = new Map();
+  let area = "Geral";
+  let context = "Missões";
+  let inTable = false;
+  let titleCell = "";
+  let titleCellOpen = false;
+  let cellIndex = -1;
+
+  const flushTitle = () => {
+    if (titleCell) addMissionGroupItem(groups, area, context, extractMissionNameFromText(titleCell));
+    titleCell = "";
+    titleCellOpen = false;
+  };
+
+  rawText.split("\n").forEach((rawLine) => {
+    const line = rawLine.trim();
+    if (!line) return;
+
+    if (!inTable && /^==[^=]/.test(line)) {
+      const heading = cleanMissionHeading(line);
+      if (heading) {
+        area = heading;
+        context = "Missões";
+      }
+      return;
+    }
+
+    if (!inTable && /^={3,}/.test(line)) {
+      const heading = cleanMissionHeading(line);
+      if (heading) context = heading;
+      return;
+    }
+
+    if (!inTable && /^;/.test(line)) {
+      const heading = cleanMissionHeading(line);
+      if (heading) context = heading;
+      return;
+    }
+
+    if (!inTable && /^'''\[\[/.test(line)) {
+      const heading = extractMissionNameFromText(line);
+      if (heading) context = heading;
+      return;
+    }
+
+    if (!inTable && /^\*+\s*'''.*'''/.test(line) && !line.includes("[[")) {
+      const heading = cleanMissionMarkup(line.replace(/^\*+/, ""));
+      if (heading) context = heading;
+      return;
+    }
+
+    if (/^\{\|/.test(line)) {
+      inTable = true;
+      titleCell = "";
+      titleCellOpen = false;
+      cellIndex = -1;
+      return;
+    }
+
+    if (/^\|\}/.test(line)) {
+      flushTitle();
+      inTable = false;
+      cellIndex = -1;
+      return;
+    }
+
+    if (inTable && /^\|-/.test(line)) {
+      flushTitle();
+      cellIndex = -1;
+      return;
+    }
+
+    if (inTable && /^!/.test(line)) return;
+
+    if (inTable && /^\|/.test(line)) {
+      const content = line.replace(/^\|+/, "").trim();
+      cellIndex += 1;
+      if (cellIndex === 0) {
+        titleCell = content;
+        titleCellOpen = true;
+      } else {
+        flushTitle();
+      }
+      return;
+    }
+
+    if (inTable && titleCellOpen) {
+      titleCell += ` ${line}`;
+      return;
+    }
+
+    if (!inTable && /^\*+.*\[\[/.test(line)) {
+      addMissionGroupItem(groups, area, context, extractMissionNameFromText(line));
+    }
+  });
+
+  return [...groups.entries()]
+    .map(([label, names]) => ({ label, items: [...names].sort((a, b) => a.localeCompare(b, "pt-BR")) }))
+    .filter((group) => group.items.length)
+    .sort((a, b) => a.label.localeCompare(b.label, "pt-BR"));
+};
+
+const loadMissionGroups = async (mission) => {
+  const cacheKey = `${mission.id}:${mission.apiPage || "fallback"}`;
+  if (missionGroupCache.has(cacheKey)) return missionGroupCache.get(cacheKey);
+  let groups = [];
+  if (mission.apiPage) {
+    const data = await fetch(vehicleApiUrl({
+      action: "parse",
+      prop: "wikitext",
+      redirects: "1",
+      page: mission.apiPage
+    })).then((response) => response.json());
+    groups = parseMissionWikitext(data?.parse?.wikitext?.["*"] || "");
+  }
+  if (!groups.length && mission.fallbackGroups) groups = mission.fallbackGroups;
+  missionGroupCache.set(cacheKey, groups);
+  return groups;
+};
+
+const missionGameFor = (mission) => gamesData.find((game) => game.id === mission.gameId) || null;
+
+const matchesMissionType = (mission, type) => {
+  if (type === "all") return true;
+  const hay = normalizeText([mission.coverage, mission.tags, mission.highlights, mission.summary, mission.systems].join(" "));
+  const tests = {
+    story: ["story", "historia", "campanha", "main", "protagonista"],
+    side: ["side", "paralela", "atividade", "random", "strangers", "hobbies"],
+    phone: ["phone", "telefone", "phonebox", "walkie"],
+    heist: ["heist", "assalto", "setups", "roubo"],
+    vehicle: ["vehicle", "veiculo", "taxi", "vigilante", "paramedic", "firefighter", "races", "corridas"],
+    online: ["online", "dlc", "contatos", "jobs", "arquivo vivo"]
+  };
+  return (tests[type] || []).some((needle) => hay.includes(needle));
+};
+
+const MissionDossierCard = ({ mission, onOpen }) => {
+  const game = missionGameFor(mission);
+  const media = mission.media || game?.media;
+  return (
+    <article className="card dossier-mission-card">
+      <Corners />
+      <div className={`dossier-mission-media ${universeTone(mission.universe)} ${media ? "has-official" : ""}`}>
+        {media ? <OfficialMedia media={media} className="dossier-mission-official" /> : <div className="dossier-cover-map" />}
+        <div className="dossier-mission-badge"><DossierIcon type="database" /><span>{mission.totalLabel}</span></div>
+      </div>
+      <div className="dossier-card-body">
+        <div className="dossier-card-kicker">{mission.universe} · missões em {mission.storyYear}</div>
+        <h3>{mission.title}</h3>
+        <p>{mission.summary}</p>
+        <MetaGrid rows={[
+          ["Cidade", mission.city],
+          ["Cobertura", asList(mission.coverage).slice(0, 5)],
+          ["Destaques", asList(mission.highlights).slice(0, 5)]
+        ]} />
+        <DossierChips items={mission.tags} limit={6} />
+        <button className="btn" onClick={() => onOpen({ type: "mission", item: { ...mission, media } })}>Abrir missões</button>
+      </div>
+    </article>
+  );
+};
+
+const MissionsDossierSection = ({ onOpenDossier }) => {
+  const missions = window.missionDossierData || [];
+  const [query, setQuery] = React.useState("");
+  const [universe, setUniverse] = React.useState("all");
+  const [type, setType] = React.useState("all");
+  const typeOptions = [
+    ["all", "Todas"],
+    ["story", "História"],
+    ["side", "Paralelas"],
+    ["phone", "Telefone"],
+    ["heist", "Assaltos"],
+    ["vehicle", "Veículos/serviços"],
+    ["online", "Online/DLC"]
+  ];
+  const filtered = missions.filter((mission) =>
+    searchRecord(mission, query) &&
+    (universe === "all" || mission.universe === universe) &&
+    matchesMissionType(mission, type)
+  );
+
+  return (
+    <section id="missions" className="dossier-section dossier-shell mission-section">
+      <div className="wrap">
+        <DossierSectionHead eyebrow="Operações" title="Missões por jogo" accent="var(--money)" right={`${filtered.length} arquivos de missão`} />
+        <div className="dossier-mission-intro card">
+          <Corners />
+          <div>
+            <h3>O caminho jogável da saga</h3>
+            <p>
+              Esta seção fica entre Jogos e os dossiês de equipamentos porque as missões são a espinha dorsal da experiência: campanha, telefonemas, assaltos, propriedades, serviços, atividades paralelas, contatos online e arquivos ainda não confirmados.
+            </p>
+          </div>
+          <div className="dossier-mission-scan">
+            <span>mission index</span>
+            <strong>story + side</strong>
+            <small>listas completas sob demanda</small>
+          </div>
+        </div>
+        <div className="dossier-filterbar wide">
+          <label><span>Busca</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="End of the Line, The Big Score, Lamar..." /></label>
+          <label><span>Universo</span><select value={universe} onChange={(e) => setUniverse(e.target.value)}><option value="all">Todos</option>{universeData.map((u) => <option key={u.name}>{u.name}</option>)}</select></label>
+          <label><span>Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}>{typeOptions.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
+        </div>
+        <div className="dossier-mission-grid">
+          {filtered.map((mission) => <MissionDossierCard key={mission.id} mission={mission} onOpen={onOpenDossier} />)}
         </div>
       </div>
     </section>
@@ -1848,6 +2114,106 @@ const VehicleDossierModalContent = ({ item }) => {
   );
 };
 
+const MissionGroupsPanel = ({ groups, query }) => {
+  const normalizedQuery = normalizeText(query);
+  const visibleGroups = groups
+    .map((group) => ({
+      ...group,
+      items: asList(group.items).filter((name) => !normalizedQuery || normalizeText(name).includes(normalizedQuery))
+    }))
+    .filter((group) => group.items.length);
+  const visibleCount = visibleGroups.reduce((sum, group) => sum + group.items.length, 0);
+
+  if (!visibleGroups.length) {
+    return <div className="dossier-vehicle-empty">Nenhuma missão encontrada nesse filtro.</div>;
+  }
+
+  return (
+    <div className="dossier-vehicle-groups dossier-mission-groups">
+      <div className="dossier-vehicle-group-total">{visibleCount} missões exibidas</div>
+      {visibleGroups.map((group, index) => (
+        <details key={group.label} className="dossier-vehicle-group dossier-mission-group" open={index < 3 || Boolean(query)}>
+          <summary><span>{group.label}</span><strong>{group.items.length}</strong></summary>
+          <div className="dossier-vehicle-name-grid dossier-mission-name-grid">
+            {group.items.map((name) => <span key={`${group.label}-${name}`}>{name}</span>)}
+          </div>
+        </details>
+      ))}
+    </div>
+  );
+};
+
+const MissionDossierModalContent = ({ item }) => {
+  const [groups, setGroups] = React.useState(item.fallbackGroups || []);
+  const [query, setQuery] = React.useState("");
+  const [status, setStatus] = React.useState(item.apiPage ? "loading" : "static");
+  const [error, setError] = React.useState("");
+  const totalLoaded = groups.reduce((sum, group) => sum + asList(group.items).length, 0);
+
+  React.useEffect(() => {
+    let alive = true;
+    setQuery("");
+    setGroups(item.fallbackGroups || []);
+    setError("");
+    if (!item.apiPage) {
+      setStatus("static");
+      return () => { alive = false; };
+    }
+    setStatus("loading");
+    loadMissionGroups(item)
+      .then((loaded) => {
+        if (!alive) return;
+        setGroups(loaded.length ? loaded : (item.fallbackGroups || []));
+        setStatus(loaded.length ? "ready" : "empty");
+      })
+      .catch((err) => {
+        if (!alive) return;
+        setError(err?.message || "Nao foi possivel carregar a lista completa agora.");
+        setGroups(item.fallbackGroups || []);
+        setStatus("error");
+      });
+    return () => { alive = false; };
+  }, [item.id]);
+
+  return (
+    <>
+      <MetaGrid rows={[
+        ["Lançamento", item.releaseYear],
+        ["Ano da história", item.storyYear],
+        ["Universo", item.universe],
+        ["Cidade", item.city],
+        ["Total / fonte", item.totalLabel],
+        ["Arquivo carregado", item.apiPage || "dossiê estático"]
+      ]} />
+      <ModalField label="Resumo">{item.summary}</ModalField>
+      <ModalField label="Como as missões funcionam"><BulletList items={item.systems} /></ModalField>
+      <div className="dossier-modal-split">
+        <ModalField label="Cobertura"><DossierChips items={item.coverage} limit={20} /></ModalField>
+        <ModalField label="Missões / blocos marcantes"><DossierChips items={item.highlights} limit={20} /></ModalField>
+      </div>
+      <ModalField label="Lista completa por região, contato ou tipo">
+        <div className="dossier-mission-modal-tools">
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filtrar: Big Smoke, The Big Score, phone, heist..." />
+          <span className={`dossier-mission-load-state ${status}`}>
+            {status === "loading" ? "carregando fonte..." :
+              status === "error" ? "fonte indisponível agora" :
+              status === "empty" ? "sem tabela pública completa" :
+              `${totalLoaded} registros carregados`}
+          </span>
+        </div>
+        {error && <p className="dossier-mission-error">{error}</p>}
+        <MissionGroupsPanel groups={groups} query={query} />
+      </ModalField>
+      {item.relatedMissionFiles && (
+        <ModalField label="Campanhas herdadas"><DossierChips items={item.relatedMissionFiles} limit={10} /></ModalField>
+      )}
+      <ModalField label="Notas de precisão"><BulletList items={item.precisionNotes} /></ModalField>
+      <ModalField label="Tags"><DossierChips items={item.tags} limit={12} /></ModalField>
+      <ModalField label="Fonte"><SourceLinks items={item.source ? [item.source] : []} /></ModalField>
+    </>
+  );
+};
+
 const WeaponDossierModalContent = ({ item }) => {
   const [groups, setGroups] = React.useState(item.fallbackGroups || []);
   const [query, setQuery] = React.useState("");
@@ -1928,11 +2294,13 @@ const DossierRecordModal = ({ record, onClose }) => {
     record.type === "city" ? `${item.realWorldInspiration}` :
     record.type === "faction" ? `${item.category} · ${item.city}` :
     record.type === "onlineDlc" ? `${item.releaseDate} / ${item.type}` :
+    record.type === "mission" ? `${item.universe} · ${item.totalLabel}` :
     record.type === "vehicle" ? `${item.universe} · ${item.totalLabel}` :
     record.type === "weapon" ? `${item.universe} · ${item.totalLabel}` :
     record.type === "glossary" ? `${item.category || "Glossario"} / termo de referencia` :
     item.universe || "Arquivo";
   const recordLabel = record.type === "onlineDlc" ? "ONLINE DLC" :
+    record.type === "mission" ? "MISSÕES" :
     record.type === "vehicle" ? "FROTA" :
     record.type === "weapon" ? "ARSENAL" :
     record.type === "glossary" ? "GLOSSARIO" :
@@ -1982,6 +2350,9 @@ const DossierRecordModal = ({ record, onClose }) => {
                 <ModalField label="Importância">{item.importance}</ModalField>
                 <ModalField label="Temas"><DossierChips items={item.themes} limit={12} /></ModalField>
               </>
+            )}
+            {record.type === "mission" && (
+              <MissionDossierModalContent item={item} />
             )}
             {record.type === "vehicle" && (
               <VehicleDossierModalContent item={item} />
@@ -2091,6 +2462,7 @@ Object.assign(window, {
   DossierHero,
   TimelineDossierSection,
   GamesDossierSection,
+  MissionsDossierSection,
   VehiclesDossierSection,
   WeaponsDossierSection,
   DevelopmentDossierSection,

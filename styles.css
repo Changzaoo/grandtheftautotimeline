@@ -649,6 +649,32 @@ select:focus{
 .dossier-person-meta strong{color:var(--evidence);font-family:"Space Mono",monospace;font-size:9px;text-transform:uppercase}
 .dossier-people-note{align-items:flex-start}
 
+.mission-section{background:linear-gradient(180deg,#080b0a,#101612 48%,#08090b)}
+.dossier-mission-intro{display:grid;grid-template-columns:1fr 250px;gap:18px;align-items:center;margin-bottom:18px;padding:20px;border-color:rgba(74,222,128,.24);background:linear-gradient(135deg,rgba(74,222,128,.08),rgba(59,108,255,.045))}
+.dossier-mission-intro h3{font-size:36px;margin-bottom:8px;color:#fff}
+.dossier-mission-scan{display:grid;gap:5px;padding:16px;border:1px solid rgba(74,222,128,.25);border-radius:6px;background:rgba(74,222,128,.06);font-family:"Space Mono",monospace;text-transform:uppercase}
+.dossier-mission-scan span{color:var(--money);font-size:10px}
+.dossier-mission-scan strong{color:#fff;font-size:18px}
+.dossier-mission-scan small{color:var(--grit);font-size:10px}
+.dossier-mission-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.dossier-mission-card{display:flex;flex-direction:column;overflow:hidden}
+.dossier-mission-card:hover{border-color:rgba(74,222,128,.4);box-shadow:0 0 28px rgba(74,222,128,.08)}
+.dossier-mission-media{position:relative;min-height:178px;overflow:hidden;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#0f1a13,#09090c)}
+.dossier-mission-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.2) 42%,rgba(0,0,0,.84));z-index:1}
+.dossier-mission-media.yellow{background:linear-gradient(135deg,rgba(245,197,24,.14),#0a0a0d)}
+.dossier-mission-media.blue{background:linear-gradient(135deg,rgba(59,108,255,.14),#0a0a0d)}
+.dossier-mission-media.pink{background:linear-gradient(135deg,rgba(255,61,138,.14),#0a0a0d)}
+.dossier-mission-official{position:absolute;inset:0;border:0;border-radius:0;z-index:0}
+.dossier-mission-official img{filter:saturate(1.06) contrast(1.05)}
+.dossier-mission-badge{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;display:flex;align-items:center;gap:9px;padding:9px 10px;border:1px solid rgba(255,255,255,.16);border-radius:6px;background:rgba(5,8,6,.74);backdrop-filter:blur(8px);color:var(--bone-2);font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase}
+.dossier-mission-badge svg{flex:0 0 auto;color:var(--money)}
+.dossier-mission-modal-tools{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.dossier-mission-modal-tools input{flex:1;min-width:0;padding:12px;border:1px solid var(--line-2);border-radius:6px;background:#09090c;color:var(--bone);font-family:"Space Grotesk",sans-serif}
+.dossier-mission-load-state{flex:0 0 auto;padding:9px 10px;border:1px solid rgba(74,222,128,.28);border-radius:999px;background:rgba(74,222,128,.07);color:var(--money);font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase}
+.dossier-mission-load-state.error{border-color:rgba(255,42,42,.32);background:rgba(255,42,42,.08);color:#ffb3b3}
+.dossier-mission-error{margin:0 0 10px;color:#ffb3b3;font-size:12px}
+.dossier-mission-group summary strong{color:var(--money)}
+
 .vehicle-section{background:linear-gradient(180deg,#090a0d,#101116 48%,#08090b)}
 .dossier-vehicle-intro{display:grid;grid-template-columns:1fr 240px;gap:18px;align-items:center;margin-bottom:18px;padding:20px;border-color:rgba(59,108,255,.24);background:linear-gradient(135deg,rgba(59,108,255,.08),rgba(245,197,24,.05))}
 .dossier-vehicle-intro h3{font-size:36px;margin-bottom:8px;color:#fff}
@@ -815,6 +841,7 @@ select:focus{
 
 @media (max-width:1180px){
   .dossier-games-grid,
+  .dossier-mission-grid,
   .dossier-vehicle-grid,
   .dossier-weapon-grid,
   .dossier-character-grid,
@@ -839,6 +866,7 @@ select:focus{
   .dossier-city-layout,
   .dossier-rockstar-layout,
   .dossier-online-intro,
+  .dossier-mission-intro,
   .dossier-vehicle-intro,
   .dossier-weapon-intro,
   .dossier-gta6-hero,
@@ -867,6 +895,7 @@ select:focus{
   .dossier-section{padding:62px 0}
   .dossier-section-head h2{font-size:40px}
   .dossier-games-grid,
+  .dossier-mission-grid,
   .dossier-vehicle-grid,
   .dossier-weapon-grid,
   .dossier-character-grid,
@@ -877,6 +906,7 @@ select:focus{
   .dossier-online-dlc-grid,
   .dossier-glossary-grid{grid-template-columns:1fr}
   .dossier-vehicle-modal-tools{display:grid}
+  .dossier-mission-modal-tools{display:grid}
   .dossier-weapon-modal-tools{display:grid}
   .dossier-vehicle-name-grid{grid-template-columns:1fr}
   .dossier-timeline-card,

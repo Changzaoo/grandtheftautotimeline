@@ -4,17 +4,18 @@ const dossierNavData = [
   { id: "overview", label: "Visão Geral", k: "01" },
   { id: "timeline", label: "Timeline Cronológica", k: "02" },
   { id: "games", label: "Jogos", k: "03" },
-  { id: "vehicles", label: "Veículos", k: "04" },
-  { id: "weapons", label: "Armas", k: "05" },
-  { id: "development", label: "Desenvolvimento", k: "06" },
-  { id: "characters", label: "Personagens", k: "07" },
-  { id: "cities", label: "Cidades", k: "08" },
-  { id: "gangs", label: "Gangues e Organizações", k: "09" },
-  { id: "universes", label: "Universos GTA", k: "10" },
-  { id: "rockstar", label: "Rockstar Games", k: "11" },
-  { id: "gtaonline", label: "GTA Online", k: "12" },
-  { id: "gta6", label: "GTA VI", k: "13" },
-  { id: "glossary", label: "Glossário", k: "14" }
+  { id: "missions", label: "Missões", k: "04" },
+  { id: "vehicles", label: "Veículos", k: "05" },
+  { id: "weapons", label: "Armas", k: "06" },
+  { id: "development", label: "Desenvolvimento", k: "07" },
+  { id: "characters", label: "Personagens", k: "08" },
+  { id: "cities", label: "Cidades", k: "09" },
+  { id: "gangs", label: "Gangues e Organizações", k: "10" },
+  { id: "universes", label: "Universos GTA", k: "11" },
+  { id: "rockstar", label: "Rockstar Games", k: "12" },
+  { id: "gtaonline", label: "GTA Online", k: "13" },
+  { id: "gta6", label: "GTA VI", k: "14" },
+  { id: "glossary", label: "Glossário", k: "15" }
 ];
 
 const dossierSourcesData = [
