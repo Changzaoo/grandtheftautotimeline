@@ -827,6 +827,23 @@ const vehicleApiUrl = (params) => {
   return `https://gta.fandom.com/api.php?${search.toString()}`;
 };
 
+const vehicleWikiPageUrl = (page = "") => `https://gta.fandom.com/wiki/${encodeURIComponent(String(page).replace(/\s+/g, "_"))}`;
+
+const vehicleMediaFromSource = (name, pageTitle, src) => src ? ({
+  src,
+  alt: `Imagem de ${name}`,
+  source: vehicleWikiPageUrl(pageTitle || name),
+  caption: `GTA Wiki - ${name}`,
+  credit: "Imagem via GTA Wiki / Fandom; direitos dos assets pertencem aos respectivos titulares.",
+  fit: "contain",
+  position: "center"
+}) : null;
+
+const vehicleItemName = (item) => typeof item === "string" ? item : item?.name || "";
+const vehicleItemPageTitle = (item) => typeof item === "string" ? item : item?.pageTitle || item?.name || "";
+const vehicleItemMedia = (item) => typeof item === "string" ? null : item?.media || null;
+const vehicleItemKey = (item) => normalizeText(`${vehicleItemPageTitle(item)} ${vehicleItemName(item)}`);
+
 const cleanWikiMarkup = (value = "") => String(value)
   .replace(/\{\{([^{}]+)\}\}/g, (_, inner) => {
     const parts = inner.split("|").map((part) => part.trim()).filter(Boolean);
@@ -854,27 +871,37 @@ const cleanVehicleGroupLabel = (line = "") => {
 };
 
 const extractVehicleNameFromLine = (line = "") => {
-  if (/\[\[:?(file|image|category|pl|ru|es|fr|de|pt|zh):/i.test(line)) return "";
-  if (!line.includes("[[")) return "";
-  let name = line.trim().replace(/^\*+/, "").replace(/^\|+/, "");
-  name = name
-    .replace(/<ref[^>]*>.*?<\/ref>/gi, "")
-    .replace(/\{\{[^{}]+\}\}/g, "");
-  name = cleanWikiMarkup(name)
+  const item = extractVehicleItemFromLine(line);
+  return vehicleItemName(item);
+};
+
+const extractVehicleImageTitle = (line = "") => {
+  const match = String(line).match(/\[\[:?(?:Image|File):([^\]|]+)(?:\|[^\]]*)?\]\]/i);
+  return match ? `File:${match[1].trim()}` : "";
+};
+
+const extractVehicleItemFromLine = (line = "") => {
+  if (!line.includes("[[")) return null;
+  const links = [...String(line).matchAll(/\[\[:?([^\]|#]+)(?:#[^\]|]+)?(?:\|([^\]]+))?\]\]/g)];
+  const link = links.find((match) => !/^(file|image|category|pl|ru|es|fr|de|pt|zh):/i.test(match[1].trim()));
+  if (!link) return null;
+  const pageTitle = cleanWikiMarkup(link[1]).trim();
+  let name = cleanWikiMarkup(link[2] || link[1])
     .replace(/\s+can be seen.*$/i, "")
     .replace(/\s+inaccessible.*$/i, "")
     .replace(/\s+featuring.*$/i, "")
     .trim()
     .replace(/\.$/, "");
   if (/^(vehicles in|grand theft auto|yusuf amir|power-ups|rocket launcher|machine gun|shotgun|flamethrower|respect|electrofingers|fast reload|get outta jail|crusher|image:|file:|molotov|oil slick|invulnerability|kill frenzy|double damage|police bribe|electrogun)$/i.test(name)) return "";
-  return name;
+  return { name, pageTitle, imageTitle: extractVehicleImageTitle(line) };
 };
 
-const addVehicleGroupItem = (groups, label, name) => {
-  if (!name) return;
+const addVehicleGroupItem = (groups, label, item) => {
+  const normalizedItem = typeof item === "string" ? { name: item, pageTitle: item } : item;
+  if (!vehicleItemName(normalizedItem)) return;
   const groupLabel = label || "Lista completa";
-  if (!groups.has(groupLabel)) groups.set(groupLabel, new Set());
-  groups.get(groupLabel).add(name);
+  if (!groups.has(groupLabel)) groups.set(groupLabel, new Map());
+  groups.get(groupLabel).set(vehicleItemKey(normalizedItem), normalizedItem);
 };
 
 const nextNonEmptyLine = (lines, start) => {
@@ -943,17 +970,18 @@ const parseVehicleWikitext = (rawText = "") => {
       }
       if (/^\|\[\[/.test(line)) {
         const next = nextNonEmptyLine(lines, index + 1);
-        if (/^\|\[\[(Image|File):/i.test(next)) addVehicleGroupItem(groups, currentGroup, extractVehicleNameFromLine(line));
+        const item = extractVehicleItemFromLine(line);
+        if (/^\|\[\[(Image|File):/i.test(next)) addVehicleGroupItem(groups, currentGroup, item ? { ...item, imageTitle: item.imageTitle || extractVehicleImageTitle(next) } : item);
       } else {
-        addVehicleGroupItem(groups, currentGroup, extractVehicleNameFromLine(line));
+        addVehicleGroupItem(groups, currentGroup, extractVehicleItemFromLine(line));
       }
       return;
     }
-    if (/^\*\[\[/.test(line)) addVehicleGroupItem(groups, currentGroup, extractVehicleNameFromLine(line));
+    if (/^\*\[\[/.test(line)) addVehicleGroupItem(groups, currentGroup, extractVehicleItemFromLine(line));
   });
 
   return [...groups.entries()]
-    .map(([label, names]) => ({ label, items: [...names].sort((a, b) => a.localeCompare(b, "pt-BR")) }))
+    .map(([label, items]) => ({ label, items: [...items.values()].sort((a, b) => vehicleItemName(a).localeCompare(vehicleItemName(b), "pt-BR")) }))
     .filter((group) => group.items.length)
     .sort((a, b) => a.label.localeCompare(b.label, "pt-BR"));
 };
@@ -963,26 +991,258 @@ const normalizeVehicleTitle = (title = "") => title
   .replace(/^Beta Vehicles.*$/i, "")
   .trim();
 
+const chunkVehicleTitles = (items, size = 45) => {
+  const chunks = [];
+  for (let index = 0; index < items.length; index += size) chunks.push(items.slice(index, index + size));
+  return chunks;
+};
+
+const loadVehiclePageMediaMap = async (titles) => {
+  const uniqueTitles = [...new Set(titles.filter(Boolean))];
+  const mediaByTitle = new Map();
+  await Promise.all(chunkVehicleTitles(uniqueTitles).map(async (chunk) => {
+    const data = await fetch(vehicleApiUrl({
+      action: "query",
+      prop: "pageimages",
+      piprop: "thumbnail",
+      pithumbsize: "360",
+      redirects: "1",
+      titles: chunk.join("|")
+    })).then((response) => response.json());
+    Object.values(data?.query?.pages || {}).forEach((page) => {
+      const src = page?.thumbnail?.source;
+      if (!src) return;
+      const media = vehicleMediaFromSource(page.title, page.title, src);
+      mediaByTitle.set(normalizeText(page.title), media);
+    });
+  }));
+  return mediaByTitle;
+};
+
+const loadVehicleFileMediaMap = async (fileTitles) => {
+  const uniqueTitles = [...new Set(fileTitles.filter(Boolean))];
+  const mediaByFile = new Map();
+  await Promise.all(chunkVehicleTitles(uniqueTitles).map(async (chunk) => {
+    const data = await fetch(vehicleApiUrl({
+      action: "query",
+      prop: "imageinfo",
+      iiprop: "url",
+      iiurlwidth: "360",
+      titles: chunk.join("|")
+    })).then((response) => response.json());
+    Object.values(data?.query?.pages || {}).forEach((page) => {
+      const src = page?.imageinfo?.[0]?.thumburl || page?.imageinfo?.[0]?.url;
+      if (!src) return;
+      mediaByFile.set(normalizeText(page.title), vehicleMediaFromSource(page.title.replace(/^File:/i, ""), page.title, src));
+    });
+  }));
+  return mediaByFile;
+};
+
+const vehicleImageNeedlesByGameId = {
+  "gta-1": ["GTA1"],
+  "london-1969": ["GTAL69", "GTAL"],
+  "london-1961": ["GTAL61", "GTAL"],
+  "gta-2": ["GTA2"],
+  "gta-iii": ["GTA3", "GTAIII"],
+  "vice-city": ["GTAVC"],
+  "san-andreas": ["GTASA"],
+  "gta-advance": ["GTAA"],
+  "liberty-city-stories": ["GTALCS"],
+  "vice-city-stories": ["GTAVCS"],
+  "gta-iv": ["GTAIV", "GTA4"],
+  "lost-and-damned": ["TLAD"],
+  "ballad-gay-tony": ["TBoGT", "TBOGT"],
+  "chinatown-wars": ["GTACW"],
+  "gta-v": ["GTAV"],
+  "gta-online": ["GTAO", "GTAV"],
+  "trilogy-definitive": ["GTAIII", "GTAVC", "GTASA"],
+  "gta-vi": ["GTAVI"]
+};
+
+const vehiclePageAliasesByName = {
+  "bati 801rr": ["Bati 800"],
+  "borner hearse": ["Romero Hearse"],
+  "breakdown truck": ["Repair Van"],
+  "burrito": ["Burrito (HD Universe)", "Burrito (second generation)"],
+  "lawn mower": ["Mower"],
+  "trailer": ["Trailer (car carrier)"]
+};
+
+const vehicleUniversePageSuffix = (vehicle) => {
+  if (vehicle?.universe?.includes("2D")) return "2D Universe";
+  if (vehicle?.universe?.includes("3D")) return "3D Universe";
+  if (vehicle?.universe?.includes("HD")) return "HD Universe";
+  return "";
+};
+
+const vehiclePageCandidatesForItem = (item, vehicle) => {
+  const name = vehicleItemName(item);
+  const pageTitle = vehicleItemPageTitle(item);
+  const suffix = vehicleUniversePageSuffix(vehicle);
+  const aliases = vehiclePageAliasesByName[normalizeText(name)] || [];
+  return [...new Set([
+    pageTitle,
+    name,
+    suffix ? `${name} (${suffix})` : "",
+    ...aliases
+  ].filter(Boolean))];
+};
+
+const vehicleFileStemCandidates = (name = "") => {
+  const ascii = String(name).normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const aliases = vehiclePageAliasesByName[normalizeText(ascii)] || [];
+  return [...new Set([
+    ascii.replace(/\s+x\s+/gi, "x").replace(/[^a-z0-9-]/gi, ""),
+    ascii.replace(/[^a-z0-9]/gi, ""),
+    ascii.replace(/\s+/g, "").replace(/[^a-z0-9-]/gi, ""),
+    ...aliases.flatMap((alias) => vehicleFileStemCandidates(alias))
+  ].filter(Boolean))];
+};
+
+const vehicleFileCandidatesForItem = (item, vehicle) => {
+  const codes = vehicleImageNeedlesByGameId[vehicle?.id] || [];
+  const stems = vehicleFileStemCandidates(vehicleItemName(item));
+  const suffixes = [".png", ".jpg", "-front.png", "-front.jpg", "-Front.png", "-Front.jpg", "-FrontQuarter.png", "-FrontQuarter.jpg", "-front-Sprunk.png"];
+  const candidates = [];
+  stems.forEach((stem) => {
+    codes.forEach((code) => {
+      suffixes.forEach((suffix) => candidates.push(`File:${stem}-${code}${suffix}`));
+    });
+  });
+  return [...new Set(candidates)];
+};
+
+const vehicleImageScore = (fileTitle = "", item, vehicle) => {
+  const title = normalizeText(fileTitle);
+  if (/site logo|invisiblehero|blips|badge|emblem|map|location|poster|advert|livery|dashboard|engine|inside|rear|side|top|underside/.test(title)) return -100;
+  let score = 0;
+  const needles = vehicleImageNeedlesByGameId[vehicle?.id] || [];
+  needles.forEach((needle) => {
+    if (title.includes(normalizeText(needle))) score += 80;
+  });
+  const stem = normalizeText(vehicleItemName(item));
+  const compactStem = normalizeText(vehicleItemName(item).replace(/[^a-z0-9]/gi, ""));
+  if (stem && title.includes(stem)) score += 35;
+  if (compactStem && title.includes(compactStem)) score += 35;
+  if (/front|frontquarter|ingame|screenshot/.test(title)) score += 12;
+  if (/png|jpg|jpeg/.test(title)) score += 3;
+  return score;
+};
+
+const loadVehicleGalleryMediaByItem = async (items, vehicle) => {
+  const titles = [...new Set(items.flatMap((item) => vehiclePageCandidatesForItem(item, vehicle)).filter(Boolean))];
+  const itemByTitle = new Map();
+  items.forEach((item) => {
+    vehiclePageCandidatesForItem(item, vehicle).forEach((title) => itemByTitle.set(normalizeText(title), item));
+  });
+  const chosenFileByItem = new Map();
+  await Promise.all(chunkVehicleTitles(titles).map(async (chunk) => {
+    const data = await fetch(vehicleApiUrl({
+      action: "query",
+      prop: "images",
+      imlimit: "80",
+      redirects: "1",
+      titles: chunk.join("|")
+    })).then((response) => response.json());
+    Object.values(data?.query?.pages || {}).forEach((page) => {
+      const item = itemByTitle.get(normalizeText(page.title));
+      if (!item) return;
+      const images = asList(page.images).map((image) => image.title).filter(Boolean);
+      const best = images
+        .map((title) => ({ title, score: vehicleImageScore(title, item, vehicle) }))
+        .filter((entry) => entry.score > 0)
+        .sort((a, b) => b.score - a.score)[0];
+      if (best) chosenFileByItem.set(vehicleItemKey(item), best.title);
+    });
+  }));
+  const fileMedia = await loadVehicleFileMediaMap([...chosenFileByItem.values()]);
+  const mediaByItem = new Map();
+  chosenFileByItem.forEach((fileTitle, itemKey) => {
+    if (fileMedia.has(normalizeText(fileTitle))) mediaByItem.set(itemKey, fileMedia.get(normalizeText(fileTitle)));
+  });
+  return mediaByItem;
+};
+
+const loadVehicleHeuristicMediaByItem = async (items, vehicle) => {
+  const candidateByItem = new Map();
+  const allCandidates = [];
+  items.forEach((item) => {
+    const candidates = vehicleFileCandidatesForItem(item, vehicle);
+    candidateByItem.set(vehicleItemKey(item), candidates);
+    allCandidates.push(...candidates);
+  });
+  const fileMedia = await loadVehicleFileMediaMap(allCandidates);
+  const mediaByItem = new Map();
+  items.forEach((item) => {
+    const found = asList(candidateByItem.get(vehicleItemKey(item))).find((candidate) => fileMedia.has(normalizeText(candidate)));
+    if (!found) return;
+    const media = fileMedia.get(normalizeText(found));
+    mediaByItem.set(vehicleItemKey(item), {
+      ...media,
+      alt: `Imagem de ${vehicleItemName(item)}`,
+      source: vehicleWikiPageUrl(vehicleItemPageTitle(item)),
+      caption: `GTA Wiki - ${vehicleItemName(item)}`
+    });
+  });
+  return mediaByItem;
+};
+
+const hydrateVehicleGroupMedia = async (groups, vehicle) => {
+  const items = groups.flatMap((group) => asList(group.items));
+  const fileMedia = await loadVehicleFileMediaMap(items.map((item) => item?.imageTitle));
+  const galleryMedia = await loadVehicleGalleryMediaByItem(items, vehicle);
+  const pageMedia = await loadVehiclePageMediaMap(items.flatMap((item) => vehiclePageCandidatesForItem(item, vehicle)));
+  const missingAfterKnown = items.filter((item) =>
+    !vehicleItemMedia(item) &&
+    !fileMedia.get(normalizeText(item?.imageTitle || "")) &&
+    !galleryMedia.get(vehicleItemKey(item)) &&
+    !vehiclePageCandidatesForItem(item, vehicle).some((candidate) => pageMedia.get(normalizeText(candidate)))
+  );
+  const heuristicMedia = await loadVehicleHeuristicMediaByItem(missingAfterKnown, vehicle);
+  return groups.map((group) => ({
+    ...group,
+    items: asList(group.items).map((item) => {
+      const normalizedItem = typeof item === "string" ? { name: item, pageTitle: item } : item;
+      const media =
+        vehicleItemMedia(normalizedItem) ||
+        fileMedia.get(normalizeText(normalizedItem.imageTitle || "")) ||
+        galleryMedia.get(vehicleItemKey(normalizedItem)) ||
+        heuristicMedia.get(vehicleItemKey(normalizedItem)) ||
+        vehiclePageCandidatesForItem(normalizedItem, vehicle).map((candidate) => pageMedia.get(normalizeText(candidate))).find(Boolean);
+      return { ...normalizedItem, media };
+    })
+  }));
+};
+
 const loadVehicleCategoryGroup = async (categoryTitle) => {
-  const names = [];
+  const items = new Map();
   let cmcontinue = "";
   do {
     const data = await fetch(vehicleApiUrl({
       action: "query",
-      list: "categorymembers",
-      cmtitle: categoryTitle,
-      cmnamespace: "0",
-      cmlimit: "500",
-      ...(cmcontinue ? { cmcontinue } : {})
+      generator: "categorymembers",
+      gcmtitle: categoryTitle,
+      gcmnamespace: "0",
+      gcmlimit: "500",
+      prop: "pageimages",
+      piprop: "thumbnail",
+      pithumbsize: "360",
+      ...(cmcontinue ? { gcmcontinue: cmcontinue } : {})
     })).then((response) => response.json());
-    const members = data?.query?.categorymembers || [];
-    members.forEach((member) => {
-      const title = normalizeVehicleTitle(member.title);
-      if (title && !/^Vehicles in/i.test(title)) names.push(title);
+    Object.values(data?.query?.pages || {}).forEach((page) => {
+      const title = normalizeVehicleTitle(page.title);
+      if (!title || /^Vehicles in/i.test(title)) return;
+      const item = {
+        name: title,
+        pageTitle: page.title,
+        media: vehicleMediaFromSource(title, page.title, page.thumbnail?.source)
+      };
+      items.set(vehicleItemKey(item), item);
     });
-    cmcontinue = data?.continue?.cmcontinue || "";
+    cmcontinue = data?.continue?.gcmcontinue || "";
   } while (cmcontinue);
-  return [{ label: "Lista completa", items: [...new Set(names)].sort((a, b) => a.localeCompare(b, "pt-BR")) }];
+  return [{ label: "Lista completa", items: [...items.values()].sort((a, b) => vehicleItemName(a).localeCompare(vehicleItemName(b), "pt-BR")) }];
 };
 
 const loadVehicleGroups = async (vehicle) => {
@@ -1001,6 +1261,7 @@ const loadVehicleGroups = async (vehicle) => {
     groups = parseVehicleWikitext(data?.parse?.wikitext?.["*"] || "");
   }
   if (!groups.length && vehicle.fallbackGroups) groups = vehicle.fallbackGroups;
+  groups = await hydrateVehicleGroupMedia(groups, vehicle);
   vehicleGroupCache.set(cacheKey, groups);
   return groups;
 };
@@ -2112,7 +2373,7 @@ const VehicleGroupsPanel = ({ groups, query }) => {
   const visibleGroups = groups
     .map((group) => ({
       ...group,
-      items: asList(group.items).filter((name) => !normalizedQuery || normalizeText(name).includes(normalizedQuery))
+      items: asList(group.items).filter((vehicle) => !normalizedQuery || normalizeText(vehicleItemName(vehicle)).includes(normalizedQuery))
     }))
     .filter((group) => group.items.length);
   const visibleCount = visibleGroups.reduce((sum, group) => sum + group.items.length, 0);
@@ -2128,7 +2389,23 @@ const VehicleGroupsPanel = ({ groups, query }) => {
         <details key={group.label} className="dossier-vehicle-group" open={index < 3 || Boolean(query)}>
           <summary><span>{group.label}</span><strong>{group.items.length}</strong></summary>
           <div className="dossier-vehicle-name-grid">
-            {group.items.map((name) => <span key={`${group.label}-${name}`}>{name}</span>)}
+            {group.items.map((vehicle) => {
+              const name = vehicleItemName(vehicle);
+              const media = vehicleItemMedia(vehicle);
+              const source = media?.source || vehicleWikiPageUrl(vehicleItemPageTitle(vehicle));
+              return (
+                <a className={`dossier-vehicle-model-card ${media ? "has-media" : ""}`} href={source} target="_blank" rel="noreferrer" key={`${group.label}-${vehicleItemKey(vehicle)}`}>
+                  <span className="dossier-vehicle-model-thumb">
+                    {media?.src ? (
+                      <img src={media.src} alt={media.alt || `Imagem de ${name}`} loading="lazy" referrerPolicy="no-referrer" />
+                    ) : (
+                      <span className="dossier-vehicle-model-placeholder"><DossierIcon type="car" /> imagem pendente</span>
+                    )}
+                  </span>
+                  <strong>{name}</strong>
+                </a>
+              );
+            })}
           </div>
         </details>
       ))}
