@@ -43,9 +43,9 @@ function App(){
       <FactionsDossierSection onOpenDossier={setDossier}/>
       <UniversesDossierSection/>
       <RockstarDossierSection/>
-      <GTAOnlineDossierSection/>
+      <GTAOnlineDossierSection onOpenDossier={setDossier}/>
       <GTA6DossierSection/>
-      <GlossaryDossierSection/>
+      <GlossaryDossierSection onOpenDossier={setDossier}/>
       <ConnectionsImpactSection/>
       <DossierFooter/>
       <DossierRecordModal record={dossier} onClose={()=>setDossier(null)}/>

@@ -841,12 +841,23 @@ const RockstarDossierSection = () => (
   </section>
 );
 
-const GTAOnlineDossierSection = () => {
+const GTAOnlineDossierSection = ({ onOpenDossier }) => {
+  const [query, setQuery] = React.useState("");
+  const [year, setYear] = React.useState("Todos");
+  const [type, setType] = React.useState("Todos");
   const onlineHero = window.officialMediaData?.gtaOnlineHero || gamesData.find((game) => game.id === "gta-online")?.media;
+  const years = React.useMemo(() => ["Todos", ...Array.from(new Set(onlineDlcData.map((item) => item.year))).sort()], []);
+  const types = React.useMemo(() => ["Todos", ...Array.from(new Set(onlineDlcData.map((item) => item.type))).sort()], []);
+  const filteredDlc = onlineDlcData.filter((item) => (
+    searchRecord(item, query) &&
+    (year === "Todos" || item.year === year) &&
+    (type === "Todos" || item.type === type)
+  ));
+  const openDlc = (item) => onOpenDossier && onOpenDossier({ type: "onlineDlc", item });
   return (
     <section id="gtaonline" className="dossier-section dossier-shell">
       <div className="wrap">
-        <DossierSectionHead eyebrow="Plataforma viva" title="GTA Online" accent="var(--money)" right="Los Santos depois de 2013" />
+        <DossierSectionHead eyebrow="Plataforma viva" title="GTA Online" accent="var(--money)" right={`${onlineDlcData.length} DLCs catalogadas`} />
         <div className="dossier-online-intro">
           <div>
             <h3>Não é apenas multiplayer: é uma carreira criminal contínua.</h3>
@@ -861,6 +872,74 @@ const GTAOnlineDossierSection = () => {
               <span><strong>10+ anos</strong> atualizações</span>
               <span><strong>Los Santos</strong> plataforma</span>
             </div>
+          </div>
+        </div>
+        <div className="dossier-online-catalog-head">
+          <div>
+            <div className="dossier-card-kicker">Arquivo de DLCs e updates</div>
+            <h3>Do Beach Bum ao Safehouse: cada fase clicavel</h3>
+            <p>Use a busca para abrir heists, negocios, eventos sazonais, modos adversarios, carros, agencias e frentes de lavagem com contexto de impacto, sistemas, personagens e fontes.</p>
+          </div>
+          <span>{filteredDlc.length} registros ativos</span>
+        </div>
+        <div className="dossier-filterbar wide">
+          <label><span>Busca</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Cayo Perico, bunker, Franklin, cassino..." /></label>
+          <label><span>Ano</span><select value={year} onChange={(e) => setYear(e.target.value)}>{years.map((item) => <option key={item}>{item}</option>)}</select></label>
+          <label><span>Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}>{types.map((item) => <option key={item}>{item}</option>)}</select></label>
+        </div>
+        <div className="dossier-online-dlc-grid">
+          {filteredDlc.length ? filteredDlc.map((item) => (
+            <article
+              key={item.id}
+              className="card dossier-online-dlc-card"
+              role="button"
+              tabIndex={0}
+              onClick={() => openDlc(item)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  openDlc(item);
+                }
+              }}
+            >
+              <Corners />
+              {item.media && <OfficialMedia media={item.media} className="dossier-online-update-media" />}
+              <div className="dossier-card-kicker">{item.releaseDate} / {item.era}</div>
+              <h3>{item.title}</h3>
+              <p>{item.summary}</p>
+              <MetaGrid rows={[
+                ["Tipo", item.type],
+                ["Sistemas", asList(item.systems).slice(0, 3)],
+                ["Personagens", asList(item.characters).slice(0, 3)]
+              ]} />
+              <div className="dossier-online-dlc-brought">
+                {asList(item.brought).slice(0, 4).map((entry) => <span key={entry}>{entry}</span>)}
+              </div>
+              <DossierChips items={item.tags} limit={6} />
+              <button
+                className="btn"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openDlc(item);
+                }}
+              >
+                Abrir dossie
+              </button>
+            </article>
+          )) : (
+            <article className="card dossier-online-empty">
+              <Corners />
+              <h3>Nenhuma DLC encontrada</h3>
+              <p>Limpe os filtros ou busque por outro termo do catalogo.</p>
+            </article>
+          )}
+        </div>
+        <div className="dossier-online-catalog-head compact">
+          <div>
+            <div className="dossier-card-kicker">Linha macro</div>
+            <h3>Fases maiores da carreira online</h3>
+            <p>Um resumo visual das grandes viradas de GTA Online, para entender como os updates mudaram a economia e o ritmo do jogo.</p>
           </div>
         </div>
         <div className="dossier-online-timeline">
@@ -912,7 +991,7 @@ const GTA6DossierSection = () => {
   );
 };
 
-const GlossaryDossierSection = () => {
+const GlossaryDossierSection = ({ onOpenDossier }) => {
   const [query, setQuery] = React.useState("");
   const filtered = glossaryData.filter((item) => searchRecord(item, query));
   return (
@@ -924,11 +1003,26 @@ const GlossaryDossierSection = () => {
         </div>
         <div className="dossier-glossary-grid">
           {filtered.map((item) => (
-            <article key={item.term} className="card dossier-glossary-item">
+            <article
+              key={item.term}
+              className="card dossier-glossary-item"
+              role="button"
+              tabIndex={0}
+              onClick={() => onOpenDossier?.({ type: "glossary", item })}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onOpenDossier?.({ type: "glossary", item });
+                }
+              }}
+            >
               <Corners />
               {item.media && <OfficialMedia media={item.media} className="dossier-glossary-media" />}
+              <div className="dossier-card-kicker">{item.category || "Termo do dossie"}</div>
               <h3>{item.term}</h3>
               <p>{item.definition}</p>
+              <DossierChips items={item.tags || item.relatedTerms} limit={4} />
+              <button className="btn" type="button" onClick={(e) => { e.stopPropagation(); onOpenDossier?.({ type: "glossary", item }); }}>Abrir termo</button>
             </article>
           ))}
         </div>
@@ -1021,12 +1115,17 @@ const ModalField = ({ label, children }) => (
 const DossierRecordModal = ({ record, onClose }) => {
   if (!record?.item) return null;
   const item = record.item;
-  const title = item.title || item.name;
+  const title = item.title || item.name || item.term;
   const subtitle = record.type === "game" ? `${item.universe} · ${item.city}` :
     record.type === "character" ? `${item.role} · ${item.city}` :
     record.type === "city" ? `${item.realWorldInspiration}` :
     record.type === "faction" ? `${item.category} · ${item.city}` :
+    record.type === "onlineDlc" ? `${item.releaseDate} / ${item.type}` :
+    record.type === "glossary" ? `${item.category || "Glossario"} / termo de referencia` :
     item.universe || "Arquivo";
+  const recordLabel = record.type === "onlineDlc" ? "ONLINE DLC" :
+    record.type === "glossary" ? "GLOSSARIO" :
+    record.type.toUpperCase();
 
   return (
     <div className="dossier-modal-back dossier-shell" onClick={onClose}>
@@ -1047,8 +1146,8 @@ const DossierRecordModal = ({ record, onClose }) => {
               <div className={`dossier-cover-art ${universeTone(item.universe || item.category)} ${item.media ? "has-official" : ""}`}>
                 {item.media ? <OfficialMedia media={item.media} className="dossier-cover-media" /> : <div className="dossier-cover-map" />}
                 <div className="dossier-cover-label">
-                  <strong>{record.type.toUpperCase()}</strong>
-                  <small>{item.id || item.year || "arquivo"}</small>
+                  <strong>{recordLabel}</strong>
+                  <small>{item.id || item.year || item.term || "arquivo"}</small>
                 </div>
               </div>
             )}
@@ -1131,6 +1230,48 @@ const DossierRecordModal = ({ record, onClose }) => {
                 ]} />
                 <ModalField label="Resumo">{item.summary}</ModalField>
                 <ModalField label="Eventos"><BulletList items={item.beats} /></ModalField>
+              </>
+            )}
+            {record.type === "onlineDlc" && (
+              <>
+                <MetaGrid rows={[
+                  ["Lancamento", item.releaseDate],
+                  ["Ano", item.year],
+                  ["Fase", item.era],
+                  ["Tipo", item.type],
+                  ["Sistemas", item.systems],
+                  ["Modos", item.modes],
+                  ["Veiculos", item.vehicles],
+                  ["Personagens", item.characters]
+                ]} />
+                <ModalField label="Resumo">{item.summary}</ModalField>
+                <ModalField label="O que trouxe"><BulletList items={item.brought} /></ModalField>
+                <ModalField label="Sistemas e propriedades"><BulletList items={asList(item.systems).length ? item.systems : ["sem sistema persistente especifico; foco em conteudo, evento ou ajuste de plataforma"]} /></ModalField>
+                <ModalField label="Veiculos e equipamentos"><BulletList items={asList(item.vehicles).length ? item.vehicles : ["sem veiculo central; update focado em modo, evento, ferramenta ou atividade"]} /></ModalField>
+                <ModalField label="Modos e atividades"><BulletList items={asList(item.modes).length ? item.modes : ["sem modo destacado alem das atividades associadas ao update"]} /></ModalField>
+                <ModalField label="Personagens e contatos"><BulletList items={asList(item.characters).length ? item.characters : ["jogador online e contatos de sessao"]} /></ModalField>
+                <ModalField label="Impacto em GTA Online">{item.impact}</ModalField>
+                <ModalField label="Leitura de gameplay">
+                  {`Esta atualizacao se encaixa na fase "${item.era}" do Online e amplia a carreira criminal do jogador por meio de ${asList(item.systems).join(", ") || "novas atividades"}.`}
+                </ModalField>
+                <ModalField label="Tags"><DossierChips items={item.tags} limit={12} /></ModalField>
+                <ModalField label="Fontes"><SourceLinks items={item.sources} /></ModalField>
+              </>
+            )}
+            {record.type === "glossary" && (
+              <>
+                <MetaGrid rows={[
+                  ["Categoria", item.category],
+                  ["Aparece em", item.appearsIn || item.games],
+                  ["Termos relacionados", item.relatedTerms]
+                ]} />
+                <ModalField label="Definicao rapida">{item.definition}</ModalField>
+                <ModalField label="Explicacao completa">{item.expanded}</ModalField>
+                <ModalField label="Por que importa">{item.whyItMatters || item.importance}</ModalField>
+                <ModalField label="Exemplos no dossie"><BulletList items={item.examples} /></ModalField>
+                <ModalField label="Notas de precisao"><BulletList items={item.precisionNotes} /></ModalField>
+                <ModalField label="Tags"><DossierChips items={item.tags} limit={12} /></ModalField>
+                <ModalField label="Fontes"><SourceLinks items={item.sources} /></ModalField>
               </>
             )}
           </section>

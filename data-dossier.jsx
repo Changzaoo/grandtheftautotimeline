@@ -32,6 +32,16 @@ const dossierSourcesData = [
     note: "Atualizacao de GTA Online usada na linha do tempo viva."
   },
   {
+    label: "Rockstar Newswire - Oscar Guzman Flies Again",
+    url: "https://www.rockstargames.com/newswire/article/179kk473a8a18k/gta-online-oscar-guzman-flies-again-now-available",
+    note: "Atualizacao de 2025 com McKenzie Field Hangar e trafico aereo."
+  },
+  {
+    label: "Rockstar Newswire - A Safehouse in the Hills",
+    url: "https://www.rockstargames.com/newswire/article/51358a55o2o11o/gta-online-a-safehouse-in-the-hills-coming-december-10",
+    note: "Anuncio oficial da atualizacao de safehouse de GTA Online."
+  },
+  {
     label: "Rockstar North / Rockstar Games - historico publico",
     url: "https://en.wikipedia.org/wiki/Rockstar_North",
     note: "Estrutura historica de DMA Design, Rockstar North e principais jogos."
@@ -50,6 +60,11 @@ const dossierSourcesData = [
     label: "GTA Wiki / Fandom - paginas de jogos e lore",
     url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_Wiki",
     note: "Apoio para detalhes de personagens, locais, faccoes, motores e cronologia secundaria."
+  },
+  {
+    label: "GTA Wiki - Updates in GTA Online",
+    url: "https://gta.fandom.com/wiki/Updates_in_GTA_Online",
+    note: "Lista-base de DLCs e atualizacoes de conteudo de GTA Online."
   },
   {
     label: "ESRB - caso Hot Coffee",
@@ -3180,7 +3195,847 @@ const onlineTimelineData = [
   { year: "2022-2023", title: "Los Santos Drug Wars", theme: "Dax, Fooliganz, laboratorios e acido" },
   { year: "2023", title: "San Andreas Mercenaries", theme: "operações aereas contra Merryweather e carreira militar privada" },
   { year: "2025", title: "Money Fronts", theme: "lavagem de dinheiro por negocios de fachada, incluindo car wash e outras frentes" },
+  { year: "2025", title: "A Safehouse in the Hills", theme: "safehouse high-end, contratos e novas rotas de carreira criminal nas colinas" },
   { year: "continuo", title: "Carreira e economia", theme: "balancos, GTA+, veiculos, criador de missoes, eventos e rotacao semanal" }
+];
+
+const onlineDlcData = [
+  {
+    id: "beach-bum",
+    title: "Beach Bum Update",
+    releaseDate: "19 de novembro de 2013",
+    year: "2013",
+    type: "Conteudo gratuito",
+    era: "Base inicial",
+    summary: "Primeiro pacote grande de GTA Online, voltado para praia, lazer e atividades leves em Los Santos.",
+    brought: ["novos veiculos de praia", "armas SNS Pistol e Broken Bottle", "roupas e tatuagens praianas", "novos jobs de corrida, deathmatch e parachuting"],
+    systems: ["expansao do catalogo inicial"],
+    vehicles: ["BF Bifta", "Canis Kalahari", "Bravado Paradise", "Speeder"],
+    modes: ["jobs de praia", "corridas", "deathmatches"],
+    characters: ["jogador online"],
+    impact: "Mostrou o modelo de GTA Online como plataforma expansivel por updates gratuitos.",
+    tags: ["2013", "veiculos", "armas", "inicio"],
+    sourcePage: "Beach Bum Update"
+  },
+  {
+    id: "deathmatch-race-creators",
+    title: "Deathmatch & Race Creators Update",
+    releaseDate: "11 de dezembro de 2013",
+    year: "2013",
+    type: "Ferramentas de criacao",
+    era: "Base inicial",
+    summary: "Liberou criadores para jogadores publicarem corridas e deathmatches proprios.",
+    brought: ["criador de corridas", "criador de deathmatches", "conteudo verificado pela Rockstar", "base para comunidade produzir jobs"],
+    systems: ["Content Creator"],
+    vehicles: [],
+    modes: ["races", "deathmatches", "jobs criados pela comunidade"],
+    characters: ["criadores da comunidade"],
+    impact: "Foi o primeiro passo para transformar a comunidade em fonte constante de atividades.",
+    tags: ["criador", "corridas", "deathmatch"],
+    sourcePage: "Deathmatch & Race Creators Update"
+  },
+  {
+    id: "capture",
+    title: "Capture Update",
+    releaseDate: "18 de dezembro de 2013",
+    year: "2013",
+    type: "Modo competitivo",
+    era: "Base inicial",
+    summary: "Adicionou Capture, variacao de capture-the-flag adaptada ao caos de GTA Online.",
+    brought: ["modo Capture", "variantes Contend, GTA, Hold e Raid", "novos jobs competitivos", "foco em equipes e objetivos"],
+    systems: ["Capture Jobs"],
+    vehicles: [],
+    modes: ["Capture"],
+    characters: ["jogador online"],
+    impact: "Ampliou o lado competitivo antes dos grandes negocios e heists.",
+    tags: ["modo", "pvp", "equipes"],
+    sourcePage: "Capture Update"
+  },
+  {
+    id: "holiday-gifts",
+    title: "Holiday Gifts",
+    releaseDate: "24 de dezembro de 2013",
+    year: "2013",
+    type: "Evento sazonal",
+    era: "Base inicial",
+    summary: "Primeiro evento natalino, com neve temporaria, roupas festivas e itens sazonais.",
+    brought: ["neve em Los Santos", "roupas natalinas", "mascaras e itens festivos", "recompensas de fim de ano"],
+    systems: ["eventos sazonais"],
+    vehicles: [],
+    modes: ["atividades livres com tema natalino"],
+    characters: ["jogador online"],
+    impact: "Estabeleceu a tradicao de eventos temporarios e clima sazonal.",
+    tags: ["evento", "natal", "sazonal"],
+    sourcePage: "Holiday Gifts"
+  },
+  {
+    id: "valentines-day-massacre",
+    title: "The Valentine's Day Massacre Special",
+    releaseDate: "13 de fevereiro de 2014",
+    year: "2014",
+    type: "Evento tematico",
+    era: "Base inicial",
+    summary: "Pacote inspirado em crime dos anos 1920/1930, com carro classico, roupas e a Gusenberg Sweeper.",
+    brought: ["Albany Roosevelt", "Gusenberg Sweeper", "roupas de gangster", "jobs tematicos"],
+    systems: ["conteudo de tempo limitado no lancamento"],
+    vehicles: ["Albany Roosevelt"],
+    modes: ["jobs tematicos"],
+    characters: ["jogador online"],
+    impact: "Introduziu a ideia de updates como fantasia estetica especifica.",
+    tags: ["evento", "armas", "veiculos", "retro"],
+    sourcePage: "The Valentine's Day Massacre Special"
+  },
+  {
+    id: "business",
+    title: "The Business Update",
+    releaseDate: "4 de marco de 2014",
+    year: "2014",
+    type: "Conteudo de luxo",
+    era: "Base inicial",
+    summary: "Adicionou visual executivo inicial: veiculos esportivos, jato, arma e roupas de negocios.",
+    brought: ["Dinka Jester", "Grotti Turismo R", "Albany Alpha", "Vestra", "Heavy Pistol", "Special Carbine", "roupas executivas"],
+    systems: ["catalogo de luxo"],
+    vehicles: ["Jester", "Turismo R", "Alpha", "Vestra"],
+    modes: ["jobs adicionais"],
+    characters: ["jogador online"],
+    impact: "Antecipou o tema CEO que so ficaria pleno em 2015 e 2016.",
+    tags: ["veiculos", "armas", "luxo"],
+    sourcePage: "The Business Update"
+  },
+  {
+    id: "high-life",
+    title: "The High Life Update",
+    releaseDate: "13 de maio de 2014",
+    year: "2014",
+    type: "Apartamentos e luxo",
+    era: "Base inicial",
+    summary: "Focou em vida de alto padrao, apartamentos adicionais e veiculos premium.",
+    brought: ["apartamentos high-end adicionais", "possibilidade de possuir mais propriedades", "Dewbauchee Massacro", "Pegassi Zentorno", "Bullpup Rifle", "Mental State"],
+    systems: ["multi-propriedades", "Mental State"],
+    vehicles: ["Massacro", "Zentorno", "Huntley S", "Thrust"],
+    modes: ["novos jobs"],
+    characters: ["jogador online"],
+    impact: "Comecou a transformar progresso em patrimonio visivel.",
+    tags: ["propriedades", "veiculos", "luxo"],
+    sourcePage: "The High Life Update"
+  },
+  {
+    id: "hipster",
+    title: "The I'm Not a Hipster Update",
+    releaseDate: "17 de junho de 2014",
+    year: "2014",
+    type: "Estilo urbano",
+    era: "Base inicial",
+    summary: "Satirizou moda alternativa de Los Santos com carros compactos, roupas e armas.",
+    brought: ["veiculos compactos e classicos", "Vintage Pistol", "Antique Cavalry Dagger", "roupas hipster", "novos jobs"],
+    systems: ["customizacao estetica"],
+    vehicles: ["Glendale", "Warrener", "Rhapsody", "Panto", "Pigalle", "Blade"],
+    modes: ["jobs adicionais"],
+    characters: ["jogador online"],
+    impact: "Reforcou GTA Online como vitrine de subculturas e satira urbana.",
+    tags: ["moda", "veiculos", "satira"],
+    sourcePage: "The \"I'm Not a Hipster\" Update"
+  },
+  {
+    id: "independence-day",
+    title: "The Independence Day Special",
+    releaseDate: "1 de julho de 2014",
+    year: "2014",
+    type: "Evento sazonal",
+    era: "Base inicial",
+    summary: "Pacote patriotico dos EUA com monster truck, moto, armas e fogos.",
+    brought: ["Vapid Liberator", "Western Sovereign", "Musket", "Firework Launcher", "roupas patrioticas", "propriedades decoradas"],
+    systems: ["conteudo sazonal de 4 de julho"],
+    vehicles: ["Liberator", "Sovereign"],
+    modes: ["jobs tematicos"],
+    characters: ["jogador online"],
+    impact: "Virou modelo para eventos patrioticos e retornos temporarios anuais.",
+    tags: ["evento", "armas", "veiculos"],
+    sourcePage: "The Independence Day Special"
+  },
+  {
+    id: "flight-school",
+    title: "The San Andreas Flight School Update",
+    releaseDate: "19 de agosto de 2014",
+    year: "2014",
+    type: "Aviacao",
+    era: "Base inicial",
+    summary: "Expandiu atividades aereas com escola de voo, aeronaves e paraquedas.",
+    brought: ["San Andreas Flight School", "Besra", "Miljet", "Swift", "paraquedas e roupas de piloto", "novos jobs aereos"],
+    systems: ["escola de voo", "desafios aereos"],
+    vehicles: ["Besra", "Miljet", "Swift"],
+    modes: ["corridas aereas", "desafios de voo"],
+    characters: ["jogador online"],
+    impact: "Deu peso ao espaco aereo antes de Smuggler's Run.",
+    tags: ["aeronaves", "escola", "jobs"],
+    sourcePage: "The San Andreas Flight School Update"
+  },
+  {
+    id: "last-team-standing",
+    title: "The Last Team Standing Update",
+    releaseDate: "2 de outubro de 2014",
+    year: "2014",
+    type: "Modo competitivo",
+    era: "Base inicial",
+    summary: "Refinou combates por equipes com novas armas, veiculos e jobs LTS.",
+    brought: ["novos Last Team Standing Jobs", "Heavy Shotgun", "Marksman Rifle", "Lampadati Furore GT", "roupas taticas"],
+    systems: ["Last Team Standing"],
+    vehicles: ["Furore GT"],
+    modes: ["Last Team Standing"],
+    characters: ["jogador online"],
+    impact: "Fortaleceu PvP organizado antes da era de negocios.",
+    tags: ["pvp", "armas", "equipes"],
+    sourcePage: "The Last Team Standing Update"
+  },
+  {
+    id: "festive-surprise-2014",
+    title: "Festive Surprise",
+    releaseDate: "18 de dezembro de 2014",
+    year: "2014",
+    type: "Evento sazonal",
+    era: "Base inicial",
+    summary: "Evento natalino maior, com neve, roupas, armas festivas e veiculos.",
+    brought: ["neve temporaria", "Homing Launcher", "Proximity Mines", "Vapid Slamvan", "Bravado Rat-Truck", "roupas e mascaras natalinas"],
+    systems: ["evento de fim de ano"],
+    vehicles: ["Slamvan", "Rat-Truck"],
+    modes: ["jobs sazonais"],
+    characters: ["jogador online"],
+    impact: "Consolidou o ciclo anual de eventos sazonais.",
+    tags: ["natal", "armas", "veiculos"],
+    sourcePage: "Festive Surprise"
+  },
+  {
+    id: "heists",
+    title: "Heists Update",
+    releaseDate: "10 de marco de 2015",
+    year: "2015",
+    type: "Assaltos cooperativos",
+    era: "Era dos heists",
+    summary: "Primeiro grande salto estrutural: assaltos cooperativos com planejamento, setups, finais e funcoes de equipe.",
+    brought: ["Fleeca Job", "Prison Break", "Humane Labs Raid", "Series A Funding", "Pacific Standard Job", "apartamento high-end como sala de planejamento", "novos veiculos, roupas e equipamentos"],
+    systems: ["heists cooperativos", "setups", "finales", "papel de lider do assalto"],
+    vehicles: ["Kuruma", "Insurgent", "Hydra", "Savage", "Mule", "Lectro"],
+    modes: ["heists", "adversary modes"],
+    characters: ["Lester Crest", "Agent 14", "Trevor Philips", "Ron Jakowski", "Paige Harris"],
+    impact: "Transformou GTA Online de sandbox competitivo em carreira criminal cooperativa.",
+    tags: ["heist", "cooperativo", "Lester"],
+    sourcePage: "Heists Update"
+  },
+  {
+    id: "ill-gotten-gains-1",
+    title: "Ill-Gotten Gains Part 1",
+    releaseDate: "10 de junho de 2015",
+    year: "2015",
+    type: "Luxo e consumo",
+    era: "Pos-heists",
+    summary: "Pacote de ostentacao para gastar dinheiro dos heists: supercarros, aeronaves, armas e roupas caras.",
+    brought: ["veiculos de luxo", "armas douradas", "roupas premium", "acessorios e itens de status"],
+    systems: ["catalogo de luxo"],
+    vehicles: ["Pegassi Osiris", "Benefactor Stirling GT", "Enus Windsor", "Albany Virgo", "Luxor Deluxe", "Swift Deluxe"],
+    modes: ["jobs adicionais"],
+    characters: ["jogador online"],
+    impact: "Cristalizou a economia de status de GTA Online.",
+    tags: ["luxo", "veiculos", "dinheiro"],
+    sourcePage: "Ill-Gotten Gains Part 1"
+  },
+  {
+    id: "ill-gotten-gains-2",
+    title: "Ill-Gotten Gains Part 2",
+    releaseDate: "8 de julho de 2015",
+    year: "2015",
+    type: "Luxo e combate",
+    era: "Pos-heists",
+    summary: "Continuacao do pacote de ostentacao com novos veiculos, armas e itens para a elite criminosa.",
+    brought: ["novos veiculos", "Marksman Pistol", "Knuckle Dusters", "roupas e joias", "novos jobs"],
+    systems: ["catalogo de luxo"],
+    vehicles: ["Coil Brawler", "Progen T20", "Vapid Chino", "Dinka Vindicator", "Invetero Coquette BlackFin"],
+    modes: ["jobs adicionais"],
+    characters: ["jogador online"],
+    impact: "Manteve o ciclo de consumo depois dos heists.",
+    tags: ["luxo", "armas", "veiculos"],
+    sourcePage: "Ill-Gotten Gains Part 2"
+  },
+  {
+    id: "freemode-events",
+    title: "Freemode Events Update",
+    releaseDate: "15 de setembro de 2015",
+    year: "2015",
+    type: "Mundo aberto",
+    era: "Freemode",
+    summary: "Introduziu eventos dinamicos no mapa livre, sem lobby, com competicoes surgindo durante a sessao.",
+    brought: ["Freemode Events", "Freemode Challenges", "Hunt the Beast", "King of the Castle", "Penned In", "novos modos adversarios"],
+    systems: ["eventos sem lobby", "atividades de sessao"],
+    vehicles: [],
+    modes: ["Freemode Events", "Adversary Modes"],
+    characters: ["jogador online"],
+    impact: "Fez Los Santos parecer mais vivo entre missoes formais.",
+    tags: ["freemode", "eventos", "pvp"],
+    sourcePage: "Freemode Events Update"
+  },
+  {
+    id: "lowriders",
+    title: "GTA Online: Lowriders",
+    releaseDate: "20 de outubro de 2015",
+    year: "2015",
+    type: "Customizacao e missoes",
+    era: "Cultura automotiva",
+    summary: "Abriu a Benny's Original Motor Works e aprofundou a customizacao de lowriders.",
+    brought: ["Benny's Original Motor Works", "customizacoes hydraulics", "interiores e audio", "novas missoes de Lamar", "roupas e armas"],
+    systems: ["Benny's", "customizacao avancada"],
+    vehicles: ["Voodoo Custom", "Faction Custom", "Moonbeam Custom", "Primo Custom", "Chino Custom", "Buccaneer Custom"],
+    modes: ["missoes de Lamar"],
+    characters: ["Lamar Davis", "Benny"],
+    impact: "Criou um dos pilares de customizacao automotiva do Online.",
+    tags: ["Benny's", "carros", "Lamar"],
+    sourcePage: "GTA Online: Lowriders"
+  },
+  {
+    id: "halloween-surprise",
+    title: "Halloween Surprise",
+    releaseDate: "29 de outubro de 2015",
+    year: "2015",
+    type: "Evento sazonal",
+    era: "Eventos",
+    summary: "Evento de Halloween com veiculos funebres, armas e modos adversarios sombrios.",
+    brought: ["Albany Lurcher", "Franken Stange", "Flashlight", "mascaras de Halloween", "Slasher Adversary Mode"],
+    systems: ["evento de Halloween"],
+    vehicles: ["Lurcher", "Franken Stange"],
+    modes: ["Slasher"],
+    characters: ["jogador online"],
+    impact: "Inaugurou uma das tradicoes sazonais mais reconheciveis do Online.",
+    tags: ["Halloween", "evento", "modo adversario"],
+    sourcePage: "Halloween Surprise"
+  },
+  {
+    id: "executives-other-criminals",
+    title: "Executives and Other Criminals",
+    releaseDate: "15 de dezembro de 2015",
+    year: "2015",
+    type: "Organizacoes VIP",
+    era: "Negocios",
+    summary: "Introduziu o estilo CEO/VIP inicial, iates e estrutura de guarda-costas.",
+    brought: ["sistema VIP e bodyguards", "super yachts", "apartamentos stilt", "novos veiculos armados e de luxo", "Extraction Adversary Mode"],
+    systems: ["VIP Organizations", "Bodyguards", "Yachts"],
+    vehicles: ["Turreted Limo", "Schafter V12", "Cognoscenti", "SuperVolito", "Tampa"],
+    modes: ["VIP Work", "Extraction"],
+    characters: ["jogador online"],
+    impact: "Foi a semente direta dos negocios CEO que viriam em Finance and Felony.",
+    tags: ["VIP", "iates", "organizacoes"],
+    sourcePage: "GTA Online: Executives and Other Criminals"
+  },
+  {
+    id: "festive-surprise-2015",
+    title: "Festive Surprise 2015",
+    releaseDate: "21 de dezembro de 2015",
+    year: "2015",
+    type: "Evento sazonal",
+    era: "Eventos",
+    summary: "Novo pacote natalino com neve, roupas, carros e retorno de itens festivos.",
+    brought: ["neve", "Declasse Tampa", "roupas e mascaras de Natal", "itens sazonais", "retorno de conteudos festivos"],
+    systems: ["evento de fim de ano"],
+    vehicles: ["Declasse Tampa"],
+    modes: ["jobs sazonais"],
+    characters: ["jogador online"],
+    impact: "Reforcou a rotina anual de eventos e itens temporarios.",
+    tags: ["natal", "evento", "veiculos"],
+    sourcePage: "Festive Surprise 2015"
+  },
+  {
+    id: "january-2016",
+    title: "January 2016 Update",
+    releaseDate: "28 de janeiro de 2016",
+    year: "2016",
+    type: "Modos e veiculos",
+    era: "Adversary modes",
+    summary: "Update menor que trouxe novos veiculos de Benny's/mercado e o modo Drop Zone.",
+    brought: ["Drop Zone Adversary Mode", "Karin Sultan RS", "Bravado Banshee 900R", "novas opcoes de customizacao"],
+    systems: ["Adversary Mode", "Benny's"],
+    vehicles: ["Sultan RS", "Banshee 900R"],
+    modes: ["Drop Zone"],
+    characters: ["jogador online"],
+    impact: "Manteve o ritmo de conteudo entre grandes pacotes.",
+    tags: ["Benny's", "modo adversario", "carros"],
+    sourcePage: "January 2016 Update"
+  },
+  {
+    id: "be-my-valentine",
+    title: "GTA Online: Be My Valentine",
+    releaseDate: "10 de fevereiro de 2016",
+    year: "2016",
+    type: "Evento tematico",
+    era: "Eventos",
+    summary: "Revisitou o tema Valentine's com Roosevelt Valor, roupas e Till Death Do Us Part.",
+    brought: ["Albany Roosevelt Valor", "roupas vintage", "retorno de itens do Valentine's anterior", "Till Death Do Us Part"],
+    systems: ["evento tematico"],
+    vehicles: ["Roosevelt Valor"],
+    modes: ["Till Death Do Us Part"],
+    characters: ["jogador online"],
+    impact: "Mostrou como updates antigos poderiam voltar em versao expandida.",
+    tags: ["evento", "retro", "modo adversario"],
+    sourcePage: "GTA Online: Be My Valentine"
+  },
+  {
+    id: "lowriders-custom-classics",
+    title: "GTA Online: Lowriders: Custom Classics",
+    releaseDate: "15 de marco de 2016",
+    year: "2016",
+    type: "Customizacao",
+    era: "Cultura automotiva",
+    summary: "Expandiu Benny's com novos upgrades custom, armas e o modo Sumo.",
+    brought: ["novos lowriders custom", "Double Barrel Shotgun", "Compact Rifle", "Sumo Adversary Mode", "roupas e tatuagens"],
+    systems: ["Benny's", "Adversary Mode"],
+    vehicles: ["Faction Custom Donk", "Slamvan Custom", "Virgo Classic Custom"],
+    modes: ["Sumo"],
+    characters: ["jogador online"],
+    impact: "Aprofundou a subcultura lowrider dentro do Online.",
+    tags: ["Benny's", "armas", "Sumo"],
+    sourcePage: "GTA Online: Lowriders: Custom Classics"
+  },
+  {
+    id: "finance-felony",
+    title: "Further Adventures in Finance and Felony",
+    releaseDate: "7 de junho de 2016",
+    year: "2016",
+    type: "Negocios CEO",
+    era: "Negocios",
+    summary: "Transformou VIP em CEO permanente, com escritorios, armazens e contrabando de carga.",
+    brought: ["escritorios executivos", "SecuroServ CEO", "Special Cargo", "warehouses", "novos VIP/CEO work", "veiculos executivos"],
+    systems: ["CEO", "Special Cargo", "warehouses", "assistente executiva"],
+    vehicles: ["Pegassi Reaper", "Vapid FMJ", "Benefactor XLS", "Bravado Rumpo Custom", "Brickade"],
+    modes: ["CEO Work", "Special Cargo sales"],
+    characters: ["Assistente do escritorio"],
+    impact: "Criou o primeiro loop robusto de grind empresarial de GTA Online.",
+    tags: ["CEO", "carga", "escritorio", "negocios"],
+    sourcePage: "GTA Online: Further Adventures in Finance and Felony"
+  },
+  {
+    id: "cunning-stunts",
+    title: "GTA Online: Cunning Stunts",
+    releaseDate: "12 de julho de 2016",
+    year: "2016",
+    type: "Corridas stunt",
+    era: "Corridas",
+    summary: "Reinventou corridas com pistas irreais, tubos, rampas e objetos stunt.",
+    brought: ["Stunt Races", "criador stunt depois expandido", "veiculos esportivos e motos", "roupas de corrida"],
+    systems: ["Stunt Races", "Stunt Props"],
+    vehicles: ["RE-7B", "ETR1", "Tyrus", "Omnis", "Trophy Truck", "Cliffhanger"],
+    modes: ["Stunt Races", "Premium Races"],
+    characters: ["jogador online"],
+    impact: "Criou uma linguagem propria para corridas arcade dentro de GTA Online.",
+    tags: ["corridas", "stunt", "veiculos"],
+    sourcePage: "GTA Online: Cunning Stunts"
+  },
+  {
+    id: "bikers",
+    title: "GTA Online: Bikers",
+    releaseDate: "4 de outubro de 2016",
+    year: "2016",
+    type: "Motoclubes e negocios",
+    era: "Negocios",
+    summary: "Adicionou clubes de moto, hierarquia MC e negocios de producao ilegal.",
+    brought: ["clubhouses", "MC President", "cargos de motoclube", "negocios de cocaine, meth, weed, counterfeit cash e document forgery", "novas motos"],
+    systems: ["Motorcycle Clubs", "MC Businesses", "contracts"],
+    vehicles: ["Hakuchou Drag", "Nightblade", "Avarus", "Zombie", "Daemon Custom", "Faggio Mod"],
+    modes: ["Clubhouse Contracts", "MC Challenges"],
+    characters: ["Malc", "LJT"],
+    impact: "Deu ao jogador uma identidade criminal alternativa ao CEO.",
+    tags: ["MC", "negocios", "motos"],
+    sourcePage: "GTA Online: Bikers"
+  },
+  {
+    id: "import-export",
+    title: "GTA Online: Import/Export",
+    releaseDate: "13 de dezembro de 2016",
+    year: "2016",
+    type: "Roubo de veiculos",
+    era: "Negocios",
+    summary: "Adicionou Vehicle Cargo, garagens de veiculos especiais e missoes com tecnologia exagerada.",
+    brought: ["Vehicle Warehouses", "Vehicle Cargo", "Special Vehicle Work", "garagens de ate 60 veiculos", "veiculos especiais armados"],
+    systems: ["Vehicle Cargo", "Special Vehicle Work"],
+    vehicles: ["Ruiner 2000", "Rocket Voltic", "Phantom Wedge", "Ramp Buggy", "Technical Aqua", "Wastelander"],
+    modes: ["steal/sell vehicles", "Special Vehicle missions"],
+    characters: ["Assistente do escritorio"],
+    impact: "Virou um dos loops mais populares de dinheiro solo/CEO.",
+    tags: ["CEO", "carros", "veiculos especiais"],
+    sourcePage: "GTA Online: Import/Export"
+  },
+  {
+    id: "special-vehicle-circuit",
+    title: "Cunning Stunts: Special Vehicle Circuit",
+    releaseDate: "14 de marco de 2017",
+    year: "2017",
+    type: "Corridas especiais",
+    era: "Corridas",
+    summary: "Criou corridas dedicadas a veiculos especiais de Import/Export.",
+    brought: ["Special Vehicle Races", "pistas para Ruiner 2000, Rocket Voltic e Blazer Aqua", "novos carros esportivos"],
+    systems: ["Special Vehicle Circuit"],
+    vehicles: ["Progen GP1", "Hijak Ruston", "Turismo Classic", "Infernus Classic"],
+    modes: ["Special Vehicle Races"],
+    characters: ["jogador online"],
+    impact: "Amarrou corridas stunt aos veiculos especiais da economia CEO.",
+    tags: ["corridas", "veiculos especiais"],
+    sourcePage: "GTA Online: Cunning Stunts: Special Vehicle Circuit"
+  },
+  {
+    id: "gunrunning",
+    title: "GTA Online: Gunrunning",
+    releaseDate: "13 de junho de 2017",
+    year: "2017",
+    type: "Bunkers e armas",
+    era: "Negocios militares",
+    summary: "Adicionou bunkers, pesquisa, fabricacao de armas e veiculos militarizados.",
+    brought: ["bunkers", "Mobile Operations Center", "research", "weaponized vehicles", "Mk II weapon upgrades", "Gunrunning sell missions"],
+    systems: ["Bunker Business", "Research", "MOC", "Mk II Weapons"],
+    vehicles: ["APC", "Dune FAV", "Half-track", "Oppressor", "Weaponized Tampa", "Anti-Aircraft Trailer"],
+    modes: ["Gunrunning sales", "Mobile Operations"],
+    characters: ["Agent 14"],
+    impact: "Mudou o equilibrio do Online ao colocar tecnologia militar no centro da economia.",
+    tags: ["bunker", "armas", "militar", "Mk II"],
+    sourcePage: "GTA Online: Gunrunning"
+  },
+  {
+    id: "smugglers-run",
+    title: "GTA Online: Smuggler's Run",
+    releaseDate: "29 de agosto de 2017",
+    year: "2017",
+    type: "Contrabando aereo",
+    era: "Negocios militares",
+    summary: "Transformou hangares em negocios de carga aerea, com aeronaves customizaveis.",
+    brought: ["hangars", "Air Freight Cargo", "aeronaves novas", "customizacao de aeronaves", "Adversary Modes aereos"],
+    systems: ["Hangar Business", "Air Freight Cargo"],
+    vehicles: ["Rogue", "Tula", "Mogul", "Molotok", "Nokota", "Hunter", "Pyro"],
+    modes: ["Air Freight missions"],
+    characters: ["Ron Jakowski"],
+    impact: "Expandiu o mapa verticalmente e conectou Fort Zancudo ao progresso do jogador.",
+    tags: ["hangar", "aeronaves", "contrabando"],
+    sourcePage: "GTA Online: Smuggler's Run"
+  },
+  {
+    id: "doomsday-heist",
+    title: "GTA Online: The Doomsday Heist",
+    releaseDate: "12 de dezembro de 2017",
+    year: "2017",
+    type: "Heist tecnologico",
+    era: "Agencias e tecnologia",
+    summary: "Assalto em tres atos com IAA, Avon Hertz, Clifford, bases subterraneas e ameaca de fim do mundo.",
+    brought: ["Facilities", "Doomsday Heist Acts I-III", "prep missions em freemode", "Orbital Cannon", "Avenger", "veiculos futuristas"],
+    systems: ["Facilities", "Doomsday Heist", "Orbital Cannon"],
+    vehicles: ["Avenger", "Deluxo", "Stromberg", "Thruster", "Khanjali", "Chernobog"],
+    modes: ["Doomsday Heist", "setups e preps"],
+    characters: ["Lester Crest", "Agent 14", "Avon Hertz", "Clifford", "Bogdan", "ULP"],
+    impact: "Levou GTA Online para ficcao de espionagem absurda e tecnologia de alto nivel.",
+    tags: ["heist", "IAA", "Facility", "tecnologia"],
+    sourcePage: "GTA Online: The Doomsday Heist"
+  },
+  {
+    id: "southern-san-andreas-super-sport-series",
+    title: "Southern San Andreas Super Sport Series",
+    releaseDate: "20 de marco de 2018",
+    year: "2018",
+    type: "Corridas e modos",
+    era: "Corridas",
+    summary: "Serie de conteudos automotivos com Hotring Circuit, Target Assault e varios veiculos.",
+    brought: ["Hotring Circuit", "Target Assault Races", "Transform Races adicionais", "novos carros e roupas"],
+    systems: ["novas series de corrida"],
+    vehicles: ["Hotring Sabre", "GB200", "Entity XXR", "Taipan", "Flash GT", "Issi Classic"],
+    modes: ["Hotring Circuit", "Target Assault"],
+    characters: ["jogador online"],
+    impact: "Manteve o foco de corridas entre grandes expansoes de negocios.",
+    tags: ["corridas", "carros", "Hotring"],
+    sourcePage: "GTA Online: Southern San Andreas Super Sport Series"
+  },
+  {
+    id: "after-hours",
+    title: "GTA Online: After Hours",
+    releaseDate: "24 de julho de 2018",
+    year: "2018",
+    type: "Nightclubs e renda passiva",
+    era: "Negocios conectados",
+    summary: "Trouxe Tony Prince de volta e fez nightclubs conectarem negocios anteriores em uma rede passiva.",
+    brought: ["Nightclubs", "warehouse technicians", "DJs reais", "Terrorbyte", "Oppressor Mk II", "novas missoes de promocao"],
+    systems: ["Nightclub Business", "Technicians", "Terrorbyte Client Jobs"],
+    vehicles: ["Terrorbyte", "Oppressor Mk II", "Mule Custom", "Pounder Custom", "Stafford", "Swinger"],
+    modes: ["club management", "business battles", "client jobs"],
+    characters: ["Tony Prince", "Lazlow Jones", "Solomun", "Dixon", "Tale of Us", "The Black Madonna"],
+    impact: "Unificou negocios antigos e virou uma das bases de renda passiva mais importantes.",
+    tags: ["nightclub", "Tony Prince", "renda passiva"],
+    sourcePage: "GTA Online: After Hours"
+  },
+  {
+    id: "arena-war",
+    title: "GTA Online: Arena War",
+    releaseDate: "11 de dezembro de 2018",
+    year: "2018",
+    type: "Combate veicular",
+    era: "Espetaculo",
+    summary: "Adicionou Arena Workshop, ranking de arena e modos de combate veicular estilo show televisivo.",
+    brought: ["Arena Workshop", "Arena Points", "veiculos Apocalypse, Future Shock e Nightmare", "modos Arena War"],
+    systems: ["Arena Career", "Arena Workshop"],
+    vehicles: ["Deathbike", "Sasquatch", "Imperator", "ZR380", "Bruiser", "Brutus"],
+    modes: ["Carnage", "Flag War", "Here Come the Monsters", "Wreck It"],
+    characters: ["Alan Jerome", "Bryony"],
+    impact: "Foi uma ramificacao mais arcade e separada da economia criminal tradicional.",
+    tags: ["arena", "veiculos", "combate"],
+    sourcePage: "GTA Online: Arena War"
+  },
+  {
+    id: "diamond-casino-resort",
+    title: "The Diamond Casino & Resort",
+    releaseDate: "23 de julho de 2019",
+    year: "2019",
+    type: "Cassino e propriedade",
+    era: "Cassino",
+    summary: "Abriu o Diamond Casino & Resort com penthouses, jogos de azar e narrativa dos Cheng contra Duggan.",
+    brought: ["Diamond Casino aberto", "Master Penthouse", "casino games", "Lucky Wheel", "Casino Store", "missoes de historia do cassino"],
+    systems: ["Casino", "Penthouses", "Membership"],
+    vehicles: ["Thrax", "Paragon R", "S80RR", "Drafter", "Gauntlet Classic"],
+    modes: ["Casino Story Missions", "Work Missions"],
+    characters: ["Tao Cheng", "Agatha Baker", "Tom Connors", "Avery Duggan"],
+    impact: "Transformou um predio fechado desde 2013 em hub social e economico.",
+    tags: ["cassino", "penthouse", "Cheng"],
+    sourcePage: "GTA Online: The Diamond Casino & Resort"
+  },
+  {
+    id: "diamond-casino-heist",
+    title: "The Diamond Casino Heist",
+    releaseDate: "12 de dezembro de 2019",
+    year: "2019",
+    type: "Heist flexivel",
+    era: "Cassino",
+    summary: "Adicionou o Arcade como fachada e um assalto ao cassino com abordagens variadas.",
+    brought: ["Arcades", "Diamond Casino Heist", "approaches Silent & Sneaky, Big Con e Aggressive", "equipe de suporte", "novos veiculos e armas"],
+    systems: ["Arcade Business", "Casino Heist planning", "heist approach system"],
+    vehicles: ["Retinue Mk II", "Komoda", "Everon", "Sultan Classic", "Vagrant", "Zhaba"],
+    modes: ["Casino Heist", "prep missions"],
+    characters: ["Lester Crest", "Georgina Cheng", "Avi Schwartzman", "Paige Harris"],
+    impact: "Elevou re-jogabilidade dos heists com escolhas reais de abordagem.",
+    tags: ["heist", "Arcade", "cassino"],
+    sourcePage: "GTA Online: The Diamond Casino Heist"
+  },
+  {
+    id: "los-santos-summer-special",
+    title: "Los Santos Summer Special",
+    releaseDate: "11 de agosto de 2020",
+    year: "2020",
+    type: "Qualidade de vida e atividades",
+    era: "Pre-Cayo",
+    summary: "Pacote intermediario com missoes de iate, carros, corridas Open Wheel e melhorias gerais.",
+    brought: ["Super Yacht Life", "novos veiculos", "Open Wheel Races adicionais", "Business Battles expandidas", "criador melhorado"],
+    systems: ["Yacht Missions", "Open Wheel"],
+    vehicles: ["Coquette D10", "Tigon", "Youga Classic 4x4", "Club", "Gauntlet Classic Custom"],
+    modes: ["A Superyacht Life", "Open Wheel Races"],
+    characters: ["Captain Darcy"],
+    impact: "Serviu como respiro antes da maior expansao de heist da era.",
+    tags: ["iate", "corridas", "veiculos"],
+    sourcePage: "GTA Online: Los Santos Summer Special"
+  },
+  {
+    id: "cayo-perico-heist",
+    title: "The Cayo Perico Heist",
+    releaseDate: "15 de dezembro de 2020",
+    year: "2020",
+    type: "Heist e mapa novo",
+    era: "Heists modernos",
+    summary: "Adicionou Cayo Perico, ilha privada de El Rubio, e o primeiro heist grande jogavel solo.",
+    brought: ["ilha Cayo Perico", "Kosatka submarine", "Cayo Perico Heist", "Music Locker", "novas armas, veiculos e radios"],
+    systems: ["solo-friendly heist", "Kosatka", "intel gathering", "secondary targets"],
+    vehicles: ["Kosatka", "Sparrow", "Toreador", "Winky", "RO-86 Alkonost", "Annihilator Stealth"],
+    modes: ["Cayo Perico Heist", "Gather Intel", "Prep Missions"],
+    characters: ["Miguel Madrazo", "El Rubio", "Pavel", "English Dave"],
+    impact: "Mudou a economia por permitir grind solo lucrativo e levar o jogador para fora de San Andreas.",
+    tags: ["heist", "solo", "Cayo Perico", "Kosatka"],
+    sourcePage: "GTA Online: The Cayo Perico Heist"
+  },
+  {
+    id: "los-santos-tuners",
+    title: "Los Santos Tuners",
+    releaseDate: "20 de julho de 2021",
+    year: "2021",
+    type: "Cultura automotiva",
+    era: "Tuners",
+    summary: "Criou o LS Car Meet, reputacao de encontros, contratos de Auto Shop e foco em carros tuner.",
+    brought: ["LS Car Meet", "Auto Shops", "Contracts", "Reputation", "Prize Ride", "Test Track", "novos carros tuner"],
+    systems: ["LS Car Meet", "Auto Shop Business", "Reputation"],
+    vehicles: ["Calico GTF", "Jester RR", "Remus", "ZR350", "Comet S2", "Sultan RS Classic"],
+    modes: ["Street Race Series", "Pursuit Series", "Contracts"],
+    characters: ["Mimi", "Sessanta", "KDJ"],
+    impact: "Foi a maior expansao automotiva desde Benny's e criou comunidade social de carros.",
+    tags: ["tuners", "Auto Shop", "carros"],
+    sourcePage: "GTA Online: Los Santos Tuners"
+  },
+  {
+    id: "the-contract",
+    title: "The Contract",
+    releaseDate: "15 de dezembro de 2021",
+    year: "2021",
+    type: "Agencia e narrativa",
+    era: "Continuidade de GTA V",
+    summary: "Trouxe Franklin mais velho como empresario, Agency e contrato VIP com Dr. Dre.",
+    brought: ["Agencies", "VIP Contract", "Security Contracts", "Payphone Hits", "Armory", "Imani Tech", "novas musicas e estudios"],
+    systems: ["Agency Business", "VIP Contract", "Imani Tech"],
+    vehicles: ["Champion", "Buffalo STX", "Deity", "Jubilee", "Ignus", "Shinobi"],
+    modes: ["Security Contracts", "Payphone Hits", "Short Trips"],
+    characters: ["Franklin Clinton", "Lamar Davis", "Dr. Dre", "Imani", "Anderson .Paak"],
+    impact: "Conectou explicitamente GTA Online ao futuro de Franklin apos GTA V.",
+    tags: ["Franklin", "Agency", "Dr. Dre", "continuidade"],
+    sourcePage: "GTA Online: The Contract"
+  },
+  {
+    id: "criminal-enterprises",
+    title: "The Criminal Enterprises",
+    releaseDate: "26 de julho de 2022",
+    year: "2022",
+    type: "Economia e qualidade de vida",
+    era: "Rebalanceamento",
+    summary: "Grande update de economia, novas missoes da IAA e melhorias em negocios existentes.",
+    brought: ["Operation Paper Trail", "expansoes para CEO, MC, bunker e nightclub", "payouts melhorados", "veiculos e qualidade de vida", "vendas em sessoes privadas"],
+    systems: ["business boosts", "Operation Paper Trail", "private session selling"],
+    vehicles: ["Torero XO", "Omnis e-GT", "Corsita", "Greenwood", "SM722"],
+    modes: ["IAA missions", "business source/sell updates"],
+    characters: ["Agent ULP", "Mason Duggan"],
+    impact: "Respondeu ao desgaste do grind e modernizou loops antigos.",
+    tags: ["economia", "IAA", "qualidade de vida"],
+    sourcePage: "GTA Online: The Criminal Enterprises"
+  },
+  {
+    id: "los-santos-drug-wars",
+    title: "Los Santos Drug Wars",
+    releaseDate: "13 de dezembro de 2022",
+    year: "2022",
+    type: "Drogas e Fooliganz",
+    era: "Fooliganz",
+    summary: "Introduziu Dax, The Freakshop, Acid Lab e a linha narrativa First Dose/Last Dose.",
+    brought: ["First Dose missions", "Last Dose missions", "The Freakshop", "Acid Lab", "Fooliganz Jobs", "novos veiculos e armas"],
+    systems: ["Acid Lab Business", "Fooligan Jobs"],
+    vehicles: ["MTL Brickade 6x6", "Manchez Scout C", "Entity MT", "Journey II", "Toundra Panthere"],
+    modes: ["First Dose", "Last Dose", "Fooligan Jobs"],
+    characters: ["Dax", "Luchadora", "Labrat", "Dr. Isiah Friedlander"],
+    impact: "Criou uma progressao relativamente acessivel para jogadores solo.",
+    tags: ["Acid Lab", "Dax", "drogas"],
+    sourcePage: "GTA Online: Los Santos Drug Wars"
+  },
+  {
+    id: "san-andreas-mercenaries",
+    title: "San Andreas Mercenaries",
+    releaseDate: "13 de junho de 2023",
+    year: "2023",
+    type: "Operacoes aereas",
+    era: "Mercenarios",
+    summary: "Colocou os Los Santos Angels contra Merryweather com missoes aereas a partir do Avenger.",
+    brought: ["Project Overthrow", "LSA Operations", "Avenger Operations Terminal", "Mammoth Avenger upgrades", "novos veiculos e melhorias"],
+    systems: ["Avenger Operations", "LSA Operations"],
+    vehicles: ["F-160 Raiju", "MonstroCiti", "Walton L35", "Ratel", "Streamer216"],
+    modes: ["Project Overthrow", "LSA Operations"],
+    characters: ["Charlie Reed", "Los Santos Angels"],
+    impact: "Reposicionou o Avenger como base operacional e trouxe combate militar moderno.",
+    tags: ["Merryweather", "Avenger", "aereo"],
+    sourcePage: "GTA Online: San Andreas Mercenaries"
+  },
+  {
+    id: "the-chop-shop",
+    title: "The Chop Shop",
+    releaseDate: "12 de dezembro de 2023",
+    year: "2023",
+    type: "Roubo de carros",
+    era: "Roubos especializados",
+    summary: "Adicionou Salvage Yard, roubos de veiculos de alto valor e retorno de Yusuf Amir.",
+    brought: ["Salvage Yard", "Salvage Yard Robberies", "Tow Truck Service", "planejamento de roubos", "novos veiculos e Drift Races"],
+    systems: ["Salvage Yard Business", "Tow Truck", "Vehicle Robberies"],
+    vehicles: ["Turismo Omaggio", "FR36", "Dorado", "Vivanite", "Aleutian"],
+    modes: ["Salvage Yard Robberies", "Drift Races"],
+    characters: ["Yusuf Amir", "Jamal Amir"],
+    impact: "Trouxe uma fantasia de roubo de carros mais proxima do DNA original da serie.",
+    tags: ["Salvage Yard", "Yusuf", "carros"],
+    sourcePage: "GTA Online: The Chop Shop"
+  },
+  {
+    id: "bottom-dollar-bounties",
+    title: "Bottom Dollar Bounties",
+    releaseDate: "25 de junho de 2024",
+    year: "2024",
+    type: "Cacadores de recompensa",
+    era: "Justica privatizada",
+    summary: "Transformou o jogador em operador da Bottom Dollar Bail Enforcement, com procurados e trabalhos policiais.",
+    brought: ["Bail Office", "standard bounty targets", "Most Wanted targets", "Dispatch Work", "novos veiculos de policia e utilitarios"],
+    systems: ["Bail Office Business", "Bounty Targets", "Dispatch Work"],
+    vehicles: ["Dominator FX", "Envisage", "Impaler SZ Cruiser", "Greenwood Cruiser", "Yosemite 1500"],
+    modes: ["Bounty Targets", "Dispatch Work"],
+    characters: ["Maude Eccles", "Jenette Eccles", "Vincent Effenburger"],
+    impact: "Misturou fantasia policial, recompensa e economia criminal em uma atividade diaria.",
+    tags: ["bounties", "policia", "Bail Office"],
+    sourcePage: "GTA Online: Bottom Dollar Bounties"
+  },
+  {
+    id: "agents-of-sabotage",
+    title: "Agents of Sabotage",
+    releaseDate: "10 de dezembro de 2024",
+    year: "2024",
+    type: "Operacoes clandestinas",
+    era: "Sabotagem",
+    summary: "Adicionou Darnell Bros Garment Factory como base e File missions com Jodi Marshall.",
+    brought: ["Darnell Bros Garment Factory", "The FIB Files", "novas missoes de infiltracao", "Terrorbyte upgrades", "novos veiculos"],
+    systems: ["Garment Factory", "FIB Files", "hacking/infiltration jobs"],
+    vehicles: ["Banshee GTS", "Chavos V6", "Jester RR Widebody", "Coquette D10 Pursuit"],
+    modes: ["FIB Files", "Priority File"],
+    characters: ["Jodi Marshall", "Pavel", "Lester Crest"],
+    impact: "Recuperou o espaco da Darnell Bros, historico de GTA V, como hub criminal moderno.",
+    tags: ["FIB", "sabotagem", "Garment Factory"],
+    sourcePage: "GTA Online: Agents of Sabotage"
+  },
+  {
+    id: "oscar-guzman-flies-again",
+    title: "Oscar Guzman Flies Again",
+    releaseDate: "4 de marco de 2025",
+    year: "2025",
+    type: "Missoes e hangar",
+    era: "Contrabando aereo",
+    summary: "Continuacao de Agents of Sabotage com Oscar Guzman, McKenzie Field Hangar e uma nova linha de trafico de armas contra Eberhard Munitions.",
+    brought: ["McKenzie Field Hangar compravel", "nova serie de missoes com Oscar Guzman", "missoes de trafico de armas", "novas aeronaves e veiculos", "progressao de carreira no Enhanced"],
+    systems: ["McKenzie Field Hangar", "arms trafficking missions", "Career Progress"],
+    vehicles: ["Duster 300-H", "DH-7 Iron Mule", "Titan 250 D"],
+    modes: ["Oscar Guzman Flies Again missions", "arms trafficking work"],
+    characters: ["Oscar Guzman", "Ron Jakowski", "Eberhard Munitions"],
+    impact: "Reaproveitou o passado de Trevor Philips Enterprises e deu ao contrabando aereo uma nova frente narrativa.",
+    tags: ["Oscar Guzman", "hangar", "Blaine County", "2025"],
+    sourcePage: "Oscar Guzman Flies Again",
+    officialSource: "https://www.rockstargames.com/newswire/article/179kk473a8a18k/gta-online-oscar-guzman-flies-again-now-available"
+  },
+  {
+    id: "money-fronts",
+    title: "Money Fronts",
+    releaseDate: "17 de junho de 2025",
+    year: "2025",
+    type: "Lavagem de dinheiro",
+    era: "Fachadas",
+    summary: "Focou em negocios de fachada para lavar dinheiro, esconder operacoes ilegais e transformar empresas legitimas em cobertura criminal.",
+    brought: ["Hands On Car Wash como primeira fachada", "Smoke on the Water e Higgins Helitours integrados como frentes adicionais", "Mr. Faber como contato", "trabalhos legitimos para manter aparencia limpa", "renda passiva conectada a lavagem", "novos veiculos, melhorias e atividades de mapa"],
+    systems: ["Money Laundering Fronts", "business upgrades", "front income", "trabalhos legitimos", "QuickiePharm", "Safeguard deliveries"],
+    vehicles: ["Karin Everon RS", "Woodlander", "Tampa GT", "novos veiculos adicionados por drip-feed"],
+    modes: ["front management", "lavagem e entregas", "Cayo Perico Adversary/Survival", "Slasher em Ramius Submarine"],
+    characters: ["Martin Madrazo", "Mr. Faber"],
+    impact: "Deu coesao narrativa a negocios de lavagem que GTA Online sugeria havia anos e aproximou a economia do jogador de uma rede criminosa com fachada legal.",
+    tags: ["lavagem", "negocios", "fachadas", "Mr. Faber"],
+    sourcePage: "GTA Online: Money Fronts",
+    officialSource: "https://www.rockstargames.com/newswire/article/51322o2k393kka/gta-online-money-fronts-now-available"
+  },
+  {
+    id: "safehouse-in-the-hills",
+    title: "A Safehouse in the Hills",
+    releaseDate: "10 de dezembro de 2025",
+    year: "2025",
+    type: "Safehouse e high-end crime",
+    era: "Fase atual",
+    summary: "Update de fim de 2025 centrado na compra de mansoes Prix Luxury nas colinas, com safehouse de luxo, assistente de IA e novas operacoes ligadas ao alto escalao criminal de Los Santos.",
+    brought: ["mansoes Prix Luxury compraveis", "interiores de safehouse high-end", "assistente de IA para suporte da propriedade", "beneficios de seguranca privada", "impulso de producao para negocios", "novas missoes de preparacao", "novos veiculos, roupas e recompensas"],
+    systems: ["Luxury Safehouse", "AI Assistant", "Private Security", "Production Boosts", "Prix Luxury prep missions"],
+    vehicles: ["novos veiculos adicionados pela atualizacao e drip-feed"],
+    modes: ["missoes da safehouse", "prep missions", "atividades de carreira", "KnoWay Out"],
+    characters: ["jogador online", "Avi Schwartzman", "Michael De Santa"],
+    impact: "Leva a fantasia de patrimonio do Online para mansoes de alto luxo e reposiciona o jogador como chefe consolidado, nao apenas operador de rua.",
+    tags: ["safehouse", "luxo", "Prix Luxury", "Michael", "2025"],
+    sourcePage: "GTA Online: A Safehouse in the Hills",
+    officialSource: "https://www.rockstargames.com/newswire/article/51358a55o2o11o/gta-online-a-safehouse-in-the-hills-coming-december-10"
+  }
 ];
 
 const gta6FactsData = {
@@ -3294,7 +4149,512 @@ const glossaryData = [
   { term: "Vice City", definition: "Analogo de Miami, presente em 2D, 3D e HD Universe." }
 ];
 
+const glossaryDetailData = {
+  "2D Universe": {
+    category: "Universos",
+    expanded:
+      "O 2D Universe cobre a fase original de Grand Theft Auto, quando a serie ainda era vista de cima, com ritmo arcade, pontuacao, missoes curtas e continuidade narrativa bem mais solta. Liberty City, San Andreas e Vice City ja existem como nomes, mas ainda funcionam como mapas de caos urbano, nao como cidades-personagem densas. London 1969 e London 1961 tambem entram nessa fase e sao excecoes historicas por levarem GTA para fora do imaginario criminal norte-americano que dominaria a franquia depois.",
+    importance:
+      "E o laboratorio da formula: roubo de veiculos, perseguicao policial, radios, humor acido, liberdade sistemica e crime urbano antes da virada cinematografica de GTA III.",
+    examples: ["Grand Theft Auto", "GTA: London 1969", "GTA: London 1961", "Grand Theft Auto 2"],
+    relatedTerms: ["3D Universe", "HD Universe", "Canon", "Easter egg"],
+    games: ["GTA 1", "London 1969", "London 1961", "GTA 2"],
+    precisionNotes: [
+      "GTA 2 e frequentemente tratado como parte da fase 2D, mas seu ano interno e tom retrofuturista sao deliberadamente nebulosos.",
+      "Nomes de cidades podem reaparecer em outros universos sem significar que sao a mesma continuidade."
+    ],
+    tags: ["universo", "top-down", "arcade", "origem"],
+    sources: [
+      { label: "GTA Wiki - Universes", url: "https://gta.fandom.com/wiki/Universes" },
+      { label: "Wikipedia - Grand Theft Auto", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto" }
+    ]
+  },
+  "3D Universe": {
+    category: "Universos",
+    expanded:
+      "O 3D Universe e a continuidade classica formada por GTA III, Vice City, San Andreas, Advance, Liberty City Stories e Vice City Stories. Ele transforma nomes antigos em lugares memoraveis, com mafias, gangues, radios, personagens recorrentes e eventos que se conectam entre jogos. Claude, Tommy Vercetti, CJ, Mike, Toni Cipriani e Victor Vance pertencem a esse bloco narrativo.",
+    importance:
+      "Foi a era que consolidou GTA como narrativa criminal de mundo aberto, fazendo Liberty City, Vice City e San Andreas parecerem arquivos vivos de crime, radio, politica e cultura pop.",
+    examples: ["Leone Family atravessando San Andreas, LCS e GTA III", "Catalina conectando San Andreas e GTA III", "Vice City Stories preparando o terreno para Vice City"],
+    relatedTerms: ["2D Universe", "HD Universe", "Prequel", "Canon"],
+    games: ["GTA III", "Vice City", "San Andreas", "GTA Advance", "Liberty City Stories", "Vice City Stories"],
+    precisionNotes: [
+      "GTA Advance e top-down, mas pertence ao 3D Universe por continuidade, cidade e ligacao com GTA III.",
+      "Referencias da era 3D podem aparecer na era HD como marcas, piadas ou ecos, mas personagens centrais nao devem ser assumidos como canonicos no HD Universe."
+    ],
+    tags: ["universo", "3d", "continuidade", "mafias"],
+    sources: [
+      { label: "GTA Wiki - 3D Universe", url: "https://gta.fandom.com/wiki/3D_Universe" },
+      { label: "GTA Wiki - Universes", url: "https://gta.fandom.com/wiki/Universes" }
+    ]
+  },
+  "HD Universe": {
+    category: "Universos",
+    expanded:
+      "O HD Universe comeca em GTA IV e segue por Episodes from Liberty City, Chinatown Wars, GTA V, GTA Online e GTA VI. A Rockstar reinventa a continuidade com cidades mais densas, fisica mais complexa, tom mais realista e satira contemporanea. Liberty City, Los Santos e Vice City retornam reinterpretadas, com escala, geografia e canon diferentes da era 3D.",
+    importance:
+      "E o universo atual da franquia. Ele sustenta a narrativa de Niko Bellic, Johnny Klebitz, Luis Lopez, Huang Lee, Michael, Franklin, Trevor, o protagonista de GTA Online, Lucia Caminos e Jason Duval.",
+    examples: ["GTA IV e Episodes mostram o mesmo conflito por angulos diferentes", "GTA Online continua Los Santos depois de 2013", "GTA VI leva a continuidade HD para Leonida e Vice City moderna"],
+    relatedTerms: ["Canon", "RAGE", "Euphoria", "GTA Online Organization", "Leonida"],
+    games: ["GTA IV", "The Lost and Damned", "The Ballad of Gay Tony", "Chinatown Wars", "GTA V", "GTA Online", "GTA VI"],
+    precisionNotes: [
+      "O HD Universe nao invalida a importancia historica da era 3D; ele separa continuidade narrativa.",
+      "GTA VI e confirmado no HD Universe por continuidade moderna de marca, tecnologia e pagina oficial, mas detalhes finos do canon so ficam completos apos o lancamento."
+    ],
+    tags: ["universo", "hd", "canon atual", "realismo"],
+    sources: [
+      { label: "GTA Wiki - HD Universe", url: "https://gta.fandom.com/wiki/HD_Universe" },
+      { label: "Rockstar - GTA VI", url: "https://www.rockstargames.com/VI" }
+    ]
+  },
+  "Wanted Level": {
+    category: "Sistemas",
+    expanded:
+      "Wanted Level e o medidor de resposta policial de GTA. Crimes publicos, disparos, atropelamentos, invasao de areas restritas e ataques a autoridades elevam o nivel de procurado. Nas eras 2D e 3D ele costuma ir ate seis estrelas; em GTA V e GTA Online opera em escala de cinco estrelas. A logica muda por jogo, mas a fantasia e a mesma: quanto mais caos publico, mais agressiva e organizada fica a resposta do Estado.",
+    importance:
+      "E um dos sistemas mais reconheciveis da serie, porque transforma a cidade em organismo reativo: patrulhas, barreiras, helicopteros, unidades taticas e perseguicoes contam a historia do crime sem precisar de cutscene.",
+    examples: ["seis estrelas em jogos classicos", "cinco estrelas em GTA V", "resposta automatica a areas restritas em GTA Online"],
+    relatedTerms: ["NOOSE", "LSPD", "LCPD", "C.R.A.S.H."],
+    games: ["franquia GTA"],
+    precisionNotes: [
+      "A quantidade maxima de estrelas e a logica de fuga variam entre jogos.",
+      "GTA Online evita prisao tradicional do jogador e tende a usar resposta letal."
+    ],
+    tags: ["policia", "sistema", "estrelas", "perseguicao"],
+    sources: [
+      { label: "GTA Wiki - Wanted Level", url: "https://gta.fandom.com/wiki/Wanted_Level" },
+      { label: "Wikipedia - Grand Theft Auto", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto" }
+    ]
+  },
+  "Heist": {
+    category: "Estrutura narrativa",
+    expanded:
+      "Heist e o assalto planejado, geralmente dividido em preparacao, equipe, equipamento, execucao e fuga. A ideia existe no DNA da serie desde roubos e golpes menores, mas ganha forma cinematografica em GTA V e estrutura cooperativa em GTA Online. Em vez de uma missao isolada, o heist vira campanha curta: escolher abordagem, roubar preparativos, dividir papeis e lidar com consequencias.",
+    importance:
+      "Os heists conectam a fantasia criminal de GTA ao design moderno de missao. No Online, eles tambem viraram o eixo economico de progressao e cooperacao.",
+    examples: ["Fleeca Job", "Pacific Standard Job", "The Doomsday Heist", "The Diamond Casino Heist", "The Cayo Perico Heist"],
+    relatedTerms: ["GTA Online Organization", "Lester Crest", "IAA", "FIB"],
+    games: ["GTA V", "GTA Online"],
+    precisionNotes: [
+      "Nem todo roubo em GTA e chamado formalmente de heist.",
+      "Cayo Perico e historico por permitir execucao solo de um grande heist em GTA Online."
+    ],
+    tags: ["heist", "assalto", "cooperativo", "planejamento"],
+    sources: [
+      { label: "GTA Wiki - Heists", url: "https://gta.fandom.com/wiki/Heists" },
+      { label: "GTA Wiki - Heists Update", url: "https://gta.fandom.com/wiki/Heists_Update" }
+    ]
+  },
+  "C.R.A.S.H.": {
+    category: "Policia corrupta",
+    expanded:
+      "Community Resources Against Street Hoodlums, abreviado como C.R.A.S.H., e a unidade corrupta do LSPD que domina parte da narrativa de GTA San Andreas. Frank Tenpenny, Eddie Pulaski e Jimmy Hernandez manipulam CJ, fabricam pressoes, usam gangues como ferramenta e representam a corrupcao institucional por tras da guerra de ruas de Los Santos.",
+    importance:
+      "C.R.A.S.H. e o rosto policial da tragedia de San Andreas: a historia nao e apenas gangues contra gangues, mas uma cidade onde autoridade, crime e politica se contaminam.",
+    examples: ["Tenpenny coagindo CJ", "Pulaski como executor", "Hernandez dividido entre culpa e obediencia"],
+    relatedTerms: ["Wanted Level", "LSPD", "Canon"],
+    games: ["GTA San Andreas"],
+    precisionNotes: ["C.R.A.S.H. e especifica da continuidade 3D e nao deve ser confundida com LSPD generica da era HD."],
+    tags: ["policia corrupta", "San Andreas", "Tenpenny", "LSPD"],
+    sources: [{ label: "GTA Wiki - C.R.A.S.H.", url: "https://gta.fandom.com/wiki/C.R.A.S.H." }]
+  },
+  "FIB": {
+    category: "Agencias",
+    expanded:
+      "Federal Investigation Bureau e a parodia de GTA para o FBI. Na era HD, o FIB aparece como agencia federal agressiva, burocratica e politicamente contaminada. Dave Norton e Steve Haines sao centrais em GTA V: o primeiro prende Michael numa mentira de protecao; o segundo explora Michael, Franklin e Trevor em operacoes sujas.",
+    importance:
+      "O FIB permite que GTA critique vigilancia, propaganda, conflito entre agencias e uso do crime como ferramenta de Estado.",
+    examples: ["Steve Haines em GTA V", "Dave Norton e o acordo de Michael", "The FIB Files em Agents of Sabotage"],
+    relatedTerms: ["IAA", "NOOSE", "Wanted Level", "HD Universe"],
+    games: ["GTA IV", "GTA V", "GTA Online"],
+    precisionNotes: ["A representacao varia por jogo; no HD Universe o FIB fica muito mais presente no enredo principal."],
+    tags: ["governo", "FIB", "corrupcao", "HD Universe"],
+    sources: [{ label: "GTA Wiki - FIB", url: "https://gta.fandom.com/wiki/Federal_Investigation_Bureau" }]
+  },
+  "IAA": {
+    category: "Agencias",
+    expanded:
+      "International Affairs Agency e a parodia de GTA para agencias de inteligencia como a CIA. Ela aparece em conflitos de espionagem, operacoes clandestinas e disputas com o FIB. Em GTA V e GTA Online, a IAA usa criminosos, mercenarios e intermediarios para resolver crises que oficialmente nao existem.",
+    importance:
+      "A IAA amplia GTA para alem de gangues e mafias: o crime tambem pode ser geopolitica, laboratorio, sabotagem e guerra de informacao.",
+    examples: ["conflito FIB versus IAA em GTA V", "Agent ULP em missao da IAA", "Operation Paper Trail"],
+    relatedTerms: ["FIB", "NOOSE", "Heist", "HD Universe"],
+    games: ["GTA IV", "GTA V", "GTA Online"],
+    precisionNotes: ["A IAA e uma satira ficcional; paralelos com agencias reais sao intencionais, mas nao equivalencias literais."],
+    tags: ["governo", "IAA", "inteligencia", "operacoes"],
+    sources: [{ label: "GTA Wiki - IAA", url: "https://gta.fandom.com/wiki/International_Affairs_Agency" }]
+  },
+  "NOOSE": {
+    category: "Policia tática",
+    expanded:
+      "National Office of Security Enforcement e a forca tática federal do HD Universe, funcionando como resposta armada de alto nivel. Em perseguicoes intensas, missoes e eventos de GTA IV, GTA V e GTA Online, a NOOSE representa a militarizacao da resposta policial.",
+    importance:
+      "Ela materializa o topo da escala de repressao: quando o Wanted Level vira crise, a cidade troca patrulhas por equipes taticas, helicopteros e bloqueios pesados.",
+    examples: ["resposta de alto nivel em Liberty City", "unidades taticas em Los Santos", "missoes envolvendo N.O.O.S.E. em GTA Online"],
+    relatedTerms: ["Wanted Level", "FIB", "IAA", "LSPD"],
+    games: ["GTA IV", "GTA V", "GTA Online"],
+    precisionNotes: ["Em jogos antigos, funcoes parecidas eram ocupadas por SWAT/FBI/Army; NOOSE e mais propria da era HD."],
+    tags: ["policia", "NOOSE", "tatico", "HD Universe"],
+    sources: [{ label: "GTA Wiki - NOOSE", url: "https://gta.fandom.com/wiki/National_Office_of_Security_Enforcement" }]
+  },
+  "RAGE": {
+    category: "Tecnologia",
+    expanded:
+      "Rockstar Advanced Game Engine e a tecnologia proprietaria usada pela Rockstar na era HD. GTA IV marca a entrada da franquia nesse ciclo tecnico, combinando mundo aberto mais denso, fisica, streaming de cidade, animacao, veiculos e sistemas urbanos em escala maior. GTA V e Red Dead Redemption 2 refinam essa base; GTA VI deve representar a proxima evolucao, embora detalhes tecnicos oficiais continuem limitados.",
+    importance:
+      "RAGE e a infraestrutura que permitiu a virada de GTA para cidades mais densas, iluminacao moderna, fisica mais reativa e simulacao mais ambiciosa.",
+    examples: ["GTA IV", "GTA V", "GTA Online", "Red Dead Redemption 2"],
+    relatedTerms: ["Euphoria", "HD Universe", "GTA VI"],
+    games: ["GTA IV", "GTA V", "GTA Online", "GTA VI"],
+    precisionNotes: [
+      "A Rockstar nao publica todos os detalhes internos da engine.",
+      "Afirmacoes sobre reconstrucoes completas para GTA VI devem ser tratadas como nao confirmadas salvo fonte oficial."
+    ],
+    tags: ["engine", "RAGE", "tecnologia", "HD Universe"],
+    sources: [
+      { label: "GTA Wiki - RAGE", url: "https://gta.fandom.com/wiki/Rockstar_Advanced_Game_Engine" },
+      { label: "Wikipedia - Rockstar Advanced Game Engine", url: "https://en.wikipedia.org/wiki/Rockstar_Advanced_Game_Engine" }
+    ]
+  },
+  "Euphoria": {
+    category: "Tecnologia",
+    expanded:
+      "Euphoria e uma tecnologia de animacao comportamental e fisica corporal associada a NaturalMotion, integrada a jogos da Rockstar na era HD. Em GTA IV ela ficou famosa pelas reacoes de corpos a impactos, quedas, atropelamentos e tiroteios, fazendo personagens parecerem menos presos a animacoes rigidas.",
+    importance:
+      "A tecnologia ajudou GTA IV a parecer fisicamente diferente da era 3D: mais pesado, imprevisivel e responsivo ao choque entre pedestres, veiculos e armas.",
+    examples: ["reacoes de Niko e pedestres em GTA IV", "ragdoll mais fisico em GTA V", "quedas e colisoes em jogos da Rockstar"],
+    relatedTerms: ["RAGE", "HD Universe", "Wanted Level"],
+    games: ["GTA IV", "GTA V", "GTA Online"],
+    precisionNotes: ["Euphoria nao e a engine inteira; e uma camada/tecnologia ligada a animacao e simulacao corporal."],
+    tags: ["fisica", "animacao", "Euphoria", "RAGE"],
+    sources: [
+      { label: "GTA Wiki - Euphoria", url: "https://gta.fandom.com/wiki/Euphoria" },
+      { label: "Wikipedia - Euphoria software", url: "https://en.wikipedia.org/wiki/Euphoria_(software)" }
+    ]
+  },
+  "Canon": {
+    category: "Continuidade",
+    expanded:
+      "Canon e o conjunto de eventos aceitos como continuidade narrativa. Em GTA, o termo precisa ser usado com cuidado porque a franquia separa universos, brinca com marcas recorrentes, deixa finais alternativos e usa easter eggs para referenciar jogos antigos sem necessariamente confirmar coexistencia. A Opcao C de GTA V, por exemplo, e amplamente tratada como continuidade mais aceita por GTA Online, pois Franklin, Trevor e Michael seguem vivos em aparicoes e referencias posteriores.",
+    importance:
+      "Ajuda a separar historia interna, interpretacao de fa, piada visual, referencia de marketing e informacao confirmada pela Rockstar.",
+    examples: ["universos 2D/3D/HD separados", "Opcao C de GTA V reforcada por GTA Online", "referencias a marcas antigas sem canonizar personagens"],
+    relatedTerms: ["Easter egg", "Prequel", "Spin-off", "HD Universe"],
+    games: ["franquia GTA"],
+    precisionNotes: [
+      "Quando a Rockstar nao confirma uma ligacao, o dossie marca como interpretacao ou referencia/easter egg.",
+      "Canon de gameplay e canon narrativo nem sempre sao identicos."
+    ],
+    tags: ["canon", "continuidade", "precisao", "lore"],
+    sources: [{ label: "GTA Wiki - Universes", url: "https://gta.fandom.com/wiki/Universes" }]
+  },
+  "Easter egg": {
+    category: "Referencias",
+    expanded:
+      "Easter egg e uma referencia escondida, piada visual, segredo ou pista colocada no mundo do jogo. GTA usa easter eggs para comentar cultura pop, jogos anteriores, teorias da comunidade e absurdos urbanos. Eles enriquecem a leitura do mapa, mas nao devem ser tratados automaticamente como prova de canon.",
+    importance:
+      "E uma camada essencial da experiencia GTA: a cidade parece viva porque guarda segredos, piadas internas, lendas urbanas e rastros para o jogador investigar.",
+    examples: ["segredos alienigenas em GTA V", "referencias a personagens de outros universos", "mensagens escondidas em mapas e placas"],
+    relatedTerms: ["Canon", "Universos", "HD Universe"],
+    games: ["franquia GTA"],
+    precisionNotes: ["Um easter egg pode ser intencional e ainda assim nao alterar continuidade narrativa."],
+    tags: ["referencia", "segredo", "easter egg", "interpretacao"],
+    sources: [{ label: "GTA Wiki - Secrets and Easter Eggs", url: "https://gta.fandom.com/wiki/Secrets_and_Easter_Eggs" }]
+  },
+  "Prequel": {
+    category: "Estrutura narrativa",
+    expanded:
+      "Prequel e uma historia lancada depois, mas ambientada antes de outro jogo. GTA usa prequels para preencher lacunas de poder: Liberty City Stories mostra Toni Cipriani e a familia Leone antes de GTA III; Vice City Stories mostra Victor Vance e Vice City antes da chegada de Tommy Vercetti.",
+    importance:
+      "Os prequels ajudam a entender como cidades e faccoes chegaram ao estado visto nos jogos principais.",
+    examples: ["Liberty City Stories antes de GTA III", "Vice City Stories antes de Vice City", "North Yankton 2004 como prologo dentro de GTA V"],
+    relatedTerms: ["Canon", "Spin-off", "3D Universe"],
+    games: ["Liberty City Stories", "Vice City Stories", "GTA V"],
+    precisionNotes: ["Prequel e posicao cronologica, nao necessariamente menor importancia."],
+    tags: ["prequel", "cronologia", "lore", "3D Universe"],
+    sources: [
+      { label: "GTA Wiki - Liberty City Stories", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto:_Liberty_City_Stories" },
+      { label: "GTA Wiki - Vice City Stories", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto:_Vice_City_Stories" }
+    ]
+  },
+  "Spin-off": {
+    category: "Estrutura de serie",
+    expanded:
+      "Spin-off e uma entrada derivada que muda escala, plataforma, formato ou foco. Em GTA, o termo pode cobrir jogos portateis, expansoes e experiencias laterais que nao seguem exatamente a numeracao principal, mas acrescentam contexto, personagens e sistemas.",
+    importance:
+      "Sem os spin-offs, o mapa historico da saga fica incompleto: Chinatown Wars, Advance, Episodes from Liberty City e os Stories explicam redes criminosas que os jogos principais apenas sugerem.",
+    examples: ["GTA Advance", "Chinatown Wars", "The Lost and Damned", "The Ballad of Gay Tony"],
+    relatedTerms: ["Prequel", "Canon", "3D Universe", "HD Universe"],
+    games: ["GTA Advance", "Chinatown Wars", "Episodes from Liberty City"],
+    precisionNotes: ["Spin-off nao significa nao canonico; depende do universo e do jogo."],
+    tags: ["spin-off", "expansao", "portatil", "canon"],
+    sources: [{ label: "GTA Wiki - Grand Theft Auto Wiki", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_Wiki" }]
+  },
+  "GTA Online Organization": {
+    category: "Economia online",
+    expanded:
+      "GTA Online Organization e a estrutura de organizacao criada pelo jogador para operar negocios, contratar associados e executar atividades como CEO, VIP, MC President, dono de nightclub, agencia, bunker, arcade, auto shop, salvage yard e outras frentes. Ela e menos uma faccao canonica fixa e mais um guarda-chuva de gameplay que transforma o personagem online em empresario criminoso.",
+    importance:
+      "E a base da carreira criminal persistente de GTA Online: o jogador deixa de ser apenas mercenario e passa a administrar cadeias de producao, roubo, lavagem, contrabando e servicos armados.",
+    examples: ["CEO Warehouses", "MC Businesses", "Bunker", "Nightclub", "Agency", "Arcade", "Auto Shop", "Salvage Yard", "Money Fronts"],
+    relatedTerms: ["Heist", "GTA Online", "FIB", "IAA"],
+    games: ["GTA Online"],
+    precisionNotes: [
+      "A organizacao do jogador e personalizavel e nao tem nome canonico unico.",
+      "Muitos negocios sao simultaneamente sistemas de gameplay e ficcao de lavagem de dinheiro."
+    ],
+    tags: ["online", "CEO", "MC", "negocios", "lavagem"],
+    sources: [
+      { label: "GTA Wiki - Organizations", url: "https://gta.fandom.com/wiki/Organizations" },
+      { label: "GTA Wiki - Updates in GTA Online", url: "https://gta.fandom.com/wiki/Updates_in_GTA_Online" }
+    ]
+  },
+  "Leonida": {
+    category: "Cidades e estados",
+    expanded:
+      "Leonida e o estado ficticio de GTA VI, inspirado na Florida. A pagina oficial e os trailers mostram Vice City moderna, Keys, pantanos, praias, vida noturna, encontros virais, policiamento, redes sociais e criminalidade contemporanea. A Rockstar apresenta Leonida como o novo grande palco do HD Universe, com Lucia Caminos e Jason Duval presos a uma conspiracao criminal apos um servico dar errado.",
+    importance:
+      "Leonida marca a volta de Vice City em escala moderna e abre a proxima fase de GTA depois de mais de uma decada de Los Santos como centro da franquia.",
+    examples: ["Vice City", "Leonida Keys", "ambiente de redes sociais e cultura viral", "Lucia Caminos e Jason Duval"],
+    relatedTerms: ["Vice City", "HD Universe", "Canon", "GTA VI"],
+    games: ["GTA VI"],
+    precisionNotes: [
+      "A data oficial atual de GTA VI e 19 de novembro de 2026.",
+      "Detalhes de mapa completo, antagonistas e sistemas ainda devem ser tratados como nao confirmados."
+    ],
+    tags: ["Leonida", "GTA VI", "Vice City", "confirmado"],
+    sources: [
+      { label: "Rockstar - GTA VI", url: "https://www.rockstargames.com/VI" },
+      { label: "Rockstar Newswire - GTA VI data", url: "https://www.rockstargames.com/newswire/article/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026" }
+    ]
+  },
+  "Vice City": {
+    category: "Cidades e estados",
+    expanded:
+      "Vice City e o analogo de Miami dentro de GTA. Na era 2D, aparece como uma cidade do primeiro jogo. Na era 3D, vira palco neon de drogas, cartels, luxo, praia e cinema criminal dos anos 80 em Vice City e Vice City Stories. No HD Universe, retorna em GTA VI como cidade moderna dentro de Leonida, com redes sociais, cultura viral, policia, praias, clubes e crime contemporaneo.",
+    importance:
+      "E uma das identidades urbanas mais fortes da franquia: onde Liberty City e mafia/capitalismo e Los Santos e celebridade/desigualdade, Vice City e excesso tropical, neon, golpe, trafico e reinvencao cultural.",
+    examples: ["Victor Vance em 1984", "Tommy Vercetti em 1986", "Lucia e Jason em GTA VI"],
+    relatedTerms: ["Leonida", "3D Universe", "HD Universe", "Prequel"],
+    games: ["GTA 1", "Vice City Stories", "Vice City", "GTA VI"],
+    precisionNotes: [
+      "Vice City da era 3D e Vice City de GTA VI nao sao a mesma continuidade.",
+      "A inspiracao em Miami e clara, mas a Rockstar usa satira e composicao ficcional, nao reproduz a cidade real literalmente."
+    ],
+    tags: ["Vice City", "Miami", "neon", "GTA VI", "anos 80"],
+    sources: [
+      { label: "GTA Wiki - Vice City", url: "https://gta.fandom.com/wiki/Vice_City" },
+      { label: "Rockstar - GTA VI", url: "https://www.rockstargames.com/VI" }
+    ]
+  }
+};
+
+glossaryData.forEach((item) => {
+  Object.assign(item, glossaryDetailData[item.term] || {});
+});
+
 const mediaCredit = "Imagem promocional oficial © Rockstar Games / Take-Two Interactive";
+const glossaryDetailsByTerm = {
+  "2D Universe": {
+    category: "Continuidades",
+    expanded: "A primeira fase de GTA funciona como laboratorio da franquia: camera top-down, missoes curtas, pontuacao, radio, caos urbano e menos compromisso com drama cinematografico. Os nomes Liberty City, Vice City e San Andreas ja existem, mas ainda sao mapas abstratos.",
+    appearsIn: ["Grand Theft Auto", "GTA: London 1969", "GTA: London 1961", "Grand Theft Auto 2"],
+    examples: ["GTA 1 usa tres cidades em perspectiva de cima.", "London 1969 e London 1961 sao raras incursoes fora dos EUA.", "GTA 2 usa Anywhere City e gangues de tom retrofuturista."],
+    whyItMatters: "E onde nascem as regras basicas: roubar carros, fugir da policia, aceitar trabalhos criminosos e transformar a cidade em sistema de caos.",
+    relatedTerms: ["3D Universe", "Canon", "Spin-off"],
+    precisionNotes: ["A continuidade e mais solta que nas fases posteriores.", "Cidades com o mesmo nome nao sao automaticamente a mesma versao canonica."],
+    tags: ["universo", "2D", "top-down", "origem"],
+    sources: [{ label: "GTA Wiki - 2D Universe", url: "https://gta.fandom.com/wiki/2D_Universe" }]
+  },
+  "3D Universe": {
+    category: "Continuidades",
+    expanded: "A fase classica da franquia: cidades em 3D, personagens recorrentes, mafias conectadas, radios satiricas e continuidade reconhecivel. GTA III, Vice City e San Andreas criam a identidade moderna da serie.",
+    appearsIn: ["GTA III", "Vice City", "San Andreas", "GTA Advance", "Liberty City Stories", "Vice City Stories"],
+    examples: ["Salvatore Leone conecta San Andreas, Liberty City Stories e GTA III.", "Catalina aparece em San Andreas antes de trair Claude.", "Vice City Stories mostra a cidade antes de Tommy Vercetti dominar o submundo."],
+    whyItMatters: "Transformou GTA em fenomeno cultural e consolidou o modelo urbano de mundo aberto.",
+    relatedTerms: ["2D Universe", "HD Universe", "Prequel", "Canon"],
+    precisionNotes: ["Nao e a mesma continuidade da era HD.", "Referencias posteriores podem ser homenagem ou easter egg."],
+    tags: ["universo", "3D", "PS2", "continuidade"],
+    sources: [{ label: "GTA Wiki - 3D Universe", url: "https://gta.fandom.com/wiki/3D_Universe" }]
+  },
+  "HD Universe": {
+    category: "Continuidades",
+    expanded: "Continuidade moderna iniciada em GTA IV, com cidades reinterpretadas, fisica mais realista, satira contemporanea e mundos mais densos. Liberty City de GTA IV nao e a mesma de GTA III; Los Santos de GTA V nao e simplesmente o mapa de San Andreas.",
+    appearsIn: ["GTA IV", "Episodes from Liberty City", "Chinatown Wars", "GTA V", "GTA Online", "GTA VI"],
+    examples: ["Niko Bellic vive na Liberty City HD.", "GTA V e GTA Online expandem Los Santos e Blaine County.", "GTA VI leva a continuidade para Leonida e Vice City moderna."],
+    whyItMatters: "E a continuidade ativa da franquia e o eixo de GTA Online, GTA V e GTA VI.",
+    relatedTerms: ["Canon", "RAGE", "Euphoria", "GTA Online Organization"],
+    precisionNotes: ["Personagens antigos podem ser citados sem migrar de universo.", "GTA Online tem cronologia viva e flexivel."],
+    tags: ["universo", "HD", "moderno", "GTA Online"],
+    sources: [{ label: "GTA Wiki - HD Universe", url: "https://gta.fandom.com/wiki/HD_Universe" }]
+  },
+  "Wanted Level": {
+    category: "Sistemas",
+    expanded: "Wanted Level e a linguagem policial de GTA. Crimes aumentam estrelas; cada estrela amplia patrulhas, bloqueios, helicopteros, unidades taticas e perseguicoes. O sistema cria tensao imediata entre liberdade e consequencia.",
+    appearsIn: ["quase toda a serie principal"],
+    examples: ["GTA III pode escalar ate exercito e tanques.", "GTA IV e GTA V usam area de busca e linha de visao.", "GTA Online adapta a resposta policial para sessoes multiplayer."],
+    whyItMatters: "Faz a cidade reagir ao jogador e transforma improviso em perseguicao.",
+    relatedTerms: ["NOOSE", "FIB", "IAA", "Canon"],
+    precisionNotes: ["A implementacao muda por jogo.", "Muitas respostas policiais sao sistema de gameplay, nao evento canonico."],
+    tags: ["policia", "sistema", "estrelas", "gameplay"],
+    sources: [{ label: "GTA Wiki - Wanted Level", url: "https://gta.fandom.com/wiki/Wanted_Level" }]
+  },
+  "Heist": {
+    category: "Estrutura de missao",
+    expanded: "Heist e o assalto planejado de GTA: reconhecimento, preparacao, equipe, equipamento, execucao, fuga e pagamento. Em GTA V organiza a campanha; em GTA Online vira pilar cooperativo, solo-friendly ou modular.",
+    appearsIn: ["GTA V", "GTA Online", "The Doomsday Heist", "The Diamond Casino Heist", "The Cayo Perico Heist"],
+    examples: ["The Jewel Store Job define o modelo em GTA V.", "Pacific Standard marca os heists classicos do Online.", "Cayo Perico muda a economia por permitir grind solo lucrativo."],
+    whyItMatters: "Condensa a fantasia criminal moderna da serie em planejamento e recompensa.",
+    relatedTerms: ["GTA Online Organization", "FIB", "IAA", "Prequel"],
+    precisionNotes: ["Nem todo roubo e heist formal.", "Pagamentos e dificuldade mudam com balanceamentos do Online."],
+    tags: ["assalto", "missao", "GTA Online", "crime"],
+    sources: [{ label: "GTA Wiki - Heists", url: "https://gta.fandom.com/wiki/Heists" }]
+  },
+  "C.R.A.S.H.": {
+    category: "Organizacoes",
+    expanded: "Community Resources Against Street Hoodlums e a unidade policial corrupta de GTA San Andreas. Tenpenny, Pulaski e Hernandez representam abuso de poder, chantagem, fabricacao de provas e uso das gangues como ferramenta politica.",
+    appearsIn: ["Grand Theft Auto: San Andreas"],
+    examples: ["Tenpenny incrimina CJ logo no retorno a Los Santos.", "C.R.A.S.H. usa CJ para remover ameacas.", "A queda de Tenpenny explode nos riots finais."],
+    whyItMatters: "E o centro politico da historia de CJ e liga gangues, policia e corrupcao sistemica.",
+    relatedTerms: ["Wanted Level", "Canon", "3D Universe"],
+    precisionNotes: ["Inspirada por escandalos reais, mas tratada como ficcao satirica."],
+    tags: ["policia corrupta", "San Andreas", "Tenpenny", "3D Universe"],
+    sources: [{ label: "GTA Wiki - C.R.A.S.H.", url: "https://gta.fandom.com/wiki/Community_Resources_Against_Street_Hoodlums" }]
+  },
+  "FIB": {
+    category: "Agencias",
+    expanded: "Federal Investigation Bureau e a parodia do FBI no universo GTA. Em GTA V, Dave Norton e Steve Haines colocam Michael, Franklin e Trevor em operacoes clandestinas, disputas internas e manipulacao politica.",
+    appearsIn: ["GTA IV", "GTA V", "GTA Online"],
+    examples: ["Steve Haines usa os protagonistas em guerra burocratica contra a IAA.", "Dave Norton sustenta a mentira de North Yankton.", "GTA Online retoma arquivos e operacoes do FIB em updates modernos."],
+    whyItMatters: "Mostra que o Estado em GTA tambem funciona como faccao interessada.",
+    relatedTerms: ["IAA", "NOOSE", "Wanted Level", "HD Universe"],
+    precisionNotes: ["O nome e ficcional; a parodia do FBI e intencional."],
+    tags: ["governo", "FIB", "corrupcao", "HD Universe"],
+    sources: [{ label: "GTA Wiki - FIB", url: "https://gta.fandom.com/wiki/Federal_Investigation_Bureau" }]
+  },
+  "IAA": {
+    category: "Agencias",
+    expanded: "International Affairs Agency satiriza inteligencia externa, operacoes secretas e rivalidade burocratica com o FIB. Em GTA V e Online, aparece em interrogatorios, conspiracoes e missoes de espionagem.",
+    appearsIn: ["GTA IV", "GTA V", "GTA Online"],
+    examples: ["A disputa FIB/IAA move varias missoes de GTA V.", "The Doomsday Heist coloca inteligencia e tecnologia no centro da ameaca.", "Agent ULP reaparece em operacoes do Online."],
+    whyItMatters: "Amplia a satira politica para agencias de inteligencia e guerra secreta.",
+    relatedTerms: ["FIB", "NOOSE", "Heist", "HD Universe"],
+    precisionNotes: ["E uma agencia ficcional; conexoes com a CIA sao satiricas, nao literais."],
+    tags: ["governo", "IAA", "espionagem", "HD Universe"],
+    sources: [{ label: "GTA Wiki - IAA", url: "https://gta.fandom.com/wiki/International_Affairs_Agency" }]
+  },
+  "NOOSE": {
+    category: "Agencias",
+    expanded: "National Office of Security Enforcement e a resposta tatica pesada da era HD, misturando parodia de seguranca nacional, SWAT e forcas federais. Surge quando a situacao passa da policia comum.",
+    appearsIn: ["GTA IV", "GTA V", "GTA Online"],
+    examples: ["Equipes taticas aparecem em perseguicoes intensas.", "Helicopteros e unidades armadas reforcam Wanted Level alto.", "Heists e missoes usam NOOSE como pressao institucional."],
+    whyItMatters: "Representa a escalada do crime urbano para resposta quase militar.",
+    relatedTerms: ["Wanted Level", "FIB", "IAA", "HD Universe"],
+    precisionNotes: ["O papel exato varia por jogo, missao e nivel de procurado."],
+    tags: ["policia", "tatico", "HD Universe", "governo"],
+    sources: [{ label: "GTA Wiki - NOOSE", url: "https://gta.fandom.com/wiki/National_Office_of_Security_Enforcement" }]
+  },
+  "RAGE": {
+    category: "Tecnologia",
+    expanded: "Rockstar Advanced Game Engine e a engine proprietaria da Rockstar na era HD. Sustenta streaming de mapa, fisica, veiculos, clima, animacoes e sistemas urbanos em mundos grandes e densos.",
+    appearsIn: ["GTA IV", "GTA V", "GTA Online", "Red Dead Redemption", "Red Dead Redemption 2"],
+    examples: ["GTA IV usa RAGE para direcao pesada e fisica urbana.", "GTA V amplia escala com Los Santos e Blaine County.", "GTA Online evolui a mesma base por anos de updates."],
+    whyItMatters: "Marca a virada tecnica da serie apos a era RenderWare.",
+    relatedTerms: ["Euphoria", "HD Universe", "GTA Online Organization"],
+    precisionNotes: ["Detalhes internos de versoes da engine nem sempre sao publicos."],
+    tags: ["engine", "tecnologia", "Rockstar", "HD"],
+    sources: [{ label: "GTA Wiki - RAGE", url: "https://gta.fandom.com/wiki/Rockstar_Advanced_Game_Engine" }]
+  },
+  "Euphoria": {
+    category: "Tecnologia",
+    expanded: "Euphoria e uma tecnologia de animacao procedural para reacoes corporais. Em vez de depender so de animacoes fixas, personagens podem reagir a impacto, queda, atropelamento e colisao com mais naturalidade.",
+    appearsIn: ["GTA IV", "GTA V", "Red Dead Redemption"],
+    examples: ["Niko reage fisicamente a quedas e atropelamentos.", "GTA V mistura ragdoll, fisica e animacao em tiroteios.", "A tecnologia ajuda a dar peso a acidentes e perseguicoes."],
+    whyItMatters: "Foi parte importante da sensacao de realismo fisico na era HD.",
+    relatedTerms: ["RAGE", "HD Universe", "Wanted Level"],
+    precisionNotes: ["Nem toda reacao fisica visivel e necessariamente Euphoria; ha mistura de sistemas."],
+    tags: ["fisica", "animacao", "tecnologia", "HD"],
+    sources: [{ label: "GTA Wiki - Euphoria", url: "https://gta.fandom.com/wiki/Euphoria" }]
+  },
+  "Canon": {
+    category: "Lore",
+    expanded: "Canon em GTA exige cuidado: ha universos separados, finais alternativos, eventos opcionais, piadas internas e referencias que nem sempre confirmam coexistencia. O dossie separa confirmado, interpretacao, easter egg e nao confirmado.",
+    appearsIn: ["toda a franquia"],
+    examples: ["A Opcao C de GTA V e a leitura mais aceita por GTA Online.", "Personagens da era 3D podem ser citados na era HD como referencia.", "GTA 2 tem ambientacao deliberadamente ambigua."],
+    whyItMatters: "Impede que referencias virem fatos duvidosos e organiza a cronologia da saga.",
+    relatedTerms: ["2D Universe", "3D Universe", "HD Universe", "Easter egg"],
+    precisionNotes: ["Quando algo for incerto, o site deve marcar como interpretacao ou nao confirmado."],
+    tags: ["canon", "lore", "continuidade"],
+    sources: [{ label: "GTA Wiki - Universes", url: "https://gta.fandom.com/wiki/Universes" }]
+  },
+  "Easter egg": {
+    category: "Lore",
+    expanded: "Easter eggs sao segredos, piadas, homenagens, pistas visuais ou referencias escondidas. Eles enriquecem o mundo, mas nem sempre devem ser tratados como prova canonica.",
+    appearsIn: ["toda a franquia"],
+    examples: ["Misterios de Mount Chiliad.", "Referencias a jogos e personagens antigos.", "Objetos, frases e marcas falsas escondidas pelo mapa."],
+    whyItMatters: "Mantem a comunidade investigando cidades por anos e reforca o tom de arquivo secreto da serie.",
+    relatedTerms: ["Canon", "HD Universe", "Spin-off"],
+    precisionNotes: ["Easter egg nao e automaticamente fato canonico.", "Alguns misterios sao deliberadamente ambiguos."],
+    tags: ["segredo", "referencia", "lore"],
+    sources: [{ label: "GTA Wiki - Easter Eggs", url: "https://gta.fandom.com/wiki/Easter_Eggs" }]
+  },
+  "Prequel": {
+    category: "Estrutura narrativa",
+    expanded: "Prequel e uma historia que acontece antes de outra ja lancada. Em GTA, prequels costumam explicar guerras de mafia, ascensao de personagens e estados anteriores de uma cidade.",
+    appearsIn: ["Liberty City Stories", "Vice City Stories", "San Andreas", "prologo de GTA V"],
+    examples: ["Liberty City Stories mostra Toni Cipriani subindo na familia Leone.", "Vice City Stories mostra Vic Vance antes de Tommy.", "O prologo de GTA V mostra North Yankton em 2004."],
+    whyItMatters: "Reorganiza a saga por cronologia interna, nao por ordem de lancamento.",
+    relatedTerms: ["3D Universe", "Canon", "Spin-off"],
+    precisionNotes: ["Prequel nao significa automaticamente spin-off."],
+    tags: ["cronologia", "prequel", "historia"],
+    sources: [{ label: "GTA Wiki - Timeline", url: "https://gta.fandom.com/wiki/Timeline" }]
+  },
+  "Spin-off": {
+    category: "Estrutura narrativa",
+    expanded: "Spin-off e uma entrada derivada que muda foco, plataforma, formato ou escala. Em GTA, expansoes e portateis podem ser menores que os jogos numerados, mas ainda carregar peso de lore.",
+    appearsIn: ["London 1969", "London 1961", "GTA Advance", "Chinatown Wars", "Episodes from Liberty City"],
+    examples: ["Chinatown Wars tem estrutura propria e foco em Triads.", "Episodes from Liberty City mostra GTA IV por outros protagonistas.", "London 1969 e London 1961 sao expansoes historicas."],
+    whyItMatters: "Explica por que jogos derivados podem ser essenciais para entender cidades e personagens.",
+    relatedTerms: ["Prequel", "2D Universe", "HD Universe"],
+    precisionNotes: ["Nem todo spin-off e menos canonico; Chinatown Wars pertence ao HD Universe."],
+    tags: ["spin-off", "expansao", "portatil"],
+    sources: [{ label: "GTA Wiki - Grand Theft Auto", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto" }]
+  },
+  "GTA Online Organization": {
+    category: "GTA Online",
+    expanded: "Organizacoes sao a forma como o jogador vira operador economico em GTA Online. O sistema passa por VIP/CEO, motoclubes, bunkers, nightclubs, agencias, arcades, auto shops, salvage yards, bail offices e frentes de lavagem.",
+    appearsIn: ["GTA Online"],
+    examples: ["CEO gerencia Special Cargo e Vehicle Cargo.", "MC administra negocios de drogas e falsificacao.", "Nightclub conecta negocios antigos em renda passiva.", "Agency abre contratos e Payphone Hits."],
+    whyItMatters: "E a espinha dorsal da progressao moderna de GTA Online.",
+    relatedTerms: ["Heist", "HD Universe", "Wanted Level"],
+    precisionNotes: ["Pagamentos e regras mudam com balanceamentos.", "Algumas atividades funcionam solo; outras foram pensadas para grupo."],
+    tags: ["online", "negocios", "CEO", "MC"],
+    sources: [{ label: "GTA Wiki - Organizations", url: "https://gta.fandom.com/wiki/Organizations" }]
+  },
+  "Leonida": {
+    category: "Cidades e estados",
+    expanded: "Leonida e o estado de GTA VI no HD Universe, inspirado na Florida. O material oficial destaca Vice City moderna, praias, pantanos, rodovias, redes sociais, cultura viral e criminalidade contemporanea.",
+    appearsIn: ["Grand Theft Auto VI"],
+    examples: ["Vice City e a cidade principal destacada.", "Leonida Keys e Port Gellhorn aparecem em materiais de GTA VI.", "Lucia Caminos e Jason Duval sao protagonistas confirmados."],
+    whyItMatters: "E o proximo grande espaco narrativo da franquia e o retorno moderno de Vice City.",
+    relatedTerms: ["Vice City", "HD Universe", "Canon"],
+    precisionNotes: ["Mapa completo e todos os distritos seguem nao confirmados ate o lancamento.", "Data oficial atual registrada no dossie: 19 de novembro de 2026."],
+    tags: ["GTA VI", "Leonida", "Vice City", "HD"],
+    sources: [{ label: "Rockstar Games - GTA VI", url: "https://www.rockstargames.com/VI" }]
+  },
+  "Vice City": {
+    category: "Cidades e estados",
+    expanded: "Vice City e o grande simbolo neon da serie: Miami ficcional, art deco, praia, trafico, clubes, luxo e ambicao. Na era 3D, e palco de Vic Vance e Tommy Vercetti; na era HD, retorna em GTA VI dentro de Leonida.",
+    appearsIn: ["GTA 1", "Vice City", "Vice City Stories", "GTA VI"],
+    examples: ["Vice City Stories mostra a cidade antes de Tommy.", "Vice City acompanha Tommy derrubando Ricardo Diaz.", "GTA VI reinterpreta a cidade com redes sociais e crime moderno."],
+    whyItMatters: "Liga nostalgia da era 3D ao futuro da franquia.",
+    relatedTerms: ["Leonida", "3D Universe", "HD Universe", "Prequel"],
+    precisionNotes: ["A Vice City de GTA VI nao e literalmente a mesma continuidade da Vice City de 1986.", "Alguns grupos e eventos de GTA VI ainda nao foram confirmados."],
+    tags: ["cidade", "Miami", "Vice City", "GTA VI"],
+    sources: [{ label: "GTA Wiki - Vice City", url: "https://gta.fandom.com/wiki/Vice_City" }]
+  }
+};
+
 const rsgGamesSource = "https://www.rockstargames.com/games";
 const rsgVI = "https://www.rockstargames.com/VI";
 const rsgVIScreens = "https://www.rockstargames.com/VI/downloads/screenshots?pubDate=20250511";
@@ -4054,8 +5414,61 @@ const gtaOnlineTimelineMedia = [
   gtaWikiImage("GTA Online: Los Santos Drug Wars", "https://static.wikia.nocookie.net/gtawiki/images/7/7d/LosSantosDrugWars-GTAOe-AnnouncementArtwork.jpg/revision/latest/scale-to-width-down/1200?cb=20221208141044"),
   gtaWikiImage("GTA Online: San Andreas Mercenaries", "https://static.wikia.nocookie.net/gtawiki/images/1/17/SanAndreasMercenaries-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20230606141219"),
   gtaWikiImage("GTA Online: Money Fronts", "https://static.wikia.nocookie.net/gtawiki/images/6/61/MoneyFronts-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20250617140448"),
+  gtaWikiImage("GTA Online: A Safehouse in the Hills", "https://static.wikia.nocookie.net/gtawiki/images/2/2c/ASafehouseInTheHills-GTAO-Artwork.png/revision/latest/scale-to-width-down/1200?cb=20260330025009"),
   gtaWikiImage("Career Builder", "https://static.wikia.nocookie.net/gtawiki/images/3/3c/CareerBuilder-GTAOee-ExecutiveOption.jpg/revision/latest/scale-to-width-down/1200?cb=20220317091052")
 ];
+
+const gtaOnlineDlcMediaById = {
+  "beach-bum": gtaWikiImage("Beach Bum Update", "https://static.wikia.nocookie.net/gtawiki/images/5/54/BeachBum1-GTAV.jpg/revision/latest?cb=20140202203233"),
+  "deathmatch-race-creators": gtaWikiImage("Deathmatch & Race Creators Update", "https://static.wikia.nocookie.net/gtawiki/images/8/83/ContentCreatorUpdate-GTAO.jpg/revision/latest?cb=20250616105210"),
+  "capture": gtaWikiImage("Capture Update", "https://static.wikia.nocookie.net/gtawiki/images/8/88/CaptureMode-GTAO.jpg/revision/latest?cb=20140118144706"),
+  "holiday-gifts": gtaWikiImage("Holiday Gifts", "https://static.wikia.nocookie.net/gtawiki/images/3/3e/HolidayGifts-GTAO.gif/revision/latest?cb=20250616120440"),
+  "valentines-day-massacre": gtaWikiImage("The Valentine's Day Massacre Special", "https://static.wikia.nocookie.net/gtawiki/images/4/4b/ValentineMassacre-GTAV-promotionalpic.jpg/revision/latest?cb=20140211180450"),
+  "business": gtaWikiImage("The Business Update", "https://static.wikia.nocookie.net/gtawiki/images/7/70/BusinessUpdate-GTAV.jpg/revision/latest?cb=20140304190336"),
+  "high-life": gtaWikiImage("The High Life Update", "https://static.wikia.nocookie.net/gtawiki/images/9/9f/TheHighLifeUpdate-GTAO-Artwork.jpg/revision/latest?cb=20140513163956"),
+  "hipster": gtaWikiImage("The I'm Not a Hipster Update", "https://static.wikia.nocookie.net/gtawiki/images/5/5d/HipsterUpdate-GTAO.jpg/revision/latest?cb=20150318025006"),
+  "independence-day": gtaWikiImage("The Independence Day Special", "https://static.wikia.nocookie.net/gtawiki/images/3/3b/TheIndependeDayUpdate-GTAO-Artwork.jpg/revision/latest?cb=20140701115544"),
+  "flight-school": gtaWikiImage("The San Andreas Flight School Update", "https://static.wikia.nocookie.net/gtawiki/images/a/a0/SanAndreasFlightSchoolUpdate-GTAO.jpg/revision/latest?cb=20140818230128"),
+  "last-team-standing": gtaWikiImage("The Last Team Standing Update", "https://static.wikia.nocookie.net/gtawiki/images/a/ab/LastTeamStandingUpdate-GTAO.png/revision/latest?cb=20141002131630"),
+  "festive-surprise-2014": gtaWikiImage("Festive Surprise", "https://static.wikia.nocookie.net/gtawiki/images/b/b9/GTAV-Festive-Surprise-Title.jpg/revision/latest?cb=20141218165437"),
+  "heists": gtaWikiImage("Heists Update", "https://static.wikia.nocookie.net/gtawiki/images/0/02/HeistsUpdate-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20180518131251"),
+  "ill-gotten-gains-1": gtaWikiImage("Ill-Gotten Gains Part 1", "https://static.wikia.nocookie.net/gtawiki/images/0/0e/IllGottenGainPt1Artwork-GTAO.jpg/revision/latest?cb=20150605171842"),
+  "ill-gotten-gains-2": gtaWikiImage("Ill-Gotten Gains Part 2", "https://static.wikia.nocookie.net/gtawiki/images/a/a9/IllGottenGainsPart2-GTAO-Artwork.png/revision/latest?cb=20150708143901"),
+  "freemode-events": gtaWikiImage("Freemode Events Update", "https://static.wikia.nocookie.net/gtawiki/images/1/1b/Freemode-Update-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20220311131535"),
+  "lowriders": gtaWikiImage("GTA Online: Lowriders", "https://static.wikia.nocookie.net/gtawiki/images/e/e3/Lowriders-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20151016145557"),
+  "halloween-surprise": gtaWikiImage("Halloween Surprise", "https://static.wikia.nocookie.net/gtawiki/images/d/d1/HalloweenSurprise-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20171014121601"),
+  "executives-other-criminals": gtaWikiImage("GTA Online: Executives and Other Criminals", "https://static.wikia.nocookie.net/gtawiki/images/3/30/Executives_And_Other_Criminals.jpg/revision/latest/scale-to-width-down/1200?cb=20151210173942"),
+  "festive-surprise-2015": gtaWikiImage("Festive Surprise 2015", "https://static.wikia.nocookie.net/gtawiki/images/6/61/FestiveSurprise2015-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20151221201248"),
+  "january-2016": gtaWikiImage("January 2016 Update", "https://static.wikia.nocookie.net/gtawiki/images/1/15/DropZone-GTAO-Promo.jpg/revision/latest?cb=20160128165943"),
+  "be-my-valentine": gtaWikiImage("GTA Online: Be My Valentine", "https://static.wikia.nocookie.net/gtawiki/images/7/70/BeMyValentineUpdate-GTAO-Artwork.png/revision/latest/scale-to-width-down/1200?cb=20160210214437"),
+  "lowriders-custom-classics": gtaWikiImage("GTA Online: Lowriders Custom Classics", "https://static.wikia.nocookie.net/gtawiki/images/e/e3/Lowriders-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20151016145557"),
+  "finance-felony": gtaWikiImage("GTA Online: Further Adventures in Finance and Felony", "https://static.wikia.nocookie.net/gtawiki/images/7/7c/GTAOFAFF-Artwork-GTAO.jpg/revision/latest/scale-to-width-down/1200?cb=20160602140947"),
+  "cunning-stunts": gtaWikiImage("GTA Online: Cunning Stunts", "https://static.wikia.nocookie.net/gtawiki/images/9/9f/CunningStunts-Artwork-GTAO.png/revision/latest/scale-to-width-down/1200?cb=20160707131143"),
+  "bikers": gtaWikiImage("GTA Online: Bikers", "https://static.wikia.nocookie.net/gtawiki/images/9/9c/GTAOnlineBikers-Artwork-GTAO.jpg/revision/latest/scale-to-width-down/1200?cb=20161013172036"),
+  "import-export": gtaWikiImage("GTA Online: Import/Export", "https://static.wikia.nocookie.net/gtawiki/images/d/de/ImportExport-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20161216190946"),
+  "special-vehicle-circuit": gtaWikiImage("Special Vehicle Circuit", "https://static.wikia.nocookie.net/gtawiki/images/9/9f/CunningStunts-Artwork-GTAO.png/revision/latest/scale-to-width-down/1200?cb=20160707131143"),
+  "gunrunning": gtaWikiImage("GTA Online: Gunrunning", "https://static.wikia.nocookie.net/gtawiki/images/3/39/Gunrunning-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20170607144656"),
+  "smugglers-run": gtaWikiImage("GTA Online: Smuggler's Run", "https://static.wikia.nocookie.net/gtawiki/images/6/62/SmugglersRun-GTAO-Artwork.png/revision/latest/scale-to-width-down/1200?cb=20170824141957"),
+  "doomsday-heist": gtaWikiImage("The Doomsday Heist", "https://static.wikia.nocookie.net/gtawiki/images/a/a3/TheDoomsdayHeist-GTAO-Artwork.png/revision/latest/scale-to-width-down/1200?cb=20171208173427"),
+  "southern-san-andreas-super-sport-series": gtaWikiImage("Southern San Andreas Super Sport Series", "https://static.wikia.nocookie.net/gtawiki/images/0/05/SouthernSanAndreasSuperSportSeries-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20180320174953"),
+  "after-hours": gtaWikiImage("GTA Online: After Hours", "https://static.wikia.nocookie.net/gtawiki/images/1/1c/AfterHours-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20180724205006"),
+  "arena-war": gtaWikiImage("Arena War", "https://static.wikia.nocookie.net/gtawiki/images/2/28/ArenaWar-GTAO-PosterOfficial.jpg/revision/latest/scale-to-width-down/1200?cb=20190719042015"),
+  "diamond-casino-resort": gtaWikiImage("GTA Online: The Diamond Casino & Resort", "https://static.wikia.nocookie.net/gtawiki/images/d/d2/TheDiamondCasino%26Resort-GTAO-PosterOfficial.jpg/revision/latest/scale-to-width-down/1200?cb=20190724194110"),
+  "diamond-casino-heist": gtaWikiImage("The Diamond Casino Heist", "https://static.wikia.nocookie.net/gtawiki/images/f/f3/TheDiamondCasinoHeist-GTAO.png/revision/latest/scale-to-width-down/1200?cb=20191214080022"),
+  "los-santos-summer-special": gtaWikiImage("GTA Online: Los Santos Summer Special", "https://static.wikia.nocookie.net/gtawiki/images/e/ef/LosSantosSummerSpecial-GTAO.png/revision/latest/scale-to-width-down/1200?cb=20200811142705"),
+  "cayo-perico-heist": gtaWikiImage("The Cayo Perico Heist", "https://static.wikia.nocookie.net/gtawiki/images/5/55/TheCayoPericoHeist-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20201222061436"),
+  "los-santos-tuners": gtaWikiImage("GTA Online: Los Santos Tuners", "https://static.wikia.nocookie.net/gtawiki/images/6/68/GTAOnline-LosSantosTuners-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20210819234653"),
+  "the-contract": gtaWikiImage("GTA Online: The Contract", "https://static.wikia.nocookie.net/gtawiki/images/1/1c/GTAOnline-TheContract-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20211215141321"),
+  "criminal-enterprises": gtaWikiImage("The Criminal Enterprises", "https://static.wikia.nocookie.net/gtawiki/images/d/de/TheCriminalEnterprises-GTAOe-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20220726133540"),
+  "los-santos-drug-wars": gtaWikiImage("GTA Online: Los Santos Drug Wars", "https://static.wikia.nocookie.net/gtawiki/images/7/7d/LosSantosDrugWars-GTAOe-AnnouncementArtwork.jpg/revision/latest/scale-to-width-down/1200?cb=20221208141044"),
+  "san-andreas-mercenaries": gtaWikiImage("GTA Online: San Andreas Mercenaries", "https://static.wikia.nocookie.net/gtawiki/images/1/17/SanAndreasMercenaries-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20230606141219"),
+  "the-chop-shop": gtaWikiImage("GTA Online: The Chop Shop", "https://static.wikia.nocookie.net/gtawiki/images/c/c5/TheChopShop-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20240122033726"),
+  "bottom-dollar-bounties": gtaWikiImage("GTA Online: Bottom Dollar Bounties", "https://static.wikia.nocookie.net/gtawiki/images/9/9c/BottomDollarBounties-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20240922020632"),
+  "agents-of-sabotage": gtaWikiImage("GTA Online: Agents of Sabotage", "https://static.wikia.nocookie.net/gtawiki/images/2/24/AgentsOfSabotage-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20241203160416"),
+  "oscar-guzman-flies-again": gtaWikiImage("Oscar Guzman Flies Again", "https://static.wikia.nocookie.net/gtawiki/images/4/4d/OscarGuzmanFliesAgain-GTAO-Artwork.jpg/revision/latest?cb=20250306143657"),
+  "money-fronts": gtaWikiImage("GTA Online: Money Fronts", "https://static.wikia.nocookie.net/gtawiki/images/6/61/MoneyFronts-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20250617140448"),
+  "safehouse-in-the-hills": gtaWikiImage("GTA Online: A Safehouse in the Hills", "https://static.wikia.nocookie.net/gtawiki/images/2/2c/ASafehouseInTheHills-GTAO-Artwork.png/revision/latest/scale-to-width-down/1200?cb=20260330025009")
+};
 
 const gtaWikiGlossaryMediaByTerm = {
   "2D Universe": gtaWikiUniverseMediaById["2d"],
@@ -4147,7 +5560,16 @@ onlineTimelineData.forEach((item, index) => {
   if (gtaOnlineTimelineMedia[index]) item.media = gtaOnlineTimelineMedia[index];
 });
 
+onlineDlcData.forEach((item) => {
+  if (gtaOnlineDlcMediaById[item.id]) item.media = gtaOnlineDlcMediaById[item.id];
+  item.sources = [
+    { label: `GTA Wiki - ${item.sourcePage || item.title}`, url: gtaWikiPage(item.sourcePage || item.title) },
+    ...(item.officialSource ? [{ label: "Rockstar Newswire", url: item.officialSource }] : [])
+  ];
+});
+
 glossaryData.forEach((item) => {
+  Object.assign(item, glossaryDetailsByTerm[item.term] || {}, glossaryDetailData[item.term] || {});
   if (gtaWikiGlossaryMediaByTerm[item.term]) item.media = gtaWikiGlossaryMediaByTerm[item.term];
 });
 
@@ -4166,6 +5588,7 @@ Object.assign(window, {
   factionsData,
   developmentData,
   onlineTimelineData,
+  onlineDlcData,
   gta6FactsData,
   connectionsData,
   recommendedOrderData,
