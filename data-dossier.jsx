@@ -4,15 +4,16 @@ const dossierNavData = [
   { id: "overview", label: "Visão Geral", k: "01" },
   { id: "timeline", label: "Timeline Cronológica", k: "02" },
   { id: "games", label: "Jogos", k: "03" },
-  { id: "development", label: "Desenvolvimento", k: "04" },
-  { id: "characters", label: "Personagens", k: "05" },
-  { id: "cities", label: "Cidades", k: "06" },
-  { id: "gangs", label: "Gangues e Organizações", k: "07" },
-  { id: "universes", label: "Universos GTA", k: "08" },
-  { id: "rockstar", label: "Rockstar Games", k: "09" },
-  { id: "gtaonline", label: "GTA Online", k: "10" },
-  { id: "gta6", label: "GTA VI", k: "11" },
-  { id: "glossary", label: "Glossário", k: "12" }
+  { id: "vehicles", label: "Veículos", k: "04" },
+  { id: "development", label: "Desenvolvimento", k: "05" },
+  { id: "characters", label: "Personagens", k: "06" },
+  { id: "cities", label: "Cidades", k: "07" },
+  { id: "gangs", label: "Gangues e Organizações", k: "08" },
+  { id: "universes", label: "Universos GTA", k: "09" },
+  { id: "rockstar", label: "Rockstar Games", k: "10" },
+  { id: "gtaonline", label: "GTA Online", k: "11" },
+  { id: "gta6", label: "GTA VI", k: "12" },
+  { id: "glossary", label: "Glossário", k: "13" }
 ];
 
 const dossierSourcesData = [

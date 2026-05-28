@@ -37,6 +37,7 @@ function App(){
       <DossierHero/>
       <TimelineDossierSection onOpenDossier={setDossier}/>
       <GamesDossierSection onOpenDossier={setDossier}/>
+      <VehiclesDossierSection onOpenDossier={setDossier}/>
       <DevelopmentDossierSection/>
       <CharactersDossierSection onOpenDossier={setDossier}/>
       <CitiesDossierSection onOpenDossier={setDossier}/>

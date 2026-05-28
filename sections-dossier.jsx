@@ -6,15 +6,16 @@ const dossierNav = () => window.dossierNavData || window.NAV || [
   { id: "overview", label: "Visão Geral", k: "01" },
   { id: "timeline", label: "Timeline Cronológica", k: "02" },
   { id: "games", label: "Jogos", k: "03" },
-  { id: "development", label: "Desenvolvimento", k: "04" },
-  { id: "characters", label: "Personagens", k: "05" },
-  { id: "cities", label: "Cidades", k: "06" },
-  { id: "gangs", label: "Gangues e Organizações", k: "07" },
-  { id: "universes", label: "Universos GTA", k: "08" },
-  { id: "rockstar", label: "Rockstar Games", k: "09" },
-  { id: "gtaonline", label: "GTA Online", k: "10" },
-  { id: "gta6", label: "GTA VI", k: "11" },
-  { id: "glossary", label: "Glossário", k: "12" }
+  { id: "vehicles", label: "Veículos", k: "04" },
+  { id: "development", label: "Desenvolvimento", k: "05" },
+  { id: "characters", label: "Personagens", k: "06" },
+  { id: "cities", label: "Cidades", k: "07" },
+  { id: "gangs", label: "Gangues e Organizações", k: "08" },
+  { id: "universes", label: "Universos GTA", k: "09" },
+  { id: "rockstar", label: "Rockstar Games", k: "10" },
+  { id: "gtaonline", label: "GTA Online", k: "11" },
+  { id: "gta6", label: "GTA VI", k: "12" },
+  { id: "glossary", label: "Glossário", k: "13" }
 ];
 
 const asList = (value) => Array.isArray(value) ? value : value ? [value] : [];
@@ -257,6 +258,7 @@ const DossierHero = () => {
   const quick = [
     ["Timeline", "timeline", "map"],
     ["Jogos", "games", "file"],
+    ["Veículos", "vehicles", "car"],
     ["Personagens", "characters", "users"],
     ["Cidades", "cities", "city"],
     ["Organizações", "gangs", "database"],
@@ -450,6 +452,286 @@ const GamesDossierSection = ({ onOpenDossier }) => {
         </div>
         <div className="dossier-games-grid">
           {filtered.map((game) => <GameDossierCard key={game.id} game={game} onOpen={onOpenDossier} />)}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const vehicleGroupCache = new Map();
+
+const vehicleApiUrl = (params) => {
+  const search = new URLSearchParams({ format: "json", origin: "*", ...params });
+  return `https://gta.fandom.com/api.php?${search.toString()}`;
+};
+
+const cleanWikiMarkup = (value = "") => String(value)
+  .replace(/\{\{([^{}]+)\}\}/g, (_, inner) => {
+    const parts = inner.split("|").map((part) => part.trim()).filter(Boolean);
+    const name = normalizeText(parts[0] || "");
+    if (["dlc", "nd", "un", "eeev", "ee", "ev", "time"].includes(name)) return "";
+    return parts.length > 1 ? parts[parts.length - 1] : "";
+  })
+  .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, "$2")
+  .replace(/\[\[([^\]]+)\]\]/g, "$1")
+  .replace(/<ref[^>]*>.*?<\/ref>/gi, "")
+  .replace(/<[^>]+>/g, "")
+  .replace(/''+/g, "")
+  .replace(/&amp;/g, "&")
+  .replace(/&nbsp;/g, " ")
+  .replace(/\s+/g, " ")
+  .trim();
+
+const cleanVehicleGroupLabel = (line = "") => {
+  let label = String(line).trim().replace(/^=+|=+$/g, "").replace(/^!+/, "");
+  if (/^\s*(colspan|rowspan|style|width|scope)/i.test(label)) label = label.split("|").pop();
+  label = cleanWikiMarkup(label);
+  if (/^(reference|meaning|description|total|available|contents|key|table|vehicles|name|image|notes?|features?|type|class|locations?|rewards?)$/i.test(label)) return "";
+  if (/gallery|navigation|references|trivia|see also|imagery table/i.test(label)) return "";
+  return label;
+};
+
+const extractVehicleNameFromLine = (line = "") => {
+  if (/\[\[:?(file|image|category|pl|ru|es|fr|de|pt|zh):/i.test(line)) return "";
+  if (!line.includes("[[")) return "";
+  let name = line.trim().replace(/^\*+/, "").replace(/^\|+/, "");
+  name = name
+    .replace(/<ref[^>]*>.*?<\/ref>/gi, "")
+    .replace(/\{\{[^{}]+\}\}/g, "");
+  name = cleanWikiMarkup(name)
+    .replace(/\s+can be seen.*$/i, "")
+    .replace(/\s+inaccessible.*$/i, "")
+    .replace(/\s+featuring.*$/i, "")
+    .trim()
+    .replace(/\.$/, "");
+  if (/^(vehicles in|grand theft auto|yusuf amir|power-ups|rocket launcher|machine gun|shotgun|flamethrower|respect|electrofingers|fast reload|get outta jail|crusher|image:|file:|molotov|oil slick|invulnerability|kill frenzy|double damage|police bribe|electrogun)$/i.test(name)) return "";
+  return name;
+};
+
+const addVehicleGroupItem = (groups, label, name) => {
+  if (!name) return;
+  const groupLabel = label || "Lista completa";
+  if (!groups.has(groupLabel)) groups.set(groupLabel, new Set());
+  groups.get(groupLabel).add(name);
+};
+
+const nextNonEmptyLine = (lines, start) => {
+  for (let index = start; index < lines.length; index += 1) {
+    const line = lines[index].trim();
+    if (line) return line;
+  }
+  return "";
+};
+
+const parseVehicleWikitext = (rawText = "") => {
+  const start = rawText.includes("===Contents===") ? rawText.indexOf("===Contents===") : 0;
+  const text = rawText.slice(start);
+  const lines = text.split("\n");
+  const groups = new Map();
+  let headers = [];
+  let currentGroup = "Lista completa";
+  let columnIndex = 0;
+  let inTable = false;
+  let newRow = false;
+  let readingHeaders = false;
+
+  lines.forEach((rawLine, index) => {
+    const line = rawLine.trim();
+    if (!line) return;
+    if (/^\{\|/.test(line)) {
+      inTable = true;
+      headers = [];
+      columnIndex = 0;
+      return;
+    }
+    if (/^\|\}/.test(line)) {
+      inTable = false;
+      headers = [];
+      columnIndex = 0;
+      return;
+    }
+    if (/^==+/.test(line)) {
+      const label = cleanVehicleGroupLabel(line);
+      if (label) currentGroup = label;
+      return;
+    }
+    if (inTable && /^\|-/.test(line)) {
+      columnIndex = 0;
+      newRow = true;
+      readingHeaders = false;
+      return;
+    }
+    if (/^!/.test(line)) {
+      const label = cleanVehicleGroupLabel(line);
+      if (label) {
+        if (newRow && !readingHeaders) {
+          headers = [];
+          readingHeaders = true;
+        }
+        headers.push(label);
+      }
+      return;
+    }
+    if (inTable && /^\|/.test(line)) {
+      newRow = false;
+      readingHeaders = false;
+      if (!line.includes("[[") || /^\|colspan/i.test(line)) {
+        if (headers.length) currentGroup = headers[Math.min(columnIndex, headers.length - 1)];
+        columnIndex += 1;
+      }
+      if (/^\|\[\[/.test(line)) {
+        const next = nextNonEmptyLine(lines, index + 1);
+        if (/^\|\[\[(Image|File):/i.test(next)) addVehicleGroupItem(groups, currentGroup, extractVehicleNameFromLine(line));
+      } else {
+        addVehicleGroupItem(groups, currentGroup, extractVehicleNameFromLine(line));
+      }
+      return;
+    }
+    if (/^\*\[\[/.test(line)) addVehicleGroupItem(groups, currentGroup, extractVehicleNameFromLine(line));
+  });
+
+  return [...groups.entries()]
+    .map(([label, names]) => ({ label, items: [...names].sort((a, b) => a.localeCompare(b, "pt-BR")) }))
+    .filter((group) => group.items.length)
+    .sort((a, b) => a.label.localeCompare(b.label, "pt-BR"));
+};
+
+const normalizeVehicleTitle = (title = "") => title
+  .replace(/\s+\((2D|3D|HD) Universe\)$/i, "")
+  .replace(/^Beta Vehicles.*$/i, "")
+  .trim();
+
+const loadVehicleCategoryGroup = async (categoryTitle) => {
+  const names = [];
+  let cmcontinue = "";
+  do {
+    const data = await fetch(vehicleApiUrl({
+      action: "query",
+      list: "categorymembers",
+      cmtitle: categoryTitle,
+      cmnamespace: "0",
+      cmlimit: "500",
+      ...(cmcontinue ? { cmcontinue } : {})
+    })).then((response) => response.json());
+    const members = data?.query?.categorymembers || [];
+    members.forEach((member) => {
+      const title = normalizeVehicleTitle(member.title);
+      if (title && !/^Vehicles in/i.test(title)) names.push(title);
+    });
+    cmcontinue = data?.continue?.cmcontinue || "";
+  } while (cmcontinue);
+  return [{ label: "Lista completa", items: [...new Set(names)].sort((a, b) => a.localeCompare(b, "pt-BR")) }];
+};
+
+const loadVehicleGroups = async (vehicle) => {
+  const cacheKey = `${vehicle.id}:${vehicle.apiPage || vehicle.categoryTitle || "fallback"}`;
+  if (vehicleGroupCache.has(cacheKey)) return vehicleGroupCache.get(cacheKey);
+  let groups = [];
+  if (vehicle.categoryTitle) {
+    groups = await loadVehicleCategoryGroup(vehicle.categoryTitle);
+  } else if (vehicle.apiPage) {
+    const data = await fetch(vehicleApiUrl({
+      action: "parse",
+      prop: "wikitext",
+      redirects: "1",
+      page: vehicle.apiPage
+    })).then((response) => response.json());
+    groups = parseVehicleWikitext(data?.parse?.wikitext?.["*"] || "");
+  }
+  if (!groups.length && vehicle.fallbackGroups) groups = vehicle.fallbackGroups;
+  vehicleGroupCache.set(cacheKey, groups);
+  return groups;
+};
+
+const vehicleGameFor = (vehicle) => gamesData.find((game) => game.id === vehicle.gameId) || null;
+
+const matchesVehicleType = (vehicle, type) => {
+  if (type === "all") return true;
+  const hay = normalizeText([vehicle.coverage, vehicle.tags, vehicle.highlights, vehicle.summary].join(" "));
+  const tests = {
+    land: ["carro", "van", "caminh", "sedan", "suv", "terrestre", "off-road"],
+    bikes: ["moto", "biciclet", "bike", "cycles", "bmx"],
+    air: ["aviao", "avioes", "aereo", "aereos", "aeronave", "helicoptero", "helicopteros", "hydra", "lazer"],
+    water: ["barco", "barcos", "submers", "costa", "naval"],
+    service: ["servico", "emergencia", "policia", "taxi", "governo", "viatura"],
+    weaponized: ["militar", "armado", "blindado", "apc", "oppressor", "weapon"],
+    online: ["online", "dlc", "economia viva"]
+  };
+  return (tests[type] || []).some((needle) => hay.includes(needle));
+};
+
+const VehicleDossierCard = ({ vehicle, onOpen }) => {
+  const game = vehicleGameFor(vehicle);
+  const media = vehicle.media || game?.media;
+  return (
+    <article className="card dossier-vehicle-card">
+      <Corners />
+      <div className={`dossier-vehicle-media ${universeTone(vehicle.universe)} ${media ? "has-official" : ""}`}>
+        {media ? <OfficialMedia media={media} className="dossier-vehicle-official" /> : <div className="dossier-cover-map" />}
+        <div className="dossier-vehicle-badge"><DossierIcon type="car" /><span>{vehicle.totalLabel}</span></div>
+      </div>
+      <div className="dossier-card-body">
+        <div className="dossier-card-kicker">{vehicle.universe} · frota em {vehicle.storyYear}</div>
+        <h3>{vehicle.title}</h3>
+        <p>{vehicle.summary}</p>
+        <MetaGrid rows={[
+          ["Cidade", vehicle.city],
+          ["Cobertura", asList(vehicle.coverage).slice(0, 5)],
+          ["Ícones", asList(vehicle.highlights).slice(0, 5)]
+        ]} />
+        <DossierChips items={vehicle.tags} limit={6} />
+        <button className="btn" onClick={() => onOpen({ type: "vehicle", item: { ...vehicle, media } })}>Abrir frota</button>
+      </div>
+    </article>
+  );
+};
+
+const VehiclesDossierSection = ({ onOpenDossier }) => {
+  const vehicles = window.vehicleDossierData || [];
+  const [query, setQuery] = React.useState("");
+  const [universe, setUniverse] = React.useState("all");
+  const [type, setType] = React.useState("all");
+  const typeOptions = [
+    ["all", "Todos"],
+    ["land", "Terrestres"],
+    ["bikes", "Motos/bikes"],
+    ["air", "Aéreos"],
+    ["water", "Água"],
+    ["service", "Serviço/emergência"],
+    ["weaponized", "Militar/armado"],
+    ["online", "Online/DLC"]
+  ];
+  const filtered = vehicles.filter((vehicle) =>
+    searchRecord(vehicle, query) &&
+    (universe === "all" || vehicle.universe === universe) &&
+    matchesVehicleType(vehicle, type)
+  );
+
+  return (
+    <section id="vehicles" className="dossier-section dossier-shell vehicle-section">
+      <div className="wrap">
+        <DossierSectionHead eyebrow="Garagem criminal" title="Veículos por jogo" accent="var(--copper)" right={`${filtered.length} arquivos de frota`} />
+        <div className="dossier-vehicle-intro card">
+          <Corners />
+          <div>
+            <h3>Do top-down ao Online</h3>
+            <p>
+              Cada arquivo abaixo abre a frota do jogo e carrega a lista detalhada da fonte: carros, motos, bicicletas, aviões, helicópteros, barcos, submarinos, trens, viaturas, veículos militares, especiais e variações quando a própria fonte separa esses modelos.
+            </p>
+          </div>
+          <div className="dossier-vehicle-scan">
+            <span>live wiki fetch</span>
+            <strong>lazy loading</strong>
+            <small>listas completas sob demanda</small>
+          </div>
+        </div>
+        <div className="dossier-filterbar wide">
+          <label><span>Busca</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Jogo, cidade, avião, bicicleta, Rhino..." /></label>
+          <label><span>Universo</span><select value={universe} onChange={(e) => setUniverse(e.target.value)}><option value="all">Todos</option>{universeData.map((u) => <option key={u.name}>{u.name}</option>)}</select></label>
+          <label><span>Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}>{typeOptions.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
+        </div>
+        <div className="dossier-vehicle-grid">
+          {filtered.map((vehicle) => <VehicleDossierCard key={vehicle.id} vehicle={vehicle} onOpen={onOpenDossier} />)}
         </div>
       </div>
     </section>
@@ -1192,6 +1474,106 @@ const GlossaryTermModalContent = ({ item }) => {
   );
 };
 
+const VehicleGroupsPanel = ({ groups, query }) => {
+  const normalizedQuery = normalizeText(query);
+  const visibleGroups = groups
+    .map((group) => ({
+      ...group,
+      items: asList(group.items).filter((name) => !normalizedQuery || normalizeText(name).includes(normalizedQuery))
+    }))
+    .filter((group) => group.items.length);
+  const visibleCount = visibleGroups.reduce((sum, group) => sum + group.items.length, 0);
+
+  if (!visibleGroups.length) {
+    return <div className="dossier-vehicle-empty">Nenhum veículo encontrado nesse filtro.</div>;
+  }
+
+  return (
+    <div className="dossier-vehicle-groups">
+      <div className="dossier-vehicle-group-total">{visibleCount} itens exibidos</div>
+      {visibleGroups.map((group, index) => (
+        <details key={group.label} className="dossier-vehicle-group" open={index < 3 || Boolean(query)}>
+          <summary><span>{group.label}</span><strong>{group.items.length}</strong></summary>
+          <div className="dossier-vehicle-name-grid">
+            {group.items.map((name) => <span key={`${group.label}-${name}`}>{name}</span>)}
+          </div>
+        </details>
+      ))}
+    </div>
+  );
+};
+
+const VehicleDossierModalContent = ({ item }) => {
+  const [groups, setGroups] = React.useState(item.fallbackGroups || []);
+  const [query, setQuery] = React.useState("");
+  const [status, setStatus] = React.useState(item.apiPage || item.categoryTitle ? "loading" : "static");
+  const [error, setError] = React.useState("");
+  const totalLoaded = groups.reduce((sum, group) => sum + asList(group.items).length, 0);
+
+  React.useEffect(() => {
+    let alive = true;
+    setQuery("");
+    setGroups(item.fallbackGroups || []);
+    setError("");
+    if (!item.apiPage && !item.categoryTitle) {
+      setStatus("static");
+      return () => { alive = false; };
+    }
+    setStatus("loading");
+    loadVehicleGroups(item)
+      .then((loaded) => {
+        if (!alive) return;
+        setGroups(loaded.length ? loaded : (item.fallbackGroups || []));
+        setStatus(loaded.length ? "ready" : "empty");
+      })
+      .catch((err) => {
+        if (!alive) return;
+        setError(err?.message || "Nao foi possivel carregar a lista completa agora.");
+        setGroups(item.fallbackGroups || []);
+        setStatus("error");
+      });
+    return () => { alive = false; };
+  }, [item.id]);
+
+  return (
+    <>
+      <MetaGrid rows={[
+        ["Lançamento", item.releaseYear],
+        ["Ano da história", item.storyYear],
+        ["Universo", item.universe],
+        ["Cidade", item.city],
+        ["Total / fonte", item.totalLabel],
+        ["Arquivo carregado", item.apiPage || item.categoryTitle || "dossiê estático"]
+      ]} />
+      <ModalField label="Resumo">{item.summary}</ModalField>
+      <ModalField label="Como a frota funciona"><BulletList items={item.systems} /></ModalField>
+      <div className="dossier-modal-split">
+        <ModalField label="Cobertura"><DossierChips items={item.coverage} limit={20} /></ModalField>
+        <ModalField label="Veículos marcantes"><DossierChips items={item.highlights} limit={20} /></ModalField>
+      </div>
+      <ModalField label="Lista completa por classe">
+        <div className="dossier-vehicle-modal-tools">
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filtrar dentro da frota: Hydra, BMX, Police, barco..." />
+          <span className={`dossier-vehicle-load-state ${status}`}>
+            {status === "loading" ? "carregando fonte..." :
+              status === "error" ? "fonte indisponível agora" :
+              status === "empty" ? "sem tabela pública completa" :
+              `${totalLoaded} registros carregados`}
+          </span>
+        </div>
+        {error && <p className="dossier-vehicle-error">{error}</p>}
+        <VehicleGroupsPanel groups={groups} query={query} />
+      </ModalField>
+      {item.relatedVehicleFiles && (
+        <ModalField label="Frotas herdadas"><DossierChips items={item.relatedVehicleFiles} limit={10} /></ModalField>
+      )}
+      <ModalField label="Notas de precisão"><BulletList items={item.precisionNotes} /></ModalField>
+      <ModalField label="Tags"><DossierChips items={item.tags} limit={12} /></ModalField>
+      <ModalField label="Fonte"><SourceLinks items={item.source ? [item.source] : []} /></ModalField>
+    </>
+  );
+};
+
 const DossierRecordModal = ({ record, onClose }) => {
   if (!record?.item) return null;
   const item = record.item;
@@ -1201,9 +1583,11 @@ const DossierRecordModal = ({ record, onClose }) => {
     record.type === "city" ? `${item.realWorldInspiration}` :
     record.type === "faction" ? `${item.category} · ${item.city}` :
     record.type === "onlineDlc" ? `${item.releaseDate} / ${item.type}` :
+    record.type === "vehicle" ? `${item.universe} · ${item.totalLabel}` :
     record.type === "glossary" ? `${item.category || "Glossario"} / termo de referencia` :
     item.universe || "Arquivo";
   const recordLabel = record.type === "onlineDlc" ? "ONLINE DLC" :
+    record.type === "vehicle" ? "FROTA" :
     record.type === "glossary" ? "GLOSSARIO" :
     record.type.toUpperCase();
 
@@ -1251,6 +1635,9 @@ const DossierRecordModal = ({ record, onClose }) => {
                 <ModalField label="Importância">{item.importance}</ModalField>
                 <ModalField label="Temas"><DossierChips items={item.themes} limit={12} /></ModalField>
               </>
+            )}
+            {record.type === "vehicle" && (
+              <VehicleDossierModalContent item={item} />
             )}
             {record.type === "character" && (
               <>
@@ -1354,6 +1741,7 @@ Object.assign(window, {
   DossierHero,
   TimelineDossierSection,
   GamesDossierSection,
+  VehiclesDossierSection,
   DevelopmentDossierSection,
   CharactersDossierSection,
   CitiesDossierSection,
