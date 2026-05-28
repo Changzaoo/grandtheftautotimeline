@@ -464,6 +464,7 @@ const GamesDossierSection = ({ onOpenDossier }) => {
 };
 
 const missionGroupCache = new Map();
+const missionDetailCache = new Map();
 
 const cleanMissionMarkup = (value = "") => String(value)
   .replace(/\{\{([^{}]+)\}\}/g, (_, inner) => {
@@ -490,7 +491,15 @@ const cleanMissionHeading = (line = "") => {
   return label || "Missões";
 };
 
-const extractMissionNameFromText = (value = "") => {
+const missionItemName = (item) => typeof item === "string" ? item : item?.name || "";
+
+const missionItemPage = (item) => {
+  if (!item) return "";
+  if (typeof item === "string") return item;
+  return item.page || item.name || "";
+};
+
+const extractMissionEntryFromText = (value = "") => {
   const cleaned = String(value).replace(/\[\[(File|Image):[^\]]+\]\]/gi, "");
   const matches = [...cleaned.matchAll(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g)]
     .map((match) => {
@@ -503,14 +512,16 @@ const extractMissionNameFromText = (value = "") => {
   const chosen = matches.length ? matches[0] : null;
   const name = chosen && /^(mission \d+|phone \d+)$/i.test(chosen.label) ? chosen.target : (chosen?.label || "");
   if (/^(n\/a|none|safehouse|ammu-nation)$/i.test(name)) return "";
-  return name;
+  return name ? { name, page: chosen?.target || name } : null;
 };
 
-const addMissionGroupItem = (groups, area, context, name) => {
-  if (!name) return;
+const addMissionGroupItem = (groups, area, context, entry) => {
+  const record = typeof entry === "string" ? { name: entry, page: entry } : entry;
+  if (!record?.name) return;
   const groupLabel = [area, context].filter(Boolean).join(" / ") || "Missões";
-  if (!groups.has(groupLabel)) groups.set(groupLabel, new Set());
-  groups.get(groupLabel).add(name);
+  if (!groups.has(groupLabel)) groups.set(groupLabel, new Map());
+  const key = normalizeText(`${record.page || record.name}:${record.name}`);
+  groups.get(groupLabel).set(key, record);
 };
 
 const parseMissionWikitext = (rawText = "") => {
@@ -523,7 +534,7 @@ const parseMissionWikitext = (rawText = "") => {
   let cellIndex = -1;
 
   const flushTitle = () => {
-    if (titleCell) addMissionGroupItem(groups, area, context, extractMissionNameFromText(titleCell));
+    if (titleCell) addMissionGroupItem(groups, area, context, extractMissionEntryFromText(titleCell));
     titleCell = "";
     titleCellOpen = false;
   };
@@ -554,8 +565,8 @@ const parseMissionWikitext = (rawText = "") => {
     }
 
     if (!inTable && /^'''\[\[/.test(line)) {
-      const heading = extractMissionNameFromText(line);
-      if (heading) context = heading;
+      const heading = extractMissionEntryFromText(line);
+      if (heading?.name) context = heading.name;
       return;
     }
 
@@ -606,12 +617,12 @@ const parseMissionWikitext = (rawText = "") => {
     }
 
     if (!inTable && /^\*+.*\[\[/.test(line)) {
-      addMissionGroupItem(groups, area, context, extractMissionNameFromText(line));
+      addMissionGroupItem(groups, area, context, extractMissionEntryFromText(line));
     }
   });
 
   return [...groups.entries()]
-    .map(([label, names]) => ({ label, items: [...names].sort((a, b) => a.localeCompare(b, "pt-BR")) }))
+    .map(([label, names]) => ({ label, items: [...names.values()].sort((a, b) => missionItemName(a).localeCompare(missionItemName(b), "pt-BR")) }))
     .filter((group) => group.items.length)
     .sort((a, b) => a.label.localeCompare(b.label, "pt-BR"));
 };
@@ -632,6 +643,88 @@ const loadMissionGroups = async (mission) => {
   if (!groups.length && mission.fallbackGroups) groups = mission.fallbackGroups;
   missionGroupCache.set(cacheKey, groups);
   return groups;
+};
+
+const missionDetailUrl = (page) => `https://gta.fandom.com/wiki/${encodeURIComponent(page).replaceAll("%20", "_")}`;
+
+const extractMissionSummaryFromHtml = (html = "") => {
+  if (!html || typeof DOMParser === "undefined") return "";
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  doc.querySelectorAll("aside, table, figure, nav, style, script, sup, .toc, .navbox, .portable-infobox, .reference, .metadata").forEach((node) => node.remove());
+  const paragraphs = [...doc.querySelectorAll(".mw-parser-output > p, .mw-parser-output > ul, .mw-parser-output > ol")]
+    .map((node) => cleanMissionMarkup(node.textContent || ""))
+    .filter((text) => text.length > 45)
+    .filter((text) => !/^(This article|For other uses|This page|The following is)/i.test(text));
+  return paragraphs.slice(0, 2).join("\n\n").slice(0, 720);
+};
+
+const extractMissionFactsFromHtml = (html = "") => {
+  if (!html || typeof DOMParser === "undefined") return [];
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const wanted = ["Type", "Game", "For", "Location", "Target", "Reward", "Unlocks", "Unlocked By", "Unlocked by", "Protagonist"];
+  return [...doc.querySelectorAll(".portable-infobox .pi-data")]
+    .map((row) => {
+      const label = cleanMissionMarkup(row.querySelector(".pi-data-label")?.textContent || "");
+      const valueNode = row.querySelector(".pi-data-value");
+      const listValues = [...(valueNode?.querySelectorAll("li") || [])].map((node) => cleanMissionMarkup(node.textContent || "")).filter(Boolean);
+      const value = listValues.length ? listValues.join(", ") : cleanMissionMarkup(valueNode?.textContent || "");
+      return { label, value };
+    })
+    .filter((row) => row.label && row.value && wanted.some((label) => normalizeText(label) === normalizeText(row.label)))
+    .slice(0, 8);
+};
+
+const missionFactLabel = (label = "") => ({
+  type: "Tipo",
+  game: "Jogo",
+  for: "Contato",
+  location: "Local",
+  target: "Alvos",
+  reward: "Recompensa",
+  unlocks: "Libera",
+  "unlocked by": "Liberada por",
+  protagonist: "Protagonista"
+}[normalizeText(label)] || label);
+
+const loadMissionDetail = async (entry) => {
+  const pageTitle = missionItemPage(entry);
+  const label = missionItemName(entry);
+  if (!pageTitle) return null;
+  const cacheKey = normalizeText(pageTitle);
+  if (missionDetailCache.has(cacheKey)) return missionDetailCache.get(cacheKey);
+
+  const fetchDetail = async (title) => {
+    const data = await fetch(vehicleApiUrl({
+      action: "parse",
+      prop: "text|displaytitle",
+      redirects: "1",
+      page: title
+    })).then((response) => response.json());
+    const page = data?.parse;
+    if (!page || data?.error) return null;
+    const html = page.text?.["*"] || "";
+    const extract = extractMissionSummaryFromHtml(html);
+    const facts = extractMissionFactsFromHtml(html);
+    return {
+      title: cleanMissionMarkup(page.displaytitle || page.title || label || title),
+      extract,
+      facts,
+      url: missionDetailUrl(page.title || title)
+    };
+  };
+
+  let detail = await fetchDetail(pageTitle);
+  if ((!detail?.extract || normalizeText(detail.title) === normalizeText(label)) && !/\(mission\)$/i.test(pageTitle)) {
+    const missionPage = await fetchDetail(`${label} (mission)`);
+    if (missionPage?.extract) detail = missionPage;
+  }
+  const result = detail || {
+    title: label || pageTitle,
+    extract: "",
+    url: missionDetailUrl(pageTitle)
+  };
+  missionDetailCache.set(cacheKey, result);
+  return result;
 };
 
 const missionGameFor = (mission) => gamesData.find((game) => game.id === mission.gameId) || null;
@@ -2114,12 +2207,12 @@ const VehicleDossierModalContent = ({ item }) => {
   );
 };
 
-const MissionGroupsPanel = ({ groups, query }) => {
+const MissionGroupsPanel = ({ groups, query, selected, onSelect }) => {
   const normalizedQuery = normalizeText(query);
   const visibleGroups = groups
     .map((group) => ({
       ...group,
-      items: asList(group.items).filter((name) => !normalizedQuery || normalizeText(name).includes(normalizedQuery))
+      items: asList(group.items).filter((item) => !normalizedQuery || normalizeText(missionItemName(item)).includes(normalizedQuery))
     }))
     .filter((group) => group.items.length);
   const visibleCount = visibleGroups.reduce((sum, group) => sum + group.items.length, 0);
@@ -2135,7 +2228,22 @@ const MissionGroupsPanel = ({ groups, query }) => {
         <details key={group.label} className="dossier-vehicle-group dossier-mission-group" open={index < 3 || Boolean(query)}>
           <summary><span>{group.label}</span><strong>{group.items.length}</strong></summary>
           <div className="dossier-vehicle-name-grid dossier-mission-name-grid">
-            {group.items.map((name) => <span key={`${group.label}-${name}`}>{name}</span>)}
+            {group.items.map((item) => {
+              const name = missionItemName(item);
+              const page = missionItemPage(item);
+              const active = selected && missionItemPage(selected) === page && missionItemName(selected) === name;
+              const record = typeof item === "string" ? { name, page } : item;
+              return (
+                <button
+                  key={`${group.label}-${page}-${name}`}
+                  type="button"
+                  className={active ? "active" : ""}
+                  onClick={() => onSelect?.({ ...record, group: group.label })}
+                >
+                  {name}
+                </button>
+              );
+            })}
           </div>
         </details>
       ))}
@@ -2143,9 +2251,73 @@ const MissionGroupsPanel = ({ groups, query }) => {
   );
 };
 
+const MissionDetailPanel = ({ selected, mission }) => {
+  const [detail, setDetail] = React.useState(null);
+  const [status, setStatus] = React.useState("idle");
+  const [error, setError] = React.useState("");
+  const name = missionItemName(selected);
+
+  React.useEffect(() => {
+    let alive = true;
+    setDetail(null);
+    setError("");
+    if (!selected) {
+      setStatus("idle");
+      return () => { alive = false; };
+    }
+    setStatus("loading");
+    loadMissionDetail(selected)
+      .then((loaded) => {
+        if (!alive) return;
+        setDetail(loaded);
+        setStatus(loaded?.extract ? "ready" : "partial");
+      })
+      .catch((err) => {
+        if (!alive) return;
+        setError(err?.message || "Nao foi possivel carregar o arquivo da missao agora.");
+        setStatus("error");
+      });
+    return () => { alive = false; };
+  }, [selected?.name, selected?.page]);
+
+  if (!selected) {
+    return (
+      <aside className="dossier-mission-detail empty">
+        <span>Arquivo individual</span>
+        <h4>Selecione uma missão</h4>
+        <p>Clique em qualquer nome da lista para abrir o resumo público, a página de origem e o contexto daquele item dentro do jogo.</p>
+      </aside>
+    );
+  }
+
+  return (
+    <aside className={`dossier-mission-detail ${status}`}>
+      <span>Arquivo individual</span>
+      <h4>{name}</h4>
+      <MetaGrid rows={[
+        ["Jogo", mission.title],
+        ["Grupo", selected.group],
+        ["Fonte", detail?.title || missionItemPage(selected)]
+      ]} />
+      {detail?.facts?.length ? (
+        <MetaGrid rows={detail.facts.map((fact) => [missionFactLabel(fact.label), fact.value])} />
+      ) : null}
+      {status === "loading" && <p>Carregando resumo da missão...</p>}
+      {status === "error" && <p>{error}</p>}
+      {status !== "loading" && status !== "error" && (
+        <p>{detail?.extract || "A fonte pública lista esta missão, mas não retornou um resumo introdutório limpo pela API. Mantive o link direto para conferência manual."}</p>
+      )}
+      <div className="dossier-mission-detail-actions">
+        <a className="btn" href={detail?.url || missionDetailUrl(missionItemPage(selected))} target="_blank" rel="noreferrer">Abrir fonte</a>
+      </div>
+    </aside>
+  );
+};
+
 const MissionDossierModalContent = ({ item }) => {
   const [groups, setGroups] = React.useState(item.fallbackGroups || []);
   const [query, setQuery] = React.useState("");
+  const [selectedMission, setSelectedMission] = React.useState(null);
   const [status, setStatus] = React.useState(item.apiPage ? "loading" : "static");
   const [error, setError] = React.useState("");
   const totalLoaded = groups.reduce((sum, group) => sum + asList(group.items).length, 0);
@@ -2154,6 +2326,7 @@ const MissionDossierModalContent = ({ item }) => {
     let alive = true;
     setQuery("");
     setGroups(item.fallbackGroups || []);
+    setSelectedMission(null);
     setError("");
     if (!item.apiPage) {
       setStatus("static");
@@ -2163,7 +2336,15 @@ const MissionDossierModalContent = ({ item }) => {
     loadMissionGroups(item)
       .then((loaded) => {
         if (!alive) return;
-        setGroups(loaded.length ? loaded : (item.fallbackGroups || []));
+        const nextGroups = loaded.length ? loaded : (item.fallbackGroups || []);
+        setGroups(nextGroups);
+        const firstMission = nextGroups.flatMap((group) => asList(group.items).map((missionItem) => {
+          const name = missionItemName(missionItem);
+          const page = missionItemPage(missionItem);
+          const record = typeof missionItem === "string" ? { name, page } : missionItem;
+          return { ...record, group: group.label };
+        }))[0];
+        setSelectedMission(firstMission || null);
         setStatus(loaded.length ? "ready" : "empty");
       })
       .catch((err) => {
@@ -2202,7 +2383,10 @@ const MissionDossierModalContent = ({ item }) => {
           </span>
         </div>
         {error && <p className="dossier-mission-error">{error}</p>}
-        <MissionGroupsPanel groups={groups} query={query} />
+        <div className="dossier-mission-list-layout">
+          <MissionGroupsPanel groups={groups} query={query} selected={selectedMission} onSelect={setSelectedMission} />
+          <MissionDetailPanel selected={selectedMission} mission={item} />
+        </div>
       </ModalField>
       {item.relatedMissionFiles && (
         <ModalField label="Campanhas herdadas"><DossierChips items={item.relatedMissionFiles} limit={10} /></ModalField>

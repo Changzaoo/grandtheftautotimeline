@@ -673,6 +673,15 @@ select:focus{
 .dossier-mission-load-state{flex:0 0 auto;padding:9px 10px;border:1px solid rgba(74,222,128,.28);border-radius:999px;background:rgba(74,222,128,.07);color:var(--money);font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase}
 .dossier-mission-load-state.error{border-color:rgba(255,42,42,.32);background:rgba(255,42,42,.08);color:#ffb3b3}
 .dossier-mission-error{margin:0 0 10px;color:#ffb3b3;font-size:12px}
+.dossier-mission-list-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);gap:14px;align-items:start}
+.dossier-mission-name-grid button{border:1px solid rgba(255,255,255,.08);border-radius:5px;background:rgba(255,255,255,.025);color:var(--bone-2);font-family:"Space Mono",monospace;font-size:10px;text-align:left;padding:8px;cursor:pointer;transition:border-color .2s ease,background .2s ease,color .2s ease}
+.dossier-mission-name-grid button:hover,.dossier-mission-name-grid button.active{border-color:rgba(74,222,128,.48);background:rgba(74,222,128,.1);color:#fff}
+.dossier-mission-detail{position:sticky;top:82px;border:1px solid rgba(74,222,128,.22);border-radius:7px;background:linear-gradient(145deg,rgba(74,222,128,.08),rgba(255,255,255,.025));padding:15px;display:grid;gap:12px;min-height:240px}
+.dossier-mission-detail span{font-family:"Space Mono",monospace;color:var(--money);text-transform:uppercase;font-size:10px}
+.dossier-mission-detail h4{font-size:24px;color:#fff;margin:0}
+.dossier-mission-detail p{margin:0;color:var(--bone-2);font-size:13px;line-height:1.65}
+.dossier-mission-detail-actions{display:flex;justify-content:flex-start}
+.dossier-mission-detail.empty{border-color:rgba(255,255,255,.12);background:rgba(255,255,255,.025)}
 .dossier-mission-group summary strong{color:var(--money)}
 
 .vehicle-section{background:linear-gradient(180deg,#090a0d,#101116 48%,#08090b)}
@@ -883,6 +892,8 @@ select:focus{
   .dossier-online-catalog-head>span{display:inline-flex;margin-top:12px}
   .dossier-modal-split,
   .dossier-glossary-relations{grid-template-columns:1fr}
+  .dossier-mission-list-layout{grid-template-columns:1fr}
+  .dossier-mission-detail{position:relative;top:auto}
   .dossier-modal-grid{grid-template-columns:1fr}
 }
 @media (max-width:680px){
