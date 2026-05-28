@@ -49,69 +49,84 @@ const universeTone = (value = "") => {
 };
 
 const cinemaAccentColors = ["#FF6B35", "#FF006E", "#8338EC", "#00FFFF", "#f5c518"];
+const clamp01 = (value) => Math.max(0, Math.min(1, value));
 
 const useHeroCinematicMotion = () => {
-  const Motion = window.Motion;
-  const [titleStyle, setTitleStyle] = React.useState({});
-  const [panelStyle, setPanelStyle] = React.useState({});
-  if (Motion?.useScroll && Motion?.useTransform) {
-    const { scrollYProgress } = Motion.useScroll();
-    const titleY = Motion.useTransform(scrollYProgress, [0, 0.28], [0, -92]);
-    const titleScale = Motion.useTransform(scrollYProgress, [0, 0.28], [1, 0.88]);
-    const titleRotateX = Motion.useTransform(scrollYProgress, [0, 0.28], [0, 11]);
-    const panelY = Motion.useTransform(scrollYProgress, [0, 0.32], [0, 74]);
-    const panelRotateY = Motion.useTransform(scrollYProgress, [0, 0.32], [0, -8]);
+  const titleRef = React.useRef(null);
+  const panelRef = React.useRef(null);
 
-    React.useEffect(() => {
-      const update = () => {
-        setTitleStyle({
-          transform: `translateY(${titleY.get()}px) scale(${titleScale.get()}) rotateX(${titleRotateX.get()}deg)`
-        });
-        setPanelStyle({
-          transform: `translateY(${panelY.get()}px) rotateY(${panelRotateY.get()}deg)`
-        });
-      };
-      const unsubs = [
-        titleY.on("change", update),
-        titleScale.on("change", update),
-        titleRotateX.on("change", update),
-        panelY.on("change", update),
-        panelRotateY.on("change", update)
-      ];
-      update();
-      return () => unsubs.forEach((unsubscribe) => unsubscribe && unsubscribe());
-    }, [titleY, titleScale, titleRotateX, panelY, panelRotateY]);
-  }
-  return { title: titleStyle, panel: panelStyle };
+  React.useEffect(() => {
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const progress = reduceMotion ? 0 : clamp01(window.scrollY / Math.max(1, window.innerHeight * 0.72));
+      if (titleRef.current) {
+        const y = -72 * progress;
+        const scale = 1 - (0.08 * progress);
+        const rotate = 8 * progress;
+        titleRef.current.style.transform = `translate3d(0,${y}px,0) scale(${scale}) rotateX(${rotate}deg)`;
+      }
+      if (panelRef.current) {
+        const y = 54 * progress;
+        const rotate = -6 * progress;
+        panelRef.current.style.transform = `translate3d(0,${y}px,0) rotateY(${rotate}deg)`;
+        panelRef.current.style.setProperty("--hero-scroll-progress", progress.toFixed(3));
+      }
+    };
+
+    const requestUpdate = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    };
+
+    update();
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
+    return () => {
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
+    };
+  }, []);
+
+  return { titleRef, panelRef };
 };
 
 const DossierScrollProgress = () => {
-  const Motion = window.Motion;
-  const [scale, setScale] = React.useState(0);
-  if (Motion?.useScroll && Motion?.useSpring) {
-    const { scrollYProgress } = Motion.useScroll();
-    const scaleX = Motion.useSpring(scrollYProgress, { stiffness: 140, damping: 32, restDelta: 0.001 });
-    React.useEffect(() => scaleX.on("change", setScale), [scaleX]);
-    return <div className="cinema-scroll-progress" style={{ transform: `scaleX(${scale})` }} />;
-  }
+  const progressRef = React.useRef(null);
+
   React.useEffect(() => {
+    let ticking = false;
+
     const update = () => {
+      ticking = false;
       const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      setScale(window.scrollY / max);
+      const scale = clamp01(window.scrollY / max);
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${scale})`;
     };
+
+    const requestUpdate = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(update);
+    };
+
     update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
     return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
     };
   }, []);
-  return <div className="cinema-scroll-progress" style={{ transform: `scaleX(${scale})` }} />;
+
+  return <div ref={progressRef} className="cinema-scroll-progress" style={{ transform: "scaleX(0)" }} />;
 };
 
 const DossierCinematicBackdrop = () => {
-  const particles = React.useMemo(() => Array.from({ length: 72 }, (_, index) => {
+  const particles = React.useMemo(() => Array.from({ length: 48 }, (_, index) => {
     const col = index % 12;
     const row = Math.floor(index / 12);
     return {
@@ -152,29 +167,71 @@ const DossierCinematicBackdrop = () => {
 const useDossierCinemaEffects = () => {
   React.useEffect(() => {
     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-    const cleanups = [];
+    const root = document.getElementById("root") || document.body;
     const prepared = new WeakSet();
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) entry.target.classList.add("is-visible");
-      });
-    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.12 });
-
-    const tilt = (element, event) => {
-      if (reduceMotion) return;
-      const rect = element.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / rect.width - 0.5;
-      const y = (event.clientY - rect.top) / rect.height - 0.5;
-      element.style.setProperty("--tilt-y", `${x * 10}deg`);
-      element.style.setProperty("--tilt-x", `${y * -8}deg`);
-    };
+    let activeTilt = null;
+    let pointerFrame = 0;
+    let pointerEvent = null;
+    let prepareScheduled = false;
+    let lastScrollY = window.scrollY;
+    let scrollDirectionFrame = 0;
 
     const resetTilt = (element) => {
+      if (!element) return;
       element.style.setProperty("--tilt-x", "0deg");
       element.style.setProperty("--tilt-y", "0deg");
     };
 
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const visible = reduceMotion || (entry.isIntersecting && entry.intersectionRatio > 0.04);
+        entry.target.classList.toggle("is-visible", visible);
+        if (!visible && entry.target.classList.contains("card")) resetTilt(entry.target);
+      });
+    }, { rootMargin: "-6% 0px -12% 0px", threshold: [0, 0.04, 0.16, 0.32] });
+
+    const applyTilt = () => {
+      pointerFrame = 0;
+      if (reduceMotion) return;
+      const element = pointerEvent?.target?.closest?.(".dossier-shell .card");
+      if (!element) return;
+      if (activeTilt && activeTilt !== element) resetTilt(activeTilt);
+      activeTilt = element;
+      const rect = element.getBoundingClientRect();
+      const x = (pointerEvent.clientX - rect.left) / rect.width - 0.5;
+      const y = (pointerEvent.clientY - rect.top) / rect.height - 0.5;
+      element.style.setProperty("--tilt-y", `${x * 7}deg`);
+      element.style.setProperty("--tilt-x", `${y * -5}deg`);
+    };
+
+    const onPointerMove = (event) => {
+      if (reduceMotion) return;
+      if (!event.target?.closest?.(".dossier-shell .card")) return;
+      pointerEvent = event;
+      if (!pointerFrame) pointerFrame = window.requestAnimationFrame(applyTilt);
+    };
+
+    const onPointerOut = (event) => {
+      const card = event.target?.closest?.(".dossier-shell .card");
+      if (!card || card.contains(event.relatedTarget)) return;
+      resetTilt(card);
+      if (activeTilt === card) activeTilt = null;
+    };
+
+    const updateScrollDirection = () => {
+      scrollDirectionFrame = 0;
+      const current = window.scrollY;
+      document.body.classList.toggle("scrolling-up", current < lastScrollY);
+      document.body.classList.toggle("scrolling-down", current >= lastScrollY);
+      lastScrollY = current;
+    };
+
+    const onScrollDirection = () => {
+      if (!scrollDirectionFrame) scrollDirectionFrame = window.requestAnimationFrame(updateScrollDirection);
+    };
+
     const prepare = () => {
+      prepareScheduled = false;
       const revealTargets = Array.from(document.querySelectorAll([
         ".dossier-shell .card",
         ".dossier-section-head",
@@ -182,38 +239,46 @@ const useDossierCinemaEffects = () => {
         ".dossier-quick-tabs a",
         ".dossier-stat"
       ].join(",")));
+      const sectionCounts = new WeakMap();
       revealTargets.forEach((element, index) => {
         if (prepared.has(element)) return;
         prepared.add(element);
         const section = element.closest(".dossier-section, .dossier-hero, .dossier-footer") || document.body;
-        const localIndex = Array.from(section.querySelectorAll(".card, .dossier-section-head, .dossier-quick-tabs a, .dossier-stat")).indexOf(element);
-        const sideIndex = localIndex >= 0 ? localIndex : index;
+        const sideIndex = sectionCounts.get(section) || 0;
+        sectionCounts.set(section, sideIndex + 1);
         element.classList.add("cinema-reveal", sideIndex % 2 ? "reveal-right" : "reveal-left");
-        element.style.setProperty("--reveal-delay", `${Math.min(sideIndex, 6) * 0.15}s`);
+        element.style.setProperty("--reveal-delay", `${Math.min(sideIndex, 5) * 0.08}s`);
         element.style.setProperty("--card-accent", cinemaAccentColors[index % cinemaAccentColors.length]);
-        if (element.classList.contains("card")) {
-          element.style.transformStyle = "preserve-3d";
-          const handleMove = (event) => tilt(element, event);
-          const handleLeave = () => resetTilt(element);
-          element.addEventListener("mousemove", handleMove);
-          element.addEventListener("mouseleave", handleLeave);
-          cleanups.push(() => {
-            element.removeEventListener("mousemove", handleMove);
-            element.removeEventListener("mouseleave", handleLeave);
-          });
-        }
         observer.observe(element);
       });
     };
 
+    const schedulePrepare = () => {
+      if (prepareScheduled) return;
+      prepareScheduled = true;
+      const run = () => prepare();
+      if (window.requestIdleCallback) window.requestIdleCallback(run, { timeout: 600 });
+      else window.requestAnimationFrame(run);
+    };
+
     prepare();
-    const mutationObserver = new MutationObserver(prepare);
-    mutationObserver.observe(document.body, { childList: true, subtree: true });
+    root.addEventListener("pointermove", onPointerMove, { passive: true });
+    root.addEventListener("pointerout", onPointerOut);
+    window.addEventListener("scroll", onScrollDirection, { passive: true });
+
+    const mutationObserver = new MutationObserver((mutations) => {
+      if (mutations.some((mutation) => mutation.addedNodes.length)) schedulePrepare();
+    });
+    mutationObserver.observe(root, { childList: true, subtree: true });
 
     return () => {
       observer.disconnect();
       mutationObserver.disconnect();
-      cleanups.forEach((cleanup) => cleanup());
+      root.removeEventListener("pointermove", onPointerMove);
+      root.removeEventListener("pointerout", onPointerOut);
+      window.removeEventListener("scroll", onScrollDirection);
+      if (pointerFrame) window.cancelAnimationFrame(pointerFrame);
+      if (scrollDirectionFrame) window.cancelAnimationFrame(scrollDirectionFrame);
     };
   }, []);
 };
@@ -450,7 +515,7 @@ const DossierHero = () => {
       <div className="wrap dossier-hero-grid">
         <div className="dossier-hero-copy">
           <div className="tape">CONFIDENCIAL · ARQUIVO GTA</div>
-          <h1 className="cinema-gradient-text cinema-glitch" style={heroMotion.title}>
+          <h1 ref={heroMotion.titleRef} className="cinema-gradient-text cinema-glitch">
             Grand Theft Auto: Timeline Completa, História, Personagens e Cidades
           </h1>
           <p>
@@ -465,7 +530,7 @@ const DossierHero = () => {
             ))}
           </div>
         </div>
-        <aside className="dossier-hero-panel" style={heroMotion.panel}>
+        <aside ref={heroMotion.panelRef} className="dossier-hero-panel">
           <div className="dossier-case-top">
             <span>CASE FILE</span>
             <strong>GTA-SAGA-1997-2026</strong>
