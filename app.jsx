@@ -3,7 +3,6 @@
 function App(){
   const [dossier,setDossier] = React.useState(null);
   const [active,setActive] = React.useState("overview");
-  useDossierCinemaEffects();
 
   // Scroll-spy
   React.useEffect(()=>{
@@ -34,8 +33,6 @@ function App(){
 
   return (
     <>
-      <DossierCinematicBackdrop/>
-      <DossierScrollProgress/>
       <DossierHUDNav active={active} onJump={setActive}/>
       <DossierHero/>
       <TimelineDossierSection onOpenDossier={setDossier}/>
