@@ -217,7 +217,7 @@ const DossierHUDNav = ({ active, onJump }) => {
           <span className="dossier-brand-badge">GTA</span>
           <span>
             <strong>Dossiê Criminal</strong>
-            <small>Arquivo GTA / canon, bastidores e cidades</small>
+            <small>Arquivo GTA</small>
           </span>
         </a>
         <nav className={open ? "open" : ""}>

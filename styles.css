@@ -423,22 +423,22 @@ select:focus{
   background:rgba(8,8,10,.82);
   backdrop-filter:blur(18px) saturate(140%);
 }
-.dossier-hud-inner{display:flex;align-items:center;gap:18px;padding:16px 28px}
-.dossier-brand{display:flex;align-items:center;gap:12px;min-width:280px;color:var(--bone);text-decoration:none}
-.dossier-brand-badge{display:grid;place-items:center;width:54px;height:42px;border-radius:6px;background:var(--evidence);color:#171000;font-weight:900}
-.dossier-brand strong{display:block;font-size:16px;text-transform:uppercase}
-.dossier-brand small{display:block;color:var(--grit);font-family:"Space Mono",monospace;font-size:11px}
-.dossier-hud nav{display:flex;gap:6px;flex:1;overflow:auto}
+.dossier-hud-inner{display:flex;align-items:center;gap:22px;padding:18px 32px}
+.dossier-brand{display:flex;align-items:center;gap:14px;min-width:300px;color:var(--bone);text-decoration:none}
+.dossier-brand-badge{display:grid;place-items:center;width:62px;height:48px;border-radius:6px;background:var(--evidence);color:#171000;font-weight:900;font-size:18px}
+.dossier-brand strong{display:block;font-size:18px;text-transform:uppercase}
+.dossier-brand small{display:block;color:var(--grit);font-family:"Space Mono",monospace;font-size:12px}
+.dossier-hud nav{display:flex;gap:8px;flex:1;overflow:auto}
 .dossier-hud nav a{
   display:flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none;
-  padding:11px 14px;border:1px solid transparent;border-radius:6px;color:var(--bone-2);
-  font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase
+  padding:14px 18px;border:1px solid transparent;border-radius:6px;color:var(--bone-2);
+  font-family:"Space Mono",monospace;font-size:12px;text-transform:uppercase
 }
 .dossier-hud nav a span{color:var(--grit)}
 .dossier-hud nav a:hover{border-color:var(--line-2);color:#fff;background:rgba(255,255,255,.04)}
 .dossier-hud nav a.active{background:var(--evidence);color:#171000}
 .dossier-hud nav a.active span{color:#171000}
-.dossier-menu{display:none;width:52px;height:46px;border:1px solid var(--line-2);border-radius:6px;background:#141419;color:var(--bone);font-size:22px}
+.dossier-menu{display:none;width:60px;height:54px;border:1px solid var(--line-2);border-radius:6px;background:#141419;color:var(--bone);font-size:26px}
 
 .dossier-hero{position:relative;overflow:hidden;min-height:680px;padding:76px 0 56px;border-bottom:1px solid var(--line)}
 .dossier-map-bg{
@@ -953,8 +953,8 @@ select:focus{
 }
 @media (max-width:940px){
   .dossier-hud nav{display:none}
-  .dossier-hud nav.open{display:flex;position:absolute;left:0;right:0;top:100%;gap:8px;padding:18px;background:#09090c;border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .dossier-hud nav.open a{padding:13px 15px;font-size:11px}
+  .dossier-hud nav.open{display:flex;position:absolute;left:0;right:0;top:100%;gap:10px;padding:22px;background:#09090c;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .dossier-hud nav.open a{padding:16px 18px;font-size:12px}
   .dossier-menu{display:block}
   .dossier-brand{min-width:0;flex:1}
   .dossier-hero-grid,
