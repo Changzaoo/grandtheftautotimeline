@@ -706,6 +706,15 @@ select:focus{
 .dossier-glossary-media img{filter:saturate(1.08) contrast(1.05)}
 .dossier-glossary-item h3{font-size:24px;color:var(--evidence);margin-bottom:8px}
 .dossier-glossary-item .btn{align-self:flex-start;margin-top:auto}
+.dossier-glossary-modal-content{display:grid;gap:14px}
+.dossier-glossary-brief{display:grid;gap:8px;padding:18px;border:1px solid rgba(245,197,24,.18);border-radius:6px;background:linear-gradient(135deg,rgba(245,197,24,.09),rgba(59,108,255,.045))}
+.dossier-glossary-brief strong{font-size:18px;line-height:1.45;color:#fff}
+.dossier-glossary-brief span{color:var(--evidence);font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase}
+.dossier-modal-split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dossier-glossary-relations{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.dossier-glossary-relations div{padding:12px;border:1px solid rgba(255,255,255,.1);border-radius:6px;background:rgba(0,0,0,.2)}
+.dossier-glossary-relations strong{display:block;margin-bottom:5px;color:var(--evidence);font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase}
+.dossier-glossary-relations span{display:block;color:var(--bone-2);font-size:12px;line-height:1.5}
 .dossier-extra-block{padding-top:42px}
 .dossier-extra-block.compact{padding-top:32px}
 .dossier-extra-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
@@ -779,6 +788,8 @@ select:focus{
   .dossier-section-head h2{font-size:50px}
   .dossier-online-catalog-head{display:block}
   .dossier-online-catalog-head>span{display:inline-flex;margin-top:12px}
+  .dossier-modal-split,
+  .dossier-glossary-relations{grid-template-columns:1fr}
   .dossier-modal-grid{grid-template-columns:1fr}
 }
 @media (max-width:680px){

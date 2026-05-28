@@ -1138,6 +1138,60 @@ const ModalField = ({ label, children }) => (
   </div>
 );
 
+const GlossaryTermModalContent = ({ item }) => {
+  const appearsIn = asList(item.appearsIn || item.games);
+  const related = asList(item.relatedTerms);
+  const relatedRecords = related
+    .map((term) => glossaryData.find((entry) => entry.term === term))
+    .filter(Boolean);
+
+  return (
+    <div className="dossier-glossary-modal-content">
+      <div className="dossier-glossary-brief">
+        <strong>{item.definition}</strong>
+        <span>{item.category || "Termo do dossie"}</span>
+      </div>
+      <MetaGrid rows={[
+        ["Categoria", item.category],
+        ["Aparece em", appearsIn],
+        ["Termos relacionados", related],
+        ["Fontes", `${asList(item.sources).length} referencias`]
+      ]} />
+      <ModalField label="Contexto completo">{item.expanded || item.definition}</ModalField>
+      <div className="dossier-modal-split">
+        <ModalField label="Onde aparece">
+          <BulletList items={appearsIn.length ? appearsIn : ["Aplicavel ao dossie geral da franquia."]} />
+        </ModalField>
+        <ModalField label="Por que importa">
+          {item.whyItMatters || item.importance || "Ajuda a ler a cronologia, o canon e os sistemas da franquia sem misturar interpretacao com fato confirmado."}
+        </ModalField>
+      </div>
+      <ModalField label="Exemplos no dossie">
+        <BulletList items={asList(item.examples).length ? item.examples : ["Termo usado para cruzar jogos, cidades, personagens e sistemas dentro do dossie."]} />
+      </ModalField>
+      <ModalField label="Relacoes com outros termos">
+        {relatedRecords.length ? (
+          <div className="dossier-glossary-relations">
+            {relatedRecords.map((record) => (
+              <div key={record.term}>
+                <strong>{record.term}</strong>
+                <span>{record.definition}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <DossierChips items={related} limit={12} />
+        )}
+      </ModalField>
+      <ModalField label="Notas de precisao">
+        <BulletList items={asList(item.precisionNotes).length ? item.precisionNotes : ["Sem nota adicional; o termo e usado no sentido editorial descrito acima."]} />
+      </ModalField>
+      <ModalField label="Tags"><DossierChips items={item.tags} limit={12} /></ModalField>
+      <ModalField label="Fontes"><SourceLinks items={item.sources} /></ModalField>
+    </div>
+  );
+};
+
 const DossierRecordModal = ({ record, onClose }) => {
   if (!record?.item) return null;
   const item = record.item;
@@ -1286,20 +1340,7 @@ const DossierRecordModal = ({ record, onClose }) => {
               </>
             )}
             {record.type === "glossary" && (
-              <>
-                <MetaGrid rows={[
-                  ["Categoria", item.category],
-                  ["Aparece em", item.appearsIn || item.games],
-                  ["Termos relacionados", item.relatedTerms]
-                ]} />
-                <ModalField label="Definicao rapida">{item.definition}</ModalField>
-                <ModalField label="Explicacao completa">{item.expanded}</ModalField>
-                <ModalField label="Por que importa">{item.whyItMatters || item.importance}</ModalField>
-                <ModalField label="Exemplos no dossie"><BulletList items={item.examples} /></ModalField>
-                <ModalField label="Notas de precisao"><BulletList items={item.precisionNotes} /></ModalField>
-                <ModalField label="Tags"><DossierChips items={item.tags} limit={12} /></ModalField>
-                <ModalField label="Fontes"><SourceLinks items={item.sources} /></ModalField>
-              </>
+              <GlossaryTermModalContent item={item} />
             )}
           </section>
         </div>
