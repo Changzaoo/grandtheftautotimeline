@@ -7,15 +7,16 @@ const dossierNav = () => window.dossierNavData || window.NAV || [
   { id: "timeline", label: "Timeline Cronológica", k: "02" },
   { id: "games", label: "Jogos", k: "03" },
   { id: "vehicles", label: "Veículos", k: "04" },
-  { id: "development", label: "Desenvolvimento", k: "05" },
-  { id: "characters", label: "Personagens", k: "06" },
-  { id: "cities", label: "Cidades", k: "07" },
-  { id: "gangs", label: "Gangues e Organizações", k: "08" },
-  { id: "universes", label: "Universos GTA", k: "09" },
-  { id: "rockstar", label: "Rockstar Games", k: "10" },
-  { id: "gtaonline", label: "GTA Online", k: "11" },
-  { id: "gta6", label: "GTA VI", k: "12" },
-  { id: "glossary", label: "Glossário", k: "13" }
+  { id: "weapons", label: "Armas", k: "05" },
+  { id: "development", label: "Desenvolvimento", k: "06" },
+  { id: "characters", label: "Personagens", k: "07" },
+  { id: "cities", label: "Cidades", k: "08" },
+  { id: "gangs", label: "Gangues e Organizações", k: "09" },
+  { id: "universes", label: "Universos GTA", k: "10" },
+  { id: "rockstar", label: "Rockstar Games", k: "11" },
+  { id: "gtaonline", label: "GTA Online", k: "12" },
+  { id: "gta6", label: "GTA VI", k: "13" },
+  { id: "glossary", label: "Glossário", k: "14" }
 ];
 
 const asList = (value) => Array.isArray(value) ? value : value ? [value] : [];
@@ -54,6 +55,7 @@ const DossierIcon = ({ type = "file" }) => {
     city: <svg {...common}><path d="M3 21h18"/><path d="M5 21V7l6-4 6 4v14"/><path d="M9 21v-6h6v6"/><path d="M8 9h1M12 9h1M16 9h1M8 12h1M16 12h1"/></svg>,
     police: <svg {...common}><path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5z"/><path d="m9 12 2 2 4-5"/></svg>,
     car: <svg {...common}><path d="M3 16h18"/><path d="M5 16l2-6h10l2 6"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>,
+    weapon: <svg {...common}><circle cx="12" cy="12" r="8"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="2"/></svg>,
     users: <svg {...common}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
     star: <svg {...common}><path d="m12 2 2.8 6.2 6.7.7-5 4.6 1.4 6.5-5.9-3.3L6.1 20l1.4-6.5-5-4.6 6.7-.7z"/></svg>,
     database: <svg {...common}><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>
@@ -259,6 +261,7 @@ const DossierHero = () => {
     ["Timeline", "timeline", "map"],
     ["Jogos", "games", "file"],
     ["Veículos", "vehicles", "car"],
+    ["Armas", "weapons", "weapon"],
     ["Personagens", "characters", "users"],
     ["Cidades", "cities", "city"],
     ["Organizações", "gangs", "database"],
@@ -732,6 +735,277 @@ const VehiclesDossierSection = ({ onOpenDossier }) => {
         </div>
         <div className="dossier-vehicle-grid">
           {filtered.map((vehicle) => <VehicleDossierCard key={vehicle.id} vehicle={vehicle} onOpen={onOpenDossier} />)}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const weaponGroupCache = new Map();
+
+const weaponContentSlice = (rawText = "") => {
+  const starts = ["===Contents===", "==Contents==", "== List of weapons ==", "== Weapons returning", "==Description=="];
+  const startCandidates = starts
+    .map((marker) => rawText.indexOf(marker))
+    .filter((index) => index >= 0);
+  const start = startCandidates.length ? Math.min(...startCandidates) : 0;
+  const tail = rawText.slice(start);
+  const endMarkers = [
+    "\n==Gallery==",
+    "\n==Interactive Map==",
+    "\n==Additional Information==",
+    "\n==Beta Weapons==",
+    "\n== Deleted weapons ==",
+    "\n==References==",
+    "\n==Navigation=="
+  ];
+  const endCandidates = endMarkers
+    .map((marker) => tail.indexOf(marker))
+    .filter((index) => index > 0);
+  return endCandidates.length ? tail.slice(0, Math.min(...endCandidates)) : tail;
+};
+
+const cleanWeaponGroupLabel = (line = "") => {
+  let label = String(line).trim().replace(/^=+|=+$/g, "").replace(/^!+/, "");
+  if (/^\s*(colspan|rowspan|style|width|scope)/i.test(label)) label = label.split("|").pop();
+  label = cleanWikiMarkup(label);
+  if (/^(reference|meaning|description|total|available|contents|key|table|weapons|weapon names?|name|image|slot|damage per round|rounds per ammunition unit|features?|type|class|description)$/i.test(label)) return "";
+  if (/gallery|navigation|references|trivia|see also|interactive map|additional information/i.test(label)) return "";
+  return label;
+};
+
+const extractWeaponNameFromLine = (line = "") => {
+  if (/\[\[:?(file|image|category|pl|ru|es|fr|de|pt|zh):/i.test(line)) return "";
+  if (!line.includes("[[")) return "";
+  let name = line.trim().replace(/^\*+/, "").replace(/^\|+/, "");
+  name = name
+    .replace(/<ref[^>]*>.*?<\/ref>/gi, "")
+    .replace(/\{\{[^{}]+\}\}/g, "");
+  name = cleanWikiMarkup(name)
+    .replace(/\s+\(Slot\s+\d+\)/i, "")
+    .replace(/\s+\(PS2 only\)/i, " (PS2 only)")
+    .replace(/\s+\(Standard & Explosive\)/i, " (Standard & Explosive)")
+    .trim()
+    .replace(/\.$/, "");
+  if (/^(weapons in|grand theft auto|file:|image:|weapon wheel|ammu-nation|random pedestrian|mission|user|cutscene weapon|gameplay weapon)$/i.test(name)) return "";
+  return name;
+};
+
+const addWeaponGroupItem = (groups, label, name) => {
+  if (!name) return;
+  const groupLabel = label || "Lista completa";
+  if (!groups.has(groupLabel)) groups.set(groupLabel, new Set());
+  groups.get(groupLabel).add(name);
+};
+
+const parseWeaponWikitext = (rawText = "") => {
+  const text = weaponContentSlice(rawText);
+  const lines = text.split("\n");
+  const groups = new Map();
+  let headers = [];
+  let currentGroup = "Lista completa";
+  let columnIndex = 0;
+  let inTable = false;
+  let newRow = false;
+  let readingHeaders = false;
+
+  lines.forEach((rawLine) => {
+    const line = rawLine.trim();
+    if (!line) return;
+    if (/^\{\|/.test(line)) {
+      inTable = true;
+      headers = [];
+      columnIndex = 0;
+      return;
+    }
+    if (/^\|\}/.test(line)) {
+      inTable = false;
+      headers = [];
+      columnIndex = 0;
+      return;
+    }
+    if (/^==+/.test(line)) {
+      const label = cleanWeaponGroupLabel(line);
+      if (label) currentGroup = label;
+      return;
+    }
+    if (inTable && /^\|-/.test(line)) {
+      columnIndex = 0;
+      newRow = true;
+      readingHeaders = false;
+      return;
+    }
+    if (/^!/.test(line)) {
+      const label = cleanWeaponGroupLabel(line);
+      if (label) {
+        if (newRow && !readingHeaders) {
+          headers = [];
+          readingHeaders = true;
+        }
+        headers.push(label);
+      }
+      return;
+    }
+    if (inTable && /^\|$/.test(line)) {
+      newRow = false;
+      readingHeaders = false;
+      if (headers.length) currentGroup = headers[Math.min(columnIndex, headers.length - 1)];
+      columnIndex += 1;
+      return;
+    }
+    if (inTable && /^\|/.test(line)) {
+      newRow = false;
+      readingHeaders = false;
+      addWeaponGroupItem(groups, currentGroup, extractWeaponNameFromLine(line));
+      return;
+    }
+    if (/^\*\[\[/.test(line)) addWeaponGroupItem(groups, currentGroup, extractWeaponNameFromLine(line));
+  });
+
+  return [...groups.entries()]
+    .map(([label, names]) => ({ label, items: [...names].sort((a, b) => a.localeCompare(b, "pt-BR")) }))
+    .filter((group) => group.items.length)
+    .sort((a, b) => a.label.localeCompare(b.label, "pt-BR"));
+};
+
+const normalizeWeaponTitle = (title = "") => title
+  .replace(/\s+\((2D|3D|HD) Universe\)$/i, "")
+  .replace(/^Beta Weapons.*$/i, "")
+  .trim();
+
+const loadWeaponCategoryGroup = async (categoryTitle) => {
+  const names = [];
+  let cmcontinue = "";
+  do {
+    const data = await fetch(vehicleApiUrl({
+      action: "query",
+      list: "categorymembers",
+      cmtitle: categoryTitle,
+      cmnamespace: "0",
+      cmlimit: "500",
+      ...(cmcontinue ? { cmcontinue } : {})
+    })).then((response) => response.json());
+    const members = data?.query?.categorymembers || [];
+    members.forEach((member) => {
+      const title = normalizeWeaponTitle(member.title);
+      if (title && !/^Weapons in/i.test(title)) names.push(title);
+    });
+    cmcontinue = data?.continue?.cmcontinue || "";
+  } while (cmcontinue);
+  return [{ label: "Lista completa", items: [...new Set(names)].sort((a, b) => a.localeCompare(b, "pt-BR")) }];
+};
+
+const loadWeaponGroups = async (weapon) => {
+  const cacheKey = `${weapon.id}:${weapon.apiPage || weapon.categoryTitle || "fallback"}`;
+  if (weaponGroupCache.has(cacheKey)) return weaponGroupCache.get(cacheKey);
+  let groups = [];
+  if (weapon.categoryTitle) {
+    groups = await loadWeaponCategoryGroup(weapon.categoryTitle);
+  } else if (weapon.apiPage) {
+    const data = await fetch(vehicleApiUrl({
+      action: "parse",
+      prop: "wikitext",
+      redirects: "1",
+      page: weapon.apiPage
+    })).then((response) => response.json());
+    groups = parseWeaponWikitext(data?.parse?.wikitext?.["*"] || "");
+  }
+  if (!groups.length && weapon.fallbackGroups) groups = weapon.fallbackGroups;
+  weaponGroupCache.set(cacheKey, groups);
+  return groups;
+};
+
+const weaponGameFor = (weapon) => gamesData.find((game) => game.id === weapon.gameId) || null;
+
+const matchesWeaponType = (weapon, type) => {
+  if (type === "all") return true;
+  const hay = normalizeText([weapon.coverage, weapon.tags, weapon.highlights, weapon.summary].join(" "));
+  const tests = {
+    melee: ["melee", "corpo", "branca", "motosserra", "katana", "fist", "baseball", "knife"],
+    handgun: ["pistola", "pistol", "revolver", "handgun", ".357", ".44"],
+    shotgun: ["shotgun", "spaz", "cano serrado", "sawn"],
+    automatic: ["smg", "metralhadora", "rifle", "mg", "carbine", "ak", "m4", "tec"],
+    sniper: ["sniper", "marksman"],
+    heavy: ["pesada", "pesadas", "rpg", "rocket", "minigun", "grenade launcher", "railgun", "lança"],
+    thrown: ["arremess", "grenada", "molotov", "sticky", "pipe bomb", "proximity", "tear gas"],
+    special: ["especial", "utilitario", "utilit", "gifts", "camera", "spray", "paraquedas", "orbital", "alien", "mk ii", "online"]
+  };
+  return (tests[type] || []).some((needle) => hay.includes(needle));
+};
+
+const WeaponDossierCard = ({ weapon, onOpen }) => {
+  const game = weaponGameFor(weapon);
+  const media = weapon.media || game?.media;
+  return (
+    <article className="card dossier-weapon-card">
+      <Corners />
+      <div className={`dossier-weapon-media ${universeTone(weapon.universe)} ${media ? "has-official" : ""}`}>
+        {media ? <OfficialMedia media={media} className="dossier-weapon-official" /> : <div className="dossier-cover-map" />}
+        <div className="dossier-weapon-badge"><DossierIcon type="weapon" /><span>{weapon.totalLabel}</span></div>
+      </div>
+      <div className="dossier-card-body">
+        <div className="dossier-card-kicker">{weapon.universe} · arsenal em {weapon.storyYear}</div>
+        <h3>{weapon.title}</h3>
+        <p>{weapon.summary}</p>
+        <MetaGrid rows={[
+          ["Cidade", weapon.city],
+          ["Cobertura", asList(weapon.coverage).slice(0, 5)],
+          ["Destaques", asList(weapon.highlights).slice(0, 5)]
+        ]} />
+        <DossierChips items={weapon.tags} limit={6} />
+        <button className="btn" onClick={() => onOpen({ type: "weapon", item: { ...weapon, media } })}>Abrir arsenal</button>
+      </div>
+    </article>
+  );
+};
+
+const WeaponsDossierSection = ({ onOpenDossier }) => {
+  const weapons = window.weaponDossierData || [];
+  const [query, setQuery] = React.useState("");
+  const [universe, setUniverse] = React.useState("all");
+  const [type, setType] = React.useState("all");
+  const typeOptions = [
+    ["all", "Todos"],
+    ["melee", "Corpo a corpo"],
+    ["handgun", "Pistolas"],
+    ["shotgun", "Shotguns"],
+    ["automatic", "SMG/Rifles/MG"],
+    ["sniper", "Snipers"],
+    ["heavy", "Pesadas"],
+    ["thrown", "Arremessáveis"],
+    ["special", "Especiais/Online"]
+  ];
+  const filtered = weapons.filter((weapon) =>
+    searchRecord(weapon, query) &&
+    (universe === "all" || weapon.universe === universe) &&
+    matchesWeaponType(weapon, type)
+  );
+
+  return (
+    <section id="weapons" className="dossier-section dossier-shell alt weapon-section">
+      <div className="wrap">
+        <DossierSectionHead eyebrow="Arsenal criminal" title="Armas por jogo" accent="var(--siren)" right={`${filtered.length} arquivos de arsenal`} />
+        <div className="dossier-weapon-intro card">
+          <Corners />
+          <div>
+            <h3>Do punho ao Orbital Cannon</h3>
+            <p>
+              Cada ficha abre o arsenal do jogo e busca a lista completa na fonte: melee, pistolas, shotguns, SMGs, rifles, snipers, armas pesadas, explosivos, itens especiais, equipamentos e armas de DLC quando a fonte separa essas classes.
+            </p>
+          </div>
+          <div className="dossier-weapon-scan">
+            <span>full arsenal</span>
+            <strong>wiki indexed</strong>
+            <small>beta/cut separado por precisão</small>
+          </div>
+        </div>
+        <div className="dossier-filterbar wide">
+          <label><span>Busca</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Minigun, Katana, Mk II, Rocket Launcher..." /></label>
+          <label><span>Universo</span><select value={universe} onChange={(e) => setUniverse(e.target.value)}><option value="all">Todos</option>{universeData.map((u) => <option key={u.name}>{u.name}</option>)}</select></label>
+          <label><span>Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}>{typeOptions.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
+        </div>
+        <div className="dossier-weapon-grid">
+          {filtered.map((weapon) => <WeaponDossierCard key={weapon.id} weapon={weapon} onOpen={onOpenDossier} />)}
         </div>
       </div>
     </section>
@@ -1574,6 +1848,77 @@ const VehicleDossierModalContent = ({ item }) => {
   );
 };
 
+const WeaponDossierModalContent = ({ item }) => {
+  const [groups, setGroups] = React.useState(item.fallbackGroups || []);
+  const [query, setQuery] = React.useState("");
+  const [status, setStatus] = React.useState(item.apiPage || item.categoryTitle ? "loading" : "static");
+  const [error, setError] = React.useState("");
+  const totalLoaded = groups.reduce((sum, group) => sum + asList(group.items).length, 0);
+
+  React.useEffect(() => {
+    let alive = true;
+    setQuery("");
+    setGroups(item.fallbackGroups || []);
+    setError("");
+    if (!item.apiPage && !item.categoryTitle) {
+      setStatus("static");
+      return () => { alive = false; };
+    }
+    setStatus("loading");
+    loadWeaponGroups(item)
+      .then((loaded) => {
+        if (!alive) return;
+        setGroups(loaded.length ? loaded : (item.fallbackGroups || []));
+        setStatus(loaded.length ? "ready" : "empty");
+      })
+      .catch((err) => {
+        if (!alive) return;
+        setError(err?.message || "Nao foi possivel carregar a lista completa agora.");
+        setGroups(item.fallbackGroups || []);
+        setStatus("error");
+      });
+    return () => { alive = false; };
+  }, [item.id]);
+
+  return (
+    <>
+      <MetaGrid rows={[
+        ["Lançamento", item.releaseYear],
+        ["Ano da história", item.storyYear],
+        ["Universo", item.universe],
+        ["Cidade", item.city],
+        ["Total / fonte", item.totalLabel],
+        ["Arquivo carregado", item.apiPage || item.categoryTitle || "dossiê estático"]
+      ]} />
+      <ModalField label="Resumo">{item.summary}</ModalField>
+      <ModalField label="Como o arsenal funciona"><BulletList items={item.systems} /></ModalField>
+      <div className="dossier-modal-split">
+        <ModalField label="Cobertura"><DossierChips items={item.coverage} limit={20} /></ModalField>
+        <ModalField label="Armas marcantes"><DossierChips items={item.highlights} limit={20} /></ModalField>
+      </div>
+      <ModalField label="Lista completa por classe">
+        <div className="dossier-weapon-modal-tools">
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filtrar dentro do arsenal: Minigun, Katana, Mk II..." />
+          <span className={`dossier-weapon-load-state ${status}`}>
+            {status === "loading" ? "carregando fonte..." :
+              status === "error" ? "fonte indisponível agora" :
+              status === "empty" ? "sem tabela pública completa" :
+              `${totalLoaded} registros carregados`}
+          </span>
+        </div>
+        {error && <p className="dossier-weapon-error">{error}</p>}
+        <VehicleGroupsPanel groups={groups} query={query} />
+      </ModalField>
+      {item.relatedWeaponFiles && (
+        <ModalField label="Arsenais herdados"><DossierChips items={item.relatedWeaponFiles} limit={10} /></ModalField>
+      )}
+      <ModalField label="Notas de precisão"><BulletList items={item.precisionNotes} /></ModalField>
+      <ModalField label="Tags"><DossierChips items={item.tags} limit={12} /></ModalField>
+      <ModalField label="Fonte"><SourceLinks items={item.source ? [item.source] : []} /></ModalField>
+    </>
+  );
+};
+
 const DossierRecordModal = ({ record, onClose }) => {
   if (!record?.item) return null;
   const item = record.item;
@@ -1584,10 +1929,12 @@ const DossierRecordModal = ({ record, onClose }) => {
     record.type === "faction" ? `${item.category} · ${item.city}` :
     record.type === "onlineDlc" ? `${item.releaseDate} / ${item.type}` :
     record.type === "vehicle" ? `${item.universe} · ${item.totalLabel}` :
+    record.type === "weapon" ? `${item.universe} · ${item.totalLabel}` :
     record.type === "glossary" ? `${item.category || "Glossario"} / termo de referencia` :
     item.universe || "Arquivo";
   const recordLabel = record.type === "onlineDlc" ? "ONLINE DLC" :
     record.type === "vehicle" ? "FROTA" :
+    record.type === "weapon" ? "ARSENAL" :
     record.type === "glossary" ? "GLOSSARIO" :
     record.type.toUpperCase();
 
@@ -1638,6 +1985,9 @@ const DossierRecordModal = ({ record, onClose }) => {
             )}
             {record.type === "vehicle" && (
               <VehicleDossierModalContent item={item} />
+            )}
+            {record.type === "weapon" && (
+              <WeaponDossierModalContent item={item} />
             )}
             {record.type === "character" && (
               <>
@@ -1742,6 +2092,7 @@ Object.assign(window, {
   TimelineDossierSection,
   GamesDossierSection,
   VehiclesDossierSection,
+  WeaponsDossierSection,
   DevelopmentDossierSection,
   CharactersDossierSection,
   CitiesDossierSection,

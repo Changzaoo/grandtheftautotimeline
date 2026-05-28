@@ -684,6 +684,32 @@ select:focus{
 .dossier-vehicle-name-grid span{padding:7px 8px;border:1px solid rgba(255,255,255,.08);border-radius:5px;background:rgba(0,0,0,.2);color:var(--bone-2);font-size:12px;line-height:1.25}
 .dossier-vehicle-empty{padding:16px;border:1px dashed rgba(255,255,255,.16);border-radius:6px;color:var(--grit)}
 
+.weapon-section{background:linear-gradient(180deg,#0a0909,#151010 48%,#08090b)}
+.dossier-weapon-intro{display:grid;grid-template-columns:1fr 240px;gap:18px;align-items:center;margin-bottom:18px;padding:20px;border-color:rgba(255,42,42,.24);background:linear-gradient(135deg,rgba(255,42,42,.08),rgba(245,197,24,.045))}
+.dossier-weapon-intro h3{font-size:36px;margin-bottom:8px;color:#fff}
+.dossier-weapon-scan{display:grid;gap:5px;padding:16px;border:1px solid rgba(255,42,42,.25);border-radius:6px;background:rgba(255,42,42,.06);font-family:"Space Mono",monospace;text-transform:uppercase}
+.dossier-weapon-scan span{color:#ffb3b3;font-size:10px}
+.dossier-weapon-scan strong{color:#fff;font-size:18px}
+.dossier-weapon-scan small{color:var(--grit);font-size:10px}
+.dossier-weapon-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.dossier-weapon-card{display:flex;flex-direction:column;overflow:hidden}
+.dossier-weapon-card:hover{border-color:rgba(255,42,42,.4);box-shadow:0 0 28px rgba(255,42,42,.08)}
+.dossier-weapon-media{position:relative;min-height:178px;overflow:hidden;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#1f1010,#09090c)}
+.dossier-weapon-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.2) 42%,rgba(0,0,0,.84));z-index:1}
+.dossier-weapon-media.yellow{background:linear-gradient(135deg,rgba(245,197,24,.16),#0a0a0d)}
+.dossier-weapon-media.blue{background:linear-gradient(135deg,rgba(59,108,255,.14),#0a0a0d)}
+.dossier-weapon-media.pink{background:linear-gradient(135deg,rgba(255,61,138,.14),#0a0a0d)}
+.dossier-weapon-official{position:absolute;inset:0;border:0;border-radius:0;z-index:0}
+.dossier-weapon-official img{filter:saturate(1.06) contrast(1.05)}
+.dossier-weapon-badge{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;display:flex;align-items:center;gap:9px;padding:9px 10px;border:1px solid rgba(255,255,255,.16);border-radius:6px;background:rgba(8,5,5,.74);backdrop-filter:blur(8px);color:var(--bone-2);font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase}
+.dossier-weapon-badge svg{flex:0 0 auto;color:var(--siren)}
+.dossier-weapon-modal-tools{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.dossier-weapon-modal-tools input{flex:1;min-width:0;padding:12px;border:1px solid var(--line-2);border-radius:6px;background:#09090c;color:var(--bone);font-family:"Space Grotesk",sans-serif}
+.dossier-weapon-load-state{flex:0 0 auto;padding:9px 10px;border:1px solid rgba(255,42,42,.28);border-radius:999px;background:rgba(255,42,42,.07);color:#ffb3b3;font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase}
+.dossier-weapon-load-state.ready{border-color:rgba(74,222,128,.28);background:rgba(74,222,128,.07);color:var(--money)}
+.dossier-weapon-load-state.error{border-color:rgba(255,42,42,.32);background:rgba(255,42,42,.08);color:#ffb3b3}
+.dossier-weapon-error{margin:0 0 10px;color:#ffb3b3;font-size:12px}
+
 .dossier-online-intro{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:stretch;margin-bottom:22px}
 .dossier-online-intro h3{font-size:42px;margin-bottom:10px}
 .dossier-online-side{display:grid;gap:10px}
@@ -790,6 +816,7 @@ select:focus{
 @media (max-width:1180px){
   .dossier-games-grid,
   .dossier-vehicle-grid,
+  .dossier-weapon-grid,
   .dossier-character-grid,
   .dossier-faction-grid,
   .dossier-people-grid,
@@ -813,6 +840,7 @@ select:focus{
   .dossier-rockstar-layout,
   .dossier-online-intro,
   .dossier-vehicle-intro,
+  .dossier-weapon-intro,
   .dossier-gta6-hero,
   .dossier-footer-grid{grid-template-columns:1fr}
   .dossier-founder-panel{position:relative;top:auto}
@@ -840,6 +868,7 @@ select:focus{
   .dossier-section-head h2{font-size:40px}
   .dossier-games-grid,
   .dossier-vehicle-grid,
+  .dossier-weapon-grid,
   .dossier-character-grid,
   .dossier-faction-grid,
   .dossier-people-grid,
@@ -848,6 +877,7 @@ select:focus{
   .dossier-online-dlc-grid,
   .dossier-glossary-grid{grid-template-columns:1fr}
   .dossier-vehicle-modal-tools{display:grid}
+  .dossier-weapon-modal-tools{display:grid}
   .dossier-vehicle-name-grid{grid-template-columns:1fr}
   .dossier-timeline-card,
   .dossier-release-card,
