@@ -3117,9 +3117,104 @@ const glossaryData = [
   { term: "Vice City", definition: "Analogo de Miami, presente em 2D, 3D e HD Universe." }
 ];
 
+const mediaCredit = "Imagem promocional oficial © Rockstar Games / Take-Two Interactive";
+const rsgGamesSource = "https://www.rockstargames.com/games";
+const rsgVI = "https://www.rockstargames.com/VI";
+const rsgVIScreens = "https://www.rockstargames.com/VI/downloads/screenshots?pubDate=20250511";
+const rsgVIArtwork = "https://www.rockstargames.com/VI/downloads/artwork-wallpapers";
+const rsgVSource = "https://www.rockstargames.com/gta-v";
+const rsgOnlineSource = "https://www.rockstargames.com/gta-online";
+const rsgTrilogySource = "https://www.rockstargames.com/GTATrilogy";
+
+const officialMediaData = {
+  notice:
+    "Imagens oficiais promocionais da Rockstar Games / Take-Two Interactive usadas com credito e link para a fonte oficial. O projeto e um arquivo editorial de fa e nao afirma propriedade sobre as artes.",
+  hero: {
+    src: "https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_01_landscape.0e2a6544.jpg",
+    alt: "Arte oficial de Grand Theft Auto VI com Lucia e Jason",
+    credit: mediaCredit,
+    caption: "Rockstar Games - GTA VI Artwork & Wallpapers",
+    source: rsgVIArtwork
+  },
+  sources: [
+    { label: "GTA VI - pagina oficial", url: rsgVI, note: "Hero, personagens e sinopse de Lucia/Jason." },
+    { label: "GTA VI - screenshots oficiais", url: rsgVIScreens, note: "Screenshots de Lucia, Jason, Vice City, Leonida e regioes." },
+    { label: "GTA VI - artworks e wallpapers", url: rsgVIArtwork, note: "Artes oficiais, postcards e wallpapers." },
+    { label: "GTA V - pagina oficial", url: rsgVSource, note: "Imagens promocionais atuais de Los Santos e GTA V." },
+    { label: "GTA Online - pagina oficial", url: rsgOnlineSource, note: "Imagens de atualizacoes e plataforma online." },
+    { label: "GTA Trilogy - pagina oficial", url: rsgTrilogySource, note: "Artes e screenshots da trilogia 3D remasterizada." },
+    { label: "Paginas oficiais dos jogos Rockstar", url: rsgGamesSource, note: "Screenshots oficiais de GTA 1, GTA 2, GTA III, Vice City, San Andreas, LCS, VCS, GTA IV, EFLC e Chinatown Wars." }
+  ]
+};
+
+const officialImage = (src, alt, source, caption = "Rockstar Games") => ({
+  src,
+  alt,
+  source,
+  caption,
+  credit: mediaCredit
+});
+
+const officialMediaByGameId = {
+  "gta-1": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/62c4b1e51372aacfd16acaa7ed646c1c.jpg", "Screenshot oficial de Grand Theft Auto", "https://www.rockstargames.com/games/gta"),
+  "gta-2": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/ac384326d2dc2bbdd6c79d83cc276d91.jpg", "Screenshot oficial de Grand Theft Auto 2", "https://www.rockstargames.com/games/gta2"),
+  "gta-iii": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/8fbaa33023630eedf32a7b8379fdd30d.jpg", "Screenshot oficial de Grand Theft Auto III", "https://www.rockstargames.com/games/grandtheftauto3"),
+  "vice-city": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/7c3466bd07d09ec14c9555505ea4e6af.jpg", "Screenshot oficial de Grand Theft Auto: Vice City", "https://www.rockstargames.com/games/vicecity"),
+  "san-andreas": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/bb5e5e25e29046535aba405ad47bb826.jpg", "Screenshot oficial de Grand Theft Auto: San Andreas", "https://www.rockstargames.com/games/sanandreas"),
+  "liberty-city-stories": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/bc52e237a5eada7c42733c49d21c5e47.jpg", "Screenshot oficial de Grand Theft Auto: Liberty City Stories", "https://www.rockstargames.com/games/libertycitystories"),
+  "vice-city-stories": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/ae01329b17c6f92ec10d153b9ecf6dc1.jpg", "Screenshot oficial de Grand Theft Auto: Vice City Stories", "https://www.rockstargames.com/games/vicecitystories"),
+  "gta-iv": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/5576e5d2cd0f451508d8b025b77e7250.jpg", "Screenshot oficial de Grand Theft Auto IV", "https://www.rockstargames.com/games/IV"),
+  "lost-and-damned": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/3ac5b4fa1e77f1aea8ef156103da5e40.jpg", "Screenshot oficial de Episodes from Liberty City", "https://www.rockstargames.com/games/episodesfromlibertycity"),
+  "ballad-gay-tony": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/6f78f984130287ec529aee43e8a7ee22.jpg", "Screenshot oficial de Episodes from Liberty City", "https://www.rockstargames.com/games/episodesfromlibertycity"),
+  "chinatown-wars": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/f5995d08f2bfd9d5e880e7bed0d4255d.jpg", "Screenshot oficial de Grand Theft Auto: Chinatown Wars", "https://www.rockstargames.com/games/chinatownwars"),
+  "gta-v": officialImage("https://media-rockstargames-com.akamaized.net/tina-uploads/tina-modules/gta-v/911bff9fca5209b94dd22bcba795eefdd4b71993.jpg", "Imagem oficial de Grand Theft Auto V em Los Santos", rsgVSource),
+  "gta-online": officialImage("https://media-rockstargames-com.akamaized.net/tina-uploads/tina-modules/gta-online/7ec5f9605b1524c2fe73e655f053725b05359458.jpg", "Imagem oficial de Grand Theft Auto Online", rsgOnlineSource),
+  "trilogy-definitive": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/fabc3ff8a64105c4d8ac1aadbeffb3a9.jpg", "Box art oficial de Grand Theft Auto: The Trilogy - The Definitive Edition", rsgTrilogySource),
+  "gta-vi": officialImage("https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_01_landscape.0e2a6544.jpg", "Arte oficial de GTA VI com Lucia e Jason", rsgVIArtwork, "Rockstar Games - GTA VI Artwork & Wallpapers")
+};
+
+const officialMediaByCharacterId = {
+  "claude": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/f21b89ff222aec91c5c432eeb7993a15.jpg", "Arte oficial de personagem de Grand Theft Auto III", rsgTrilogySource),
+  "tommy-vercetti": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/5b523f9e2578bdc3e95de00427f8910d.jpg", "Arte oficial de personagem de Grand Theft Auto: Vice City", rsgTrilogySource),
+  "cj": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/d28dac374fa7413d066a50ca33cf6da7.jpg", "Arte oficial de personagem de Grand Theft Auto: San Andreas", rsgTrilogySource),
+  "niko-bellic": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/5576e5d2cd0f451508d8b025b77e7250.jpg", "Screenshot oficial de Grand Theft Auto IV", "https://www.rockstargames.com/games/IV"),
+  "michael-de-santa": officialImage("https://media.rockstargames.com/rockstargames/img/global/news/upload/actual_1427472412.jpg", "Screenshot oficial de Grand Theft Auto V para PC", "https://www.rockstargames.com/newswire/article/1748koo9o829a9/screens-from-grand-theft-auto-v-for-pc"),
+  "franklin-clinton": officialImage("https://media.rockstargames.com/rockstargames/img/global/news/upload/actual_1427472455.jpg", "Screenshot oficial de Grand Theft Auto V para PC", "https://www.rockstargames.com/newswire/article/1748koo9o829a9/screens-from-grand-theft-auto-v-for-pc"),
+  "trevor-philips": officialImage("https://media.rockstargames.com/rockstargames/img/global/news/upload/actual_1427472538.jpg", "Screenshot oficial de Grand Theft Auto V para PC", "https://www.rockstargames.com/newswire/article/1748koo9o829a9/screens-from-grand-theft-auto-v-for-pc"),
+  "lucia-caminos": officialImage("https://www.rockstargames.com/VI/_next/static/media/Lucia_Caminos_01.f5023e0f.jpg", "Screenshot oficial de Lucia Caminos em GTA VI", rsgVIScreens, "Rockstar Games - GTA VI Screenshots"),
+  "jason-duval": officialImage("https://www.rockstargames.com/VI/_next/static/media/Jason_Duval_01.6e287338.jpg", "Screenshot oficial de Jason Duval em GTA VI", rsgVIScreens, "Rockstar Games - GTA VI Screenshots"),
+  "online-protagonist": officialImage("https://media-rockstargames-com.akamaized.net/tina-uploads/tina-modules/gta-online/c6d9e6a34e3f429c6ab97c75f19e58c546e8d5a2.jpg", "Imagem oficial de GTA Online", rsgOnlineSource)
+};
+
+const officialMediaByCityId = {
+  "liberty-city": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/5576e5d2cd0f451508d8b025b77e7250.jpg", "Screenshot oficial de Liberty City em GTA IV", "https://www.rockstargames.com/games/IV"),
+  "vice-city": officialImage("https://www.rockstargames.com/VI/_next/static/media/Vice_City_01.332891cf.jpg", "Screenshot oficial de Vice City em GTA VI", rsgVIScreens, "Rockstar Games - GTA VI Screenshots"),
+  "san-andreas": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/bb5e5e25e29046535aba405ad47bb826.jpg", "Screenshot oficial de San Andreas", "https://www.rockstargames.com/games/sanandreas"),
+  "los-santos": officialImage("https://media-rockstargames-com.akamaized.net/tina-uploads/tina-modules/gta-v/911bff9fca5209b94dd22bcba795eefdd4b71993.jpg", "Imagem oficial de Los Santos em GTA V", rsgVSource),
+  "san-fierro": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/9b8a9636519a343c04f860eb6f0c22d3.jpg", "Screenshot oficial de Grand Theft Auto: San Andreas", "https://www.rockstargames.com/games/sanandreas"),
+  "las-venturas": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/99efb826b071747efc32fa9a14117e99.jpg", "Screenshot oficial de Grand Theft Auto: San Andreas", "https://www.rockstargames.com/games/sanandreas"),
+  "blaine-county": officialImage("https://media.rockstargames.com/rockstargames/img/global/news/upload/actual_1427472402.jpg", "Screenshot oficial de Grand Theft Auto V para PC", "https://www.rockstargames.com/newswire/article/1748koo9o829a9/screens-from-grand-theft-auto-v-for-pc"),
+  "north-yankton": officialImage("https://media.rockstargames.com/rockstargames/img/global/news/upload/actual_1427472423.jpg", "Screenshot oficial de Grand Theft Auto V para PC", "https://www.rockstargames.com/newswire/article/1748koo9o829a9/screens-from-grand-theft-auto-v-for-pc"),
+  "anywhere-city": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/ac384326d2dc2bbdd6c79d83cc276d91.jpg", "Screenshot oficial de Grand Theft Auto 2", "https://www.rockstargames.com/games/gta2"),
+  "leonida": officialImage("https://www.rockstargames.com/VI/_next/static/media/Leonida_Keys_01.1af17390.jpg", "Screenshot oficial de Leonida Keys em GTA VI", rsgVIScreens, "Rockstar Games - GTA VI Screenshots")
+};
+
+gamesData.forEach((item) => {
+  if (officialMediaByGameId[item.id]) item.media = officialMediaByGameId[item.id];
+});
+
+charactersData.forEach((item) => {
+  if (officialMediaByCharacterId[item.id]) item.media = officialMediaByCharacterId[item.id];
+});
+
+citiesData.forEach((item) => {
+  if (officialMediaByCityId[item.id]) item.media = officialMediaByCityId[item.id];
+});
+
 Object.assign(window, {
   dossierNavData,
   dossierSourcesData,
+  officialMediaData,
   universeData,
   rockstarHistoryData,
   timelineChronologicalData,

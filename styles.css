@@ -402,6 +402,16 @@ select:focus{
   padding:20px;border:1px solid rgba(255,255,255,.14);border-radius:8px;background:rgba(12,12,16,.78);
   box-shadow:0 32px 80px -38px rgba(0,0,0,.9);backdrop-filter:blur(12px)
 }
+.official-media{position:relative;margin:0;border:1px solid rgba(255,255,255,.13);border-radius:8px;overflow:hidden;background:#0b0b10}
+.official-media img{display:block;width:100%;height:100%;object-fit:cover}
+.official-media figcaption{
+  position:absolute;left:9px;right:9px;bottom:8px;z-index:3;width:max-content;max-width:calc(100% - 18px);
+  padding:5px 7px;border:1px solid rgba(255,255,255,.16);border-radius:5px;background:rgba(0,0,0,.62);
+  color:#ffe69a;font-family:"Space Mono",monospace;font-size:9px;line-height:1.25;text-transform:uppercase
+}
+.official-media figcaption a{color:#ffe69a;text-decoration:none}
+.official-media figcaption a:hover{text-decoration:underline}
+.dossier-hero-official{height:220px;margin-bottom:14px}
 .dossier-case-top{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:14px;font-family:"Space Mono",monospace;font-size:11px;color:var(--grit);text-transform:uppercase}
 .dossier-case-top strong{color:var(--evidence)}
 .dossier-stat-grid{display:grid;grid-template-columns:1fr;gap:10px}
@@ -454,6 +464,9 @@ select:focus{
 .dossier-release-card{display:grid;grid-template-columns:190px 1fr;gap:18px;padding:16px}
 .dossier-cover-mini{position:relative;min-height:210px;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.14);padding:14px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(145deg,#101018,#211018)}
 .dossier-cover-mini::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.045) 0 10px,transparent 10px 24px)}
+.dossier-cover-mini.has-official{padding:0;justify-content:flex-end}
+.dossier-cover-mini.has-official::before{z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.78))}
+.dossier-cover-label{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;min-height:100%;padding:14px}
 .dossier-cover-mini span,
 .dossier-cover-mini strong{position:relative}
 .dossier-cover-mini span{color:var(--evidence);font-size:30px;font-weight:900}
@@ -476,6 +489,15 @@ select:focus{
 .dossier-cover-art.blue{background:linear-gradient(135deg,#0b1832,#08080c)}
 .dossier-cover-art.pink{background:linear-gradient(135deg,#32102a,#08080c)}
 .dossier-cover-map{position:absolute;inset:0;opacity:.56;background:repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 1px,transparent 1px 28px),repeating-linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 28px),radial-gradient(circle at 22% 22%,rgba(245,197,24,.22),transparent 30%),radial-gradient(circle at 72% 70%,rgba(255,61,138,.22),transparent 34%)}
+.dossier-cover-art.has-official{padding:0;min-height:270px}
+.dossier-cover-art.has-official::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.18) 40%,rgba(0,0,0,.86))}
+.dossier-cover-art.has-official .dossier-cover-label{padding:18px}
+.dossier-cover-media{position:absolute;inset:0;z-index:0;border:0;border-radius:0}
+.dossier-cover-media img{filter:saturate(1.08) contrast(1.04)}
+.dossier-cover-media figcaption,
+.dossier-mugshot-media figcaption,
+.dossier-city-media figcaption,
+.dossier-leonida-media figcaption{left:auto;right:8px;top:8px;bottom:auto;max-width:80%;font-size:8px}
 .dossier-cover-art span,
 .dossier-cover-art strong,
 .dossier-cover-art small{position:relative}
@@ -490,6 +512,10 @@ select:focus{
 .dossier-character-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .dossier-character-card{display:grid;grid-template-columns:116px 1fr;cursor:pointer}
 .dossier-mugshot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:100%;padding:14px;border-right:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015))}
+.dossier-mugshot.has-official{position:relative;min-height:250px;justify-content:flex-end;padding:0;overflow:hidden}
+.dossier-mugshot.has-official::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.18) 45%,rgba(0,0,0,.82))}
+.dossier-mugshot-media{position:absolute;inset:0;z-index:0;border:0;border-radius:0}
+.dossier-mugshot.has-official span{position:relative;z-index:2;width:100%;padding:10px 8px;background:rgba(0,0,0,.55);color:#ffe69a}
 .dossier-mugshot svg{color:var(--evidence)}
 .dossier-mugshot.red svg{color:var(--siren)}
 .dossier-mugshot.blue svg{color:var(--copper)}
@@ -509,6 +535,10 @@ select:focus{
 .dossier-city-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .dossier-city-card{cursor:pointer}
 .dossier-city-skyline{height:170px;overflow:hidden;border-bottom:1px solid var(--line)}
+.dossier-city-official{height:190px;margin:12px 0}
+.dossier-city-skyline.has-official{position:relative;height:190px}
+.dossier-city-media{position:absolute;inset:0;border:0;border-radius:0}
+.dossier-city-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.34))}
 
 .dossier-faction-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .dossier-faction-card{padding:18px}
@@ -548,7 +578,11 @@ select:focus{
 .dossier-gta6-hero>div:first-child{padding:26px;border:1px solid rgba(255,61,138,.25);border-radius:8px;background:rgba(255,61,138,.06)}
 .dossier-gta6-hero h3{font-size:58px;margin-bottom:14px;color:#fff}
 .dossier-leonida-map{position:relative;min-height:290px;border:1px solid rgba(255,61,138,.28);border-radius:8px;overflow:hidden;background:radial-gradient(circle at 50% 60%,rgba(255,61,138,.24),transparent 38%),repeating-linear-gradient(45deg,rgba(255,255,255,.045) 0 1px,transparent 1px 22px),#08080c}
+.dossier-leonida-map.has-official::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.18) 42%,rgba(0,0,0,.72))}
+.dossier-leonida-media{position:absolute;inset:0;z-index:0;border:0;border-radius:0}
 .dossier-leonida-map span{position:absolute;left:22px;bottom:18px;color:var(--neon);font-weight:900;font-size:42px}
+.dossier-leonida-map span,
+.dossier-leonida-map i{z-index:2}
 .dossier-leonida-map i{position:absolute;width:15px;height:15px;border-radius:50%;background:var(--evidence);box-shadow:0 0 20px var(--evidence)}
 .dossier-leonida-map .pin-a{left:62%;top:35%}.dossier-leonida-map .pin-b{left:72%;top:62%}.dossier-leonida-map .pin-c{left:48%;top:70%}
 .dossier-fact-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
@@ -578,6 +612,7 @@ select:focus{
 .dossier-footer-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:30px}
 .dossier-footer h2{font-size:44px;margin-bottom:12px}
 .dossier-footer h3{font-size:24px;margin-bottom:12px}
+.dossier-media-notice{margin-top:14px;padding:12px;border:1px dashed rgba(245,197,24,.28);border-radius:6px;background:rgba(245,197,24,.055);font-size:12px}
 .dossier-footer ul{list-style:none;padding:0;margin:0;display:grid;gap:10px}
 .dossier-footer li{display:grid;gap:3px}
 .dossier-footer a{color:var(--evidence);text-decoration:none;font-weight:800}
@@ -654,6 +689,10 @@ select:focus{
   .dossier-time-pin::before{left:0;top:12px}
   .dossier-time-pin{padding-left:26px}
   .dossier-cover-mini{min-height:160px}
+  .dossier-hero-official{height:180px}
+  .dossier-mugshot.has-official{min-height:220px;border-right:0;border-bottom:1px solid var(--line)}
+  .dossier-city-official,
+  .dossier-city-skyline.has-official{height:170px}
   .dossier-meta-grid{grid-template-columns:1fr}
   .dossier-city-map{min-height:360px}
   .dossier-city-map button strong{display:none}

@@ -78,6 +78,21 @@ const DossierChips = ({ items, limit = 8 }) => (
   </div>
 );
 
+const mediaCaption = (media) => media?.caption || media?.credit || "Rockstar Games";
+
+const OfficialMedia = ({ media, className = "" }) => {
+  if (!media?.src) return null;
+  const caption = mediaCaption(media);
+  return (
+    <figure className={`official-media ${className}`}>
+      <img src={media.src} alt={media.alt || caption} loading="lazy" referrerPolicy="no-referrer" />
+      <figcaption>
+        {media.source ? <a href={media.source} target="_blank" rel="noreferrer">{caption}</a> : caption}
+      </figcaption>
+    </figure>
+  );
+};
+
 const MetaGrid = ({ rows }) => (
   <div className="dossier-meta-grid">
     {rows.filter(Boolean).map(([label, value], index) => (
@@ -138,6 +153,7 @@ const DossierHUDNav = ({ active, onJump }) => {
 };
 
 const DossierHero = () => {
+  const heroMedia = window.officialMediaData?.hero;
   const stats = [
     ["Primeiro jogo", "1997", "Grand Theft Auto"],
     ["Criadores", "David Jones e Mike Dailly", "DMA Design"],
@@ -181,6 +197,7 @@ const DossierHero = () => {
             <span>CASE FILE</span>
             <strong>GTA-SAGA-1997-2026</strong>
           </div>
+          <OfficialMedia media={heroMedia} className="dossier-hero-official" />
           <div className="dossier-stat-grid">
             {stats.map(([label, value, note]) => (
               <div className="dossier-stat" key={label}>
@@ -251,9 +268,12 @@ const TimelineDossierSection = ({ onOpenDossier }) => {
             {releaseItems.map(({ year, title, game }) => (
               <article key={`${year}-${title}`} className="card dossier-release-card">
                 <Corners />
-                <div className="dossier-cover-mini">
-                  <span>{year}</span>
-                  <strong>{title.replace("Grand Theft Auto", "GTA")}</strong>
+                <div className={`dossier-cover-mini ${game?.media ? "has-official" : ""}`}>
+                  {game?.media && <OfficialMedia media={game.media} className="dossier-cover-media" />}
+                  <div className="dossier-cover-label">
+                    <span>{year}</span>
+                    <strong>{title.replace("Grand Theft Auto", "GTA")}</strong>
+                  </div>
                 </div>
                 <div>
                   <div className="dossier-card-kicker">Lançamento · {year}</div>
@@ -279,11 +299,13 @@ const TimelineDossierSection = ({ onOpenDossier }) => {
 const GameDossierCard = ({ game, onOpen }) => (
   <article className="card dossier-game-card">
     <Corners />
-    <div className={`dossier-cover-art ${universeTone(game.universe)}`}>
-      <div className="dossier-cover-map" />
-      <span>{game.releaseYear}</span>
-      <strong>{game.title}</strong>
-      <small>{game.city}</small>
+    <div className={`dossier-cover-art ${universeTone(game.universe)} ${game.media ? "has-official" : ""}`}>
+      {game.media ? <OfficialMedia media={game.media} className="dossier-cover-media" /> : <div className="dossier-cover-map" />}
+      <div className="dossier-cover-label">
+        <span>{game.releaseYear}</span>
+        <strong>{game.title}</strong>
+        <small>{game.city}</small>
+      </div>
     </div>
     <div className="dossier-card-body">
       <div className="dossier-card-kicker">{game.universe} · história em {game.storyYear}</div>
@@ -393,8 +415,12 @@ const CharactersDossierSection = ({ onOpenDossier }) => {
           {filtered.map((character) => (
             <article key={character.id} className="card dossier-character-card" onClick={() => onOpenDossier({ type: "character", item: character })}>
               <Corners />
-              <div className={`dossier-mugshot ${tagTone(character.role)}`}>
-                <DossierIcon type={character.tags.includes("governo") || character.tags.includes("polícia corrupta") ? "police" : "users"} />
+              <div className={`dossier-mugshot ${tagTone(character.role)} ${character.media ? "has-official" : ""}`}>
+                {character.media ? (
+                  <OfficialMedia media={character.media} className="dossier-mugshot-media" />
+                ) : (
+                  <DossierIcon type={character.tags.includes("governo") || character.tags.includes("polícia corrupta") ? "police" : "users"} />
+                )}
                 <span>{character.id}</span>
               </div>
               <div className="dossier-card-body">
@@ -467,6 +493,7 @@ const CitiesDossierSection = ({ onOpenDossier }) => {
             <Corners />
             <div className="dossier-card-kicker">Hotspot ativo</div>
             <h3>{selected?.name}</h3>
+            <OfficialMedia media={selected?.media} className="dossier-city-official" />
             <p>{selected?.description}</p>
             <MetaGrid rows={[
               ["Inspiração", selected?.realWorldInspiration],
@@ -484,7 +511,13 @@ const CitiesDossierSection = ({ onOpenDossier }) => {
           {filtered.map((city) => (
             <article key={city.id} className="card dossier-city-card" onClick={() => onOpenDossier({ type: "city", item: city })}>
               <Corners />
-              <div className="dossier-city-skyline"><Skyline palette={{ sky: "#101018", a: "#15151f", b: "#1d2230", c2: "#11131a", win: city.id === "vice-city" || city.id === "leonida" ? "#ff3d8a" : "#f5c518" }} /></div>
+              <div className={`dossier-city-skyline ${city.media ? "has-official" : ""}`}>
+                {city.media ? (
+                  <OfficialMedia media={city.media} className="dossier-city-media" />
+                ) : (
+                  <Skyline palette={{ sky: "#101018", a: "#15151f", b: "#1d2230", c2: "#11131a", win: city.id === "vice-city" || city.id === "leonida" ? "#ff3d8a" : "#f5c518" }} />
+                )}
+              </div>
               <div className="dossier-card-body">
                 <div className="dossier-card-kicker">{city.realWorldInspiration}</div>
                 <h3>{city.name}</h3>
@@ -642,7 +675,9 @@ const GTAOnlineDossierSection = () => (
   </section>
 );
 
-const GTA6DossierSection = () => (
+const GTA6DossierSection = () => {
+  const gta6Media = gamesData.find((game) => game.id === "gta-vi")?.media || window.officialMediaData?.hero;
+  return (
   <section id="gta6" className="dossier-section dossier-shell gta6">
     <div className="wrap">
       <DossierSectionHead eyebrow="Próximo capítulo" title="GTA VI" accent="var(--neon)" right="fatos confirmados separados de leitura comunitária" />
@@ -655,7 +690,8 @@ const GTA6DossierSection = () => (
           </p>
           <DossierChips items={["confirmado", "Leonida", "Vice City", "HD Universe", "não lançado"]} />
         </div>
-        <div className="dossier-leonida-map">
+        <div className={`dossier-leonida-map ${gta6Media ? "has-official" : ""}`}>
+          <OfficialMedia media={gta6Media} className="dossier-leonida-media" />
           <span>LEONIDA</span>
           <i className="pin-a" />
           <i className="pin-b" />
@@ -669,7 +705,8 @@ const GTA6DossierSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 const GlossaryDossierSection = () => {
   const [query, setQuery] = React.useState("");
@@ -741,13 +778,16 @@ const ConnectionsImpactSection = ({ compact = false }) => (
   </div>
 );
 
-const DossierFooter = () => (
+const DossierFooter = () => {
+  const media = window.officialMediaData;
+  return (
   <footer className="dossier-footer dossier-shell">
     <div className="wrap">
       <div className="dossier-footer-grid">
         <div>
           <h2>Grand Theft Auto Dossiê</h2>
-          <p>Arquivo editorial de fã, em português do Brasil, sem uso de arte oficial. Conteúdo separado entre lore, desenvolvimento real e impacto cultural.</p>
+          <p>Arquivo editorial de fã, em português do Brasil, com imagens promocionais oficiais creditadas e conteúdo separado entre lore, desenvolvimento real e impacto cultural.</p>
+          {media?.notice && <p className="dossier-media-notice">{media.notice}</p>}
         </div>
         <div>
           <h3>Fontes-base consultadas</h3>
@@ -755,12 +795,16 @@ const DossierFooter = () => (
             {dossierSourcesData.map((source) => (
               <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.label}</a><span>{source.note}</span></li>
             ))}
+            {media?.sources?.map((source) => (
+              <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.label}</a><span>{source.note}</span></li>
+            ))}
           </ul>
         </div>
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 const ModalField = ({ label, children }) => (
   <div className="dossier-modal-field">
@@ -792,10 +836,12 @@ const DossierRecordModal = ({ record, onClose }) => {
         </header>
         <div className="dossier-modal-grid">
           <aside className="dossier-modal-evidence">
-            <div className={`dossier-cover-art ${universeTone(item.universe || item.category)}`}>
-              <div className="dossier-cover-map" />
-              <strong>{record.type.toUpperCase()}</strong>
-              <small>{item.id || item.year || "arquivo"}</small>
+            <div className={`dossier-cover-art ${universeTone(item.universe || item.category)} ${item.media ? "has-official" : ""}`}>
+              {item.media ? <OfficialMedia media={item.media} className="dossier-cover-media" /> : <div className="dossier-cover-map" />}
+              <div className="dossier-cover-label">
+                <strong>{record.type.toUpperCase()}</strong>
+                <small>{item.id || item.year || "arquivo"}</small>
+              </div>
             </div>
             <DossierChips items={item.tags || [item.universe, item.category, item.certainty].filter(Boolean)} limit={10} />
           </aside>
