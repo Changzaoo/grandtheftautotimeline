@@ -2,14 +2,6 @@
 
 const HUDNav = ({active, onJump})=>{
   const [open,setOpen] = React.useState(false);
-  const [time,setTime] = React.useState("");
-  React.useEffect(()=>{
-    const tick=()=>{
-      const d = new Date();
-      setTime(d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",second:"2-digit"}));
-    };
-    tick(); const id=setInterval(tick,1000); return ()=>clearInterval(id);
-  },[]);
   return (
     <header className="hud">
       <div className="hud-inner">
@@ -28,11 +20,6 @@ const HUDNav = ({active, onJump})=>{
             </a>
           ))}
         </nav>
-        <div className="live" title="Live HUD">
-          <span className="pulse"/>
-          <span>AO VIVO</span>
-          <span style={{opacity:.6}}>· {time}</span>
-        </div>
         <button className="burger" onClick={()=>setOpen(v=>!v)} aria-label="Menu">≡</button>
       </div>
     </header>

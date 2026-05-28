@@ -271,7 +271,7 @@ html{
   background:linear-gradient(180deg,rgba(8,8,10,.86),rgba(8,8,10,.6));
   border-bottom:1px solid var(--line);
 }
-.hud-inner{display:flex;align-items:center;gap:16px;padding:14px 28px}
+.hud-inner{display:flex;align-items:center;gap:18px;padding:16px 30px}
 .hud .lock{display:flex;align-items:center;gap:10px;font-family:"Anton",sans-serif;letter-spacing:.18em;text-transform:uppercase}
 .hud .lock .badge{
   width:36px;height:36px;display:grid;place-items:center;background:var(--evidence);color:#1a1300;border:2px solid #1a1300;border-radius:2px;
@@ -279,21 +279,18 @@ html{
 }
 .hud nav{display:flex;gap:2px;margin-left:14px;flex:1;overflow:auto}
 .hud nav a{
-  display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:2px;
-  font-family:"Space Mono",monospace;text-transform:uppercase;letter-spacing:.18em;font-size:11px;color:var(--bone-2);
+  display:inline-flex;align-items:center;gap:8px;padding:12px 14px;border-radius:2px;
+  font-family:"Space Mono",monospace;text-transform:uppercase;letter-spacing:.18em;font-size:12px;color:var(--bone-2);
   text-decoration:none;border:1px solid transparent;white-space:nowrap;transition:.15s
 }
 .hud nav a:hover{color:#fff;border-color:var(--line-2);background:rgba(255,255,255,.03)}
 .hud nav a.active{color:#1a1300;background:var(--evidence)}
 .hud nav a .k{font-size:9.5px;opacity:.6}
-.hud .live{display:inline-flex;align-items:center;gap:8px;color:var(--bone-2);font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
-.hud .live .pulse{width:8px;height:8px;border-radius:50%;background:var(--siren);box-shadow:0 0 0 0 var(--siren);animation:p 1.2s infinite}
-@keyframes p{0%{box-shadow:0 0 0 0 rgba(255,42,42,.7)}100%{box-shadow:0 0 0 12px rgba(255,42,42,0)}}
-.hud .burger{display:none;width:40px;height:40px;border:1px solid var(--line-2);background:transparent;color:var(--bone);border-radius:2px}
+.hud .burger{display:none;width:52px;height:48px;border:1px solid var(--line-2);background:transparent;color:var(--bone);border-radius:2px;font-size:22px}
 @media (max-width:1100px){
   .hud nav{display:none}
   .hud .burger{display:block}
-  .hud nav.open{display:flex;flex-wrap:wrap;position:absolute;left:0;right:0;top:100%;background:#0c0c10;padding:14px;border-bottom:1px solid var(--line)}
+  .hud nav.open{display:flex;flex-wrap:wrap;position:absolute;left:0;right:0;top:100%;gap:8px;background:#0c0c10;padding:18px;border-bottom:1px solid var(--line)}
 }
 
 /* dossier modal */
@@ -392,9 +389,9 @@ select:focus{
 
 /* Responsive enhancements */
 @media (max-width:768px){
-  .hud-inner{gap:8px;padding:10px 16px}
+  .hud-inner{gap:10px;padding:12px 18px}
   .hud nav{gap:0;padding:0 8px}
-  .hud nav a{padding:8px 8px;font-size:10px}
+  .hud nav a{padding:10px 12px;font-size:11px}
   .sec-head{flex-direction:column;align-items:flex-start;margin-bottom:20px}
   .sec-head h2{font-size:clamp(28px,4vw,42px)}
   .g-3,.g-4,.g-6{grid-template-columns:1fr}
@@ -426,24 +423,22 @@ select:focus{
   background:rgba(8,8,10,.82);
   backdrop-filter:blur(18px) saturate(140%);
 }
-.dossier-hud-inner{display:flex;align-items:center;gap:14px;padding:12px 24px}
-.dossier-brand{display:flex;align-items:center;gap:10px;min-width:250px;color:var(--bone);text-decoration:none}
-.dossier-brand-badge{display:grid;place-items:center;width:44px;height:34px;border-radius:6px;background:var(--evidence);color:#171000;font-weight:900}
-.dossier-brand strong{display:block;font-size:14px;text-transform:uppercase}
-.dossier-brand small{display:block;color:var(--grit);font-family:"Space Mono",monospace;font-size:10px}
-.dossier-hud nav{display:flex;gap:4px;flex:1;overflow:auto}
+.dossier-hud-inner{display:flex;align-items:center;gap:18px;padding:16px 28px}
+.dossier-brand{display:flex;align-items:center;gap:12px;min-width:280px;color:var(--bone);text-decoration:none}
+.dossier-brand-badge{display:grid;place-items:center;width:54px;height:42px;border-radius:6px;background:var(--evidence);color:#171000;font-weight:900}
+.dossier-brand strong{display:block;font-size:16px;text-transform:uppercase}
+.dossier-brand small{display:block;color:var(--grit);font-family:"Space Mono",monospace;font-size:11px}
+.dossier-hud nav{display:flex;gap:6px;flex:1;overflow:auto}
 .dossier-hud nav a{
   display:flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none;
-  padding:8px 10px;border:1px solid transparent;border-radius:6px;color:var(--bone-2);
-  font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase
+  padding:11px 14px;border:1px solid transparent;border-radius:6px;color:var(--bone-2);
+  font-family:"Space Mono",monospace;font-size:11px;text-transform:uppercase
 }
 .dossier-hud nav a span{color:var(--grit)}
 .dossier-hud nav a:hover{border-color:var(--line-2);color:#fff;background:rgba(255,255,255,.04)}
 .dossier-hud nav a.active{background:var(--evidence);color:#171000}
 .dossier-hud nav a.active span{color:#171000}
-.dossier-live{display:flex;align-items:center;gap:8px;color:var(--bone-2);font-family:"Space Mono",monospace;font-size:10px;white-space:nowrap}
-.dossier-live i{width:8px;height:8px;border-radius:50%;background:var(--siren);box-shadow:0 0 14px var(--siren)}
-.dossier-menu{display:none;width:40px;height:36px;border:1px solid var(--line-2);border-radius:6px;background:#141419;color:var(--bone)}
+.dossier-menu{display:none;width:52px;height:46px;border:1px solid var(--line-2);border-radius:6px;background:#141419;color:var(--bone);font-size:22px}
 
 .dossier-hero{position:relative;overflow:hidden;min-height:680px;padding:76px 0 56px;border-bottom:1px solid var(--line)}
 .dossier-map-bg{
@@ -958,9 +953,9 @@ select:focus{
 }
 @media (max-width:940px){
   .dossier-hud nav{display:none}
-  .dossier-hud nav.open{display:flex;position:absolute;left:0;right:0;top:100%;padding:12px;background:#09090c;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .dossier-hud nav.open{display:flex;position:absolute;left:0;right:0;top:100%;gap:8px;padding:18px;background:#09090c;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .dossier-hud nav.open a{padding:13px 15px;font-size:11px}
   .dossier-menu{display:block}
-  .dossier-live{display:none}
   .dossier-brand{min-width:0;flex:1}
   .dossier-hero-grid,
   .dossier-city-layout,

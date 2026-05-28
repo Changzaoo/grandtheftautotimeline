@@ -209,13 +209,6 @@ const findGameForTimeline = (item) => {
 
 const DossierHUDNav = ({ active, onJump }) => {
   const [open, setOpen] = React.useState(false);
-  const [time, setTime] = React.useState("");
-  React.useEffect(() => {
-    const tick = () => setTime(new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
-  }, []);
 
   return (
     <header className="dossier-hud dossier-shell">
@@ -242,7 +235,6 @@ const DossierHUDNav = ({ active, onJump }) => {
             </a>
           ))}
         </nav>
-        <div className="dossier-live"><i />AO VIVO {time}</div>
         <button className="dossier-menu" onClick={() => setOpen((v) => !v)} aria-label="Abrir menu">☰</button>
       </div>
     </header>
