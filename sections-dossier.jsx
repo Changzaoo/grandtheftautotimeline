@@ -48,6 +48,176 @@ const universeTone = (value = "") => {
   return "neutral";
 };
 
+const cinemaAccentColors = ["#FF6B35", "#FF006E", "#8338EC", "#00FFFF", "#f5c518"];
+
+const useHeroCinematicMotion = () => {
+  const Motion = window.Motion;
+  const [titleStyle, setTitleStyle] = React.useState({});
+  const [panelStyle, setPanelStyle] = React.useState({});
+  if (Motion?.useScroll && Motion?.useTransform) {
+    const { scrollYProgress } = Motion.useScroll();
+    const titleY = Motion.useTransform(scrollYProgress, [0, 0.28], [0, -92]);
+    const titleScale = Motion.useTransform(scrollYProgress, [0, 0.28], [1, 0.88]);
+    const titleRotateX = Motion.useTransform(scrollYProgress, [0, 0.28], [0, 11]);
+    const panelY = Motion.useTransform(scrollYProgress, [0, 0.32], [0, 74]);
+    const panelRotateY = Motion.useTransform(scrollYProgress, [0, 0.32], [0, -8]);
+
+    React.useEffect(() => {
+      const update = () => {
+        setTitleStyle({
+          transform: `translateY(${titleY.get()}px) scale(${titleScale.get()}) rotateX(${titleRotateX.get()}deg)`
+        });
+        setPanelStyle({
+          transform: `translateY(${panelY.get()}px) rotateY(${panelRotateY.get()}deg)`
+        });
+      };
+      const unsubs = [
+        titleY.on("change", update),
+        titleScale.on("change", update),
+        titleRotateX.on("change", update),
+        panelY.on("change", update),
+        panelRotateY.on("change", update)
+      ];
+      update();
+      return () => unsubs.forEach((unsubscribe) => unsubscribe && unsubscribe());
+    }, [titleY, titleScale, titleRotateX, panelY, panelRotateY]);
+  }
+  return { title: titleStyle, panel: panelStyle };
+};
+
+const DossierScrollProgress = () => {
+  const Motion = window.Motion;
+  const [scale, setScale] = React.useState(0);
+  if (Motion?.useScroll && Motion?.useSpring) {
+    const { scrollYProgress } = Motion.useScroll();
+    const scaleX = Motion.useSpring(scrollYProgress, { stiffness: 140, damping: 32, restDelta: 0.001 });
+    React.useEffect(() => scaleX.on("change", setScale), [scaleX]);
+    return <div className="cinema-scroll-progress" style={{ transform: `scaleX(${scale})` }} />;
+  }
+  React.useEffect(() => {
+    const update = () => {
+      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      setScale(window.scrollY / max);
+    };
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+  return <div className="cinema-scroll-progress" style={{ transform: `scaleX(${scale})` }} />;
+};
+
+const DossierCinematicBackdrop = () => {
+  const particles = React.useMemo(() => Array.from({ length: 72 }, (_, index) => {
+    const col = index % 12;
+    const row = Math.floor(index / 12);
+    return {
+      id: index,
+      left: `${((col * 8.1) + ((row * 3.7) % 7) + 2) % 98}%`,
+      top: `${((row * 15.2) + ((col * 5.1) % 13) + 4) % 96}%`,
+      size: 1 + (index % 4),
+      delay: (index % 17) * 0.31,
+      duration: 5.8 + (index % 9) * 0.45,
+      opacity: 0.18 + (index % 5) * 0.08
+    };
+  }), []);
+
+  return (
+    <div className="cinema-backdrop" aria-hidden="true">
+      <div className="cinema-grid-perspective" />
+      <div className="cinema-radial-field" />
+      <div className="cinema-particles">
+        {particles.map((particle) => (
+          <span
+            key={particle.id}
+            style={{
+              left: particle.left,
+              top: particle.top,
+              width: particle.size,
+              height: particle.size,
+              opacity: particle.opacity,
+              "--particle-delay": `${particle.delay}s`,
+              "--particle-duration": `${particle.duration}s`
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const useDossierCinemaEffects = () => {
+  React.useEffect(() => {
+    const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    const cleanups = [];
+    const prepared = new WeakSet();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("is-visible");
+      });
+    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.12 });
+
+    const tilt = (element, event) => {
+      if (reduceMotion) return;
+      const rect = element.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width - 0.5;
+      const y = (event.clientY - rect.top) / rect.height - 0.5;
+      element.style.setProperty("--tilt-y", `${x * 10}deg`);
+      element.style.setProperty("--tilt-x", `${y * -8}deg`);
+    };
+
+    const resetTilt = (element) => {
+      element.style.setProperty("--tilt-x", "0deg");
+      element.style.setProperty("--tilt-y", "0deg");
+    };
+
+    const prepare = () => {
+      const revealTargets = Array.from(document.querySelectorAll([
+        ".dossier-shell .card",
+        ".dossier-section-head",
+        ".dossier-hero-panel",
+        ".dossier-quick-tabs a",
+        ".dossier-stat"
+      ].join(",")));
+      revealTargets.forEach((element, index) => {
+        if (prepared.has(element)) return;
+        prepared.add(element);
+        const section = element.closest(".dossier-section, .dossier-hero, .dossier-footer") || document.body;
+        const localIndex = Array.from(section.querySelectorAll(".card, .dossier-section-head, .dossier-quick-tabs a, .dossier-stat")).indexOf(element);
+        const sideIndex = localIndex >= 0 ? localIndex : index;
+        element.classList.add("cinema-reveal", sideIndex % 2 ? "reveal-right" : "reveal-left");
+        element.style.setProperty("--reveal-delay", `${Math.min(sideIndex, 6) * 0.15}s`);
+        element.style.setProperty("--card-accent", cinemaAccentColors[index % cinemaAccentColors.length]);
+        if (element.classList.contains("card")) {
+          element.style.transformStyle = "preserve-3d";
+          const handleMove = (event) => tilt(element, event);
+          const handleLeave = () => resetTilt(element);
+          element.addEventListener("mousemove", handleMove);
+          element.addEventListener("mouseleave", handleLeave);
+          cleanups.push(() => {
+            element.removeEventListener("mousemove", handleMove);
+            element.removeEventListener("mouseleave", handleLeave);
+          });
+        }
+        observer.observe(element);
+      });
+    };
+
+    prepare();
+    const mutationObserver = new MutationObserver(prepare);
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      mutationObserver.disconnect();
+      cleanups.forEach((cleanup) => cleanup());
+    };
+  }, []);
+};
+
 const DossierIcon = ({ type = "file" }) => {
   const common = { width: 20, height: 20, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" };
   const icons = {
@@ -251,6 +421,7 @@ const DossierHUDNav = ({ active, onJump }) => {
 
 const DossierHero = () => {
   const heroMedia = window.officialMediaData?.hero;
+  const heroMotion = useHeroCinematicMotion();
   const stats = [
     ["Primeiro jogo", "1997", "Grand Theft Auto"],
     ["Criadores", "David Jones e Mike Dailly", "DMA Design"],
@@ -279,7 +450,9 @@ const DossierHero = () => {
       <div className="wrap dossier-hero-grid">
         <div className="dossier-hero-copy">
           <div className="tape">CONFIDENCIAL · ARQUIVO GTA</div>
-          <h1>Grand Theft Auto: Timeline Completa, História, Personagens e Cidades</h1>
+          <h1 className="cinema-gradient-text cinema-glitch" style={heroMotion.title}>
+            Grand Theft Auto: Timeline Completa, História, Personagens e Cidades
+          </h1>
           <p>
             Um dossiê interativo da saga GTA: da DMA Design à Rockstar Games, da era 2D à era HD, de Liberty City a Vice City, San Andreas, Los Santos e Leonida.
           </p>
@@ -292,7 +465,7 @@ const DossierHero = () => {
             ))}
           </div>
         </div>
-        <aside className="dossier-hero-panel">
+        <aside className="dossier-hero-panel" style={heroMotion.panel}>
           <div className="dossier-case-top">
             <span>CASE FILE</span>
             <strong>GTA-SAGA-1997-2026</strong>
@@ -349,10 +522,14 @@ const TimelineDossierSection = ({ onOpenDossier }) => {
 
         {mode === "chronology" ? (
           <div className="dossier-chronology">
-            {chronologyItems.map((item) => (
-              <article key={`${item.year}-${item.title}`} className="card dossier-timeline-card">
+            {chronologyItems.map((item, index) => (
+              <article
+                key={`${item.year}-${item.title}`}
+                className={`card dossier-timeline-card ${index % 2 ? "timeline-right" : "timeline-left"}`}
+                style={{ "--timeline-color": cinemaAccentColors[index % cinemaAccentColors.length] }}
+              >
                 <Corners />
-                <div className="dossier-time-pin">
+                <div className="dossier-time-pin" data-year={item.year}>
                   <strong>{item.year}</strong>
                   <span>{item.universe}</span>
                 </div>
@@ -3295,6 +3472,9 @@ const DossierRecordModal = ({ record, onClose }) => {
 };
 
 Object.assign(window, {
+  DossierCinematicBackdrop,
+  DossierScrollProgress,
+  useDossierCinemaEffects,
   DossierHUDNav,
   DossierHero,
   TimelineDossierSection,
