@@ -209,34 +209,60 @@ const findGameForTimeline = (item) => {
 
 const DossierHUDNav = ({ active, onJump }) => {
   const [open, setOpen] = React.useState(false);
+  const navItems = dossierNav();
+  const jumpToTop = () => {
+    onJump && onJump("overview");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <header className="dossier-hud dossier-shell">
-      <div className="dossier-hud-inner">
-        <a className="dossier-brand" href="#overview" onClick={() => onJump && onJump("overview")}>
-          <img className="dossier-brand-logo" src="assets/dossier-logo.png" alt="Dossiê Criminal - Arquivo GTA" />
-        </a>
-        <nav className={open ? "open" : ""}>
-          {dossierNav().map((n) => (
-            <a
-              key={n.id}
-              href={`#${n.id}`}
-              className={active === n.id ? "active" : ""}
-              onClick={() => {
-                setOpen(false);
-                onJump && onJump(n.id);
-              }}
-            >
-              <span>{n.k}</span>{n.label}
-            </a>
-          ))}
-        </nav>
-        <button className="dossier-menu" onClick={() => setOpen((v) => !v)} aria-label="Abrir menu">☰</button>
-      </div>
-    </header>
+    <>
+      <header className="dossier-hud dossier-shell">
+        <div className="dossier-hud-inner">
+          <a className="dossier-brand" href="#overview" onClick={() => onJump && onJump("overview")}>
+            <img className="dossier-brand-logo" src="assets/dossier-logo.png" alt="Dossiê Criminal - Arquivo GTA" />
+          </a>
+          <nav className={open ? "open" : ""}>
+            {navItems.map((n) => (
+              <a
+                key={n.id}
+                href={`#${n.id}`}
+                className={active === n.id ? "active" : ""}
+                onClick={() => {
+                  setOpen(false);
+                  onJump && onJump(n.id);
+                }}
+              >
+                <span>{n.k}</span>{n.label}
+              </a>
+            ))}
+          </nav>
+          <button className="dossier-menu" onClick={() => setOpen((v) => !v)} aria-label="Abrir menu">☰</button>
+        </div>
+      </header>
+      <nav className="dossier-bottom-nav dossier-shell" aria-label="Menu">
+        {navItems.map((n) => (
+          <a
+            key={`bottom-${n.id}`}
+            href={`#${n.id}`}
+            className={active === n.id ? "active" : ""}
+            onClick={() => {
+              setOpen(false);
+              onJump && onJump(n.id);
+            }}
+          >
+            <span>{n.k}</span>{n.label}
+          </a>
+        ))}
+      </nav>
+      <button className="dossier-back-top" type="button" onClick={jumpToTop} aria-label="Voltar ao topo">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 5l-7 7m7-7 7 7M12 5v14" />
+        </svg>
+      </button>
+    </>
   );
 };
-
 const DossierHero = () => {
   const heroMedia = window.officialMediaData?.hero;
   const stats = [
