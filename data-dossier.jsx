@@ -3128,7 +3128,7 @@ const rsgTrilogySource = "https://www.rockstargames.com/GTATrilogy";
 
 const officialMediaData = {
   notice:
-    "Imagens oficiais promocionais da Rockstar Games / Take-Two Interactive usadas com credito e link para a fonte oficial. O projeto e um arquivo editorial de fa e nao afirma propriedade sobre as artes.",
+    "Imagens promocionais oficiais e imagens de referencia externas usadas com credito e link para a fonte. O projeto e um arquivo editorial de fa e nao afirma propriedade sobre as artes.",
   hero: {
     src: "https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_01_landscape.0e2a6544.jpg",
     alt: "Arte oficial de Grand Theft Auto VI com Lucia e Jason",
@@ -3143,6 +3143,7 @@ const officialMediaData = {
     { label: "GTA V - pagina oficial", url: rsgVSource, note: "Imagens promocionais atuais de Los Santos e GTA V." },
     { label: "GTA Online - pagina oficial", url: rsgOnlineSource, note: "Imagens de atualizacoes e plataforma online." },
     { label: "GTA Trilogy - pagina oficial", url: rsgTrilogySource, note: "Artes e screenshots da trilogia 3D remasterizada." },
+    { label: "GTA Wiki / Fandom - personagens e locais", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_Wiki", note: "Imagens de referencia para fichas de personagens, cidades e estados quando a pagina oficial nao entrega retrato especifico." },
     { label: "Paginas oficiais dos jogos Rockstar", url: rsgGamesSource, note: "Screenshots oficiais de GTA 1, GTA 2, GTA III, Vice City, San Andreas, LCS, VCS, GTA IV, EFLC e Chinatown Wars." }
   ]
 };
@@ -3153,6 +3154,17 @@ const officialImage = (src, alt, source, caption = "Rockstar Games", options = {
   source,
   caption,
   credit: mediaCredit,
+  ...options
+});
+
+const gtaWikiCredit = "Imagem via GTA Wiki / Fandom; direitos dos assets pertencem aos respectivos titulares.";
+const gtaWikiPage = (page) => `https://gta.fandom.com/wiki/${encodeURIComponent(page.replace(/\s+/g, "_"))}`;
+const gtaWikiImage = (page, src, options = {}) => ({
+  src,
+  alt: `Imagem de ${page} via GTA Wiki`,
+  source: gtaWikiPage(page),
+  caption: `GTA Wiki - ${page}`,
+  credit: gtaWikiCredit,
   ...options
 });
 
@@ -3200,6 +3212,98 @@ const officialMediaByCityId = {
   "leonida": officialImage("https://www.rockstargames.com/VI/_next/static/media/Leonida_Keys_01.1af17390.jpg", "Screenshot oficial de Leonida Keys em GTA VI", rsgVIScreens, "Rockstar Games - GTA VI Screenshots")
 };
 
+const gtaWikiCharacterMediaById = {
+  "claude": gtaWikiImage("Claude", "https://static.wikia.nocookie.net/gtawiki/images/3/34/Claude-GTA3.png/revision/latest?cb=20230412193939", { position: "center 18%" }),
+  "tommy-vercetti": gtaWikiImage("Tommy Vercetti", "https://static.wikia.nocookie.net/gtawiki/images/a/ae/TommyVercetti-GTAVC.jpg/revision/latest?cb=20220618090315", { position: "center 18%" }),
+  "cj": gtaWikiImage("Carl Johnson", "https://static.wikia.nocookie.net/gtawiki/images/7/70/CJ-GTASA.png/revision/latest?cb=20260330025009", { position: "center 16%" }),
+  "mike": gtaWikiImage("Mike", "https://static.wikia.nocookie.net/gtawiki/images/a/a5/Mike-GTAA.jpg/revision/latest?cb=20230521021239"),
+  "toni-cipriani": gtaWikiImage("Toni Cipriani", "https://static.wikia.nocookie.net/gtawiki/images/e/e1/ToniCipriani-GTAIII.png/revision/latest?cb=20230406180025"),
+  "vic-vance": gtaWikiImage("Victor Vance", "https://static.wikia.nocookie.net/gtawiki/images/c/cb/VictorVance-GTAVC2.png/revision/latest?cb=20230419175026"),
+  "niko-bellic": gtaWikiImage("Niko Bellic", "https://static.wikia.nocookie.net/gtawiki/images/9/9e/NikoBellic-GTAIV-Portrait.png/revision/latest?cb=20260212152128"),
+  "johnny-klebitz": gtaWikiImage("Johnny Klebitz", "https://static.wikia.nocookie.net/gtawiki/images/4/43/JohnnyKlebitz-GTAV.png/revision/latest?cb=20230630145509"),
+  "luis-lopez": gtaWikiImage("Luis Fernando Lopez", "https://static.wikia.nocookie.net/gtawiki/images/b/b4/LuisFernandoLopez-TBOGT.jpg/revision/latest?cb=20220806150957"),
+  "huang-lee": gtaWikiImage("Huang Lee", "https://static.wikia.nocookie.net/gtawiki/images/8/84/HuangLee-GTACW.png/revision/latest?cb=20230616145140"),
+  "michael-de-santa": gtaWikiImage("Michael De Santa", "https://static.wikia.nocookie.net/gtawiki/images/2/27/MichaelDeSanta-GTAOee-Portrait.png/revision/latest?cb=20251210124259"),
+  "franklin-clinton": gtaWikiImage("Franklin Clinton", "https://static.wikia.nocookie.net/gtawiki/images/f/f3/FranklinClinton-GTAOe-TheContract.png/revision/latest?cb=20260330025009"),
+  "trevor-philips": gtaWikiImage("Trevor Philips", "https://static.wikia.nocookie.net/gtawiki/images/7/7d/TrevorPhilips-GTAVee.png/revision/latest?cb=20220318160709"),
+  "lucia-caminos": gtaWikiImage("Lucia Caminos", "https://static.wikia.nocookie.net/gtawiki/images/2/2a/LuciaCaminos-GTAVI-Portrait.png/revision/latest?cb=20250506145927"),
+  "jason-duval": gtaWikiImage("Jason Duval", "https://static.wikia.nocookie.net/gtawiki/images/d/de/JasonDuval-GTAVI-Portrait.png/revision/latest?cb=20250506145706"),
+  "online-protagonist": gtaWikiImage("GTA Online Protagonist", "https://static.wikia.nocookie.net/gtawiki/images/d/d7/GTA_Online_mugshot_collage.PNG/revision/latest?cb=20260330025009"),
+  "roman-bellic": gtaWikiImage("Roman Bellic", "https://static.wikia.nocookie.net/gtawiki/images/b/b8/RomanBellic-GTAIVpc.jpg/revision/latest?cb=20260224181845"),
+  "little-jacob": gtaWikiImage("Little Jacob", "https://static.wikia.nocookie.net/gtawiki/images/5/5a/LittleJacob-GTAIV-Closeup.png/revision/latest?cb=20220807010027"),
+  "brucie-kibbutz": gtaWikiImage("Brucie Kibbutz", "https://static.wikia.nocookie.net/gtawiki/images/9/9f/BrucieKibbutz-GTAO.png/revision/latest?cb=20190826165205"),
+  "packie-mcreary": gtaWikiImage("Patrick McReary", "https://static.wikia.nocookie.net/gtawiki/images/d/de/PatrickMcReary-GTAO-2019Portrait.png/revision/latest?cb=20200619113007"),
+  "kate-mcreary": gtaWikiImage("Kate McReary", "https://static.wikia.nocookie.net/gtawiki/images/7/76/KateMcReary-GTAIV.png/revision/latest?cb=20220311115802"),
+  "mallorie-bardas": gtaWikiImage("Mallorie Bardas", "https://static.wikia.nocookie.net/gtawiki/images/5/5a/MallorieBardas-GTAIV.jpg/revision/latest?cb=20220807003948"),
+  "lester-crest": gtaWikiImage("Lester Crest", "https://static.wikia.nocookie.net/gtawiki/images/0/0d/LesterCrest-GTAOe-2019Portrait.png/revision/latest?cb=20220726003738"),
+  "lamar-davis": gtaWikiImage("Lamar Davis", "https://static.wikia.nocookie.net/gtawiki/images/6/61/LamarDavis-GTAOe-2021Portrait.png/revision/latest?cb=20240122033958"),
+  "amanda-de-santa": gtaWikiImage("Amanda De Santa", "https://static.wikia.nocookie.net/gtawiki/images/6/65/AmandaDeSanta-GTAOee-Portrait.png/revision/latest?cb=20251205171844"),
+  "jimmy-de-santa": gtaWikiImage("Jimmy De Santa", "https://static.wikia.nocookie.net/gtawiki/images/2/25/JimmyDeSanta-GTAO.png/revision/latest?cb=20191214061001"),
+  "tracey-de-santa": gtaWikiImage("Tracey De Santa", "https://static.wikia.nocookie.net/gtawiki/images/d/d2/TraceyDeSanta-GTAVee.png/revision/latest?cb=20220322175113"),
+  "dave-norton": gtaWikiImage("Dave Norton", "https://static.wikia.nocookie.net/gtawiki/images/a/af/DaveNorton-GTAVee.png/revision/latest?cb=20220322175028"),
+  "steve-haines": gtaWikiImage("Steve Haines", "https://static.wikia.nocookie.net/gtawiki/images/2/22/SteveHaines-GTAVee.png/revision/latest?cb=20220319175004"),
+  "devin-weston": gtaWikiImage("Devin Weston", "https://static.wikia.nocookie.net/gtawiki/images/e/e4/DevinWeston-GTAVee-DevinCloseup.jpg/revision/latest?cb=20221106183639"),
+  "martin-madrazo": gtaWikiImage("Martin Madrazo", "https://static.wikia.nocookie.net/gtawiki/images/d/d9/MartinMadrazo-GTAOee-2025Portrait.png/revision/latest?cb=20250617103014"),
+  "ron-jakowski": gtaWikiImage("Ron Jakowski", "https://static.wikia.nocookie.net/gtawiki/images/6/68/RonJakowski-GTAOe-2022Portrait.png/revision/latest?cb=20231108210259"),
+  "wade-hebert": gtaWikiImage("Wade Hebert", "https://static.wikia.nocookie.net/gtawiki/images/5/53/WadeHebert-GTAV-Portrait.png/revision/latest?cb=20210903102957"),
+  "ken-rosenberg": gtaWikiImage("Ken Rosenberg", "https://static.wikia.nocookie.net/gtawiki/images/8/8c/KenRosenberg-GTASA.jpg/revision/latest?cb=20230413175051"),
+  "lance-vance": gtaWikiImage("Lance Vance", "https://static.wikia.nocookie.net/gtawiki/images/1/17/LanceVance-GTAVC.jpg/revision/latest?cb=20230414193543"),
+  "sonny-forelli": gtaWikiImage("Sonny Forelli", "https://static.wikia.nocookie.net/gtawiki/images/a/a6/SonnyForelli-GTAVC.jpg/revision/latest?cb=20230421193125"),
+  "ricardo-diaz": gtaWikiImage("Ricardo Diaz", "https://static.wikia.nocookie.net/gtawiki/images/5/51/RicardoDiaz-GTAVC.jpg/revision/latest?cb=20230419175205"),
+  "colonel-cortez": gtaWikiImage("Juan Cortez", "https://static.wikia.nocookie.net/gtawiki/images/6/61/JuanCortez-GTAVC.jpg/revision/latest?cb=20230419174940"),
+  "avery-carrington": gtaWikiImage("Avery Carrington", "https://static.wikia.nocookie.net/gtawiki/images/9/9d/AveryCarrington-GTALCS-PanlanticLandGrab.png/revision/latest?cb=20251206203121"),
+  "kent-paul": gtaWikiImage("Kent Paul", "https://static.wikia.nocookie.net/gtawiki/images/7/70/KentPaul-GTASA.jpg/revision/latest?cb=20230413180138"),
+  "salvatore-leone": gtaWikiImage("Salvatore Leone", "https://static.wikia.nocookie.net/gtawiki/images/7/79/SalvatoreLeone-GTAIII.jpg/revision/latest?cb=20230705124542"),
+  "maria-latore": gtaWikiImage("Maria Latore", "https://static.wikia.nocookie.net/gtawiki/images/9/91/MariaLatore-GTAIII.jpg/revision/latest?cb=20230705120746"),
+  "joey-leone": gtaWikiImage("Joey Leone", "https://static.wikia.nocookie.net/gtawiki/images/4/4a/JoeyLeone-GTAIII.jpg/revision/latest?cb=20230406174938"),
+  "donald-love": gtaWikiImage("Donald Love", "https://static.wikia.nocookie.net/gtawiki/images/4/4a/DonaldLove-GTAIII.jpg/revision/latest?cb=20230426230204"),
+  "catalina": gtaWikiImage("Catalina", "https://static.wikia.nocookie.net/gtawiki/images/5/59/Catalina-GTAIII.png/revision/latest?cb=20230619172126"),
+  "miguel": gtaWikiImage("Miguel", "https://static.wikia.nocookie.net/gtawiki/images/e/ed/Miguel-GTAIII.jpg/revision/latest?cb=20230406175128"),
+  "asuka-kasen": gtaWikiImage("Asuka Kasen", "https://static.wikia.nocookie.net/gtawiki/images/c/c9/AsukaKasen-GTAIII.png/revision/latest?cb=20230221103809"),
+  "kenji-kasen": gtaWikiImage("Kenji Kasen", "https://static.wikia.nocookie.net/gtawiki/images/b/b5/KenjiKasen-GTAIII.png/revision/latest?cb=20230220083042"),
+  "8-ball": gtaWikiImage("8-Ball", "https://static.wikia.nocookie.net/gtawiki/images/2/26/8-Ball-GTAIII.jpg/revision/latest?cb=20240518110305"),
+  "big-smoke": gtaWikiImage("Big Smoke", "https://static.wikia.nocookie.net/gtawiki/images/b/bd/BigSmoke-GTASA.jpg/revision/latest?cb=20230629061252"),
+  "ryder": gtaWikiImage("Ryder", "https://static.wikia.nocookie.net/gtawiki/images/3/3d/LanceWilson-GTASA.png/revision/latest?cb=20230429151823"),
+  "sweet-johnson": gtaWikiImage("Sweet Johnson", "https://static.wikia.nocookie.net/gtawiki/images/5/5a/SeanJohnson-GTASA.png/revision/latest?cb=20230429163004"),
+  "kendl-johnson": gtaWikiImage("Kendl Johnson", "https://static.wikia.nocookie.net/gtawiki/images/6/6c/KendlJohnson-GTASA.png/revision/latest?cb=20230705085014"),
+  "cesar-vialpando": gtaWikiImage("Cesar Vialpando", "https://static.wikia.nocookie.net/gtawiki/images/d/d0/CesarVialpando-GTASA.jpg/revision/latest?cb=20230705085102"),
+  "woozie": gtaWikiImage("Wu Zi Mu", "https://static.wikia.nocookie.net/gtawiki/images/4/47/Woozie-GTASA-HD.jpg/revision/latest?cb=20230622010848"),
+  "mike-toreno": gtaWikiImage("Mike Toreno", "https://static.wikia.nocookie.net/gtawiki/images/d/d1/MikeToreno-GTASA.jpg/revision/latest?cb=20230630072110"),
+  "the-truth": gtaWikiImage("The Truth", "https://static.wikia.nocookie.net/gtawiki/images/5/52/TheTruth-GTASA-HD.jpg/revision/latest?cb=20230426103809"),
+  "frank-tenpenny": gtaWikiImage("Frank Tenpenny", "https://static.wikia.nocookie.net/gtawiki/images/e/ed/FrankTenpenny-GTASA.png/revision/latest?cb=20230629093953"),
+  "eddie-pulaski": gtaWikiImage("Eddie Pulaski", "https://static.wikia.nocookie.net/gtawiki/images/8/8c/EddiePulaski-GTASA.jpg/revision/latest?cb=20230629094034"),
+  "jimmy-hernandez": gtaWikiImage("Jimmy Hernandez", "https://static.wikia.nocookie.net/gtawiki/images/f/fb/JimmyHernandez-GTASA.jpg/revision/latest?cb=20230426103351"),
+  "madd-dogg": gtaWikiImage("Madd Dogg (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/9/96/MaddDogg-GTASA.jpg/revision/latest?cb=20230622010837"),
+  "zero": gtaWikiImage("Zero", "https://static.wikia.nocookie.net/gtawiki/images/4/4c/Zero-GTASA-HD.jpg/revision/latest?cb=20230701183431"),
+  "jizzy-b": gtaWikiImage("Jizzy B.", "https://static.wikia.nocookie.net/gtawiki/images/7/7b/JizzyB-GTASA.png/revision/latest?cb=20230630072150"),
+  "t-bone-mendez": gtaWikiImage("T-Bone Mendez", "https://static.wikia.nocookie.net/gtawiki/images/d/d8/T-BoneMendez-GTASA.jpg/revision/latest?cb=20230630072032"),
+  "og-loc": gtaWikiImage("OG Loc (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/0/02/OGLoc-GTASA.png/revision/latest?cb=20230630161100"),
+  "johnny-sindacco": gtaWikiImage("Johnny Sindacco", "https://static.wikia.nocookie.net/gtawiki/images/d/d4/JohnnySindacco-GTASA.png/revision/latest?cb=20230705121700"),
+  "billy-grey": gtaWikiImage("Billy Grey", "https://static.wikia.nocookie.net/gtawiki/images/9/94/BillyGrey-TBOGT.jpg/revision/latest?cb=20260214040810"),
+  "ashley-butler": gtaWikiImage("Ashley Butler", "https://static.wikia.nocookie.net/gtawiki/images/c/c7/AshleyButler-GTAVee.png/revision/latest?cb=20220620214254"),
+  "tony-prince": gtaWikiImage("Tony Prince", "https://static.wikia.nocookie.net/gtawiki/images/a/a3/TonyPrince-GTAO-AfterHoursTrailer.png/revision/latest?cb=20180719212937"),
+  "yusuf-amir": gtaWikiImage("Yusuf Amir", "https://static.wikia.nocookie.net/gtawiki/images/8/8e/YusufAmir-GTAOe-Portrait.png/revision/latest?cb=20231212102317"),
+  "mori-kibbutz": gtaWikiImage("Mori Kibbutz", "https://static.wikia.nocookie.net/gtawiki/images/5/5a/MoriKibbutz-TBOGT.png/revision/latest?cb=20220325174322"),
+  "ray-bulgarin": gtaWikiImage("Ray Bulgarin", "https://static.wikia.nocookie.net/gtawiki/images/7/7a/RayBulgarin-TBOGT.png/revision/latest?cb=20220807032945"),
+  "kenny-lee": gtaWikiImage("Wu Lee", "https://static.wikia.nocookie.net/gtawiki/images/b/b9/WuKennyLee-GTACW.png/revision/latest?cb=20211031095545"),
+  "hsin-jaoming": gtaWikiImage("Hsin Jaoming", "https://static.wikia.nocookie.net/gtawiki/images/9/98/HsinJaoming-GTACW.png/revision/latest?cb=20211117085217"),
+  "wade-heston": gtaWikiImage("Wade Heston", "https://static.wikia.nocookie.net/gtawiki/images/6/60/WadeHeston-GTACW.png/revision/latest?cb=20211102171813")
+};
+
+const gtaWikiCityMediaById = {
+  "liberty-city": gtaWikiImage("Liberty City (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/8/8e/LibertyCity-GTAIV-Montage.jpg/revision/latest?cb=20181026175903"),
+  "vice-city": gtaWikiImage("Vice City (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/2/26/ViceCity-GTAVI-Montage.jpg/revision/latest?cb=20250509052851"),
+  "san-andreas": gtaWikiImage("State of San Andreas (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/2/28/SanAndreas-GTASA-Montage.png/revision/latest?cb=20240509054256"),
+  "los-santos": gtaWikiImage("Los Santos (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/4/48/LosSantos-GTAV-Map.jpg/revision/latest?cb=20210901121031"),
+  "san-fierro": gtaWikiImage("San Fierro (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/8/82/SanFierro-GTASA-MapFull-CityLimits.png/revision/latest?cb=20220223065710"),
+  "las-venturas": gtaWikiImage("Las Venturas (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/5/52/LasVenturas-GTASA-MapFull-CityLimits.png/revision/latest?cb=20220223065707"),
+  "blaine-county": gtaWikiImage("Blaine County", "https://static.wikia.nocookie.net/gtawiki/images/5/56/BlaineCounty-GTAV-Map.jpg/revision/latest?cb=20210901121106"),
+  "north-yankton": gtaWikiImage("State of North Yankton", "https://static.wikia.nocookie.net/gtawiki/images/a/a5/StateofNorthYankton-GTAOe-GTAVe-Montage.jpg/revision/latest?cb=20241014000923"),
+  "anywhere-city": gtaWikiImage("Anywhere City", "https://static.wikia.nocookie.net/gtawiki/images/b/ba/DowntownDistrict-GTA2-MapPC.png/revision/latest?cb=20191221060617"),
+  "london": gtaWikiImage("London", "https://static.wikia.nocookie.net/gtawiki/images/0/0c/London-GTAL69-Montage.png/revision/latest?cb=20221029115443"),
+  "leonida": gtaWikiImage("State of Leonida", "https://static.wikia.nocookie.net/gtawiki/images/8/89/LeonidaStateFlag-GTAVI-RockstarWebsiteCinematic.png/revision/latest?cb=20250506203041")
+};
+
 const mediaArray = (value) => Array.isArray(value) ? value : value ? [value] : [];
 const mediaKey = (value) => String(value || "")
   .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -3230,7 +3334,8 @@ gamesData.forEach((item) => {
 });
 
 charactersData.forEach((item) => {
-  if (officialMediaByCharacterId[item.id]) item.media = officialMediaByCharacterId[item.id];
+  if (gtaWikiCharacterMediaById[item.id]) item.media = gtaWikiCharacterMediaById[item.id];
+  else if (officialMediaByCharacterId[item.id]) item.media = officialMediaByCharacterId[item.id];
   if (!item.media) {
     const relatedGame = findGameMediaForCharacter(item);
     if (relatedGame?.media) {
@@ -3245,7 +3350,8 @@ charactersData.forEach((item) => {
 });
 
 citiesData.forEach((item) => {
-  if (officialMediaByCityId[item.id]) item.media = officialMediaByCityId[item.id];
+  if (gtaWikiCityMediaById[item.id]) item.media = gtaWikiCityMediaById[item.id];
+  else if (officialMediaByCityId[item.id]) item.media = officialMediaByCityId[item.id];
 });
 
 Object.assign(window, {
