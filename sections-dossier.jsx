@@ -97,6 +97,46 @@ const OfficialMedia = ({ media, className = "" }) => {
   );
 };
 
+const CityImageCarousel = ({ city, className = "" }) => {
+  const mediaItems = asList(city?.galleryMedia || city?.media);
+  const [index, setIndex] = React.useState(0);
+  React.useEffect(() => setIndex(0), [city?.id]);
+
+  if (!mediaItems.length) return null;
+
+  const activeIndex = ((index % mediaItems.length) + mediaItems.length) % mediaItems.length;
+  const active = mediaItems[activeIndex];
+  const move = (delta) => setIndex((current) => current + delta);
+
+  return (
+    <div className={`dossier-city-carousel ${className}`}>
+      <OfficialMedia media={active} className="dossier-city-carousel-media" />
+      {mediaItems.length > 1 && (
+        <>
+          <div className="dossier-city-carousel-controls">
+            <button type="button" onClick={() => move(-1)} aria-label="Imagem anterior">&lt;</button>
+            <span>{activeIndex + 1} / {mediaItems.length}</span>
+            <button type="button" onClick={() => move(1)} aria-label="Proxima imagem">&gt;</button>
+          </div>
+          <div className="dossier-city-carousel-thumbs">
+            {mediaItems.map((media, thumbIndex) => (
+              <button
+                type="button"
+                key={`${city?.id || "city"}-${media.src}-${thumbIndex}`}
+                className={thumbIndex === activeIndex ? "active" : ""}
+                onClick={() => setIndex(thumbIndex)}
+                aria-label={`Abrir imagem ${thumbIndex + 1}`}
+              >
+                <img src={media.src} alt={media.alt || mediaCaption(media)} loading="lazy" referrerPolicy="no-referrer" />
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 const MetaGrid = ({ rows }) => (
   <div className="dossier-meta-grid">
     {rows.filter(Boolean).map(([label, value], index) => (
@@ -513,38 +553,56 @@ const CharactersDossierSection = ({ onOpenDossier }) => {
   );
 };
 
-const cityHotspots = [
-  ["liberty-city", 19, 24],
-  ["vice-city", 68, 62],
-  ["san-andreas", 14, 66],
-  ["los-santos", 28, 72],
-  ["san-fierro", 10, 51],
-  ["las-venturas", 35, 48],
-  ["blaine-county", 33, 36],
-  ["north-yankton", 47, 15],
-  ["anywhere-city", 78, 28],
-  ["london", 86, 13],
-  ["leonida", 72, 75]
+const cityUniverseLanes = [
+  {
+    id: "2d",
+    label: "2D Universe",
+    note: "top-down / arcade",
+    cities: ["liberty-city", "vice-city", "san-andreas", "anywhere-city", "london"]
+  },
+  {
+    id: "3d",
+    label: "3D Universe",
+    note: "continuidade classica",
+    cities: ["liberty-city", "vice-city", "san-andreas", "los-santos", "san-fierro", "las-venturas"]
+  },
+  {
+    id: "hd",
+    label: "HD Universe",
+    note: "continuidade moderna",
+    cities: ["liberty-city", "vice-city", "san-andreas", "los-santos", "blaine-county", "north-yankton", "leonida"]
+  }
 ];
 
 const CityMapPanel = ({ selectedId, onSelect }) => (
-  <div className="dossier-city-map">
+  <div className="dossier-city-map dossier-city-universe-map">
     <div className="dossier-map-gridlines" />
-    {cityHotspots.map(([id, x, y]) => {
-      const city = citiesData.find((c) => c.id === id);
-      return (
-        <button
-          key={id}
-          className={selectedId === id ? "active" : ""}
-          style={{ left: `${x}%`, top: `${y}%` }}
-          onClick={() => onSelect(city)}
-          title={city?.name}
-        >
-          <span />
-          <strong>{city?.name}</strong>
-        </button>
-      );
-    })}
+    <div className="dossier-city-map-lanes">
+      {cityUniverseLanes.map((lane) => (
+        <div key={lane.id} className="dossier-city-map-lane" data-universe={lane.id}>
+          <div className="dossier-city-map-lane-head">
+            <strong>{lane.label}</strong>
+            <span>{lane.note}</span>
+          </div>
+          <div className="dossier-city-map-pins">
+            {lane.cities.map((id) => {
+              const city = citiesData.find((c) => c.id === id);
+              return (
+                <button
+                  key={`${lane.id}-${id}`}
+                  className={selectedId === id ? "active" : ""}
+                  onClick={() => onSelect(city)}
+                  title={`${city?.name} em ${lane.label}`}
+                >
+                  <span className="dossier-map-dot" />
+                  <strong>{city?.name}</strong>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
   </div>
 );
 
@@ -563,7 +621,7 @@ const CitiesDossierSection = ({ onOpenDossier }) => {
             <Corners />
             <div className="dossier-card-kicker">Hotspot ativo</div>
             <h3>{selected?.name}</h3>
-            <OfficialMedia media={selected?.media} className="dossier-city-official" />
+            <CityImageCarousel city={selected} className="compact" />
             <p>{selected?.description}</p>
             <MetaGrid rows={[
               ["Inspiração", selected?.realWorldInspiration],
@@ -983,13 +1041,17 @@ const DossierRecordModal = ({ record, onClose }) => {
         </header>
         <div className="dossier-modal-grid">
           <aside className="dossier-modal-evidence">
-            <div className={`dossier-cover-art ${universeTone(item.universe || item.category)} ${item.media ? "has-official" : ""}`}>
-              {item.media ? <OfficialMedia media={item.media} className="dossier-cover-media" /> : <div className="dossier-cover-map" />}
-              <div className="dossier-cover-label">
-                <strong>{record.type.toUpperCase()}</strong>
-                <small>{item.id || item.year || "arquivo"}</small>
+            {record.type === "city" ? (
+              <CityImageCarousel city={item} className="modal" />
+            ) : (
+              <div className={`dossier-cover-art ${universeTone(item.universe || item.category)} ${item.media ? "has-official" : ""}`}>
+                {item.media ? <OfficialMedia media={item.media} className="dossier-cover-media" /> : <div className="dossier-cover-map" />}
+                <div className="dossier-cover-label">
+                  <strong>{record.type.toUpperCase()}</strong>
+                  <small>{item.id || item.year || "arquivo"}</small>
+                </div>
               </div>
-            </div>
+            )}
             <DossierChips items={item.tags || [item.universe, item.category, item.certainty].filter(Boolean)} limit={10} />
           </aside>
 

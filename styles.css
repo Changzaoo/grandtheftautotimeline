@@ -512,6 +512,7 @@ select:focus{
 .dossier-cover-media figcaption,
 .dossier-mugshot-media figcaption,
 .dossier-city-media figcaption,
+.dossier-city-carousel-media figcaption,
 .dossier-faction-media figcaption,
 .dossier-universe-media figcaption,
 .dossier-rockstar-media figcaption,
@@ -559,7 +560,34 @@ select:focus{
 .dossier-city-map button strong{font-size:12px;white-space:nowrap}
 .dossier-city-map button.active{background:var(--evidence);color:#171000}
 .dossier-city-map button.active span{background:#171000;box-shadow:none}
+.dossier-city-universe-map{display:grid;align-content:stretch;padding:18px;background:radial-gradient(circle at 20% 20%,rgba(245,197,24,.08),transparent 28%),radial-gradient(circle at 78% 72%,rgba(255,61,138,.08),transparent 30%),linear-gradient(135deg,#071018,#151016)}
+.dossier-city-universe-map::after{background:linear-gradient(180deg,rgba(245,197,24,.09) 0 1px,transparent 1px 33.1%,rgba(59,108,255,.12) 33.1% calc(33.1% + 1px),transparent calc(33.1% + 1px) 66.4%,rgba(255,61,138,.12) 66.4% calc(66.4% + 1px),transparent calc(66.4% + 1px))}
+.dossier-city-map-lanes{position:relative;z-index:2;display:grid;grid-template-rows:repeat(3,minmax(0,1fr));gap:14px;min-height:100%}
+.dossier-city-map-lane{position:relative;display:grid;grid-template-columns:126px 1fr;gap:14px;align-items:center;min-height:132px;padding:14px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(0,0,0,.22);overflow:hidden}
+.dossier-city-map-lane::before{content:"";position:absolute;left:150px;right:18px;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--evidence),transparent);opacity:.55}
+.dossier-city-map-lane[data-universe="3d"]::before{background:linear-gradient(90deg,transparent,var(--copper),transparent)}
+.dossier-city-map-lane[data-universe="hd"]::before{background:linear-gradient(90deg,transparent,var(--neon),transparent)}
+.dossier-city-map-lane-head{position:relative;z-index:2;display:grid;gap:4px}
+.dossier-city-map-lane-head strong{color:#fff;font-size:18px;text-transform:uppercase}
+.dossier-city-map-lane-head span{color:var(--grit);font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase}
+.dossier-city-map-pins{position:relative;z-index:2;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dossier-city-universe-map button{position:relative;transform:none;min-height:34px;border:1px solid rgba(255,255,255,.08);background:rgba(2,2,4,.74);backdrop-filter:blur(8px)}
+.dossier-city-universe-map button:hover{border-color:rgba(245,197,24,.45);box-shadow:0 0 18px rgba(245,197,24,.12)}
+.dossier-city-universe-map button.active{border-color:rgba(245,197,24,.85);box-shadow:0 0 22px rgba(245,197,24,.18)}
 .dossier-city-selected{padding:22px}
+.dossier-city-carousel{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:8px;background:#08080c}
+.dossier-city-carousel.compact{margin:12px 0 14px}
+.dossier-city-carousel-media{height:230px;border:0;border-radius:0}
+.dossier-city-carousel.compact .dossier-city-carousel-media{height:190px}
+.dossier-city-carousel.modal .dossier-city-carousel-media{height:300px}
+.dossier-city-carousel-media img{filter:saturate(1.08) contrast(1.04)}
+.dossier-city-carousel-controls{position:absolute;left:10px;right:10px;bottom:58px;z-index:3;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+.dossier-city-carousel-controls button{pointer-events:auto;width:34px;height:34px;border:1px solid rgba(255,255,255,.2);border-radius:50%;background:rgba(0,0,0,.68);color:#fff;font-size:18px;line-height:1;cursor:pointer}
+.dossier-city-carousel-controls span{padding:6px 8px;border:1px solid rgba(255,255,255,.16);border-radius:999px;background:rgba(0,0,0,.68);color:var(--bone-2);font-family:"Space Mono",monospace;font-size:10px}
+.dossier-city-carousel-thumbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(44px,1fr));gap:6px;padding:8px;border-top:1px solid var(--line);background:rgba(255,255,255,.025)}
+.dossier-city-carousel-thumbs button{height:42px;padding:0;border:1px solid rgba(255,255,255,.12);border-radius:5px;background:#09090c;overflow:hidden;cursor:pointer;opacity:.7}
+.dossier-city-carousel-thumbs button.active{border-color:var(--evidence);opacity:1;box-shadow:0 0 14px rgba(245,197,24,.15)}
+.dossier-city-carousel-thumbs img{width:100%;height:100%;object-fit:cover}
 .dossier-city-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .dossier-city-card{cursor:pointer}
 .dossier-city-skyline{height:170px;overflow:hidden;border-bottom:1px solid var(--line)}
@@ -764,6 +792,14 @@ select:focus{
   .dossier-meta-grid{grid-template-columns:1fr}
   .dossier-city-map{min-height:360px}
   .dossier-city-map button strong{display:none}
+  .dossier-city-universe-map{min-height:auto;padding:12px}
+  .dossier-city-map-lanes{gap:10px}
+  .dossier-city-map-lane{grid-template-columns:1fr;min-height:auto;padding:12px}
+  .dossier-city-map-lane::before{left:12px;right:12px;top:auto;bottom:12px}
+  .dossier-city-map-pins{gap:8px}
+  .dossier-city-universe-map button strong{display:inline;font-size:11px}
+  .dossier-city-carousel.compact .dossier-city-carousel-media,
+  .dossier-city-carousel.modal .dossier-city-carousel-media{height:210px}
   .dossier-gta6-hero h3{font-size:40px}
   .dossier-modal-back{padding:10px}
   .dossier-modal header h2{font-size:32px}
