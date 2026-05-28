@@ -1009,11 +1009,20 @@ const loadVehiclePageMediaMap = async (titles) => {
       redirects: "1",
       titles: chunk.join("|")
     })).then((response) => response.json());
+    const redirectsToPage = new Map();
+    asList(data?.query?.redirects).forEach((redirect) => {
+      const target = normalizeText(redirect.to);
+      if (!redirectsToPage.has(target)) redirectsToPage.set(target, []);
+      redirectsToPage.get(target).push(redirect.from);
+    });
     Object.values(data?.query?.pages || {}).forEach((page) => {
       const src = page?.thumbnail?.source;
       if (!src) return;
       const media = vehicleMediaFromSource(page.title, page.title, src);
       mediaByTitle.set(normalizeText(page.title), media);
+      asList(redirectsToPage.get(normalizeText(page.title))).forEach((from) => {
+        mediaByTitle.set(normalizeText(from), media);
+      });
     });
   }));
   return mediaByTitle;
@@ -1069,6 +1078,27 @@ const vehiclePageAliasesByName = {
   "trailer": ["Trailer (car carrier)"]
 };
 
+const vehicleFallbackMediaByGameAndName = {
+  "gta-vi": {
+    "trafego urbano moderno em vice city": vehicleMediaFromSource("trafego urbano moderno em Vice City", "Vehicles in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/9/9f/BuffaloSTX-GTAVI-Trailer1.png/revision/latest?cb=20250110080757"),
+    "carros e picapes de leonida em trailers screenshots": vehicleMediaFromSource("carros e picapes de Leonida", "Vehicles in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/9/9d/Bison-GTAVI-OfficialScreenshot-Grassrivers04.png/revision/latest/scale-to-width-down/360?cb=20250507051146"),
+    "barcos e veiculos costeiros": vehicleMediaFromSource("barcos e veiculos costeiros", "Vehicles in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/d/d8/Cruiser-GTAVI-OfficialScreenshot-LeonidaKeys02.png/revision/latest/scale-to-width-down/360?cb=20250527131704"),
+    "viaturas e perseguicoes policiais": vehicleMediaFromSource("viaturas e perseguicoes policiais", "Vehicles in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/b/b1/BuffaloSTXPursuit-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/360?cb=20250306090033"),
+    "aeronaves e vida de aeroporto ceu vistas em material promocional": vehicleMediaFromSource("aeronaves em material promocional de GTA VI", "Vehicles in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/d/df/Dodo-GTAVI-OfficialScreenshot-LeonidaKeys01.png/revision/latest/scale-to-width-down/360?cb=20250508205843")
+  }
+};
+
+const contextualVehicleMedia = (item, vehicle) => {
+  const direct = vehicleFallbackMediaByGameAndName[vehicle?.id]?.[normalizeText(vehicleItemName(item))];
+  if (direct) return direct;
+  if (!vehicle?.media) return null;
+  return {
+    ...vehicle.media,
+    alt: `Imagem contextual relacionada a ${vehicleItemName(item)}`,
+    caption: `${vehicle.media.caption || "GTA"} - contexto visual`
+  };
+};
+
 const vehicleUniversePageSuffix = (vehicle) => {
   if (vehicle?.universe?.includes("2D")) return "2D Universe";
   if (vehicle?.universe?.includes("3D")) return "3D Universe";
@@ -1089,14 +1119,17 @@ const vehiclePageCandidatesForItem = (item, vehicle) => {
   ].filter(Boolean))];
 };
 
-const vehicleFileStemCandidates = (name = "") => {
+const vehicleFileStemCandidates = (name = "", seen = new Set()) => {
   const ascii = String(name).normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  const aliases = vehiclePageAliasesByName[normalizeText(ascii)] || [];
+  const key = normalizeText(ascii);
+  if (seen.has(key)) return [];
+  seen.add(key);
+  const aliases = vehiclePageAliasesByName[key] || [];
   return [...new Set([
     ascii.replace(/\s+x\s+/gi, "x").replace(/[^a-z0-9-]/gi, ""),
     ascii.replace(/[^a-z0-9]/gi, ""),
     ascii.replace(/\s+/g, "").replace(/[^a-z0-9-]/gi, ""),
-    ...aliases.flatMap((alias) => vehicleFileStemCandidates(alias))
+    ...aliases.flatMap((alias) => vehicleFileStemCandidates(alias, seen))
   ].filter(Boolean))];
 };
 
@@ -1145,8 +1178,16 @@ const loadVehicleGalleryMediaByItem = async (items, vehicle) => {
       redirects: "1",
       titles: chunk.join("|")
     })).then((response) => response.json());
+    const redirectsToPage = new Map();
+    asList(data?.query?.redirects).forEach((redirect) => {
+      const target = normalizeText(redirect.to);
+      if (!redirectsToPage.has(target)) redirectsToPage.set(target, []);
+      redirectsToPage.get(target).push(redirect.from);
+    });
     Object.values(data?.query?.pages || {}).forEach((page) => {
-      const item = itemByTitle.get(normalizeText(page.title));
+      const item =
+        itemByTitle.get(normalizeText(page.title)) ||
+        asList(redirectsToPage.get(normalizeText(page.title))).map((from) => itemByTitle.get(normalizeText(from))).find(Boolean);
       if (!item) return;
       const images = asList(page.images).map((image) => image.title).filter(Boolean);
       const best = images
@@ -1209,7 +1250,8 @@ const hydrateVehicleGroupMedia = async (groups, vehicle) => {
         fileMedia.get(normalizeText(normalizedItem.imageTitle || "")) ||
         galleryMedia.get(vehicleItemKey(normalizedItem)) ||
         heuristicMedia.get(vehicleItemKey(normalizedItem)) ||
-        vehiclePageCandidatesForItem(normalizedItem, vehicle).map((candidate) => pageMedia.get(normalizeText(candidate))).find(Boolean);
+        vehiclePageCandidatesForItem(normalizedItem, vehicle).map((candidate) => pageMedia.get(normalizeText(candidate))).find(Boolean) ||
+        contextualVehicleMedia(normalizedItem, vehicle);
       return { ...normalizedItem, media };
     })
   }));
@@ -1363,6 +1405,23 @@ const VehiclesDossierSection = ({ onOpenDossier }) => {
 
 const weaponGroupCache = new Map();
 
+const weaponWikiPageUrl = (page = "") => `https://gta.fandom.com/wiki/${encodeURIComponent(String(page).replace(/\s+/g, "_"))}`;
+
+const weaponMediaFromSource = (name, pageTitle, src) => src ? ({
+  src,
+  alt: `Imagem de ${name}`,
+  source: weaponWikiPageUrl(pageTitle || name),
+  caption: `GTA Wiki - ${name}`,
+  credit: "Imagem via GTA Wiki / Fandom; direitos dos assets pertencem aos respectivos titulares.",
+  fit: "contain",
+  position: "center"
+}) : null;
+
+const weaponItemName = (item) => typeof item === "string" ? item : item?.name || "";
+const weaponItemPageTitle = (item) => typeof item === "string" ? item : item?.pageTitle || item?.name || "";
+const weaponItemMedia = (item) => typeof item === "string" ? null : item?.media || null;
+const weaponItemKey = (item) => normalizeText(`${weaponItemPageTitle(item)} ${weaponItemName(item)}`);
+
 const weaponContentSlice = (rawText = "") => {
   const starts = ["===Contents===", "==Contents==", "== List of weapons ==", "== Weapons returning", "==Description=="];
   const startCandidates = starts
@@ -1395,27 +1454,37 @@ const cleanWeaponGroupLabel = (line = "") => {
 };
 
 const extractWeaponNameFromLine = (line = "") => {
-  if (/\[\[:?(file|image|category|pl|ru|es|fr|de|pt|zh):/i.test(line)) return "";
-  if (!line.includes("[[")) return "";
-  let name = line.trim().replace(/^\*+/, "").replace(/^\|+/, "");
-  name = name
-    .replace(/<ref[^>]*>.*?<\/ref>/gi, "")
-    .replace(/\{\{[^{}]+\}\}/g, "");
-  name = cleanWikiMarkup(name)
+  const item = extractWeaponItemFromLine(line);
+  return weaponItemName(item);
+};
+
+const extractWeaponImageTitle = (line = "") => {
+  const match = String(line).match(/\[\[:?(?:Image|File):([^\]|]+)(?:\|[^\]]*)?\]\]/i);
+  return match ? `File:${match[1].trim()}` : "";
+};
+
+const extractWeaponItemFromLine = (line = "") => {
+  if (!line.includes("[[")) return null;
+  const links = [...String(line).matchAll(/\[\[:?([^\]|#]+)(?:#[^\]|]+)?(?:\|([^\]]+))?\]\]/g)];
+  const link = links.find((match) => !/^(file|image|category|pl|ru|es|fr|de|pt|zh):/i.test(match[1].trim()));
+  if (!link) return null;
+  const pageTitle = cleanWikiMarkup(link[1]).trim();
+  let name = cleanWikiMarkup(link[2] || link[1])
     .replace(/\s+\(Slot\s+\d+\)/i, "")
     .replace(/\s+\(PS2 only\)/i, " (PS2 only)")
     .replace(/\s+\(Standard & Explosive\)/i, " (Standard & Explosive)")
     .trim()
     .replace(/\.$/, "");
   if (/^(weapons in|grand theft auto|file:|image:|weapon wheel|ammu-nation|random pedestrian|mission|user|cutscene weapon|gameplay weapon)$/i.test(name)) return "";
-  return name;
+  return { name, pageTitle, imageTitle: extractWeaponImageTitle(line) };
 };
 
-const addWeaponGroupItem = (groups, label, name) => {
-  if (!name) return;
+const addWeaponGroupItem = (groups, label, item) => {
+  const normalizedItem = typeof item === "string" ? { name: item, pageTitle: item } : item;
+  if (!weaponItemName(normalizedItem)) return;
   const groupLabel = label || "Lista completa";
-  if (!groups.has(groupLabel)) groups.set(groupLabel, new Set());
-  groups.get(groupLabel).add(name);
+  if (!groups.has(groupLabel)) groups.set(groupLabel, new Map());
+  groups.get(groupLabel).set(weaponItemKey(normalizedItem), normalizedItem);
 };
 
 const parseWeaponWikitext = (rawText = "") => {
@@ -1429,7 +1498,7 @@ const parseWeaponWikitext = (rawText = "") => {
   let newRow = false;
   let readingHeaders = false;
 
-  lines.forEach((rawLine) => {
+  lines.forEach((rawLine, index) => {
     const line = rawLine.trim();
     if (!line) return;
     if (/^\{\|/.test(line)) {
@@ -1476,14 +1545,16 @@ const parseWeaponWikitext = (rawText = "") => {
     if (inTable && /^\|/.test(line)) {
       newRow = false;
       readingHeaders = false;
-      addWeaponGroupItem(groups, currentGroup, extractWeaponNameFromLine(line));
+      const item = extractWeaponItemFromLine(line);
+      const next = nextNonEmptyLine(lines, index + 1);
+      addWeaponGroupItem(groups, currentGroup, /^\|\[\[(Image|File):/i.test(next) && item ? { ...item, imageTitle: item.imageTitle || extractWeaponImageTitle(next) } : item);
       return;
     }
-    if (/^\*\[\[/.test(line)) addWeaponGroupItem(groups, currentGroup, extractWeaponNameFromLine(line));
+    if (/^\*\[\[/.test(line)) addWeaponGroupItem(groups, currentGroup, extractWeaponItemFromLine(line));
   });
 
   return [...groups.entries()]
-    .map(([label, names]) => ({ label, items: [...names].sort((a, b) => a.localeCompare(b, "pt-BR")) }))
+    .map(([label, items]) => ({ label, items: [...items.values()].sort((a, b) => weaponItemName(a).localeCompare(weaponItemName(b), "pt-BR")) }))
     .filter((group) => group.items.length)
     .sort((a, b) => a.label.localeCompare(b.label, "pt-BR"));
 };
@@ -1493,26 +1564,285 @@ const normalizeWeaponTitle = (title = "") => title
   .replace(/^Beta Weapons.*$/i, "")
   .trim();
 
+const weaponImageNeedlesByGameId = {
+  "gta-1": ["GTA1"],
+  "london-1969": ["GTAL69", "GTAL"],
+  "london-1961": ["GTAL61", "GTAL"],
+  "gta-2": ["GTA2"],
+  "gta-iii": ["GTA3", "GTAIII"],
+  "vice-city": ["GTAVC"],
+  "san-andreas": ["GTASA"],
+  "gta-advance": ["GTAA"],
+  "liberty-city-stories": ["GTALCS"],
+  "vice-city-stories": ["GTAVCS"],
+  "gta-iv": ["GTAIV", "GTA4"],
+  "lost-and-damned": ["TLAD"],
+  "ballad-gay-tony": ["TBoGT", "TBOGT"],
+  "chinatown-wars": ["GTACW"],
+  "gta-v": ["GTAV"],
+  "gta-online": ["GTAO", "GTAV"],
+  "trilogy-definitive": ["GTAIII", "GTAVC", "GTASA"],
+  "gta-vi": ["GTAVI"]
+};
+
+const weaponPageAliasesByName = {
+  "ak 47": ["AK47"],
+  "automatic 9mm": ["Automatic 9mm"],
+  "car bomb": ["Car Bomb"],
+  "dual pistol": ["Pistol (2D Universe)"],
+  "fist": ["Melee Attack", "Fists"],
+  "heat seeking rocket launcher": ["Heat-Seeking Rocket Launcher"],
+  "micro smg": ["Micro SMG (3D Universe)", "Micro SMG (HD Universe)"],
+  "molotov cocktails": ["Molotov Cocktails"],
+  "pistol 44": ["Pistol .44"],
+  "s uzi machine gun": ["Machine Gun (2D Universe)", "Uzi"],
+  "satchel charges": ["Satchel Charges"],
+  "sawn off shotgun": ["Sawn-Off Shotgun"],
+  "silenced 9mm": ["Silenced 9mm"],
+  "sticky bombs": ["Sticky Bombs", "Sticky Bomb"],
+  "tec9": ["Tec9"],
+  "up n atomizer": ["Up-n-Atomizer"]
+};
+
+const contextualWeaponMedia = (item, weapon) => {
+  if (!weapon?.media) return null;
+  return {
+    ...weapon.media,
+    alt: `Imagem contextual relacionada a ${weaponItemName(item)}`,
+    caption: `${weapon.media.caption || "GTA Wiki"} - contexto visual`
+  };
+};
+
+const weaponPageCandidatesForItem = (item, weapon) => {
+  const name = weaponItemName(item);
+  const pageTitle = weaponItemPageTitle(item);
+  const suffix = vehicleUniversePageSuffix(weapon);
+  const aliases = weaponPageAliasesByName[normalizeText(name)] || [];
+  return [...new Set([
+    pageTitle,
+    name,
+    suffix ? `${name} (${suffix})` : "",
+    ...aliases
+  ].filter(Boolean))];
+};
+
+const weaponFileStemCandidates = (name = "", seen = new Set()) => {
+  const ascii = String(name).normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const key = normalizeText(ascii);
+  if (seen.has(key)) return [];
+  seen.add(key);
+  const aliases = weaponPageAliasesByName[key] || [];
+  return [...new Set([
+    ascii.replace(/\.44/g, "44").replace(/[^a-z0-9-]/gi, ""),
+    ascii.replace(/\.44/g, "44").replace(/[^a-z0-9]/gi, ""),
+    ascii.replace(/\s+/g, "").replace(/[^a-z0-9-]/gi, ""),
+    ...aliases.flatMap((alias) => weaponFileStemCandidates(alias, seen))
+  ].filter(Boolean))];
+};
+
+const weaponFileCandidatesForItem = (item, weapon) => {
+  const codes = weaponImageNeedlesByGameId[weapon?.id] || [];
+  const stems = weaponFileStemCandidates(weaponItemName(item));
+  const suffixes = [".png", ".jpg", "-icon.png", "-Icon.png", "-HUD.png", "-HUDIcon.png", "-HUDicon.png", "-PS2-icon.png", "-PickupIcon.png", "-RSCStats.PNG"];
+  const candidates = [];
+  stems.forEach((stem) => {
+    codes.forEach((code) => {
+      suffixes.forEach((suffix) => candidates.push(`File:${stem}-${code}${suffix}`));
+    });
+  });
+  return [...new Set(candidates)];
+};
+
+const weaponImageScore = (fileTitle = "", item, weapon) => {
+  const title = normalizeText(fileTitle);
+  if (/site logo|invisiblehero|blips|location|locationsmap|map|poster|advert|variant|scope|suppressor|grip|mag|dashboard|badge/.test(title)) return -100;
+  let score = 0;
+  const needles = weaponImageNeedlesByGameId[weapon?.id] || [];
+  needles.forEach((needle) => {
+    if (title.includes(normalizeText(needle))) score += 80;
+  });
+  const stem = normalizeText(weaponItemName(item));
+  const compactStem = normalizeText(weaponItemName(item).replace(/[^a-z0-9]/gi, ""));
+  if (stem && title.includes(stem)) score += 35;
+  if (compactStem && title.includes(compactStem)) score += 35;
+  if (/icon|hud|model|holding|aiming|rgsc|rscstats|ingame|pickup/.test(title)) score += 14;
+  if (/png|jpg|jpeg/.test(title)) score += 3;
+  return score;
+};
+
+const loadWeaponPageMediaMap = async (titles) => {
+  const uniqueTitles = [...new Set(titles.filter(Boolean))];
+  const mediaByTitle = new Map();
+  await Promise.all(chunkVehicleTitles(uniqueTitles).map(async (chunk) => {
+    const data = await fetch(vehicleApiUrl({
+      action: "query",
+      prop: "pageimages",
+      piprop: "thumbnail",
+      pithumbsize: "360",
+      redirects: "1",
+      titles: chunk.join("|")
+    })).then((response) => response.json());
+    const redirectsToPage = new Map();
+    asList(data?.query?.redirects).forEach((redirect) => {
+      const target = normalizeText(redirect.to);
+      if (!redirectsToPage.has(target)) redirectsToPage.set(target, []);
+      redirectsToPage.get(target).push(redirect.from);
+    });
+    Object.values(data?.query?.pages || {}).forEach((page) => {
+      const src = page?.thumbnail?.source;
+      if (!src) return;
+      const media = weaponMediaFromSource(page.title, page.title, src);
+      mediaByTitle.set(normalizeText(page.title), media);
+      asList(redirectsToPage.get(normalizeText(page.title))).forEach((from) => {
+        mediaByTitle.set(normalizeText(from), media);
+      });
+    });
+  }));
+  return mediaByTitle;
+};
+
+const loadWeaponFileMediaMap = async (fileTitles) => {
+  const uniqueTitles = [...new Set(fileTitles.filter(Boolean))];
+  const mediaByFile = new Map();
+  await Promise.all(chunkVehicleTitles(uniqueTitles).map(async (chunk) => {
+    const data = await fetch(vehicleApiUrl({
+      action: "query",
+      prop: "imageinfo",
+      iiprop: "url",
+      iiurlwidth: "360",
+      titles: chunk.join("|")
+    })).then((response) => response.json());
+    Object.values(data?.query?.pages || {}).forEach((page) => {
+      const src = page?.imageinfo?.[0]?.thumburl || page?.imageinfo?.[0]?.url;
+      if (!src) return;
+      mediaByFile.set(normalizeText(page.title), weaponMediaFromSource(page.title.replace(/^File:/i, ""), page.title, src));
+    });
+  }));
+  return mediaByFile;
+};
+
+const loadWeaponGalleryMediaByItem = async (items, weapon) => {
+  const titles = [...new Set(items.flatMap((item) => weaponPageCandidatesForItem(item, weapon)).filter(Boolean))];
+  const itemByTitle = new Map();
+  items.forEach((item) => {
+    weaponPageCandidatesForItem(item, weapon).forEach((title) => itemByTitle.set(normalizeText(title), item));
+  });
+  const chosenFileByItem = new Map();
+  await Promise.all(chunkVehicleTitles(titles).map(async (chunk) => {
+    const data = await fetch(vehicleApiUrl({
+      action: "query",
+      prop: "images",
+      imlimit: "80",
+      redirects: "1",
+      titles: chunk.join("|")
+    })).then((response) => response.json());
+    const redirectsToPage = new Map();
+    asList(data?.query?.redirects).forEach((redirect) => {
+      const target = normalizeText(redirect.to);
+      if (!redirectsToPage.has(target)) redirectsToPage.set(target, []);
+      redirectsToPage.get(target).push(redirect.from);
+    });
+    Object.values(data?.query?.pages || {}).forEach((page) => {
+      const item =
+        itemByTitle.get(normalizeText(page.title)) ||
+        asList(redirectsToPage.get(normalizeText(page.title))).map((from) => itemByTitle.get(normalizeText(from))).find(Boolean);
+      if (!item) return;
+      const images = asList(page.images).map((image) => image.title).filter(Boolean);
+      const best = images
+        .map((title) => ({ title, score: weaponImageScore(title, item, weapon) }))
+        .filter((entry) => entry.score > 0)
+        .sort((a, b) => b.score - a.score)[0];
+      if (best) chosenFileByItem.set(weaponItemKey(item), best.title);
+    });
+  }));
+  const fileMedia = await loadWeaponFileMediaMap([...chosenFileByItem.values()]);
+  const mediaByItem = new Map();
+  chosenFileByItem.forEach((fileTitle, itemKey) => {
+    if (fileMedia.has(normalizeText(fileTitle))) mediaByItem.set(itemKey, fileMedia.get(normalizeText(fileTitle)));
+  });
+  return mediaByItem;
+};
+
+const loadWeaponHeuristicMediaByItem = async (items, weapon) => {
+  const candidateByItem = new Map();
+  const allCandidates = [];
+  items.forEach((item) => {
+    const candidates = weaponFileCandidatesForItem(item, weapon);
+    candidateByItem.set(weaponItemKey(item), candidates);
+    allCandidates.push(...candidates);
+  });
+  const fileMedia = await loadWeaponFileMediaMap(allCandidates);
+  const mediaByItem = new Map();
+  items.forEach((item) => {
+    const found = asList(candidateByItem.get(weaponItemKey(item))).find((candidate) => fileMedia.has(normalizeText(candidate)));
+    if (!found) return;
+    const media = fileMedia.get(normalizeText(found));
+    mediaByItem.set(weaponItemKey(item), {
+      ...media,
+      alt: `Imagem de ${weaponItemName(item)}`,
+      source: weaponWikiPageUrl(weaponItemPageTitle(item)),
+      caption: `GTA Wiki - ${weaponItemName(item)}`
+    });
+  });
+  return mediaByItem;
+};
+
+const hydrateWeaponGroupMedia = async (groups, weapon) => {
+  const items = groups.flatMap((group) => asList(group.items));
+  const fileMedia = await loadWeaponFileMediaMap(items.map((item) => item?.imageTitle));
+  const galleryMedia = await loadWeaponGalleryMediaByItem(items, weapon);
+  const pageMedia = await loadWeaponPageMediaMap(items.flatMap((item) => weaponPageCandidatesForItem(item, weapon)));
+  const missingAfterKnown = items.filter((item) =>
+    !weaponItemMedia(item) &&
+    !fileMedia.get(normalizeText(item?.imageTitle || "")) &&
+    !galleryMedia.get(weaponItemKey(item)) &&
+    !weaponPageCandidatesForItem(item, weapon).some((candidate) => pageMedia.get(normalizeText(candidate)))
+  );
+  const heuristicMedia = await loadWeaponHeuristicMediaByItem(missingAfterKnown, weapon);
+  return groups.map((group) => ({
+    ...group,
+    items: asList(group.items).map((item) => {
+      const normalizedItem = typeof item === "string" ? { name: item, pageTitle: item } : item;
+      const media =
+        weaponItemMedia(normalizedItem) ||
+        fileMedia.get(normalizeText(normalizedItem.imageTitle || "")) ||
+        galleryMedia.get(weaponItemKey(normalizedItem)) ||
+        heuristicMedia.get(weaponItemKey(normalizedItem)) ||
+        weaponPageCandidatesForItem(normalizedItem, weapon).map((candidate) => pageMedia.get(normalizeText(candidate))).find(Boolean) ||
+        contextualWeaponMedia(normalizedItem, weapon);
+      return { ...normalizedItem, media };
+    })
+  }));
+};
+
 const loadWeaponCategoryGroup = async (categoryTitle) => {
-  const names = [];
+  const items = new Map();
   let cmcontinue = "";
   do {
     const data = await fetch(vehicleApiUrl({
       action: "query",
-      list: "categorymembers",
-      cmtitle: categoryTitle,
-      cmnamespace: "0",
-      cmlimit: "500",
-      ...(cmcontinue ? { cmcontinue } : {})
+      generator: "categorymembers",
+      gcmtitle: categoryTitle,
+      gcmnamespace: "0",
+      gcmlimit: "500",
+      prop: "pageimages",
+      piprop: "thumbnail",
+      pithumbsize: "360",
+      ...(cmcontinue ? { gcmcontinue: cmcontinue } : {})
     })).then((response) => response.json());
-    const members = data?.query?.categorymembers || [];
-    members.forEach((member) => {
-      const title = normalizeWeaponTitle(member.title);
-      if (title && !/^Weapons in/i.test(title)) names.push(title);
+    Object.values(data?.query?.pages || {}).forEach((page) => {
+      const title = normalizeWeaponTitle(page.title);
+      if (!title || /^Weapons in/i.test(title)) return;
+      const item = {
+        name: title,
+        pageTitle: page.title,
+        media: weaponMediaFromSource(title, page.title, page.thumbnail?.source)
+      };
+      items.set(weaponItemKey(item), item);
     });
-    cmcontinue = data?.continue?.cmcontinue || "";
+    cmcontinue = data?.continue?.gcmcontinue || "";
   } while (cmcontinue);
-  return [{ label: "Lista completa", items: [...new Set(names)].sort((a, b) => a.localeCompare(b, "pt-BR")) }];
+  return [{ label: "Lista completa", items: [...items.values()].sort((a, b) => weaponItemName(a).localeCompare(weaponItemName(b), "pt-BR")) }];
 };
 
 const loadWeaponGroups = async (weapon) => {
@@ -1531,6 +1861,7 @@ const loadWeaponGroups = async (weapon) => {
     groups = parseWeaponWikitext(data?.parse?.wikitext?.["*"] || "");
   }
   if (!groups.length && weapon.fallbackGroups) groups = weapon.fallbackGroups;
+  groups = await hydrateWeaponGroupMedia(groups, weapon);
   weaponGroupCache.set(cacheKey, groups);
   return groups;
 };
@@ -2413,6 +2744,51 @@ const VehicleGroupsPanel = ({ groups, query }) => {
   );
 };
 
+const WeaponGroupsPanel = ({ groups, query }) => {
+  const normalizedQuery = normalizeText(query);
+  const visibleGroups = groups
+    .map((group) => ({
+      ...group,
+      items: asList(group.items).filter((weapon) => !normalizedQuery || normalizeText(weaponItemName(weapon)).includes(normalizedQuery))
+    }))
+    .filter((group) => group.items.length);
+  const visibleCount = visibleGroups.reduce((sum, group) => sum + group.items.length, 0);
+
+  if (!visibleGroups.length) {
+    return <div className="dossier-weapon-empty">Nenhuma arma encontrada nesse filtro.</div>;
+  }
+
+  return (
+    <div className="dossier-weapon-groups">
+      <div className="dossier-weapon-group-total">{visibleCount} itens exibidos</div>
+      {visibleGroups.map((group, index) => (
+        <details key={group.label} className="dossier-weapon-group" open={index < 3 || Boolean(query)}>
+          <summary><span>{group.label}</span><strong>{group.items.length}</strong></summary>
+          <div className="dossier-weapon-name-grid">
+            {group.items.map((weapon) => {
+              const name = weaponItemName(weapon);
+              const media = weaponItemMedia(weapon);
+              const source = media?.source || weaponWikiPageUrl(weaponItemPageTitle(weapon));
+              return (
+                <a className={`dossier-weapon-model-card ${media ? "has-media" : ""}`} href={source} target="_blank" rel="noreferrer" key={`${group.label}-${weaponItemKey(weapon)}`}>
+                  <span className="dossier-weapon-model-thumb">
+                    {media?.src ? (
+                      <img src={media.src} alt={media.alt || `Imagem de ${name}`} loading="lazy" referrerPolicy="no-referrer" />
+                    ) : (
+                      <span className="dossier-weapon-model-placeholder"><DossierIcon type="weapon" /> imagem pendente</span>
+                    )}
+                  </span>
+                  <strong>{name}</strong>
+                </a>
+              );
+            })}
+          </div>
+        </details>
+      ))}
+    </div>
+  );
+};
+
 const VehicleDossierModalContent = ({ item }) => {
   const [groups, setGroups] = React.useState(item.fallbackGroups || []);
   const [query, setQuery] = React.useState("");
@@ -2734,7 +3110,7 @@ const WeaponDossierModalContent = ({ item }) => {
           </span>
         </div>
         {error && <p className="dossier-weapon-error">{error}</p>}
-        <VehicleGroupsPanel groups={groups} query={query} />
+        <WeaponGroupsPanel groups={groups} query={query} />
       </ModalField>
       {item.relatedWeaponFiles && (
         <ModalField label="Arsenais herdados"><DossierChips items={item.relatedWeaponFiles} limit={10} /></ModalField>
