@@ -677,6 +677,57 @@ const UniversesDossierSection = () => (
   </section>
 );
 
+const RockstarPeopleGrid = () => (
+  <div className="dossier-rockstar-people">
+    <DossierSectionHead
+      eyebrow="Arquivo de pessoas"
+      title="Criadores, produtores e desenvolvedores"
+      accent="var(--neon)"
+      right={`${rockstarPeopleData.length} perfis com fotos reais e fontes`}
+    />
+    <div className="dossier-people-grid">
+      {rockstarPeopleData.map((person) => (
+        <article id={`people-${person.id}`} key={person.id} className="card dossier-person-card">
+          <Corners />
+          <div className={`dossier-person-photo ${person.media ? "has-official" : ""}`}>
+            {person.media ? (
+              <OfficialMedia media={person.media} className="dossier-person-media" />
+            ) : (
+              <div className="dossier-person-fallback">
+                <strong>{initialsOf(person.name)}</strong>
+                <small>foto nao confirmada</small>
+              </div>
+            )}
+            <span>{person.era}</span>
+          </div>
+          <div className="dossier-card-body">
+            <div className="dossier-card-kicker">{person.role}</div>
+            <h3>{person.name}</h3>
+            <p>{person.summary}</p>
+            <div className="dossier-person-meta">
+              <span><strong>Base</strong>{person.city}</span>
+              <span><strong>Jogos</strong>{asList(person.games).slice(0, 4).join(" / ")}</span>
+            </div>
+            <details className="dossier-details">
+              <summary>Contribuicoes no dossie</summary>
+              <BulletList items={person.contributions} />
+            </details>
+            <DossierChips items={person.tags} limit={6} />
+            <SourceLinks items={person.sources} />
+          </div>
+        </article>
+      ))}
+    </div>
+    <div className="card dossier-note-card dossier-people-note">
+      <Corners />
+      <strong>Nota editorial:</strong>
+      <span>
+        Steve Hammond, Russell Kay, Keith Hamilton e Scott Johnston continuam citados no contexto historico da DMA quando relevantes. Nao forcei cards individuais para eles porque nao encontrei uma foto publica confiavel e diretamente rastreavel para usar como retrato.
+      </span>
+    </div>
+  </div>
+);
+
 const RockstarDossierSection = () => (
   <section id="rockstar" className="dossier-section dossier-shell alt">
     <div className="wrap">
@@ -705,6 +756,16 @@ const RockstarDossierSection = () => (
           <div className="dossier-card-kicker">Fundadores da Rockstar Games</div>
           <h3>Sam Houser, Dan Houser, Terry Donovan, Jamie King e Gary Foreman</h3>
           <OfficialMedia media={rockstarHistoryData.find((item) => item.title.includes("Rockstar North"))?.media} className="dossier-founder-media" />
+          <div className="dossier-founder-faces">
+            {rockstarPeopleData
+              .filter((person) => asList(person.tags).includes("fundador"))
+              .map((person) => (
+                <a key={person.id} href={`#people-${person.id}`} title={person.name}>
+                  <img src={person.media.src} alt={person.name} loading="lazy" referrerPolicy="no-referrer" />
+                  <span>{person.name.split(" ")[0]}</span>
+                </a>
+              ))}
+          </div>
           <p>
             A Rockstar nasce em 1998 como selo da Take-Two depois da aquisição de ativos da BMG Interactive. A antiga DMA Design, depois Rockstar North, se torna o principal motor criativo e técnico de GTA.
           </p>
@@ -717,6 +778,7 @@ const RockstarDossierSection = () => (
           </p>
         </aside>
       </div>
+      <RockstarPeopleGrid />
     </div>
   </section>
 );

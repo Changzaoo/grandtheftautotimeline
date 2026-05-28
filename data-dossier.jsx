@@ -3329,6 +3329,8 @@ const officialMediaData = {
     { label: "GTA Online - pagina oficial", url: rsgOnlineSource, note: "Imagens de atualizacoes e plataforma online." },
     { label: "GTA Trilogy - pagina oficial", url: rsgTrilogySource, note: "Artes e screenshots da trilogia 3D remasterizada." },
     { label: "GTA Wiki / Fandom - personagens e locais", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_Wiki", note: "Imagens de referencia para fichas de personagens, cidades e estados quando a pagina oficial nao entrega retrato especifico." },
+    { label: "GTA Wiki / Fandom - perfis de criadores", url: "https://gta.fandom.com/wiki/Category:Developers", note: "Fotos publicas e perfis de criadores, produtores, diretores e desenvolvedores ligados a GTA." },
+    { label: "Wikimedia Commons - fotos historicas", url: "https://commons.wikimedia.org/", note: "Fotos de David Jones e Mike Dailly usadas com credito de fonte." },
     { label: "Paginas oficiais dos jogos Rockstar", url: rsgGamesSource, note: "Screenshots oficiais de GTA 1, GTA 2, GTA III, Vice City, San Andreas, LCS, VCS, GTA IV, EFLC e Chinatown Wars." }
   ]
 };
@@ -3350,6 +3352,16 @@ const gtaWikiImage = (page, src, options = {}) => ({
   source: gtaWikiPage(page),
   caption: `GTA Wiki - ${page}`,
   credit: gtaWikiCredit,
+  ...options
+});
+
+const realPersonCredit = "Foto publica usada com credito e link para a fonte indicada.";
+const realPersonImage = (name, src, source, caption = name, options = {}) => ({
+  src,
+  alt: `Foto de ${name}`,
+  source,
+  caption,
+  credit: realPersonCredit,
   ...options
 });
 
@@ -3581,6 +3593,381 @@ const rockstarHistoryMedia = [
   gtaWikiGameMediaById["gta-vi"]
 ];
 
+const rockstarPeopleData = [
+  {
+    id: "david-jones",
+    name: "David Jones",
+    role: "Fundador da DMA Design, criador e produtor",
+    era: "DMA / Origem",
+    city: "Dundee",
+    media: realPersonImage(
+      "David Jones",
+      "https://upload.wikimedia.org/wikipedia/commons/c/c4/David_Jones%2C_Gamelab_2018_%28cropped%29.jpg",
+      "https://commons.wikimedia.org/wiki/File:David_Jones,_Gamelab_2018_(cropped).jpg",
+      "Wikimedia Commons - David Jones",
+      { position: "center 18%" }
+    ),
+    summary:
+      "Figura central do nascimento da DMA Design em Dundee. Antes de GTA existir, Jones ja tinha transformado a DMA em um estudio respeitado com Lemmings; depois, ajudou a conduzir a ideia que se tornaria Grand Theft Auto.",
+    contributions: [
+      "Fundou a DMA Design no fim dos anos 1980, em Dundee, Escocia.",
+      "Ajudou a construir a cultura tecnica que gerou Lemmings, Menace, Blood Money e, mais tarde, GTA.",
+      "Co-criador associado a Grand Theft Auto ao lado de Mike Dailly e da equipe da DMA.",
+      "Representa a ponte entre a cena britanica de microcomputadores, a ambicao de cidades simuladas e o futuro da Rockstar North."
+    ],
+    games: ["Lemmings", "Grand Theft Auto", "Body Harvest"],
+    tags: ["criador", "DMA Design", "produtor", "Dundee"],
+    sources: [
+      { label: "Wikipedia - David Jones", url: "https://en.wikipedia.org/wiki/David_Jones_(video_game_developer)" },
+      { label: "GTA Wiki - David Jones", url: "https://gta.fandom.com/wiki/David_Jones" },
+      { label: "Rockstar North", url: "https://en.wikipedia.org/wiki/Rockstar_North" }
+    ]
+  },
+  {
+    id: "mike-dailly",
+    name: "Mike Dailly",
+    role: "Programador, designer e prototipador",
+    era: "DMA / Race'n'Chase",
+    city: "Dundee",
+    media: realPersonImage(
+      "Mike Dailly",
+      "https://upload.wikimedia.org/wikipedia/commons/e/e5/Mike_Dailly%2C_2011.jpg",
+      "https://commons.wikimedia.org/wiki/File:Mike_Dailly,_2011.jpg",
+      "Wikimedia Commons - Mike Dailly",
+      { position: "center 18%" }
+    ),
+    summary:
+      "Um dos nomes mais importantes da fase inicial da DMA. E frequentemente citado como designer de Lemmings e criador do prototipo original que levaria a Grand Theft Auto, quando a ideia ainda orbitava Race'n'Chase.",
+    contributions: [
+      "Foi um dos primeiros funcionarios da DMA Design.",
+      "Trabalhou em Lemmings, marco que deu reputacao internacional ao estudio.",
+      "Criou prototipos e tecnologia ligados ao conceito original de Grand Theft Auto.",
+      "Ajuda a explicar por que GTA nasceu primeiro como sistema urbano e so depois ganhou a forma de saga criminal cinematografica."
+    ],
+    games: ["Lemmings", "Race'n'Chase", "Grand Theft Auto"],
+    tags: ["criador", "programacao", "prototipo", "DMA Design"],
+    sources: [
+      { label: "Wikipedia - Mike Dailly", url: "https://en.wikipedia.org/wiki/Mike_Dailly_(game_designer)" },
+      { label: "GTA Wiki - Mike Dailly", url: "https://gta.fandom.com/wiki/Mike_Dailly" },
+      { label: "Grand Theft Wiki - Race'n'Chase", url: "https://www.grandtheftwiki.com/Race%27n%27Chase" }
+    ]
+  },
+  {
+    id: "sam-houser",
+    name: "Sam Houser",
+    role: "Co-fundador e presidente da Rockstar Games",
+    era: "Rockstar / Branding",
+    city: "Nova York",
+    media: realPersonImage(
+      "Sam Houser",
+      "https://static.wikia.nocookie.net/gtawiki/images/a/ad/SamHouser-President.png/revision/latest?cb=20220802102226",
+      "https://gta.fandom.com/wiki/Sam_Houser",
+      "GTA Wiki - Sam Houser",
+      { position: "center 18%" }
+    ),
+    summary:
+      "O nome mais associado ao comando publico da Rockstar. Vindo da BMG Interactive, Sam Houser ajudou a transformar GTA de jogo transgressor em uma franquia de escala cultural, com identidade de musica, cinema, satira e marketing.",
+    contributions: [
+      "Co-fundou a Rockstar Games em 1998 com Dan Houser, Terry Donovan, Jamie King e Gary J. Foreman.",
+      "Foi um dos defensores do potencial de GTA dentro da estrutura BMG/Take-Two.",
+      "Consolidou a Rockstar como selo autoral, com controle forte de tom, trilha, campanha e postura publica.",
+      "Supervisionou a passagem de GTA III, era 3D, era HD, GTA V, GTA Online e o caminho ate GTA VI."
+    ],
+    games: ["GTA III", "Vice City", "San Andreas", "GTA IV", "GTA V", "GTA Online", "GTA VI"],
+    tags: ["fundador", "presidente", "Rockstar Games", "producao"],
+    sources: [
+      { label: "GTA Wiki - Sam Houser", url: "https://gta.fandom.com/wiki/Sam_Houser" },
+      { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" },
+      { label: "Take-Two Interactive", url: "https://en.wikipedia.org/wiki/Take-Two_Interactive" }
+    ]
+  },
+  {
+    id: "dan-houser",
+    name: "Dan Houser",
+    role: "Co-fundador, escritor e produtor criativo",
+    era: "Rockstar / Narrativa",
+    city: "Nova York",
+    media: realPersonImage(
+      "Dan Houser",
+      "https://static.wikia.nocookie.net/gtawiki/images/1/1e/DanHouser-VicePresident.jpg/revision/latest?cb=20220802102607",
+      "https://gta.fandom.com/wiki/Dan_Houser",
+      "GTA Wiki - Dan Houser",
+      { position: "center 16%" }
+    ),
+    summary:
+      "Foi uma das vozes centrais da escrita da Rockstar durante a fase em que GTA virou satira de massa. Seu trabalho ajuda a explicar o dialogo agressivo, as radios, os personagens contraditorios e o olhar acido sobre os EUA.",
+    contributions: [
+      "Co-fundou a Rockstar Games e atuou como vice-presidente criativo por muitos anos.",
+      "Teve papel importante em roteiro, dialogo e tom satirico em GTA e Red Dead.",
+      "Ajudou a transformar cidades em ambientes narrativos cheios de radio, propaganda, televisao e cultura pop falsa.",
+      "Saiu da Rockstar em 2020, encerrando uma das fases editoriais mais marcantes do estudio."
+    ],
+    games: ["GTA III", "Vice City", "San Andreas", "GTA IV", "GTA V", "Red Dead Redemption"],
+    tags: ["fundador", "roteiro", "satira", "producao criativa"],
+    sources: [
+      { label: "GTA Wiki - Dan Houser", url: "https://gta.fandom.com/wiki/Dan_Houser" },
+      { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" },
+      { label: "Take-Two - saida de Dan Houser", url: "https://ir.take2games.com/news-releases/news-release-details/rockstar-games-announces-dan-housers-departure" }
+    ]
+  },
+  {
+    id: "terry-donovan",
+    name: "Terry Donovan",
+    role: "Co-fundador e executivo da Rockstar",
+    era: "Rockstar / Negocios",
+    city: "Nova York",
+    media: realPersonImage(
+      "Terry Donovan",
+      "https://static.wikia.nocookie.net/gtawiki/images/e/e8/TerryDonovan-Director.png/revision/latest?cb=20220719203846",
+      "https://gta.fandom.com/wiki/Terry_Donovan",
+      "GTA Wiki - Terry Donovan",
+      { position: "center 16%" }
+    ),
+    summary:
+      "Parte do grupo fundador que deu forma empresarial a Rockstar Games. Sua importancia esta na montagem do selo, na operacao de publicacao e na aproximacao entre jogo, musica, clubes e cultura urbana.",
+    contributions: [
+      "Co-fundou a Rockstar Games em 1998.",
+      "Atuou em funcoes executivas durante a consolidacao da marca.",
+      "Participou do periodo em que GTA passou de franquia controversa para evento global.",
+      "Representa a dimensao de negocios e cultura pop que diferenciou a Rockstar de uma publicadora tradicional."
+    ],
+    games: ["GTA III", "Vice City", "San Andreas", "GTA IV"],
+    tags: ["fundador", "executivo", "publicacao", "Rockstar Games"],
+    sources: [
+      { label: "GTA Wiki - Terry Donovan", url: "https://gta.fandom.com/wiki/Terry_Donovan" },
+      { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" }
+    ]
+  },
+  {
+    id: "jamie-king",
+    name: "Jamie King",
+    role: "Co-fundador e lideranca de producao",
+    era: "Rockstar / Producao",
+    city: "Nova York",
+    media: realPersonImage(
+      "Jamie King",
+      "https://static.wikia.nocookie.net/gtawiki/images/e/e6/JamieKing-Director.jpg/revision/latest?cb=20220720201027",
+      "https://gta.fandom.com/wiki/Jamie_King",
+      "GTA Wiki - Jamie King",
+      { position: "center 18%" }
+    ),
+    summary:
+      "Um dos cinco fundadores da Rockstar. Teve papel na estruturacao de producao e tecnologia da empresa em sua fase de crescimento, antes de sair e participar da fundacao da 4mm Games.",
+    contributions: [
+      "Co-fundou a Rockstar Games junto aos Housers, Terry Donovan e Gary J. Foreman.",
+      "Ajudou a escalar a operacao da Rockstar no periodo GTA III, Vice City e San Andreas.",
+      "Foi citado, ao lado de Gary Foreman, como participante de franquias como GTA, Midnight Club, Max Payne e Bully.",
+      "Depois da Rockstar, fundou a 4mm Games com Gary Foreman e outros executivos."
+    ],
+    games: ["GTA III", "Vice City", "San Andreas", "Midnight Club", "Bully"],
+    tags: ["fundador", "producao", "tecnologia", "Rockstar Games"],
+    sources: [
+      { label: "GTA Wiki - Jamie King", url: "https://gta.fandom.com/wiki/Jamie_King" },
+      { label: "GameSpot - 4mm Games", url: "https://www.gamespot.com/articles/rockstar-founders-load-4mm/1100-6210102/" },
+      { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" }
+    ]
+  },
+  {
+    id: "gary-foreman",
+    name: "Gary J. Foreman",
+    role: "Co-fundador e produtor",
+    era: "Rockstar / Tecnologia",
+    city: "Nova York",
+    media: realPersonImage(
+      "Gary J. Foreman",
+      "https://static.wikia.nocookie.net/gtawiki/images/b/bd/GaryForeman-Producer.png/revision/latest?cb=20240904075034",
+      "https://gta.fandom.com/wiki/Gary_J._Foreman",
+      "GTA Wiki - Gary J. Foreman",
+      { position: "center 18%" }
+    ),
+    summary:
+      "O fundador menos lembrado pelo grande publico, mas essencial na formacao inicial da Rockstar. E citado em registros historicos como um dos cinco fundadores e depois aparece ligado a funcoes tecnicas e de producao fora da empresa.",
+    contributions: [
+      "Co-fundou a Rockstar Games em 1998.",
+      "Participou da fase que transformou a marca em uma estrutura de publicacao global.",
+      "Foi associado a contribuicoes em GTA, Midnight Club, Max Payne e Bully em cobertura sobre sua saida para a 4mm Games.",
+      "A presenca dele no dossie corrige a tendencia comum de reduzir a fundacao da Rockstar apenas aos irmaos Houser."
+    ],
+    games: ["GTA", "Midnight Club", "Max Payne", "Bully"],
+    tags: ["fundador", "produtor", "tecnologia", "Rockstar Games"],
+    sources: [
+      { label: "GTA Wiki - Gary J. Foreman", url: "https://gta.fandom.com/wiki/Gary_J._Foreman" },
+      { label: "GameSpot - 4mm Games", url: "https://www.gamespot.com/articles/rockstar-founders-load-4mm/1100-6210102/" },
+      { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" }
+    ]
+  },
+  {
+    id: "leslie-benzies",
+    name: "Leslie Benzies",
+    role: "Produtor e ex-presidente da Rockstar North",
+    era: "Rockstar North / Escala",
+    city: "Edimburgo",
+    media: realPersonImage(
+      "Leslie Benzies",
+      "https://static.wikia.nocookie.net/gtawiki/images/1/17/LeslieBenzies-RockstarNorth.png/revision/latest/scale-to-width-down/900?cb=20220729163459",
+      "https://gta.fandom.com/wiki/Leslie_Benzies",
+      "GTA Wiki - Leslie Benzies",
+      { position: "center 16%" }
+    ),
+    summary:
+      "Produtor-chave da fase em que a antiga DMA virou Rockstar North e GTA se tornou uma maquina de mundo aberto. Benzies e associado a GTA III, Vice City, San Andreas, GTA IV e GTA V.",
+    contributions: [
+      "Entrou na DMA/Rockstar North antes da explosao global da serie.",
+      "Teve papel central na producao de GTA III, jogo que redefiniu o modelo moderno de mundo aberto.",
+      "Ajudou a coordenar a escalada tecnica e produtiva da era 3D para a era HD.",
+      "Sua saida apos GTA V marcou o fim de uma fase importante da lideranca historica da Rockstar North."
+    ],
+    games: ["GTA III", "Vice City", "San Andreas", "GTA IV", "GTA V"],
+    tags: ["produtor", "Rockstar North", "mundo aberto", "era 3D"],
+    sources: [
+      { label: "GTA Wiki - Leslie Benzies", url: "https://gta.fandom.com/wiki/Leslie_Benzies" },
+      { label: "Wikipedia - Leslie Benzies", url: "https://en.wikipedia.org/wiki/Leslie_Benzies" },
+      { label: "GTA III", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto_III" }
+    ]
+  },
+  {
+    id: "aaron-garbut",
+    name: "Aaron Garbut",
+    role: "Diretor de arte e diretor de mundo",
+    era: "Rockstar North / Cidades",
+    city: "Edimburgo",
+    media: realPersonImage(
+      "Aaron Garbut",
+      "https://static.wikia.nocookie.net/gtawiki/images/1/14/AaronGarbut-ArtDirector.jpg/revision/latest?cb=20220630180837",
+      "https://gta.fandom.com/wiki/Aaron_Garbut",
+      "GTA Wiki - Aaron Garbut",
+      { position: "center 18%" }
+    ),
+    summary:
+      "Nome fundamental para a identidade visual das cidades da Rockstar. Garbut e associado ao desenho de mundos que parecem observados, documentados e satirizados ao mesmo tempo.",
+    contributions: [
+      "Trabalhou na construcao visual de cidades como Liberty City, Vice City, San Andreas e Los Santos.",
+      "Ajudou a definir a linguagem de mapa urbano, arquitetura, bairro, luz e atmosfera da serie.",
+      "E uma das figuras que explicam por que cada GTA moderno parece uma cidade-personagem.",
+      "Na fase HD, sua area se torna ainda mais importante: detalhe ambiental, escala, fotografia e leitura urbana passam a ser narrativa."
+    ],
+    games: ["GTA III", "Vice City", "San Andreas", "GTA IV", "GTA V", "GTA VI"],
+    tags: ["arte", "mundo aberto", "cidades", "Rockstar North"],
+    sources: [
+      { label: "GTA Wiki - Aaron Garbut", url: "https://gta.fandom.com/wiki/Aaron_Garbut" },
+      { label: "Rockstar North", url: "https://en.wikipedia.org/wiki/Rockstar_North" }
+    ]
+  },
+  {
+    id: "obbe-vermeij",
+    name: "Obbe Vermeij",
+    role: "Programador e diretor tecnico",
+    era: "Rockstar North / Tecnologia",
+    city: "Edimburgo",
+    media: realPersonImage(
+      "Obbe Vermeij",
+      "https://static.wikia.nocookie.net/gtawiki/images/9/9c/ObbeVermeij-Director.png/revision/latest/scale-to-width-down/732?cb=20220729174646",
+      "https://gta.fandom.com/wiki/Obbe_Vermeij",
+      "GTA Wiki - Obbe Vermeij",
+      { position: "center 16%" }
+    ),
+    summary:
+      "Programador historico da Rockstar North, conhecido tambem por registrar memorias tecnicas em seu blog. Seu trabalho ajuda a iluminar os bastidores de streaming, sistemas urbanos e limites de hardware da era PS2.",
+    contributions: [
+      "Atuou em tecnologia e programacao durante a fase GTA III, Vice City e San Andreas.",
+      "Ajuda a explicar os compromissos tecnicos por tras de trafego, clima, streaming de mapa e comportamento urbano.",
+      "Suas anotacoes publicas viraram fonte rara sobre como a equipe pensava problemas tecnicos internamente.",
+      "Mostra que a magia da era 3D tambem veio de engenharia invisivel, nao apenas de roteiro e marketing."
+    ],
+    games: ["GTA III", "Vice City", "San Andreas", "GTA IV"],
+    tags: ["programacao", "direcao tecnica", "Rockstar North", "era PS2"],
+    sources: [
+      { label: "GTA Wiki - Obbe Vermeij", url: "https://gta.fandom.com/wiki/Obbe_Vermeij" },
+      { label: "Inside Rockstar North", url: "https://insiderockstarnorth.blogspot.com/" },
+      { label: "Rockstar North", url: "https://en.wikipedia.org/wiki/Rockstar_North" }
+    ]
+  },
+  {
+    id: "imran-sarwar",
+    name: "Imran Sarwar",
+    role: "Diretor de design e produtor",
+    era: "Rockstar / Design",
+    city: "Rockstar North",
+    media: realPersonImage(
+      "Imran Sarwar",
+      "https://static.wikia.nocookie.net/gtawiki/images/9/90/ImranSarwar-DesignDirector.png/revision/latest?cb=20220828201232",
+      "https://gta.fandom.com/wiki/Imran_Sarwar",
+      "GTA Wiki - Imran Sarwar",
+      { position: "center 18%" }
+    ),
+    summary:
+      "Lideranca de design ligada a jogos modernos da Rockstar. Seu perfil representa a fase em que GTA deixa de ser apenas missao e mapa para virar ecossistema de atividades, economia, veiculos, upgrades e assaltos.",
+    contributions: [
+      "Atuou em funcoes de design e producao em projetos da Rockstar.",
+      "E associado a decisoes de sistemas, progressao e experiencia de jogador na fase moderna.",
+      "Ajuda a conectar GTA V e GTA Online a uma leitura de design de longo prazo, com conteudo vivo e atividades persistentes.",
+      "No dossie, aparece como parte da geracao que levou a franquia para escala de servico e replay."
+    ],
+    games: ["GTA IV", "GTA V", "GTA Online", "Red Dead Redemption"],
+    tags: ["design", "producao", "GTA Online", "sistemas"],
+    sources: [
+      { label: "GTA Wiki - Imran Sarwar", url: "https://gta.fandom.com/wiki/Imran_Sarwar" },
+      { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" }
+    ]
+  },
+  {
+    id: "rob-nelson",
+    name: "Rob Nelson",
+    role: "Diretor e produtor senior",
+    era: "Rockstar / Producao global",
+    city: "Rockstar North",
+    media: realPersonImage(
+      "Rob Nelson",
+      "https://static.wikia.nocookie.net/gtawiki/images/7/72/RobNelson_2018.png/revision/latest?cb=20240417030505",
+      "https://gta.fandom.com/wiki/Rob_Nelson",
+      "GTA Wiki - Rob Nelson",
+      { position: "center 18%" }
+    ),
+    summary:
+      "Parte da lideranca moderna da Rockstar, quando a empresa passa a operar com equipes globais e producoes de escala gigantesca. E um nome importante para entender o salto de GTA V/Online para a estrutura contemporanea da empresa.",
+    contributions: [
+      "Representa a fase de producao integrada entre multiplos estudios Rockstar.",
+      "Aparece em creditos e entrevistas publicas ligadas a grandes projetos modernos da empresa.",
+      "Ajuda a contextualizar a Rockstar atual: menos estudio unico, mais rede internacional de equipes.",
+      "No site, funciona como ponte entre a historia classica de Rockstar North e a operacao global que sustenta GTA Online e GTA VI."
+    ],
+    games: ["GTA V", "GTA Online", "Red Dead Redemption 2"],
+    tags: ["producao", "lideranca", "Rockstar", "era HD"],
+    sources: [
+      { label: "GTA Wiki - Rob Nelson", url: "https://gta.fandom.com/wiki/Rob_Nelson" },
+      { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" }
+    ]
+  },
+  {
+    id: "lazlow-jones",
+    name: "Lazlow Jones",
+    role: "Roteirista, produtor de audio e personalidade de radio",
+    era: "Rockstar / Radio",
+    city: "Nova York",
+    media: realPersonImage(
+      "Lazlow Jones",
+      "https://static.wikia.nocookie.net/gtawiki/images/4/43/LazlowJones-VoiceActor.png/revision/latest?cb=20250806204421",
+      "https://gta.fandom.com/wiki/Lazlow_Jones",
+      "GTA Wiki - Lazlow Jones",
+      { position: "center 16%" }
+    ),
+    summary:
+      "Ajudou a dar voz ao GTA moderno. Radios, comerciais falsos, entrevistas absurdas, apresentadores e a propria caricatura 'Lazlow' fizeram a cidade parecer viva mesmo quando o jogador so estava dirigindo.",
+    contributions: [
+      "Trabalhou em escrita, producao de audio e radio dentro da Rockstar.",
+      "Foi uma das figuras por tras da identidade satirica das estacoes de radio.",
+      "Aparece tambem como personagem em varios jogos, misturando bastidor e ficcao.",
+      "Saiu da Rockstar em 2020, depois de uma longa fase ligada a GTA, Red Dead e a cultura sonora do estudio."
+    ],
+    games: ["GTA III", "Vice City", "San Andreas", "GTA IV", "GTA V", "GTA Online"],
+    tags: ["audio", "radio", "roteiro", "satira"],
+    sources: [
+      { label: "GTA Wiki - Lazlow Jones", url: "https://gta.fandom.com/wiki/Lazlow_Jones" },
+      { label: "Wikipedia - Lazlow Jones", url: "https://en.wikipedia.org/wiki/Lazlow_Jones" }
+    ]
+  }
+];
+
 const gtaOnlineTimelineMedia = [
   gtaWikiGameMediaById["gta-online"],
   gtaWikiImage("GTA Online: Heists", "https://static.wikia.nocookie.net/gtawiki/images/0/02/HeistsUpdate-GTAO-Artwork.jpg/revision/latest/scale-to-width-down/1200?cb=20180518131251"),
@@ -3695,6 +4082,7 @@ Object.assign(window, {
   officialMediaData,
   universeData,
   rockstarHistoryData,
+  rockstarPeopleData,
   timelineChronologicalData,
   releaseTimelineData,
   gamesData,

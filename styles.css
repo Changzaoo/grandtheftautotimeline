@@ -516,6 +516,7 @@ select:focus{
 .dossier-universe-media figcaption,
 .dossier-rockstar-media figcaption,
 .dossier-founder-media figcaption,
+.dossier-person-media figcaption,
 .dossier-online-hero-media figcaption,
 .dossier-online-update-media figcaption,
 .dossier-glossary-media figcaption,
@@ -598,8 +599,27 @@ select:focus{
 .dossier-rockstar-media{height:120px;border-radius:6px}
 .dossier-founder-panel{position:sticky;top:92px;align-self:start;padding:22px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(180deg,rgba(28,28,34,.92),rgba(15,15,19,.92))}
 .dossier-founder-media{height:180px;margin:12px 0 14px;border-radius:6px}
+.dossier-founder-faces{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:0 0 16px}
+.dossier-founder-faces a{display:grid;gap:6px;align-items:start;text-align:center;color:var(--bone-2);font-family:"Space Mono",monospace;font-size:9px;text-transform:uppercase}
+.dossier-founder-faces img{width:100%;aspect-ratio:1/1;border:1px solid rgba(245,197,24,.24);border-radius:6px;object-fit:cover;object-position:center 18%;filter:saturate(1.02) contrast(1.05)}
+.dossier-founder-faces a:hover img{border-color:var(--evidence);box-shadow:0 0 20px rgba(245,197,24,.16)}
 .dossier-founder-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:16px 0}
 .dossier-founder-grid span{padding:10px;border:1px solid rgba(245,197,24,.18);border-radius:6px;background:rgba(245,197,24,.06);color:#ffe69a;font-size:13px}
+.dossier-rockstar-people{margin-top:34px}
+.dossier-people-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.dossier-person-card{display:flex;flex-direction:column;overflow:hidden}
+.dossier-person-photo{position:relative;display:grid;place-items:center;min-height:260px;overflow:hidden;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#11151b,#09090c)}
+.dossier-person-photo.has-official::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.03),rgba(0,0,0,.14) 48%,rgba(0,0,0,.84))}
+.dossier-person-media{position:absolute;inset:0;z-index:0;border:0;border-radius:0}
+.dossier-person-media img{object-position:center 18%;filter:saturate(1.04) contrast(1.04)}
+.dossier-person-photo>span{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;padding:8px 10px;border:1px solid rgba(74,222,128,.25);border-radius:6px;background:rgba(4,7,8,.66);backdrop-filter:blur(8px);color:#c8ffd6;font-family:"Space Mono",monospace;font-size:10px;text-transform:uppercase}
+.dossier-person-fallback{display:grid;gap:8px;text-align:center;color:var(--evidence)}
+.dossier-person-fallback strong{font-size:54px;line-height:1;color:#fff}
+.dossier-person-fallback small{font-family:"Space Mono",monospace;color:var(--grit);font-size:10px;text-transform:uppercase}
+.dossier-person-meta{display:grid;grid-template-columns:1fr;gap:8px;margin:14px 0}
+.dossier-person-meta span{display:grid;gap:3px;padding:10px;border:1px solid rgba(255,255,255,.08);border-radius:6px;background:rgba(255,255,255,.025);color:var(--bone-2);font-size:12px;line-height:1.35}
+.dossier-person-meta strong{color:var(--evidence);font-family:"Space Mono",monospace;font-size:9px;text-transform:uppercase}
+.dossier-people-note{align-items:flex-start}
 
 .dossier-online-intro{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:stretch;margin-bottom:22px}
 .dossier-online-intro h3{font-size:42px;margin-bottom:10px}
@@ -680,6 +700,7 @@ select:focus{
   .dossier-games-grid,
   .dossier-character-grid,
   .dossier-faction-grid,
+  .dossier-people-grid,
   .dossier-city-grid,
   .dossier-online-timeline,
   .dossier-glossary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -722,6 +743,7 @@ select:focus{
   .dossier-games-grid,
   .dossier-character-grid,
   .dossier-faction-grid,
+  .dossier-people-grid,
   .dossier-city-grid,
   .dossier-online-timeline,
   .dossier-glossary-grid{grid-template-columns:1fr}
@@ -735,6 +757,8 @@ select:focus{
   .dossier-cover-mini{min-height:160px}
   .dossier-hero-official{height:180px}
   .dossier-mugshot.has-official{min-height:220px;border-right:0;border-bottom:1px solid var(--line)}
+  .dossier-person-photo{min-height:220px}
+  .dossier-founder-faces{grid-template-columns:repeat(5,minmax(42px,1fr))}
   .dossier-city-official,
   .dossier-city-skyline.has-official{height:170px}
   .dossier-meta-grid{grid-template-columns:1fr}
