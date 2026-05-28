@@ -455,11 +455,21 @@ select:focus{
 .dossier-segmented button.active{background:var(--evidence);color:#171000}
 .dossier-chronology{position:relative;display:grid;gap:16px}
 .dossier-chronology::before{content:"";position:absolute;left:118px;top:0;bottom:0;width:2px;background:repeating-linear-gradient(180deg,var(--siren) 0 12px,transparent 12px 22px);opacity:.55}
-.dossier-timeline-card{display:grid;grid-template-columns:180px 1fr;gap:22px;padding:18px}
+.dossier-timeline-card{display:grid;grid-template-columns:150px 230px 1fr;gap:22px;padding:18px;align-items:stretch}
 .dossier-time-pin{position:relative;display:flex;flex-direction:column;gap:6px;padding-left:14px}
 .dossier-time-pin::before{content:"";position:absolute;left:92px;top:8px;width:16px;height:16px;border-radius:50%;background:var(--siren);box-shadow:0 0 0 5px rgba(255,42,42,.14),0 0 22px var(--siren)}
 .dossier-time-pin strong{color:var(--evidence);font-size:26px}
 .dossier-time-pin span{font-family:"Space Mono",monospace;font-size:11px;color:var(--grit)}
+.dossier-timeline-cover{
+  position:relative;min-height:220px;border:1px solid rgba(255,255,255,.14);border-radius:6px;overflow:hidden;
+  background:linear-gradient(135deg,#101018,#211018);display:flex;flex-direction:column;justify-content:flex-end
+}
+.dossier-timeline-cover::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.045) 0 10px,transparent 10px 24px)}
+.dossier-timeline-cover.has-official::before{z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.07),rgba(0,0,0,.24) 42%,rgba(0,0,0,.84))}
+.dossier-timeline-cover .dossier-cover-label{padding:14px}
+.dossier-timeline-cover span{color:var(--evidence);font-size:30px;font-weight:900}
+.dossier-timeline-cover strong{color:#fff;font-size:24px;line-height:.95;text-transform:uppercase}
+.dossier-timeline-cover small{color:var(--bone-2)}
 .dossier-release-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .dossier-release-card{display:grid;grid-template-columns:190px 1fr;gap:18px;padding:16px}
 .dossier-cover-mini{position:relative;min-height:210px;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.14);padding:14px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(145deg,#101018,#211018)}

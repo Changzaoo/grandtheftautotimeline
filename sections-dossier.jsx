@@ -110,6 +110,28 @@ const BulletList = ({ items }) => (
   </ul>
 );
 
+const titleKey = (value) => normalizeText(value)
+  .replace(/grand theft auto/g, "gta")
+  .replace(/[^a-z0-9]+/g, " ")
+  .trim();
+
+const findGameForTimeline = (item) => {
+  const aliases = {
+    "gta london 1961": "london-1961",
+    "gta london 1969": "london-1969",
+    "the lost and damned": "lost-and-damned",
+    "the ballad of gay tony": "ballad-gay-tony"
+  };
+  const key = titleKey(item.title);
+  if (aliases[key]) return gamesData.find((game) => game.id === aliases[key]);
+  const exactMatch = gamesData.find((game) => titleKey(game.title) === key);
+  if (exactMatch) return exactMatch;
+  return gamesData.find((game) => {
+    const gameKey = titleKey(game.title);
+    return gameKey.length > 4 && key.length > 4 && (gameKey.includes(key) || key.includes(gameKey));
+  });
+};
+
 const DossierHUDNav = ({ active, onJump }) => {
   const [open, setOpen] = React.useState(false);
   const [time, setTime] = React.useState("");
@@ -228,6 +250,10 @@ const TimelineDossierSection = ({ onOpenDossier }) => {
     );
     return { ...release, game };
   });
+  const chronologyItems = timelineChronologicalData.map((item) => ({
+    ...item,
+    game: findGameForTimeline(item)
+  }));
 
   return (
     <section id="timeline" className="dossier-section dossier-shell">
@@ -245,12 +271,20 @@ const TimelineDossierSection = ({ onOpenDossier }) => {
 
         {mode === "chronology" ? (
           <div className="dossier-chronology">
-            {timelineChronologicalData.map((item) => (
+            {chronologyItems.map((item) => (
               <article key={`${item.year}-${item.title}`} className="card dossier-timeline-card">
                 <Corners />
                 <div className="dossier-time-pin">
                   <strong>{item.year}</strong>
                   <span>{item.universe}</span>
+                </div>
+                <div className={`dossier-timeline-cover ${item.game?.media ? "has-official" : ""}`}>
+                  {item.game?.media && <OfficialMedia media={item.game.media} className="dossier-cover-media" />}
+                  <div className="dossier-cover-label">
+                    <span>{item.game?.releaseYear || item.year}</span>
+                    <strong>{(item.game?.title || item.title).replace("Grand Theft Auto", "GTA")}</strong>
+                    <small>{item.game?.city || item.city}</small>
+                  </div>
                 </div>
                 <div className="dossier-time-body">
                   <div className="dossier-card-kicker">{item.city}</div>
