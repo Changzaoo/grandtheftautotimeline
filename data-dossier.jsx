@@ -5078,6 +5078,236 @@ const cityUniverseGalleryMediaById = {
   }
 };
 
+const cityPhoto = (page, src, label, options = {}) => gtaWikiImage(page, src, {
+  alt: `Screenshot de ${label || page}`,
+  caption: `GTA Wiki - ${label || page}`,
+  ...options
+});
+
+const refinedCityUniverseGalleryMediaById = {
+  "2d": {
+    "liberty-city": [
+      cityPhoto("Liberty City (2D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/0/05/LibertyCity-GTA1-GBC.png/revision/latest?cb=20220107215835", "Liberty City 2D"),
+      cityPhoto("Liberty City (2D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/5/5b/LibertyCityandNewGuernsey-GTA1-GBC.png/revision/latest?cb=20220107215837", "Liberty City e New Guernsey 2D"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/8/89/Screenshots-GTA-ElectronicPressKit-LC2.png/revision/latest?cb=20241120235445", "Liberty City screenshot 1"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/f/f0/Screenshots-GTA-ElectronicPressKit-LC5.png/revision/latest?cb=20241120235447", "Liberty City screenshot 2"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/4/4b/Screenshots-GTA-ElectronicPressKit-LC8.png/revision/latest?cb=20241120235448", "Liberty City screenshot 3"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/8/8f/Screenshots-GTA-ElectronicPressKit-Garage-NEWYORK.png/revision/latest?cb=20241120235811", "Liberty City garage"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/b/b4/Screenshots-GTA-ElectronicPressKit-GTA19.png/revision/latest?cb=20241120235635", "Liberty City street action")
+    ],
+    "vice-city": [
+      cityPhoto("Vice City (2D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/9/91/ViceCity-GTA1-GBC.png/revision/latest?cb=20220107214002", "Vice City 2D"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/8/8d/Screenshots-GTA-ElectronicPressKit-VC1.png/revision/latest?cb=20241120235628", "Vice City screenshot 1"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/d/d9/Screenshots-GTA-ElectronicPressKit-VC2.png/revision/latest?cb=20241120235427", "Vice City screenshot 2"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/8/84/Screenshots-GTA-ElectronicPressKit-VC5.png/revision/latest?cb=20241120235429", "Vice City screenshot 3"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/7/78/Screenshots-GTA-ElectronicPressKit-VC6.png/revision/latest?cb=20241120235430", "Vice City screenshot 4"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/5/57/Screenshots-GTA-ElectronicPressKit-VC7.png/revision/latest?cb=20241120235431", "Vice City screenshot 5"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/d/de/Screenshots-GTA-ElectronicPressKit-Garage-MIAMI.png/revision/latest?cb=20241120235810", "Vice City garage")
+    ],
+    "san-andreas": [
+      cityPhoto("San Andreas (2D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/0/07/SanAndreasCity-GTA1-GBC.png/revision/latest?cb=20220107213939", "San Andreas 2D"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/7/7d/Screenshots-GTA-ElectronicPressKit-SA1.png/revision/latest?cb=20241120235449", "San Andreas screenshot 1"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/f/f9/Screenshots-GTA-ElectronicPressKit-SA2.png/revision/latest?cb=20241120235450", "San Andreas screenshot 2"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/a/a2/Screenshots-GTA-ElectronicPressKit-SA4.png/revision/latest?cb=20241120235452", "San Andreas screenshot 3"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/7/71/Screenshots-GTA-ElectronicPressKit-SA5.png/revision/latest?cb=20241120235620", "San Andreas screenshot 4"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/5/51/Screenshots-GTA-ElectronicPressKit-SA6.png/revision/latest?cb=20241120235621", "San Andreas screenshot 5"),
+      cityPhoto("Grand Theft Auto (1997 game)/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/b/b0/Screenshots-GTA-ElectronicPressKit-Garage-SANFRAN.png/revision/latest?cb=20241120235813", "San Andreas garage")
+    ],
+    "anywhere-city": [
+      cityPhoto("Grand Theft Auto 2/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/0/01/Screenshots-GTA2-AdrenalineVault-SS1.jpg/revision/latest?cb=20241114185945", "Anywhere City gameplay 1"),
+      cityPhoto("Grand Theft Auto 2/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/3/33/Screenshots-GTA2-AdrenalineVault-SS2.jpg/revision/latest?cb=20241114185946", "Anywhere City gameplay 2"),
+      cityPhoto("Grand Theft Auto 2/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/9/9f/Screenshots-GTA2-AdrenalineVault-SS3.jpg/revision/latest?cb=20241114185947", "Anywhere City gameplay 3"),
+      cityPhoto("Grand Theft Auto 2/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/0/08/Screenshots-GTA2-AdrenalineVault-SS4.jpg/revision/latest?cb=20241114185948", "Anywhere City gameplay 4"),
+      cityPhoto("Grand Theft Auto 2/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/f/fa/Screenshots-GTA2-AdrenalineVault-SS5.jpg/revision/latest?cb=20241114185949", "Anywhere City gameplay 5"),
+      cityPhoto("Grand Theft Auto 2/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/2/2e/Screenshots-GTA2-AdrenalineVault-SS6.jpg/revision/latest?cb=20241114185950", "Anywhere City gameplay 6"),
+      cityPhoto("Grand Theft Auto 2/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/d/dd/Screenshots-GTA2-IGN-PC-SS1.jpg/revision/latest?cb=20241114190135", "Anywhere City gameplay 7"),
+      cityPhoto("Grand Theft Auto 2/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/c/c3/Screenshots-GTA2-IGN-PC-SS10.jpg/revision/latest?cb=20241114190143", "Anywhere City gameplay 8"),
+      cityPhoto("Anywhere City", "https://static.wikia.nocookie.net/gtawiki/images/1/16/AnywhereCity-GTA2-StartingPoint.jpg/revision/latest?cb=20111201183824", "Anywhere City starting point")
+    ],
+    "london": [
+      cityPhoto("London", "https://static.wikia.nocookie.net/gtawiki/images/7/73/BatterseaPark-GTAL69-DebugCamera.png/revision/latest?cb=20221103233912", "Battersea Park"),
+      cityPhoto("London", "https://static.wikia.nocookie.net/gtawiki/images/b/b5/BatterseaPowerStation-GTAL69-DebugCamera.png/revision/latest?cb=20221103233913", "Battersea Power Station"),
+      cityPhoto("London", "https://static.wikia.nocookie.net/gtawiki/images/1/1a/BuckinghamPalace-GTAL69-DebugCamera.png/revision/latest?cb=20221103233915", "Buckingham Palace"),
+      cityPhoto("London", "https://static.wikia.nocookie.net/gtawiki/images/3/3b/NationalGallery-GTAL69-DebugCamera.png/revision/latest?cb=20221103233918", "National Gallery"),
+      cityPhoto("London", "https://static.wikia.nocookie.net/gtawiki/images/0/08/PalaceofWestminster-GTAL69-DebugCamera.png/revision/latest?cb=20221103233919", "Palace of Westminster"),
+      cityPhoto("London", "https://static.wikia.nocookie.net/gtawiki/images/4/49/PiccadillyCircus-GTAL69-DebugCamera.png/revision/latest?cb=20221103233921", "Piccadilly Circus"),
+      cityPhoto("London", "https://static.wikia.nocookie.net/gtawiki/images/2/2a/TowerBridge-GTAL69-DebugCamera.png/revision/latest?cb=20221103233924", "Tower Bridge"),
+      cityPhoto("London", "https://static.wikia.nocookie.net/gtawiki/images/f/f4/TowerofLondon-GTAL69-DebugCamera.png/revision/latest?cb=20221103233926", "Tower of London"),
+      cityPhoto("London", "https://static.wikia.nocookie.net/gtawiki/images/4/49/TrafalgarSquare-GTAL69-DebugCamera.png/revision/latest?cb=20221103233927", "Trafalgar Square"),
+      cityPhoto("London", "https://static.wikia.nocookie.net/gtawiki/images/f/f4/WestminsterAbbey-GTAL69-DebugCamera.png/revision/latest?cb=20221103233928", "Westminster Abbey")
+    ]
+  },
+  "3d": {
+    "liberty-city": [
+      cityPhoto("Portland", "https://static.wikia.nocookie.net/gtawiki/images/2/2f/AtlanticQuays-GTA3-panorama.jpg/revision/latest?cb=20100117170918", "Atlantic Quays"),
+      cityPhoto("Portland", "https://static.wikia.nocookie.net/gtawiki/images/b/b7/Chinatown-GTA3-westarch.jpg/revision/latest?cb=20100116133322", "Chinatown em Portland"),
+      cityPhoto("Portland", "https://static.wikia.nocookie.net/gtawiki/images/5/5d/PortlandHarbor-GTA3-northeastwards.jpg/revision/latest?cb=20100201201708", "Portland Harbor"),
+      cityPhoto("Portland", "https://static.wikia.nocookie.net/gtawiki/images/1/14/PortlandView-GTA3-northwards.jpg/revision/latest?cb=20100212054337", "Vista de Portland"),
+      cityPhoto("Portland", "https://static.wikia.nocookie.net/gtawiki/images/c/c9/RedLightDistrict-GTA3-northwards.jpg/revision/latest?cb=20091121184836", "Red Light District"),
+      cityPhoto("Staunton Island", "https://static.wikia.nocookie.net/gtawiki/images/a/a0/BedfordPoint-GTA3-TimesSquarespoof.jpg/revision/latest?cb=20091107184558", "Bedford Point"),
+      cityPhoto("Shoreside Vale", "https://static.wikia.nocookie.net/gtawiki/images/5/52/CedarGrove-GTA3-eastwards.jpg/revision/latest?cb=20100116124418", "Cedar Grove"),
+      cityPhoto("Francis International Airport", "https://static.wikia.nocookie.net/gtawiki/images/1/1f/FrancisInternationalAirport-GTA3-mainterminal.jpg/revision/latest?cb=20091107183441", "Francis International Airport"),
+      cityPhoto("Cochrane Dam", "https://static.wikia.nocookie.net/gtawiki/images/3/36/GTA_3_Cochrane_Dam.png/revision/latest?cb=20170420215249", "Cochrane Dam"),
+      cityPhoto("Shoreside Vale", "https://static.wikia.nocookie.net/gtawiki/images/7/75/WichitaGardens-GTA3-southwestwards.jpg/revision/latest?cb=20091111104537", "Wichita Gardens")
+    ],
+    "vice-city": [
+      cityPhoto("Vice City (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/d/d7/ViceCity-GTAVC-OfficialRockstarHighResDownload.png/revision/latest?cb=20190325215432", "Vice City skyline"),
+      cityPhoto("Ocean Drive", "https://static.wikia.nocookie.net/gtawiki/images/e/ee/OceanDrive-GTAVC.png/revision/latest?cb=20190120113556", "Ocean Drive"),
+      cityPhoto("Vice Point", "https://static.wikia.nocookie.net/gtawiki/images/6/63/VicePoint-GTAVC-northwards.jpg/revision/latest?cb=20091126151624", "Vice Point"),
+      cityPhoto("Starfish Island", "https://static.wikia.nocookie.net/gtawiki/images/1/1b/StarfishIsland-GTAVC-AerialView.jpg/revision/latest?cb=20100914052419", "Starfish Island"),
+      cityPhoto("Downtown Vice City", "https://static.wikia.nocookie.net/gtawiki/images/a/ae/Downtown-GTAVCS-Night.jpg/revision/latest?cb=20181024113133", "Downtown Vice City"),
+      cityPhoto("Hyman Memorial Stadium", "https://static.wikia.nocookie.net/gtawiki/images/8/89/HymanMemorialStadium-GTAVC-exterior.jpg/revision/latest?cb=20241224202640", "Hyman Memorial Stadium"),
+      cityPhoto("Lighthouse", "https://static.wikia.nocookie.net/gtawiki/images/6/67/Lighthouse-GTAVC-1.png/revision/latest?cb=20181013140010", "Vice City Lighthouse"),
+      cityPhoto("Links Bridge", "https://static.wikia.nocookie.net/gtawiki/images/f/f3/LinksBridge-GTAVC.png/revision/latest?cb=20250116200903", "Links Bridge"),
+      cityPhoto("Washington Beach", "https://static.wikia.nocookie.net/gtawiki/images/3/37/Chunder_Wheel_2.jpg/revision/latest?cb=20080510170345", "Chunder Wheel"),
+      cityPhoto("Fort Baxter Air Base", "https://static.wikia.nocookie.net/gtawiki/images/f/f9/FortBaxterAirBase-GTAVC.jpg/revision/latest?cb=20190630120644", "Fort Baxter Air Base")
+    ],
+    "san-andreas": [
+      cityPhoto("Los Santos (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/2/23/LosSantos-GTASA-Panorama.jpg/revision/latest?cb=20140429054320", "Los Santos panorama"),
+      cityPhoto("Los Santos (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/c/cc/DowntownLosSantos-GTASA-Overview.jpg/revision/latest?cb=20250111002406", "Downtown Los Santos"),
+      cityPhoto("Grove Street", "https://static.wikia.nocookie.net/gtawiki/images/9/99/GroveStreet-GTASA.jpg/revision/latest?cb=20070510101844", "Grove Street"),
+      cityPhoto("San Fierro (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/4/4e/SanFierro-GTASA-SeenFromMissionaryHill.jpg/revision/latest?cb=20240224234522", "San Fierro from Missionary Hill"),
+      cityPhoto("Gant Bridge", "https://static.wikia.nocookie.net/gtawiki/images/c/cc/GantBridge-GTASA-Sunrise.jpg/revision/latest?cb=20240224233811", "Gant Bridge"),
+      cityPhoto("The Strip", "https://static.wikia.nocookie.net/gtawiki/images/3/38/TheStrip-GTASA-Night.jpg/revision/latest?cb=20070409143559", "The Strip"),
+      cityPhoto("Las Venturas Airport", "https://static.wikia.nocookie.net/gtawiki/images/f/f8/LasVenturasAirport-GTASA.png/revision/latest?cb=20190607210325", "Las Venturas Airport"),
+      cityPhoto("Los Santos International Airport", "https://static.wikia.nocookie.net/gtawiki/images/1/1f/LosSantosInternationalAirport-GTASA.png/revision/latest?cb=20230830040354", "Los Santos International Airport"),
+      cityPhoto("Ocean Docks", "https://static.wikia.nocookie.net/gtawiki/images/5/55/OceanDocks-GTASA-northwards.jpg/revision/latest?cb=20100426073200", "Ocean Docks"),
+      cityPhoto("Las Venturas Welcome Sign", "https://static.wikia.nocookie.net/gtawiki/images/c/cf/LasVenturasWelcomeSign-GTASA-Night.jpg/revision/latest?cb=20240316100431", "Las Venturas Welcome Sign")
+    ],
+    "los-santos": [
+      cityPhoto("Los Santos (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/2/23/LosSantos-GTASA-Panorama.jpg/revision/latest?cb=20140429054320", "Los Santos panorama"),
+      cityPhoto("Los Santos (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/c/cc/DowntownLosSantos-GTASA-Overview.jpg/revision/latest?cb=20250111002406", "Downtown Los Santos"),
+      cityPhoto("Grove Street", "https://static.wikia.nocookie.net/gtawiki/images/9/99/GroveStreet-GTASA.jpg/revision/latest?cb=20070510101844", "Grove Street"),
+      cityPhoto("Ganton", "https://static.wikia.nocookie.net/gtawiki/images/c/cd/Ganton-GTASA-GroveStreet.png/revision/latest?cb=20190304192346", "Ganton"),
+      cityPhoto("Idlewood", "https://static.wikia.nocookie.net/gtawiki/images/9/9c/Idlewood-GTASA.png/revision/latest?cb=20190304192347", "Idlewood"),
+      cityPhoto("Mulholland", "https://static.wikia.nocookie.net/gtawiki/images/c/cd/Mulholland-GTASA-VinewoodSign.jpg/revision/latest?cb=20100115051930", "Vinewood Sign"),
+      cityPhoto("Ocean Docks", "https://static.wikia.nocookie.net/gtawiki/images/5/55/OceanDocks-GTASA-northwards.jpg/revision/latest?cb=20100426073200", "Ocean Docks"),
+      cityPhoto("Los Santos International Airport", "https://static.wikia.nocookie.net/gtawiki/images/1/1f/LosSantosInternationalAirport-GTASA.png/revision/latest?cb=20230830040354", "Los Santos International Airport"),
+      cityPhoto("Los Santos (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/a/ad/LosSantos-GTASA-NightView.jpg/revision/latest?cb=20111103014605", "Los Santos night view"),
+      cityPhoto("Los Santos (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/5/5c/LosSantos-GTASA-Sunrise.jpg/revision/latest?cb=20111103014819", "Los Santos sunrise")
+    ],
+    "san-fierro": [
+      cityPhoto("San Fierro (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/4/4e/SanFierro-GTASA-SeenFromMissionaryHill.jpg/revision/latest?cb=20240224234522", "San Fierro from Missionary Hill"),
+      cityPhoto("San Fierro (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/c/c9/SanFierro-GTASA-SeenFromTierraRobada.jpg/revision/latest?cb=20240224233619", "San Fierro from Tierra Robada"),
+      cityPhoto("Chinatown (GTA San Andreas)", "https://static.wikia.nocookie.net/gtawiki/images/7/7b/Chinatown-GTASA-Archway.jpg/revision/latest?cb=20240224233923", "Chinatown archway"),
+      cityPhoto("Gant Bridge", "https://static.wikia.nocookie.net/gtawiki/images/c/cc/GantBridge-GTASA-Sunrise.jpg/revision/latest?cb=20240224233811", "Gant Bridge"),
+      cityPhoto("Gant Bridge", "https://static.wikia.nocookie.net/gtawiki/images/1/11/GarverBridge-GTASA-SanFierroView.jpg/revision/latest?cb=20091213141433", "San Fierro from Garver Bridge"),
+      cityPhoto("Palisades", "https://static.wikia.nocookie.net/gtawiki/images/a/af/PalisadesPark-GTASA-Fountain.jpg/revision/latest?cb=20240224234112", "Palisades Park"),
+      cityPhoto("San Fierro (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/0/0c/SanFierro-GTASA-TrolleyCaltonHeights.jpg/revision/latest?cb=20080606194100", "Calton Heights trolley"),
+      cityPhoto("Hashbury", "https://static.wikia.nocookie.net/gtawiki/images/0/0c/Hashbury-GTASA-StreetView.jpg/revision/latest?cb=20100525093930", "Hashbury street view"),
+      cityPhoto("Easter Basin", "https://static.wikia.nocookie.net/gtawiki/images/3/37/EasterBasin-GTASA.png/revision/latest?cb=20190322151454", "Easter Basin"),
+      cityPhoto("San Fierro (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/9/90/WindyWindyWindyWindyStreet-GTASA.jpg/revision/latest?cb=20240224234136", "Windy Windy Street")
+    ],
+    "las-venturas": [
+      cityPhoto("The Strip", "https://static.wikia.nocookie.net/gtawiki/images/0/03/LVstrip.jpeg/revision/latest?cb=20140824165445", "The Strip"),
+      cityPhoto("The Strip", "https://static.wikia.nocookie.net/gtawiki/images/3/38/TheStrip-GTASA-Night.jpg/revision/latest?cb=20070409143559", "The Strip at night"),
+      cityPhoto("The Strip", "https://static.wikia.nocookie.net/gtawiki/images/d/d3/TheStrip-GTASA.png/revision/latest?cb=20190607210411", "The Strip daytime"),
+      cityPhoto("Las Venturas Airport", "https://static.wikia.nocookie.net/gtawiki/images/5/5f/LVA-GTASA-EarlyScreenshot.jpg/revision/latest?cb=20140209141532", "Las Venturas Airport early view"),
+      cityPhoto("Las Venturas Airport", "https://static.wikia.nocookie.net/gtawiki/images/8/88/LVA-GTASA-Entrance.jpg/revision/latest?cb=20091122090507", "Las Venturas Airport entrance"),
+      cityPhoto("Las Venturas Airport", "https://static.wikia.nocookie.net/gtawiki/images/d/db/LasVenturasAirport-GTASA-WelcomeSign.jpg/revision/latest?cb=20090416050231", "Las Venturas Airport welcome sign"),
+      cityPhoto("Las Venturas Airport", "https://static.wikia.nocookie.net/gtawiki/images/f/f8/LasVenturasAirport-GTASA.png/revision/latest?cb=20190607210325", "Las Venturas Airport"),
+      cityPhoto("Las Venturas Welcome Sign", "https://static.wikia.nocookie.net/gtawiki/images/c/cf/LasVenturasWelcomeSign-GTASA-Night.jpg/revision/latest?cb=20240316100431", "Las Venturas sign at night"),
+      cityPhoto("V-Rock Hotel", "https://static.wikia.nocookie.net/gtawiki/images/b/ba/V-RockHotel-GTASA-exterior.jpg/revision/latest?cb=20100709205002", "V-Rock Hotel"),
+      cityPhoto("Roca Escalante", "https://static.wikia.nocookie.net/gtawiki/images/e/ef/PromotionalWebsite-GTASA-Flash-rocaescalante_vrock.jpg/revision/latest?cb=20201212214317", "Roca Escalante")
+    ]
+  },
+  "hd": {
+    "liberty-city": [
+      cityPhoto("Algonquin", "https://static.wikia.nocookie.net/gtawiki/images/0/07/Algonquin-GTAIV-Skyline1.png/revision/latest?cb=20181115193933", "Algonquin skyline"),
+      cityPhoto("Algonquin", "https://static.wikia.nocookie.net/gtawiki/images/3/3b/Algonquin-GTAIV-Skyline2.png/revision/latest?cb=20181115193934", "Algonquin skyline 2"),
+      cityPhoto("Algonquin", "https://static.wikia.nocookie.net/gtawiki/images/f/f3/Algonquin-GTAIV-StreetScene.png/revision/latest?cb=20190814143002", "Algonquin street scene"),
+      cityPhoto("Broker Bridge", "https://static.wikia.nocookie.net/gtawiki/images/5/5c/BrokerBridge-GTAIV.png/revision/latest?cb=20180819153722", "Broker Bridge"),
+      cityPhoto("Burlesque", "https://static.wikia.nocookie.net/gtawiki/images/3/37/Burlesque-GTAIV-Night.jpg/revision/latest?cb=20181114174554", "Burlesque at night"),
+      cityPhoto("Chinatown", "https://static.wikia.nocookie.net/gtawiki/images/3/3a/Chinatown-GTAIV.png/revision/latest?cb=20190110183105", "Chinatown HD"),
+      cityPhoto("Grand Easton Terminal", "https://static.wikia.nocookie.net/gtawiki/images/6/69/GrandEastonTerminal-GTAIV.png/revision/latest?cb=20181026125743", "Grand Easton Terminal"),
+      cityPhoto("Middle Park", "https://static.wikia.nocookie.net/gtawiki/images/d/df/MiddlePark-GTAIV.png/revision/latest?cb=20190110132119", "Middle Park"),
+      cityPhoto("Bohan", "https://static.wikia.nocookie.net/gtawiki/images/f/f3/Bohan-GTAIV-Night.png/revision/latest?cb=20160809205324", "Bohan at night"),
+      cityPhoto("Bohan", "https://static.wikia.nocookie.net/gtawiki/images/7/70/SouthBohan-GTA4-westwards.jpg/revision/latest?cb=20090828151016", "South Bohan")
+    ],
+    "vice-city": [
+      cityPhoto("Grand Theft Auto VI/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/c/ce/OfficialScreenshots-GTAVI-PromotionalWebsite-ViceCity-SS1.jpg/revision/latest?cb=20250506164253", "Vice City HD screenshot 1"),
+      cityPhoto("Grand Theft Auto VI/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/c/cf/OfficialScreenshots-GTAVI-PromotionalWebsite-ViceCity-SS2.jpg/revision/latest?cb=20250506164254", "Vice City HD screenshot 2"),
+      cityPhoto("Grand Theft Auto VI/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/e/e6/OfficialScreenshots-GTAVI-PromotionalWebsite-ViceCity-SS3.jpg/revision/latest?cb=20250506164255", "Vice City HD screenshot 3"),
+      cityPhoto("Grand Theft Auto VI/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/f/f3/OfficialScreenshots-GTAVI-PromotionalWebsite-ViceCity-SS4.jpg/revision/latest?cb=20250506164256", "Vice City HD screenshot 4"),
+      cityPhoto("Grand Theft Auto VI/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/7/77/OfficialScreenshots-GTAVI-PromotionalWebsite-ViceCity-SS5.jpg/revision/latest?cb=20250506164257", "Vice City HD screenshot 5"),
+      cityPhoto("Grand Theft Auto VI/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/a/a9/OfficialScreenshots-GTAVI-PromotionalWebsite-ViceCity-SS6.jpg/revision/latest?cb=20250506164259", "Vice City HD screenshot 6"),
+      cityPhoto("Grand Theft Auto VI/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/0/04/OfficialScreenshots-GTAVI-PromotionalWebsite-ViceCity-SS7.jpg/revision/latest?cb=20250506164300", "Vice City HD screenshot 7"),
+      cityPhoto("Grand Theft Auto VI/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/f/fa/OfficialScreenshots-GTAVI-PromotionalWebsite-ViceCity-SS8.jpg/revision/latest?cb=20250506164301", "Vice City HD screenshot 8"),
+      cityPhoto("Grand Theft Auto VI/Screenshots", "https://static.wikia.nocookie.net/gtawiki/images/b/be/OfficialScreenshots-GTAVI-PromotionalWebsite-ViceCity-SS9.jpg/revision/latest?cb=20250506164302", "Vice City HD screenshot 9")
+    ],
+    "san-andreas": [
+      cityPhoto("Los Santos (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/f/fb/LosSantos-GTAV-PC.jpg/revision/latest?cb=20150327201859", "Los Santos PC"),
+      cityPhoto("Downtown Los Santos (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/3/3d/DowntownLosSantos-GTAVee.jpg/revision/latest?cb=20240315141712", "Downtown Los Santos HD"),
+      cityPhoto("East Los Santos", "https://static.wikia.nocookie.net/gtawiki/images/2/29/EastLosSantos-GTAVee.jpg/revision/latest?cb=20240315141714", "East Los Santos"),
+      cityPhoto("Del Perro", "https://static.wikia.nocookie.net/gtawiki/images/3/3a/DelPerro-GTAVee.jpg/revision/latest?cb=20240315141706", "Del Perro"),
+      cityPhoto("Blaine County", "https://static.wikia.nocookie.net/gtawiki/images/1/1f/GSDesert.jpg/revision/latest?cb=20140209124722", "Grand Senora Desert"),
+      cityPhoto("Alamo Sea", "https://static.wikia.nocookie.net/gtawiki/images/6/60/AlamoSea-GTAV-Sunset.jpg/revision/latest?cb=20131023002832", "Alamo Sea sunset"),
+      cityPhoto("Sandy Shores", "https://static.wikia.nocookie.net/gtawiki/images/1/17/SandyShores-GTAV-overview.jpg/revision/latest?cb=20140120180934", "Sandy Shores"),
+      cityPhoto("Paleto Bay", "https://static.wikia.nocookie.net/gtawiki/images/0/0d/PaletoBay-GTAV-Aerial.jpg/revision/latest?cb=20131130054542", "Paleto Bay"),
+      cityPhoto("Grapeseed", "https://static.wikia.nocookie.net/gtawiki/images/b/b1/Grapeseed-GTAV-Downtown.jpg/revision/latest?cb=20130921073458", "Grapeseed"),
+      cityPhoto("Los Santos International Airport (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/a/a5/LosSantosInternationalAirport-GTAVee.jpg/revision/latest?cb=20240315141722", "Los Santos International Airport HD")
+    ],
+    "los-santos": [
+      cityPhoto("Los Santos (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/f/fb/LosSantos-GTAV-PC.jpg/revision/latest?cb=20150327201859", "Los Santos PC"),
+      cityPhoto("Los Santos (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/4/40/Los_Santos_at_Night_-_GTAV.png/revision/latest?cb=20141125082924", "Los Santos at night"),
+      cityPhoto("Downtown Los Santos (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/3/3d/DowntownLosSantos-GTAVee.jpg/revision/latest?cb=20240315141712", "Downtown Los Santos HD"),
+      cityPhoto("Downtown Los Santos (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/9/9c/DowntownLS-GTAV-day.jpg/revision/latest?cb=20140317221053", "Downtown Los Santos day"),
+      cityPhoto("East Los Santos", "https://static.wikia.nocookie.net/gtawiki/images/2/29/EastLosSantos-GTAVee.jpg/revision/latest?cb=20240315141714", "East Los Santos"),
+      cityPhoto("Del Perro", "https://static.wikia.nocookie.net/gtawiki/images/3/3a/DelPerro-GTAVee.jpg/revision/latest?cb=20240315141706", "Del Perro"),
+      cityPhoto("Vespucci Beach", "https://static.wikia.nocookie.net/gtawiki/images/0/0b/VespucciBeach-GTAV-AerialShot.png/revision/latest?cb=20140312210020", "Vespucci Beach"),
+      cityPhoto("Rockford Hills", "https://static.wikia.nocookie.net/gtawiki/images/b/b7/RockfordHills-GTAV-AerialView.jpg/revision/latest?cb=20131023002436", "Rockford Hills"),
+      cityPhoto("Los Santos (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/5/5a/LosSantos-GTAV-SouthLS.jpg/revision/latest?cb=20151014021921", "South Los Santos"),
+      cityPhoto("Los Santos International Airport (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/a/a5/LosSantosInternationalAirport-GTAVee.jpg/revision/latest?cb=20240315141722", "Los Santos International Airport HD")
+    ],
+    "blaine-county": [
+      cityPhoto("Blaine County", "https://static.wikia.nocookie.net/gtawiki/images/1/1f/GSDesert.jpg/revision/latest?cb=20140209124722", "Grand Senora Desert"),
+      cityPhoto("Alamo Sea", "https://static.wikia.nocookie.net/gtawiki/images/4/48/Screenshot-AlamoSea-GTAV.jpg/revision/latest?cb=20130328172735", "Alamo Sea"),
+      cityPhoto("Alamo Sea", "https://static.wikia.nocookie.net/gtawiki/images/6/60/AlamoSea-GTAV-Sunset.jpg/revision/latest?cb=20131023002832", "Alamo Sea sunset"),
+      cityPhoto("Blaine County", "https://static.wikia.nocookie.net/gtawiki/images/5/5d/Screenshot-DesertWaterTower-GTAV.jpg/revision/latest?cb=20121110032126", "Desert water tower"),
+      cityPhoto("Sandy Shores", "https://static.wikia.nocookie.net/gtawiki/images/1/17/SandyShores-GTAV-overview.jpg/revision/latest?cb=20140120180934", "Sandy Shores"),
+      cityPhoto("Sandy Shores", "https://static.wikia.nocookie.net/gtawiki/images/9/90/SandyShores-MainAvenue-GTAV.jpg/revision/latest?cb=20230226101922", "Sandy Shores Main Avenue"),
+      cityPhoto("Paleto Bay", "https://static.wikia.nocookie.net/gtawiki/images/0/0d/PaletoBay-GTAV-Aerial.jpg/revision/latest?cb=20131130054542", "Paleto Bay"),
+      cityPhoto("Paleto Bay", "https://static.wikia.nocookie.net/gtawiki/images/d/dc/PaletoBay-GTAV-ViewofMountChiliad.jpg/revision/latest?cb=20130926074910", "Paleto Bay and Mount Chiliad"),
+      cityPhoto("Grapeseed", "https://static.wikia.nocookie.net/gtawiki/images/b/b1/Grapeseed-GTAV-Downtown.jpg/revision/latest?cb=20130921073458", "Grapeseed downtown"),
+      cityPhoto("Grapeseed", "https://static.wikia.nocookie.net/gtawiki/images/c/c6/Grapeseed-GTAV-LookingEast.jpg/revision/latest?cb=20131130054708", "Grapeseed looking east")
+    ],
+    "north-yankton": [
+      cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/0/09/BannerHotel-GTAV-NorthYankton.jpg/revision/latest?cb=20140414202404", "Banner Hotel"),
+      cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/9/98/LudendorffAerialView-GTAV.jpg/revision/latest?cb=20140603103957", "Ludendorff aerial view"),
+      cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/b/b6/LudendorffChurch-GTAV-Night.png/revision/latest?cb=20131103125443", "Ludendorff Church at night"),
+      cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/0/08/PollockCinema-GTAV-Night.png/revision/latest?cb=20210909151932", "Pollock Cinema"),
+      cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/b/b0/RearBuildings-GTAVpc-NorthYankton.png/revision/latest?cb=20240720170337", "Ludendorff rear buildings"),
+      cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/d/d4/CavalryBoulevard-GTAOe.png/revision/latest?cb=20241014181251", "Cavalry Boulevard")
+    ],
+    "leonida": [
+      cityPhoto("Leonida Keys", "https://static.wikia.nocookie.net/gtawiki/images/9/9a/OfficialScreenshots-GTAVI-PromotionalWebsite-LeonidaKeys-SS1.jpg/revision/latest?cb=20250506164232", "Leonida Keys 1"),
+      cityPhoto("Leonida Keys", "https://static.wikia.nocookie.net/gtawiki/images/8/8a/OfficialScreenshots-GTAVI-PromotionalWebsite-LeonidaKeys-SS2.jpg/revision/latest?cb=20250506164233", "Leonida Keys 2"),
+      cityPhoto("Leonida Keys", "https://static.wikia.nocookie.net/gtawiki/images/0/0c/OfficialScreenshots-GTAVI-PromotionalWebsite-LeonidaKeys-SS3.jpg/revision/latest?cb=20250506164234", "Leonida Keys 3"),
+      cityPhoto("Leonida Keys", "https://static.wikia.nocookie.net/gtawiki/images/9/99/OfficialScreenshots-GTAVI-PromotionalWebsite-LeonidaKeys-SS4.jpg/revision/latest?cb=20250506164235", "Leonida Keys 4"),
+      cityPhoto("Leonida Keys", "https://static.wikia.nocookie.net/gtawiki/images/a/ab/OfficialScreenshots-GTAVI-PromotionalWebsite-LeonidaKeys-SS5.jpg/revision/latest?cb=20250506164237", "Leonida Keys 5"),
+      cityPhoto("Port Gellhorn", "https://static.wikia.nocookie.net/gtawiki/images/0/0d/OfficialScreenshots-GTAVI-PromotionalWebsite-PortGellhorn-SS1.jpg/revision/latest?cb=20250506164248", "Port Gellhorn 1"),
+      cityPhoto("Port Gellhorn", "https://static.wikia.nocookie.net/gtawiki/images/e/eb/OfficialScreenshots-GTAVI-PromotionalWebsite-PortGellhorn-SS2.jpg/revision/latest?cb=20250506164249", "Port Gellhorn 2"),
+      cityPhoto("Grassrivers", "https://static.wikia.nocookie.net/gtawiki/images/4/48/OfficialScreenshots-GTAVI-PromotionalWebsite-Grassrivers-SS1.jpg/revision/latest?cb=20250506164227", "Grassrivers 1"),
+      cityPhoto("Ambrosia", "https://static.wikia.nocookie.net/gtawiki/images/4/40/OfficialScreenshots-GTAVI-PromotionalWebsite-Ambrosia-SS1.jpg/revision/latest?cb=20250506164219", "Ambrosia"),
+      cityPhoto("Mount Kalaga", "https://static.wikia.nocookie.net/gtawiki/images/a/a7/OfficialScreenshots-GTAVI-PromotionalWebsite-MountKalaga-SS1.jpg/revision/latest?cb=20250506164238", "Mount Kalaga")
+    ]
+  }
+};
+
+const refinedCityGalleryMediaById = {
+  "liberty-city": refinedCityUniverseGalleryMediaById.hd["liberty-city"],
+  "vice-city": refinedCityUniverseGalleryMediaById.hd["vice-city"],
+  "san-andreas": refinedCityUniverseGalleryMediaById.hd["san-andreas"],
+  "los-santos": refinedCityUniverseGalleryMediaById.hd["los-santos"],
+  "san-fierro": refinedCityUniverseGalleryMediaById["3d"]["san-fierro"],
+  "las-venturas": refinedCityUniverseGalleryMediaById["3d"]["las-venturas"],
+  "blaine-county": refinedCityUniverseGalleryMediaById.hd["blaine-county"],
+  "north-yankton": refinedCityUniverseGalleryMediaById.hd["north-yankton"],
+  "anywhere-city": refinedCityUniverseGalleryMediaById["2d"]["anywhere-city"],
+  "london": refinedCityUniverseGalleryMediaById["2d"].london,
+  "leonida": refinedCityUniverseGalleryMediaById.hd.leonida
+};
+
 const cityUniverseGameScopeById = {
   "2d": {
     "liberty-city": ["GTA 1"],
@@ -5677,13 +5907,17 @@ charactersData.forEach((item) => {
 });
 
 citiesData.forEach((item) => {
-  if (curatedCityMediaById[item.id]) item.media = curatedCityMediaById[item.id];
+  if (refinedCityGalleryMediaById[item.id]?.[0]) item.media = refinedCityGalleryMediaById[item.id][0];
+  else if (curatedCityMediaById[item.id]) item.media = curatedCityMediaById[item.id];
   else if (gtaWikiCityMediaById[item.id]) item.media = gtaWikiCityMediaById[item.id];
   else if (officialMediaByCityId[item.id]) item.media = officialMediaByCityId[item.id];
-  item.galleryMedia = (cityGalleryMediaById[item.id] || [item.media]).filter(Boolean);
+  item.galleryMedia = (refinedCityGalleryMediaById[item.id] || cityGalleryMediaById[item.id] || [item.media]).filter(Boolean);
   item.universeGalleryMedia = Object.fromEntries(
     Object.entries(cityUniverseGalleryMediaById)
-      .map(([universeId, cityMap]) => [universeId, mediaArray(cityMap[item.id]).filter(Boolean)])
+      .map(([universeId, cityMap]) => {
+        const refinedMedia = refinedCityUniverseGalleryMediaById[universeId]?.[item.id];
+        return [universeId, mediaArray(refinedMedia || cityMap[item.id]).filter(Boolean)];
+      })
       .filter(([, media]) => media.length)
   );
   item.universeGameScope = Object.fromEntries(
