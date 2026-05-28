@@ -214,11 +214,7 @@ const DossierHUDNav = ({ active, onJump }) => {
     <header className="dossier-hud dossier-shell">
       <div className="dossier-hud-inner">
         <a className="dossier-brand" href="#overview" onClick={() => onJump && onJump("overview")}>
-          <span className="dossier-brand-badge">GTA</span>
-          <span>
-            <strong>Dossiê Criminal</strong>
-            <small>Arquivo GTA</small>
-          </span>
+          <img className="dossier-brand-logo" src="assets/dossier-logo.png" alt="Dossiê Criminal - Arquivo GTA" />
         </a>
         <nav className={open ? "open" : ""}>
           {dossierNav().map((n) => (
