@@ -4970,6 +4970,138 @@ const cityGalleryMediaById = {
   ]
 };
 
+const cityUniverseGalleryMediaById = {
+  "2d": {
+    "liberty-city": [
+      gtaWikiImage("Liberty City (2D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/2/28/LibertyCity-GTA1-Map-LCOnly.jpg/revision/latest?cb=20230128050359"),
+      gtaWikiGameMediaById["gta-1"]
+    ],
+    "vice-city": [
+      gtaWikiImage("Vice City (2D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/2/23/ViceCity-GTA1-Montage.png/revision/latest?cb=20220906004340"),
+      gtaWikiGameMediaById["gta-1"]
+    ],
+    "san-andreas": [
+      gtaWikiImage("San Andreas (2D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/0/0a/SanAndreas-GTA1-Montage.png/revision/latest?cb=20220906004337"),
+      gtaWikiGameMediaById["gta-1"]
+    ],
+    "anywhere-city": [
+      gtaWikiImage("Downtown District (GTA 2)", "https://static.wikia.nocookie.net/gtawiki/images/0/08/DowntownDistrict-GTA2-Montage.png/revision/latest/scale-to-width-down/912?cb=20221012145235"),
+      gtaWikiCityMediaById["anywhere-city"],
+      gtaWikiImage("Residential District (GTA 2)", "https://static.wikia.nocookie.net/gtawiki/images/9/90/ResidentialDistrict-GTA2-MapPC.png/revision/latest?cb=20191221060619")
+    ],
+    "london": [
+      gtaWikiCityMediaById["london"],
+      gtaWikiGameMediaById["london-1969"],
+      gtaWikiGameMediaById["london-1961"]
+    ]
+  },
+  "3d": {
+    "liberty-city": [
+      gtaWikiImage("Portland (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/4/47/Portland-GTAIII-Montage.png/revision/latest/scale-to-width-down/853?cb=20210917042933"),
+      gtaWikiImage("Staunton Island (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/5/51/StauntonIsland-GTAIII-Montage.png/revision/latest/scale-to-width-down/853?cb=20210917045046"),
+      gtaWikiImage("Shoreside Vale (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/6/6e/ShoresideVale-GTAIII-Montage.png/revision/latest/scale-to-width-down/853?cb=20210917043718"),
+      gtaWikiGameMediaById["liberty-city-stories"]
+    ],
+    "vice-city": [
+      gtaWikiImage("Vice City (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/7/76/ViceCity-GTAVC-Montage.png/revision/latest/scale-to-width-down/853?cb=20240406230242"),
+      gtaWikiImage("Vice City Beach (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/8/8c/ViceCityBeach-GTAVC-Montage.jpg/revision/latest/scale-to-width-down/853?cb=20240406231330"),
+      gtaWikiImage("Starfish Island (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/f/f3/StarfishIsland-GTAVC.png/revision/latest/scale-to-width-down/1200?cb=20190202220220"),
+      gtaWikiImage("Vice Point (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/4/4f/VicePoint-GTAVC.png/revision/latest/scale-to-width-down/1200?cb=20190202220220")
+    ],
+    "san-andreas": [
+      gtaWikiCityMediaById["san-andreas"],
+      gtaWikiImage("Los Santos (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/1/10/LosSantos-GTASA-MapFull-CityLimits.png/revision/latest?cb=20220223065712"),
+      gtaWikiCityMediaById["san-fierro"],
+      gtaWikiCityMediaById["las-venturas"],
+      officialMediaByCityId["san-andreas"]
+    ],
+    "los-santos": [
+      gtaWikiImage("Los Santos (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/1/10/LosSantos-GTASA-MapFull-CityLimits.png/revision/latest?cb=20220223065712"),
+      officialMediaByCityId["san-andreas"]
+    ],
+    "san-fierro": [
+      gtaWikiCityMediaById["san-fierro"],
+      officialMediaByCityId["san-fierro"]
+    ],
+    "las-venturas": [
+      gtaWikiCityMediaById["las-venturas"],
+      officialMediaByCityId["las-venturas"]
+    ]
+  },
+  "hd": {
+    "liberty-city": [
+      gtaWikiCityMediaById["liberty-city"],
+      gtaWikiImage("Algonquin (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/0/09/Algonquin-GTAIV-Montage.jpg/revision/latest/scale-to-width-down/853?cb=20181115153946"),
+      gtaWikiImage("Broker (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/e/e0/Broker-GTAIV-Montage.png/revision/latest/scale-to-width-down/853?cb=20240424132848"),
+      officialMediaByCityId["liberty-city"]
+    ],
+    "vice-city": [
+      officialMediaByCityId["vice-city"],
+      gtaWikiCityMediaById["vice-city"],
+      gtaWikiImage("Vice City (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/2/26/ViceCity-GTAVI-Montage.jpg/revision/latest/scale-to-width-down/1200?cb=20250509052851")
+    ],
+    "san-andreas": [
+      officialMediaByCityId["los-santos"],
+      officialMediaByCityId["blaine-county"],
+      gtaWikiCityMediaById["los-santos"],
+      gtaWikiCityMediaById["blaine-county"]
+    ],
+    "los-santos": [
+      officialMediaByCityId["los-santos"],
+      gtaWikiCityMediaById["los-santos"],
+      gtaWikiImage("South Los Santos (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/3/31/SouthLosSantos-IngameGPS-GTAV-Map.png/revision/latest/scale-to-width-down/1200?cb=20200203184747"),
+      gtaWikiImage("Vespucci Beach (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/6/64/VespucciBeach-IngameGPS-GTAV-Map.png/revision/latest/scale-to-width-down/1200?cb=20200206195727"),
+      gtaWikiImage("Rockford Hills (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/f/f0/RockfordHills-IngameGPS-GTAV-Map.png/revision/latest/scale-to-width-down/1200?cb=20200202164035")
+    ],
+    "blaine-county": [
+      gtaWikiCityMediaById["blaine-county"],
+      gtaWikiImage("Sandy Shores (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/0/07/SandyShores-IngameGPS-GTAV-Map.png/revision/latest/scale-to-width-down/1200?cb=20200331055042"),
+      gtaWikiImage("Paleto Bay (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/3/3a/PaletoBay-IngameGPS-GTAV-Map.png/revision/latest/scale-to-width-down/1200?cb=20200303172609"),
+      gtaWikiImage("Alamo Sea (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/1/13/AlamoSea-GTAV-West.png/revision/latest/scale-to-width-down/1200?cb=20201118181624"),
+      officialMediaByCityId["blaine-county"]
+    ],
+    "north-yankton": [
+      gtaWikiCityMediaById["north-yankton"],
+      gtaWikiImage("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/f/f4/Ludendorff-GTAV-SnapmaticPrintMap.png/revision/latest/scale-to-width-down/1200?cb=20220424081947"),
+      officialMediaByCityId["north-yankton"]
+    ],
+    "leonida": [
+      officialMediaByCityId["leonida"],
+      gtaWikiCityMediaById["leonida"],
+      gtaWikiImage("Leonida Keys", "https://static.wikia.nocookie.net/gtawiki/images/5/59/LeonidaKeys-GTAVI-CroppedPostcard.png/revision/latest/scale-to-width-down/1200?cb=20250507043056"),
+      gtaWikiImage("Port Gellhorn", "https://static.wikia.nocookie.net/gtawiki/images/9/9f/PortGellhorn-GTAVI-CroppedPostcard.png/revision/latest/scale-to-width-down/1200?cb=20250507043050"),
+      gtaWikiCityMediaById["vice-city"]
+    ]
+  }
+};
+
+const cityUniverseGameScopeById = {
+  "2d": {
+    "liberty-city": ["GTA 1"],
+    "vice-city": ["GTA 1"],
+    "san-andreas": ["GTA 1"],
+    "anywhere-city": ["GTA 2"],
+    "london": ["GTA: London 1969", "GTA: London 1961"]
+  },
+  "3d": {
+    "liberty-city": ["GTA III", "Liberty City Stories", "GTA Advance"],
+    "vice-city": ["Vice City", "Vice City Stories"],
+    "san-andreas": ["GTA: San Andreas"],
+    "los-santos": ["GTA: San Andreas"],
+    "san-fierro": ["GTA: San Andreas"],
+    "las-venturas": ["GTA: San Andreas"]
+  },
+  "hd": {
+    "liberty-city": ["GTA IV", "Episodes from Liberty City", "Chinatown Wars"],
+    "vice-city": ["GTA VI"],
+    "san-andreas": ["GTA V", "GTA Online"],
+    "los-santos": ["GTA V", "GTA Online"],
+    "blaine-county": ["GTA V", "GTA Online"],
+    "north-yankton": ["GTA V"],
+    "leonida": ["GTA VI"]
+  }
+};
+
 const gtaWikiFactionMediaById = {
   "leone-family": gtaWikiImage("Leone Crime Family", "https://static.wikia.nocookie.net/gtawiki/images/c/c4/LeoneMafia-GTALCS.png/revision/latest?cb=20170421032044"),
   "forelli-family": gtaWikiImage("Forelli Crime Family", "https://static.wikia.nocookie.net/gtawiki/images/0/05/ForelliBrothers-GTAIII.png/revision/latest/scale-to-width-down/1200?cb=20230713103043"),
@@ -5546,6 +5678,16 @@ citiesData.forEach((item) => {
   else if (gtaWikiCityMediaById[item.id]) item.media = gtaWikiCityMediaById[item.id];
   else if (officialMediaByCityId[item.id]) item.media = officialMediaByCityId[item.id];
   item.galleryMedia = (cityGalleryMediaById[item.id] || [item.media]).filter(Boolean);
+  item.universeGalleryMedia = Object.fromEntries(
+    Object.entries(cityUniverseGalleryMediaById)
+      .map(([universeId, cityMap]) => [universeId, mediaArray(cityMap[item.id]).filter(Boolean)])
+      .filter(([, media]) => media.length)
+  );
+  item.universeGameScope = Object.fromEntries(
+    Object.entries(cityUniverseGameScopeById)
+      .map(([universeId, cityMap]) => [universeId, cityMap[item.id]])
+      .filter(([, games]) => mediaArray(games).length)
+  );
 });
 
 factionsData.forEach((item) => {

@@ -100,7 +100,7 @@ const OfficialMedia = ({ media, className = "" }) => {
 const CityImageCarousel = ({ city, className = "" }) => {
   const mediaItems = asList(city?.galleryMedia || city?.media);
   const [index, setIndex] = React.useState(0);
-  React.useEffect(() => setIndex(0), [city?.id]);
+  React.useEffect(() => setIndex(0), [city?.id, city?.selectedUniverseId]);
 
   if (!mediaItems.length) return null;
 
@@ -574,7 +574,25 @@ const cityUniverseLanes = [
   }
 ];
 
-const CityMapPanel = ({ selectedId, onSelect }) => (
+const cityVariantForUniverse = (cityId, universeId) => {
+  const base = citiesData.find((city) => city.id === cityId);
+  if (!base) return null;
+  const lane = cityUniverseLanes.find((item) => item.id === universeId);
+  const galleryMedia = asList(base.universeGalleryMedia?.[universeId]).filter(Boolean);
+  const scopedGames = asList(base.universeGameScope?.[universeId]).filter(Boolean);
+
+  return {
+    ...base,
+    selectedUniverseId: universeId,
+    selectedUniverseLabel: lane?.label,
+    selectedUniverseNote: lane?.note,
+    games: scopedGames.length ? scopedGames : base.games,
+    galleryMedia: galleryMedia.length ? galleryMedia : base.galleryMedia,
+    media: galleryMedia[0] || base.media
+  };
+};
+
+const CityMapPanel = ({ selectedKey, onSelect }) => (
   <div className="dossier-city-map dossier-city-universe-map">
     <div className="dossier-map-gridlines" />
     <div className="dossier-city-map-lanes">
@@ -586,13 +604,15 @@ const CityMapPanel = ({ selectedId, onSelect }) => (
           </div>
           <div className="dossier-city-map-pins">
             {lane.cities.map((id) => {
-              const city = citiesData.find((c) => c.id === id);
+              const city = cityVariantForUniverse(id, lane.id);
+              const key = `${lane.id}-${id}`;
               return (
                 <button
-                  key={`${lane.id}-${id}`}
-                  className={selectedId === id ? "active" : ""}
+                  key={key}
+                  className={selectedKey === key ? "active" : ""}
                   onClick={() => onSelect(city)}
                   title={`${city?.name} em ${lane.label}`}
+                  disabled={!city}
                 >
                   <span className="dossier-map-dot" />
                   <strong>{city?.name}</strong>
@@ -607,24 +627,30 @@ const CityMapPanel = ({ selectedId, onSelect }) => (
 );
 
 const CitiesDossierSection = ({ onOpenDossier }) => {
-  const [selected, setSelected] = React.useState(citiesData.find((c) => c.id === "vice-city"));
+  const [selected, setSelected] = React.useState(() => cityVariantForUniverse("vice-city", "hd") || citiesData.find((c) => c.id === "vice-city"));
   const [query, setQuery] = React.useState("");
-  const filtered = citiesData.filter((city) => searchRecord(city, query));
+  const cityVariants = citiesData.flatMap((city) =>
+    Object.keys(city.universeGalleryMedia || { base: city.galleryMedia })
+      .map((universeId) => cityVariantForUniverse(city.id, universeId) || city)
+  );
+  const filtered = cityVariants.filter((city) => searchRecord(city, query));
+  const selectedKey = `${selected?.selectedUniverseId || "base"}-${selected?.id}`;
 
   return (
     <section id="cities" className="dossier-section dossier-shell">
       <div className="wrap">
         <DossierSectionHead eyebrow="Mapa urbano" title="Cidades e estados" accent="var(--copper)" right="inspirações, distritos, facções e eventos" />
         <div className="dossier-city-layout">
-          <CityMapPanel selectedId={selected?.id} onSelect={setSelected} />
+          <CityMapPanel selectedKey={selectedKey} onSelect={setSelected} />
           <aside className="card dossier-city-selected">
             <Corners />
-            <div className="dossier-card-kicker">Hotspot ativo</div>
+            <div className="dossier-card-kicker">Hotspot ativo / {selected?.selectedUniverseLabel || "todos os universos"}</div>
             <h3>{selected?.name}</h3>
             <CityImageCarousel city={selected} className="compact" />
             <p>{selected?.description}</p>
             <MetaGrid rows={[
               ["Inspiração", selected?.realWorldInspiration],
+              ["Universo visual", selected?.selectedUniverseLabel],
               ["Jogos", selected?.games],
               ["Facções", selected?.factions?.slice(0, 5)]
             ]} />
@@ -637,7 +663,7 @@ const CitiesDossierSection = ({ onOpenDossier }) => {
         </div>
         <div className="dossier-city-grid">
           {filtered.map((city) => (
-            <article key={city.id} className="card dossier-city-card" onClick={() => onOpenDossier({ type: "city", item: city })}>
+            <article key={`${city.selectedUniverseId || "base"}-${city.id}`} className="card dossier-city-card" onClick={() => onOpenDossier({ type: "city", item: city })}>
               <Corners />
               <div className={`dossier-city-skyline ${city.media ? "has-official" : ""}`}>
                 {city.media ? (
@@ -647,7 +673,7 @@ const CitiesDossierSection = ({ onOpenDossier }) => {
                 )}
               </div>
               <div className="dossier-card-body">
-                <div className="dossier-card-kicker">{city.realWorldInspiration}</div>
+                <div className="dossier-card-kicker">{city.selectedUniverseLabel || "Todos os universos"} / {city.realWorldInspiration}</div>
                 <h3>{city.name}</h3>
                 <p>{city.description}</p>
                 <DossierChips items={city.themes} limit={5} />
@@ -1194,6 +1220,7 @@ const DossierRecordModal = ({ record, onClose }) => {
                 <MetaGrid rows={[
                   ["Inspiração real", item.realWorldInspiration],
                   ["Universos", item.universeAppearances],
+                  ["Universo visual", item.selectedUniverseLabel],
                   ["Jogos", item.games],
                   ["Distritos/áreas", item.districts],
                   ["Gangues dominantes", item.factions],
