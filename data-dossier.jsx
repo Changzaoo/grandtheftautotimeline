@@ -3147,12 +3147,13 @@ const officialMediaData = {
   ]
 };
 
-const officialImage = (src, alt, source, caption = "Rockstar Games") => ({
+const officialImage = (src, alt, source, caption = "Rockstar Games", options = {}) => ({
   src,
   alt,
   source,
   caption,
-  credit: mediaCredit
+  credit: mediaCredit,
+  ...options
 });
 
 const officialMediaByGameId = {
@@ -3174,9 +3175,9 @@ const officialMediaByGameId = {
 };
 
 const officialMediaByCharacterId = {
-  "claude": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/f21b89ff222aec91c5c432eeb7993a15.jpg", "Arte oficial de personagem de Grand Theft Auto III", rsgTrilogySource),
-  "tommy-vercetti": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/5b523f9e2578bdc3e95de00427f8910d.jpg", "Arte oficial de personagem de Grand Theft Auto: Vice City", rsgTrilogySource),
-  "cj": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/d28dac374fa7413d066a50ca33cf6da7.jpg", "Arte oficial de personagem de Grand Theft Auto: San Andreas", rsgTrilogySource),
+  "claude": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/f21b89ff222aec91c5c432eeb7993a15.jpg", "Arte oficial de personagem de Grand Theft Auto III", rsgTrilogySource, "Rockstar Games", { position: "center 22%" }),
+  "tommy-vercetti": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/5b523f9e2578bdc3e95de00427f8910d.jpg", "Arte oficial de personagem de Grand Theft Auto: Vice City", rsgTrilogySource, "Rockstar Games", { position: "center 18%" }),
+  "cj": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/d28dac374fa7413d066a50ca33cf6da7.jpg", "Arte oficial de personagem de Grand Theft Auto: San Andreas", rsgTrilogySource, "Rockstar Games", { position: "center 18%" }),
   "niko-bellic": officialImage("https://media-rockstargames-com.akamaized.net/mfe6/prod/__common/img/5576e5d2cd0f451508d8b025b77e7250.jpg", "Screenshot oficial de Grand Theft Auto IV", "https://www.rockstargames.com/games/IV"),
   "michael-de-santa": officialImage("https://media.rockstargames.com/rockstargames/img/global/news/upload/actual_1427472412.jpg", "Screenshot oficial de Grand Theft Auto V para PC", "https://www.rockstargames.com/newswire/article/1748koo9o829a9/screens-from-grand-theft-auto-v-for-pc"),
   "franklin-clinton": officialImage("https://media.rockstargames.com/rockstargames/img/global/news/upload/actual_1427472455.jpg", "Screenshot oficial de Grand Theft Auto V para PC", "https://www.rockstargames.com/newswire/article/1748koo9o829a9/screens-from-grand-theft-auto-v-for-pc"),
@@ -3199,12 +3200,48 @@ const officialMediaByCityId = {
   "leonida": officialImage("https://www.rockstargames.com/VI/_next/static/media/Leonida_Keys_01.1af17390.jpg", "Screenshot oficial de Leonida Keys em GTA VI", rsgVIScreens, "Rockstar Games - GTA VI Screenshots")
 };
 
+const mediaArray = (value) => Array.isArray(value) ? value : value ? [value] : [];
+const mediaKey = (value) => String(value || "")
+  .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  .toLowerCase()
+  .replace(/grand theft auto/g, "gta")
+  .replace(/[^a-z0-9]+/g, " ")
+  .trim();
+
+const findGameMediaForCharacter = (character) => {
+  const gameNames = mediaArray(character.games).map(mediaKey);
+  for (const name of gameNames) {
+    const exactMatch = gamesData.find((game) => mediaKey(game.title) === name && game.media);
+    if (exactMatch) return exactMatch;
+  }
+  for (const name of gameNames) {
+    if (name.length <= 4) continue;
+    const partialMatch = gamesData.find((game) => {
+      const key = mediaKey(game.title);
+      return key.length > 4 && game.media && (name.includes(key) || key.includes(name));
+    });
+    if (partialMatch) return partialMatch;
+  }
+  return null;
+};
+
 gamesData.forEach((item) => {
   if (officialMediaByGameId[item.id]) item.media = officialMediaByGameId[item.id];
 });
 
 charactersData.forEach((item) => {
   if (officialMediaByCharacterId[item.id]) item.media = officialMediaByCharacterId[item.id];
+  if (!item.media) {
+    const relatedGame = findGameMediaForCharacter(item);
+    if (relatedGame?.media) {
+      item.media = {
+        ...relatedGame.media,
+        alt: `Imagem oficial de ${relatedGame.title} relacionada a ${item.name}`,
+        caption: `Rockstar Games - ${relatedGame.title}`,
+        relatedOnly: true
+      };
+    }
+  }
 });
 
 citiesData.forEach((item) => {

@@ -83,9 +83,13 @@ const mediaCaption = (media) => media?.caption || media?.credit || "Rockstar Gam
 const OfficialMedia = ({ media, className = "" }) => {
   if (!media?.src) return null;
   const caption = mediaCaption(media);
+  const imageStyle = {
+    objectPosition: media.position || undefined,
+    objectFit: media.fit || undefined
+  };
   return (
     <figure className={`official-media ${className}`}>
-      <img src={media.src} alt={media.alt || caption} loading="lazy" referrerPolicy="no-referrer" />
+      <img src={media.src} alt={media.alt || caption} loading="lazy" referrerPolicy="no-referrer" style={imageStyle} />
       <figcaption>
         {media.source ? <a href={media.source} target="_blank" rel="noreferrer">{caption}</a> : caption}
       </figcaption>
@@ -114,6 +118,15 @@ const titleKey = (value) => normalizeText(value)
   .replace(/grand theft auto/g, "gta")
   .replace(/[^a-z0-9]+/g, " ")
   .trim();
+
+const initialsOf = (value) => String(value || "")
+  .replace(/["']/g, "")
+  .split(/\s+/)
+  .filter(Boolean)
+  .slice(0, 2)
+  .map((part) => part[0])
+  .join("")
+  .toUpperCase();
 
 const findGameForTimeline = (item) => {
   const aliases = {
@@ -449,13 +462,17 @@ const CharactersDossierSection = ({ onOpenDossier }) => {
           {filtered.map((character) => (
             <article key={character.id} className="card dossier-character-card" onClick={() => onOpenDossier({ type: "character", item: character })}>
               <Corners />
-              <div className={`dossier-mugshot ${tagTone(character.role)} ${character.media ? "has-official" : ""}`}>
+              <div className={`dossier-mugshot ${tagTone(character.role)} ${character.media ? "has-official" : "has-fallback"}`}>
                 {character.media ? (
                   <OfficialMedia media={character.media} className="dossier-mugshot-media" />
                 ) : (
-                  <DossierIcon type={character.tags.includes("governo") || character.tags.includes("polícia corrupta") ? "police" : "users"} />
+                  <div className="dossier-mugshot-fallback">
+                    <DossierIcon type={character.tags.includes("governo") || character.tags.includes("polícia corrupta") ? "police" : "users"} />
+                    <strong>{initialsOf(character.name)}</strong>
+                    <small>{character.universe}</small>
+                  </div>
                 )}
-                <span>{character.id}</span>
+                <span>{character.media?.relatedOnly ? "arquivo relacionado" : character.id}</span>
               </div>
               <div className="dossier-card-body">
                 <DossierChips items={[character.role, character.importance]} limit={2} />

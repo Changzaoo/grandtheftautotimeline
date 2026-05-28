@@ -519,13 +519,18 @@ select:focus{
 .dossier-dev-card{display:grid;grid-template-columns:56px 1fr;gap:16px;padding:18px}
 .dossier-icon-box{width:48px;height:48px;border-radius:8px;border:1px solid rgba(74,222,128,.35);display:grid;place-items:center;color:var(--money);background:rgba(74,222,128,.08)}
 
-.dossier-character-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.dossier-character-card{display:grid;grid-template-columns:116px 1fr;cursor:pointer}
-.dossier-mugshot{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:100%;padding:14px;border-right:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015))}
-.dossier-mugshot.has-official{position:relative;min-height:250px;justify-content:flex-end;padding:0;overflow:hidden}
+.dossier-character-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
+.dossier-character-card{display:flex;flex-direction:column;cursor:pointer}
+.dossier-mugshot{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-height:250px;padding:14px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));overflow:hidden}
+.dossier-mugshot.has-official{min-height:270px;justify-content:flex-end;padding:0}
 .dossier-mugshot.has-official::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.18) 45%,rgba(0,0,0,.82))}
 .dossier-mugshot-media{position:absolute;inset:0;z-index:0;border:0;border-radius:0}
+.dossier-mugshot-media img{object-position:center 24%}
 .dossier-mugshot.has-official span{position:relative;z-index:2;width:100%;padding:10px 8px;background:rgba(0,0,0,.55);color:#ffe69a}
+.dossier-mugshot-fallback{display:grid;place-items:center;gap:10px;text-align:center;color:var(--evidence)}
+.dossier-mugshot-fallback svg{width:34px;height:34px}
+.dossier-mugshot-fallback strong{font-size:56px;line-height:1;color:#fff;font-weight:900}
+.dossier-mugshot-fallback small{font-family:"Space Mono",monospace;color:var(--grit);font-size:10px;text-transform:uppercase}
 .dossier-mugshot svg{color:var(--evidence)}
 .dossier-mugshot.red svg{color:var(--siren)}
 .dossier-mugshot.blue svg{color:var(--copper)}
