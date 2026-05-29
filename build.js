@@ -6,9 +6,16 @@
  * appear and janky on weak devices. This script does the transpile ONCE,
  * ahead of time, so the browser only ever downloads plain JS + React (prod).
  *
- * Outputs:
- *   dist/app.bundle.js   - all JSX files transpiled and concatenated, in order
- *   vendor/react*.js     - React / ReactDOM production UMD builds (no CDN)
+ * Everything is assembled into a single `public/` directory so that static
+ * hosts (Vercel, Netlify, GitHub Pages, ...) can serve it as-is. Vercel uses
+ * `public` as its default Output Directory, so no extra config is required.
+ *
+ * Outputs (all under public/):
+ *   public/index.html            - copied from the repo root
+ *   public/styles.css            - copied from the repo root
+ *   public/assets/*              - copied from the repo root (favicon, logo, ...)
+ *   public/dist/app.bundle.js    - all JSX files transpiled and concatenated
+ *   public/vendor/react*.js      - React / ReactDOM production UMD builds (no CDN)
  *
  * Run with:  npm run build   (or)  node build.js
  * ========================================================================== */
@@ -18,8 +25,15 @@ const path = require("path");
 const babel = require("@babel/core");
 
 const ROOT = __dirname;
-const DIST = path.join(ROOT, "dist");
-const VENDOR = path.join(ROOT, "vendor");
+const PUBLIC = path.join(ROOT, "public");
+const DIST = path.join(PUBLIC, "dist");
+const VENDOR = path.join(PUBLIC, "vendor");
+
+/* Static files copied verbatim from the repo root into public/. The relative
+ * paths inside index.html (vendor/..., dist/..., styles.css, assets/...) keep
+ * working because the whole tree is mirrored under public/. */
+const STATIC_FILES = ["index.html", "styles.css"];
+const STATIC_DIRS = ["assets"];
 
 /* Load order must match how index.html loaded the scripts: dependencies first
  * (shared components + data), then the section components, then app.jsx last. */
@@ -88,6 +102,26 @@ function copyReact(){
   }
 }
 
+function copyStatic(){
+  ensureDir(PUBLIC);
+  for(const file of STATIC_FILES){
+    const src = path.join(ROOT, file);
+    if(!fs.existsSync(src)){
+      throw new Error("Missing static file " + file);
+    }
+    fs.copyFileSync(src, path.join(PUBLIC, file));
+    process.stdout.write("  - public/" + file + "\n");
+  }
+  for(const dir of STATIC_DIRS){
+    const src = path.join(ROOT, dir);
+    if(!fs.existsSync(src)) continue;
+    fs.cpSync(src, path.join(PUBLIC, dir), { recursive: true });
+    process.stdout.write("  - public/" + dir + "/\n");
+  }
+}
+
+process.stdout.write("Copying static files...\n");
+copyStatic();
 process.stdout.write("Copying React production build...\n");
 copyReact();
 process.stdout.write("Transpiling JSX...\n");
