@@ -1,0 +1,15 @@
+{
+  "name": "gta-urban-universe",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dossie interativo GTA - build estatico pre-compilado (sem Babel no navegador).",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  }
+}

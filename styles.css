@@ -494,7 +494,7 @@ select:focus{
 .dossier-evidence-strip{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .dossier-evidence-strip span{padding:6px 9px;border-radius:999px;background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.25);color:#ffe69a;font-size:12px}
 
-.dossier-section{padding:92px 0;position:relative}
+.dossier-section{padding:92px 0;position:relative;content-visibility:auto;contain-intrinsic-size:auto 1400px}
 .dossier-section.alt{background:linear-gradient(180deg,#0a0a0d,#0e0e14 38%,#0a0a0d)}
 .dossier-section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px}
 .dossier-eyebrow{font-family:"Space Mono",monospace;text-transform:uppercase;font-size:12px;color:var(--grit);margin-bottom:10px}
@@ -1061,4 +1061,23 @@ select:focus{
   .dossier-modal-back{padding:10px}
   .dossier-modal header h2{font-size:32px}
   .dossier-modal-grid{padding:14px}
+}
+
+/* ===== SCROLL REVEAL ====================================================== *
+ * Items fade/slide in as they enter the viewport and back out when they leave.
+ * Only `opacity` + `transform` are animated (compositor-friendly = no layout
+ * or paint cost), so it stays smooth even on weak devices. The `.reveal` class
+ * is added by JS; without JS or with reduced-motion the content stays visible. */
+@media (prefers-reduced-motion: no-preference){
+  .reveal{
+    opacity:0;
+    transform:translate3d(0,26px,0);
+    transition:opacity .5s ease-out, transform .5s ease-out;
+    transition-delay:0s; /* hide (scroll up) is immediate */
+  }
+  .reveal.reveal--in{
+    opacity:1;
+    transform:none;
+    transition-delay:calc(var(--ri, 0) * 55ms); /* staggered cascade in */
+  }
 }

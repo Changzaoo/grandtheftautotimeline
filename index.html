@@ -15,24 +15,11 @@
 <body>
   <div id="root"></div>
 
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-
-  <script type="text/babel" src="components.jsx"></script>
-  <script type="text/babel" src="data.jsx"></script>
-  <script type="text/babel" src="data-gta.jsx"></script>
-  <script type="text/babel" src="data-dossier.jsx"></script>
-  <script type="text/babel" src="data-missions.jsx"></script>
-  <script type="text/babel" src="data-vehicles.jsx"></script>
-  <script type="text/babel" src="data-weapons.jsx"></script>
-  <script type="text/babel" src="sections-1.jsx"></script>
-  <script type="text/babel" src="sections-2.jsx"></script>
-  <script type="text/babel" src="sections-3.jsx"></script>
-  <script type="text/babel" src="sections-4.jsx"></script>
-  <script type="text/babel" src="sections-expanded.jsx"></script>
-  <script type="text/babel" src="sections-rockstar.jsx"></script>
-  <script type="text/babel" src="sections-dossier.jsx"></script>
-  <script type="text/babel" src="app.jsx"></script>
+  <!-- Pre-compiled build: production React + a single transpiled bundle.
+       No in-browser Babel = far faster load on weak devices.
+       After editing any .jsx, run `npm run build` to regenerate dist/app.bundle.js -->
+  <script src="vendor/react.production.min.js"></script>
+  <script src="vendor/react-dom.production.min.js"></script>
+  <script src="dist/app.bundle.js"></script>
 </body>
 </html>
