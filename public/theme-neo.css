@@ -1,0 +1,422 @@
+/* ============================================================================
+ * THEME-NEO — Visual reimagining layer (loaded AFTER styles.css)
+ * ----------------------------------------------------------------------------
+ * Goal: keep ALL existing markup + layout intact, but transform the look into a
+ * cinematic, neon "night-city" GTA aesthetic with depth, glass, glow and motion.
+ * Plus: 3D hero canvas integration, card tilt support, and easter-egg overlays.
+ * Everything here is opacity/transform/filter based to stay GPU-cheap, and the
+ * heavy motion is disabled under prefers-reduced-motion at the bottom.
+ * ========================================================================== */
+
+:root{
+  --neo-cyan:#19e3ff;
+  --neo-pink:#ff2e88;
+  --neo-purple:#9b4dff;
+  --neo-gold:#ffd23f;
+  --neo-green:#39ff88;
+  --neo-blue:#3b82ff;
+  --neo-ink:#05060b;
+  --neo-glass:rgba(16,18,30,.55);
+  --neo-glass-2:rgba(22,24,40,.66);
+  --neo-edge:rgba(255,255,255,.10);
+  --neo-edge-hi:rgba(255,255,255,.22);
+  --neo-glow-pink:0 0 24px rgba(255,46,136,.45);
+  --neo-glow-cyan:0 0 24px rgba(25,227,255,.40);
+  --neo-glow-gold:0 0 24px rgba(255,210,63,.40);
+}
+
+/* ---- Animated night-city aurora background -------------------------------- */
+html,body{background:#04050a;}
+body{
+  background:
+    radial-gradient(1200px 720px at 82% -8%, rgba(255,46,136,.20), transparent 60%),
+    radial-gradient(1000px 560px at 8% 6%, rgba(25,227,255,.16), transparent 60%),
+    radial-gradient(1200px 700px at 50% 116%, rgba(155,77,255,.16), transparent 62%),
+    linear-gradient(180deg,#05060d 0%, #04050a 60%, #05060d 100%);
+}
+body::before{
+  /* drifting neon aurora ribbons behind everything */
+  content:"";position:fixed;inset:-20% -20% -20% -20%;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(40% 30% at 20% 30%, rgba(255,46,136,.10), transparent 70%),
+    radial-gradient(45% 32% at 80% 25%, rgba(25,227,255,.10), transparent 70%),
+    radial-gradient(50% 35% at 55% 85%, rgba(155,77,255,.10), transparent 70%);
+  mix-blend-mode:screen;filter:blur(8px);
+  animation:neo-aurora 26s ease-in-out infinite alternate;
+}
+@keyframes neo-aurora{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(-2%,1.5%,0) scale(1.06)}
+  100%{transform:translate3d(2%,-1.5%,0) scale(1.04)}
+}
+/* faint horizon grid that lives behind all content */
+body::after{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+  background:
+    linear-gradient(transparent 0 70%, rgba(25,227,255,.05) 100%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.022) 0 1px, transparent 1px 64px);
+  -webkit-mask:linear-gradient(180deg, transparent 55%, #000 100%);
+          mask:linear-gradient(180deg, transparent 55%, #000 100%);
+}
+
+/* ---- Selection / focus glow ----------------------------------------------- */
+::selection{background:var(--neo-pink);color:#0a0a0c}
+
+/* ===========================================================================
+ * BOOT / LOADING SCREEN (GTA "loading the city" vibe). Removed by JS on load.
+ * ======================================================================== */
+#neo-boot{
+  position:fixed;inset:0;z-index:100000;display:grid;place-items:center;
+  background:radial-gradient(900px 600px at 50% 30%, #0c1020, #04050a 75%);
+  transition:opacity .6s ease, visibility .6s ease;
+}
+#neo-boot.hide{opacity:0;visibility:hidden}
+#neo-boot .neo-boot-inner{width:min(440px,82vw);text-align:center;transform:translateY(-4%)}
+#neo-boot .neo-boot-badge{
+  font-family:"Anton",sans-serif;font-size:13px;letter-spacing:.42em;text-transform:uppercase;
+  color:var(--neo-gold);opacity:.85;margin-bottom:18px
+}
+#neo-boot h1{
+  font-family:"Big Shoulders Display",sans-serif;font-weight:900;line-height:.84;margin:0;
+  font-size:clamp(46px,11vw,86px);letter-spacing:-.02em;text-transform:uppercase;color:#fff;
+  text-shadow:0 0 30px rgba(255,46,136,.5);
+}
+#neo-boot h1 em{font-style:normal;background:linear-gradient(90deg,var(--neo-cyan),var(--neo-pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+#neo-boot .neo-boot-bar{position:relative;height:6px;margin:26px auto 12px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
+#neo-boot .neo-boot-bar i{position:absolute;inset:0;width:0;border-radius:99px;background:linear-gradient(90deg,var(--neo-cyan),var(--neo-pink),var(--neo-gold));box-shadow:0 0 18px rgba(255,46,136,.6);animation:neo-load 1.7s cubic-bezier(.6,.05,.3,1) forwards}
+@keyframes neo-load{0%{width:4%}45%{width:62%}100%{width:100%}}
+#neo-boot .neo-boot-tip{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--bone-2);opacity:.7}
+
+/* ===========================================================================
+ * HUD NAV — glassy, glowing, with animated underline
+ * ======================================================================== */
+.dossier-hud{
+  background:linear-gradient(180deg, rgba(6,8,16,.86), rgba(6,8,16,.55));
+  border-bottom:1px solid transparent;
+  -webkit-backdrop-filter:blur(20px) saturate(150%);backdrop-filter:blur(20px) saturate(150%);
+}
+.dossier-hud::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--neo-cyan),var(--neo-pink),var(--neo-gold),transparent);
+  background-size:200% 100%;animation:neo-slide-x 8s linear infinite;opacity:.85
+}
+@keyframes neo-slide-x{to{background-position:200% 0}}
+.dossier-hud nav a{transition:color .18s ease, background .18s ease, box-shadow .25s ease, transform .18s ease}
+.dossier-hud nav a:hover{transform:translateY(-1px);background:rgba(25,227,255,.08);border-color:rgba(25,227,255,.35);color:#fff;box-shadow:0 0 18px rgba(25,227,255,.18)}
+.dossier-hud nav a.active{
+  background:linear-gradient(180deg,var(--neo-gold),#e9a900);color:#1a1200;border-color:transparent;
+  box-shadow:0 0 22px rgba(255,210,63,.5),0 6px 18px -6px rgba(0,0,0,.7)
+}
+.dossier-brand-logo{filter:drop-shadow(0 0 14px rgba(255,46,136,.35));transition:filter .3s ease, transform .3s ease}
+.dossier-brand:hover .dossier-brand-logo{filter:drop-shadow(0 0 22px rgba(25,227,255,.55));transform:translateY(-1px)}
+
+.dossier-back-top{
+  border-color:rgba(25,227,255,.55);color:var(--neo-cyan);
+  background:rgba(6,10,18,.82);box-shadow:0 0 26px rgba(25,227,255,.22);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)
+}
+.dossier-back-top:hover{background:linear-gradient(180deg,var(--neo-cyan),#0bbad6);color:#04222a;box-shadow:0 0 32px rgba(25,227,255,.5)}
+.dossier-bottom-nav a.active{background:linear-gradient(180deg,var(--neo-gold),#e9a900);border-color:transparent;color:#1a1200;box-shadow:0 0 18px rgba(255,210,63,.4)}
+
+/* ===========================================================================
+ * HERO — 3D canvas behind, neon title, glass panel
+ * ======================================================================== */
+.dossier-hero{min-height:760px;border-bottom:1px solid rgba(255,255,255,.08)}
+#hero3d{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
+.dossier-hero .dossier-map-bg{opacity:.28;z-index:0;mix-blend-mode:screen}
+.dossier-hero .dossier-hero-siren{height:240px;opacity:.6;background:linear-gradient(90deg,rgba(255,46,136,.22),transparent 35%,rgba(25,227,255,.2));z-index:1}
+.dossier-hero::after{ /* vignette + bottom fade so text reads over the 3D scene */
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 30%, transparent 40%, rgba(4,5,10,.55) 100%),
+             linear-gradient(180deg, transparent 55%, #05060d 99%);
+}
+.dossier-hero-grid{z-index:3}
+
+.dossier-hero-copy .tape{
+  background:linear-gradient(90deg,var(--neo-gold),#ffe680);box-shadow:0 0 26px rgba(255,210,63,.35);
+  animation:neo-tape 5s ease-in-out infinite
+}
+@keyframes neo-tape{0%,100%{transform:rotate(-.6deg)}50%{transform:rotate(.6deg)}}
+.dossier-hero-copy h1{
+  font-size:clamp(44px,6.4vw,86px);
+  background:linear-gradient(180deg,#ffffff 30%, #cfe9ff 75%, #8fd6ff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 42px rgba(25,227,255,.18);
+}
+.dossier-hero-copy h1::after{
+  content:"";display:block;width:120px;height:4px;margin-top:18px;border-radius:99px;
+  background:linear-gradient(90deg,var(--neo-pink),var(--neo-cyan));box-shadow:var(--neo-glow-pink)
+}
+.dossier-hero-copy p{color:#d7e6f5}
+.dossier-quick-tabs a{
+  background:var(--neo-glass);border:1px solid var(--neo-edge);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  transition:transform .18s ease, box-shadow .25s ease, border-color .2s ease, color .2s ease
+}
+.dossier-quick-tabs a:hover{
+  transform:translateY(-2px);border-color:var(--neo-cyan);color:#fff;
+  box-shadow:0 0 22px rgba(25,227,255,.28),0 10px 24px -12px rgba(0,0,0,.8)
+}
+.dossier-quick-tabs a svg{color:var(--neo-cyan)}
+
+.dossier-hero-panel{
+  border:1px solid var(--neo-edge-hi);
+  background:linear-gradient(160deg, rgba(20,22,38,.72), rgba(8,10,18,.78));
+  -webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);
+  box-shadow:0 40px 90px -42px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.06);
+  position:relative;overflow:hidden
+}
+.dossier-hero-panel::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--neo-pink),var(--neo-cyan),var(--neo-gold));opacity:.9
+}
+.dossier-case-top strong{color:var(--neo-cyan)}
+.dossier-stat strong{color:#fff}
+.dossier-stat{border-color:rgba(255,255,255,.12);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.015))}
+.dossier-evidence-strip span{
+  background:linear-gradient(180deg,rgba(255,210,63,.16),rgba(255,210,63,.05));
+  border-color:rgba(255,210,63,.32);color:#ffe9a6;box-shadow:0 0 16px rgba(255,210,63,.12)
+}
+
+/* ===========================================================================
+ * SECTION HEADS — neon gradient + animated keyline
+ * ======================================================================== */
+.dossier-section-head h2,.sec-head h2{
+  background:linear-gradient(92deg,#ffffff,#d7ecff 55%,#9fd8ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.dossier-section-head h2 em,.sec-head h2 em{
+  background:linear-gradient(92deg,var(--neo-pink),var(--neo-gold));
+  -webkit-background-clip:text;background-clip:text;color:transparent
+}
+.dossier-section-head{position:relative}
+.dossier-section-head::after{
+  content:"";position:absolute;left:0;bottom:-12px;height:2px;width:min(220px,40%);
+  background:linear-gradient(90deg,var(--neo-cyan),var(--neo-pink),transparent);border-radius:99px;opacity:.8
+}
+.dossier-eyebrow{color:var(--neo-cyan);letter-spacing:.22em}
+
+/* alternating section tints — richer, with a top neon hairline */
+.dossier-section.alt{background:linear-gradient(180deg,#070810,#0b0d18 38%,#070810)}
+.dossier-section{position:relative}
+.dossier-section + .dossier-section::before{
+  content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:min(1100px,86%);height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.10),transparent)
+}
+
+/* ===========================================================================
+ * CARDS — glass + neon edge, depth on hover, ready for JS 3D tilt
+ * ======================================================================== */
+.card,
+.dossier-game-card,.dossier-mission-card,.dossier-vehicle-card,.dossier-weapon-card,
+.dossier-character-card,.dossier-faction-card,.dossier-city-card,.dossier-universe-card,
+.dossier-person-card,.dossier-online-dlc-card,.dossier-glossary-item,.dossier-timeline-card,
+.dossier-release-card,.dossier-dev-card,.dossier-online-timeline article,.dossier-fact-columns article,
+.dossier-extra-grid>article,.dossier-rockstar-row{
+  background:linear-gradient(165deg, rgba(20,22,36,.74), rgba(9,10,18,.82));
+  border:1px solid var(--neo-edge);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:0 18px 40px -28px rgba(0,0,0,.9);
+}
+/* the 3D tilt wrapper gets perspective; cards lift toward the cursor */
+.neo-tilt{will-change:transform;transform-style:preserve-3d;transition:transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease}
+.neo-tilt .neo-tilt-glow{
+  position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;transition:opacity .25s ease;
+  background:radial-gradient(220px 220px at var(--mx,50%) var(--my,50%), rgba(25,227,255,.16), transparent 60%);
+  mix-blend-mode:screen
+}
+.neo-tilt.is-live .neo-tilt-glow{opacity:1}
+
+.card::after,
+.dossier-game-card::after,.dossier-mission-card::after,.dossier-vehicle-card::after,
+.dossier-weapon-card::after,.dossier-character-card::after,.dossier-city-card::after,
+.dossier-universe-card::after,.dossier-person-card::after,.dossier-online-dlc-card::after,
+.dossier-glossary-item::after{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;z-index:4;
+  background:linear-gradient(90deg,var(--neo-pink),var(--neo-cyan));opacity:0;transition:opacity .25s ease
+}
+.card:hover,
+.dossier-game-card:hover,.dossier-mission-card:hover,.dossier-vehicle-card:hover,
+.dossier-weapon-card:hover,.dossier-character-card:hover,.dossier-city-card:hover,
+.dossier-universe-card:hover,.dossier-person-card:hover,.dossier-online-dlc-card:hover,
+.dossier-glossary-item:hover{
+  border-color:var(--neo-edge-hi);
+  box-shadow:0 30px 70px -34px rgba(0,0,0,.95), 0 0 0 1px rgba(255,255,255,.05) inset, 0 0 30px -8px rgba(25,227,255,.22)
+}
+.card:hover::after,
+.dossier-game-card:hover::after,.dossier-mission-card:hover::after,.dossier-vehicle-card:hover::after,
+.dossier-weapon-card:hover::after,.dossier-character-card:hover::after,.dossier-city-card:hover::after,
+.dossier-universe-card:hover::after,.dossier-person-card:hover::after,.dossier-online-dlc-card:hover::after,
+.dossier-glossary-item:hover::after{opacity:.9}
+
+/* chips / tags / kicker glow */
+.dossier-card-kicker{color:var(--neo-cyan)}
+.tag.pink .dot{box-shadow:0 0 10px var(--neo-pink)}
+.tag.blue .dot{box-shadow:0 0 10px var(--neo-cyan)}
+.dossier-source-row a{border-color:rgba(25,227,255,.28);background:rgba(25,227,255,.06);color:#bff1ff}
+.dossier-source-row a:hover{border-color:rgba(25,227,255,.7);box-shadow:0 0 16px rgba(25,227,255,.2)}
+
+/* segmented / filter controls */
+.dossier-segmented button.active{background:linear-gradient(180deg,var(--neo-gold),#e9a900);color:#1a1200;box-shadow:0 0 16px rgba(255,210,63,.35)}
+.dossier-filterbar input:focus,.dossier-filterbar select:focus,
+input[type="text"]:focus,select:focus{
+  border-color:var(--neo-cyan)!important;box-shadow:0 0 0 1px rgba(25,227,255,.4),0 0 22px rgba(25,227,255,.25)!important
+}
+
+/* wanted stars upgrade */
+.stars i.on{background-color:var(--neo-gold);box-shadow:0 0 14px rgba(255,210,63,.85)}
+
+/* modal polish */
+.dossier-modal{border-color:var(--neo-edge-hi);box-shadow:0 50px 130px rgba(0,0,0,.75),0 0 60px -20px rgba(155,77,255,.3)}
+.dossier-modal header{background:rgba(8,10,18,.96)}
+.dossier-modal header p{color:var(--neo-pink)}
+.dossier-modal-back{background:rgba(2,3,8,.82)}
+
+/* GTA VI section — push the neon harder */
+.dossier-section.gta6{background:linear-gradient(180deg,#08060f,#1e0820 46%,#08060f)}
+.dossier-gta6-hero>div:first-child{border-color:rgba(255,46,136,.4);background:linear-gradient(160deg,rgba(255,46,136,.12),rgba(155,77,255,.06));box-shadow:0 0 40px -16px rgba(255,46,136,.4)}
+.dossier-leonida-map span{text-shadow:0 0 28px rgba(255,46,136,.6)}
+
+/* ===========================================================================
+ * EASTER-EGG OVERLAYS
+ * ======================================================================== */
+/* cheat-confirmation toast (GTA "cheat activated" style) */
+#neo-eggs{position:fixed;left:0;right:0;bottom:26px;z-index:99990;display:flex;flex-direction:column;align-items:center;gap:10px;pointer-events:none}
+.neo-toast{
+  pointer-events:none;min-width:240px;max-width:88vw;
+  font-family:"Space Mono",monospace;font-size:13px;letter-spacing:.06em;
+  color:#eafff4;background:linear-gradient(180deg,rgba(8,12,18,.94),rgba(6,8,14,.94));
+  border:1px solid rgba(57,255,136,.55);border-left:4px solid var(--neo-green);
+  padding:12px 16px;border-radius:8px;box-shadow:0 0 28px rgba(57,255,136,.25),0 18px 40px -18px #000;
+  transform:translateY(20px);opacity:0;animation:neo-toast-in .35s ease forwards
+}
+.neo-toast b{color:var(--neo-green);font-weight:700}
+.neo-toast.warn{border-color:rgba(255,46,136,.6);border-left-color:var(--neo-pink);box-shadow:0 0 28px rgba(255,46,136,.3),0 18px 40px -18px #000}
+.neo-toast.warn b{color:var(--neo-pink)}
+.neo-toast.out{animation:neo-toast-out .4s ease forwards}
+@keyframes neo-toast-in{to{transform:translateY(0);opacity:1}}
+@keyframes neo-toast-out{to{transform:translateY(14px);opacity:0}}
+
+/* wanted-level siren overlay (Konami / cheat) */
+#neo-wanted{position:fixed;inset:0;z-index:99980;pointer-events:none;opacity:0;transition:opacity .4s ease}
+#neo-wanted.on{opacity:1}
+#neo-wanted .flash{position:absolute;inset:0;mix-blend-mode:screen}
+#neo-wanted .flash.r{background:radial-gradient(120% 80% at 0% 50%, rgba(255,40,40,.5), transparent 45%);animation:neo-siren 1.1s infinite}
+#neo-wanted .flash.b{background:radial-gradient(120% 80% at 100% 50%, rgba(40,90,255,.5), transparent 45%);animation:neo-siren 1.1s infinite .55s}
+@keyframes neo-siren{0%,100%{opacity:0}50%{opacity:.9}}
+#neo-wanted .stars{
+  position:absolute;top:18px;right:22px;display:flex;gap:6px;padding:10px 14px;border-radius:10px;
+  background:rgba(4,6,12,.78);border:1px solid rgba(255,255,255,.14);box-shadow:0 0 30px rgba(0,0,0,.6)
+}
+#neo-wanted .stars i{
+  width:26px;height:26px;display:block;background:var(--neo-gold);
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7L12 17.3 5.7 21l1.7-7L2 9.2l7.1-.6z'/></svg>") center/contain no-repeat;
+          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7L12 17.3 5.7 21l1.7-7L2 9.2l7.1-.6z'/></svg>") center/contain no-repeat;
+  filter:drop-shadow(0 0 10px rgba(255,210,63,.9));animation:neo-star-pop .4s backwards
+}
+@keyframes neo-star-pop{from{transform:scale(0) rotate(-40deg);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* money / particle rain canvas */
+#neo-rain{position:fixed;inset:0;z-index:99970;pointer-events:none}
+
+/* secret reference badges (UFO, ghost, heart) */
+.neo-ufo{
+  position:fixed;z-index:99960;font-size:30px;pointer-events:none;
+  filter:drop-shadow(0 0 12px rgba(155,77,255,.7));will-change:transform
+}
+.neo-secret-heart{
+  position:fixed;left:50%;top:46%;transform:translate(-50%,-50%) scale(.6);z-index:99960;
+  font-size:120px;opacity:0;pointer-events:none;filter:drop-shadow(0 0 26px rgba(255,46,136,.8));
+  transition:opacity .4s ease, transform .5s cubic-bezier(.2,.8,.2,1)
+}
+.neo-secret-heart.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+/* secrets-found HUD (bottom-left, subtle until hovered) */
+#neo-secrets{
+  position:fixed;left:16px;bottom:16px;z-index:99950;
+  display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:99px;
+  font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--neo-gold);background:rgba(6,8,14,.7);border:1px solid rgba(255,210,63,.3);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  box-shadow:0 0 20px rgba(255,210,63,.12);opacity:.55;transition:opacity .25s ease, transform .25s ease;cursor:help
+}
+#neo-secrets:hover{opacity:1;transform:translateY(-2px)}
+#neo-secrets b{color:#fff}
+#neo-secrets .star{width:14px;height:14px;display:inline-block;background:var(--neo-gold);
+  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7L12 17.3 5.7 21l1.7-7L2 9.2l7.1-.6z'/></svg>") center/contain no-repeat;
+          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7L12 17.3 5.7 21l1.7-7L2 9.2l7.1-.6z'/></svg>") center/contain no-repeat}
+@media (max-width:680px){#neo-secrets{bottom:96px}}
+
+/* screen-wide effect flashes (HESOYAM heal = green, etc.) */
+#neo-flash{position:fixed;inset:0;z-index:99975;pointer-events:none;opacity:0}
+#neo-flash.go{animation:neo-flash .8s ease forwards}
+@keyframes neo-flash{0%{opacity:0}18%{opacity:.5}100%{opacity:0}}
+
+/* a hidden "cluckin' bell" style clickable tucked in the footer */
+.neo-hidden-trigger{cursor:pointer;transition:color .2s ease}
+.neo-hidden-trigger:hover{color:var(--neo-pink)}
+
+/* ============================================================================
+ * NEW ENHANCEMENTS — Added June 2026
+ * ============================================================================ */
+
+/* ---- Enhanced card hover effects ---- */
+.card{transition:transform .3s ease,box-shadow .3s ease}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 30px rgba(255,61,138,.15)}
+
+/* ---- Neon glow pulse animation ---- */
+@keyframes neo-pulse{0%,100%{box-shadow:0 0 20px rgba(255,61,138,.3)}50%{box-shadow:0 0 40px rgba(255,61,138,.6)}}
+.tag{padding:4px 10px;border-radius:2px;font-size:10px;letter-spacing:.12em}
+.tag.pink{background:rgba(255,61,138,.15);border:1px solid rgba(255,61,138,.4);color:var(--neon)}
+.tag.pink:hover{animation:neo-pulse .8s ease infinite}
+
+/* ---- Glassmorphism improvements ---- */
+.dossier-section{background:linear-gradient(180deg,transparent,rgba(10,10,20,.95));position:relative}
+.dossier-section::before{content:"";position:absolute;inset:0;background:rgba(255,255,255,.02);pointer-events:none}
+
+/* ---- Enhanced reveal animations ---- */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.reveal--in{opacity:1;transform:translateY(0)}
+
+/* ---- Neon border animation ---- */
+@keyframes neon-border{0%,100%{border-color:rgba(255,61,138,.4)}50%{border-color:rgba(255,61,138,.8)}}
+.dossier-hud{animation:neon-border 3s ease infinite}
+
+/* ---- Scroll progress indicator ---- */
+body::after{content:"";position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--neo-pink),var(--neo-cyan),var(--neo-purple));z-index:99999;width:var(--scroll-p,0%);transition:width .1s ease}
+
+/* ---- Enhanced section dividers ---- */
+.sec-head{position:relative;padding-bottom:32px;margin-bottom:40px}
+.sec-head::after{content:"";position:absolute;bottom:0;left:0;width:80px;height:2px;background:linear-gradient(90deg,var(--neo-pink),transparent)}
+
+/* ---- Typography enhancements ---- */
+.display{background:linear-gradient(135deg,var(--bone) 0%,var(--neo-cyan) 50%,var(--neon) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ---- Video/Gallery container ---- */
+.dossier-media-container{position:relative;aspect-ratio:16/9;background:#0a0a10;border-radius:4px;overflow:hidden}
+.dossier-media-container::before{content:"";position:absolute;inset:0;border:1px solid rgba(255,255,255,.1);pointer-events:none;z-index:2}
+
+/* ---- Enhanced tag animation ---- */
+.tag{transition:all .25s ease;cursor:default}
+.tag:hover{transform:scale(1.05);box-shadow:0 4px 16px rgba(0,0,0,.4)}
+
+/* ---- GTA VI section special styling ---- */
+section#gta6 .card{position:relative;overflow:hidden}
+section#gta6 .card::before{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(255,61,138,.1),transparent 30%);animation:rotate-border 8s linear infinite;pointer-events:none}
+@keyframes rotate-border{100%{transform:rotate(360deg)}}
+
+/* ---- Enhanced footer ---- */
+.dossier-footer{background:linear-gradient(180deg,#0a0a0d,var(--neo-ink))}
+
+/* ============================================================================
+ * REDUCED MOTION — cut all looping/heavy animation, keep it readable
+ * ======================================================================== */
+@media (prefers-reduced-motion: reduce){
+  body::before{animation:none}
+  .dossier-hud::after{animation:none}
+  .dossier-hero-copy .tape{animation:none}
+  #neo-wanted .flash{animation:none;opacity:.4}
+  #neo-boot .neo-boot-bar i{animation:none;width:100%}
+  .neo-tilt{transition:none}
+}

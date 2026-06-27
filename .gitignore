@@ -1,5 +1,17 @@
 node_modules/
 package-lock.json
-public/
+
+# Ignore public build output
+public/dist/
+public/vendor/
+
+# But keep new premium features
+!public/manifest.json
+!public/sw.js
+!public/search-global.js
+!public/stats-dashboard.js
+!public/map-interactive.js
+!public/theme-toggle.js
+!public/index.html
 
 _smoke.js
