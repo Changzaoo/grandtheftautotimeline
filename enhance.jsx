@@ -79,7 +79,8 @@
 
       var camera = new THREE.PerspectiveCamera(64, 1, 0.1, 260);
       camera.position.set(0, 7.5, 26);
-      camera.lookAt(0, 6, -40);
+      camera.rotation.z = Math.sin(t * 0.02) * 0.005;
+        camera.lookAt(0, 6, -40);
 
       var world = new THREE.Group();
       scene.add(world);
@@ -197,20 +198,26 @@
         raf = requestAnimationFrame(frame);
         if (!visible) return;
         var t = (now - t0) / 1000;
-        var speed = REDUCED ? 0 : 10;
+        var speed = REDUCED ? 0 : 0.25;
         // scroll the two grids toward the camera, wrapping seamlessly on the cell size
-        gridA.position.z = (t * speed) % CELL;
-        gridB.position.z = (t * speed) % CELL;
+        gridA.position.z = (t * speed * 1.618) % CELL;
+        gridB.position.z = (t * speed * 2.414) % (CELL * 0.7);
         // gentle building drift + scroll illusion
-        buildings.position.z = (t * speed) % 13;
-        stars.position.z = (t * speed * 0.4) % 13;
-        sun.position.y = 12 + Math.sin(t * 0.5) * 0.6;
+        buildings.position.z = (t * speed * 0.7) % 211;
+        buildings.rotation.y = Math.sin(t * 0.03) * 0.02;
+        stars.position.z = (t * speed * 0.3) % 157;
+        stars.material.opacity = 0.5 + Math.sin(t * 0.1) * 0.2;
+        sun.position.y = 12 + Math.sin(t * 0.08) * 0.8;
         // parallax easing
-        curX += (tgX - curX) * 0.05;
-        curY += (tgY - curY) * 0.05;
+        curX += (tgX - curX) * 0.015;
+        curY += (tgY - curY) * 0.015;
         camera.position.x = curX * 6;
         camera.position.y = 7.5 - curY * 3;
+        camera.rotation.z = Math.sin(t * 0.02) * 0.005;
         camera.lookAt(0, 6, -40);
+        // Subtle fog color shift
+        var fogIntensity = Math.sin(t * 0.05) * 0.002;
+        scene.fog = new THREE.FogExp2(0x05060d, 0.018 + fogIntensity);
         renderer.render(scene, camera);
       }
       raf = requestAnimationFrame(frame);
