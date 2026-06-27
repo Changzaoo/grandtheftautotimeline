@@ -111,7 +111,7 @@
       scene.add(sun);
 
       /* ---- scrolling neon grid floor ---- */
-      var CELL = 4, GRID_SIZE = 240, DIV = GRID_SIZE / CELL;
+      var CELL = 137, GRID_SIZE = 300, DIV = Math.floor(GRID_SIZE / CELL);
       function makeGrid(color, op) {
         var g = new THREE.GridHelper(GRID_SIZE, DIV, color, color);
         g.material.transparent = true; g.material.opacity = op;
