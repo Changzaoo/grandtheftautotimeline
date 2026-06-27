@@ -415,4 +415,4 @@ const GlossarySection = ()=>{
   );
 };
 
-Object.assign(window,{RockstarSection,UniversesSection,GTAOnlineSection,GTA6Section,GlossarySection});
+Object.assign(window,{RockstarSection,UniversesSection,GTAOnlineSection,GlossarySection});

@@ -357,7 +357,59 @@ input[type="text"]:focus,select:focus{
 .neo-hidden-trigger{cursor:pointer;transition:color .2s ease}
 .neo-hidden-trigger:hover{color:var(--neo-pink)}
 
-/* ===========================================================================
+/* ============================================================================
+ * NEW ENHANCEMENTS — Added June 2026
+ * ============================================================================ */
+
+/* ---- Enhanced card hover effects ---- */
+.card{transition:transform .3s ease,box-shadow .3s ease}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.5),0 0 30px rgba(255,61,138,.15)}
+
+/* ---- Neon glow pulse animation ---- */
+@keyframes neo-pulse{0%,100%{box-shadow:0 0 20px rgba(255,61,138,.3)}50%{box-shadow:0 0 40px rgba(255,61,138,.6)}}
+.tag{padding:4px 10px;border-radius:2px;font-size:10px;letter-spacing:.12em}
+.tag.pink{background:rgba(255,61,138,.15);border:1px solid rgba(255,61,138,.4);color:var(--neon)}
+.tag.pink:hover{animation:neo-pulse .8s ease infinite}
+
+/* ---- Glassmorphism improvements ---- */
+.dossier-section{background:linear-gradient(180deg,transparent,rgba(10,10,20,.95));position:relative}
+.dossier-section::before{content:"";position:absolute;inset:0;background:rgba(255,255,255,.02);pointer-events:none}
+
+/* ---- Enhanced reveal animations ---- */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.reveal--in{opacity:1;transform:translateY(0)}
+
+/* ---- Neon border animation ---- */
+@keyframes neon-border{0%,100%{border-color:rgba(255,61,138,.4)}50%{border-color:rgba(255,61,138,.8)}}
+.dossier-hud{animation:neon-border 3s ease infinite}
+
+/* ---- Scroll progress indicator ---- */
+body::after{content:"";position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--neo-pink),var(--neo-cyan),var(--neo-purple));z-index:99999;width:var(--scroll-p,0%);transition:width .1s ease}
+
+/* ---- Enhanced section dividers ---- */
+.sec-head{position:relative;padding-bottom:32px;margin-bottom:40px}
+.sec-head::after{content:"";position:absolute;bottom:0;left:0;width:80px;height:2px;background:linear-gradient(90deg,var(--neo-pink),transparent)}
+
+/* ---- Typography enhancements ---- */
+.display{background:linear-gradient(135deg,var(--bone) 0%,var(--neo-cyan) 50%,var(--neon) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* ---- Video/Gallery container ---- */
+.dossier-media-container{position:relative;aspect-ratio:16/9;background:#0a0a10;border-radius:4px;overflow:hidden}
+.dossier-media-container::before{content:"";position:absolute;inset:0;border:1px solid rgba(255,255,255,.1);pointer-events:none;z-index:2}
+
+/* ---- Enhanced tag animation ---- */
+.tag{transition:all .25s ease;cursor:default}
+.tag:hover{transform:scale(1.05);box-shadow:0 4px 16px rgba(0,0,0,.4)}
+
+/* ---- GTA VI section special styling ---- */
+section#gta6 .card{position:relative;overflow:hidden}
+section#gta6 .card::before{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 0deg,transparent,rgba(255,61,138,.1),transparent 30%);animation:rotate-border 8s linear infinite;pointer-events:none}
+@keyframes rotate-border{100%{transform:rotate(360deg)}}
+
+/* ---- Enhanced footer ---- */
+.dossier-footer{background:linear-gradient(180deg,#0a0a0d,var(--neo-ink))}
+
+/* ============================================================================
  * REDUCED MOTION — cut all looping/heavy animation, keep it readable
  * ======================================================================== */
 @media (prefers-reduced-motion: reduce){
