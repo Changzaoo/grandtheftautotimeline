@@ -15,8 +15,11 @@ const dossierNavData = [
   { id: "rockstar", label: "Rockstar Games", k: "12" },
   { id: "gtaonline", label: "GTA Online", k: "13" },
   { id: "gta6", label: "GTA VI", k: "14" },
-  { id: "glossary", label: "Glossário", k: "15" }
+  { id: "eastereggs", label: "Easter Eggs", k: "15" },
+  { id: "mysteries", label: "Mistérios", k: "16" },
+  { id: "glossary", label: "Glossário", k: "17" }
 ];
+window.dossierNavData = dossierNavData;
 
 const dossierSourcesData = [
   {

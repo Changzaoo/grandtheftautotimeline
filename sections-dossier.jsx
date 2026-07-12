@@ -64,15 +64,18 @@ const DossierIcon = ({ type = "file" }) => {
   return icons[type] || icons.file;
 };
 
-const DossierSectionHead = ({ eyebrow, title, accent, right }) => (
-  <div className="dossier-section-head">
-    <div>
-      <div className="dossier-eyebrow" style={{ color: accent || "var(--evidence)" }}>{eyebrow}</div>
-      <h2>{title}</h2>
+const DossierSectionHead = ({ eyebrow, title, accent, right, tkey }) => {
+  const tr = (suffix, fallback) => (tkey && window.__t ? window.__t(tkey + "." + suffix, fallback) : fallback);
+  return (
+    <div className="dossier-section-head">
+      <div>
+        <div className="dossier-eyebrow" style={{ color: accent || "var(--evidence)" }}>{tr("eyebrow", eyebrow)}</div>
+        <h2>{tr("title", title)}</h2>
+      </div>
+      {right && <div className="dossier-head-note">{right}</div>}
     </div>
-    {right && <div className="dossier-head-note">{right}</div>}
-  </div>
-);
+  );
+};
 
 const DossierChips = ({ items, limit = 8 }) => (
   <div className="dossier-chip-row">
@@ -233,10 +236,11 @@ const DossierHUDNav = ({ active, onJump }) => {
                   onJump && onJump(n.id);
                 }}
               >
-                <span>{n.k}</span>{n.label}
+                <span>{n.k}</span>{window.__t ? window.__t("nav." + n.id, n.label) : n.label}
               </a>
             ))}
           </nav>
+          {typeof VILanguagePicker !== "undefined" && <VILanguagePicker compact />}
           <button className="dossier-menu" onClick={() => setOpen((v) => !v)} aria-label="Abrir menu">☰</button>
         </div>
       </header>
@@ -251,7 +255,7 @@ const DossierHUDNav = ({ active, onJump }) => {
               onJump && onJump(n.id);
             }}
           >
-            <span>{n.k}</span>{n.label}
+            <span>{n.k}</span>{window.__t ? window.__t("nav." + n.id, n.label) : n.label}
           </a>
         ))}
       </nav>
@@ -351,7 +355,7 @@ const TimelineDossierSection = ({ onOpenDossier }) => {
     <section id="timeline" className="dossier-section dossier-shell">
       <div className="wrap">
         <DossierSectionHead
-          eyebrow="Linha do tempo"
+          tkey="section.timeline" eyebrow="Linha do tempo"
           title="Cronologia interna e lançamentos"
           accent="var(--siren)"
           right="história do universo separada da história de desenvolvimento"
@@ -463,7 +467,7 @@ const GamesDossierSection = ({ onOpenDossier }) => {
   return (
     <section id="games" className="dossier-section dossier-shell alt">
       <div className="wrap">
-        <DossierSectionHead eyebrow="Catálogo" title="Jogos da saga" accent="var(--evidence)" right={`${filtered.length} arquivos filtrados`} />
+        <DossierSectionHead tkey="section.games" eyebrow="Catálogo" title="Jogos da saga" accent="var(--evidence)" right={`${filtered.length} arquivos filtrados`} />
         <div className="dossier-filterbar">
           <label><span>Busca</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Nome, cidade, protagonista..." /></label>
           <label><span>Universo</span><select value={universe} onChange={(e) => setUniverse(e.target.value)}><option value="all">Todos</option>{universeData.map((u) => <option key={u.name} value={u.name}>{u.name}</option>)}</select></label>
@@ -806,7 +810,7 @@ const MissionsDossierSection = ({ onOpenDossier }) => {
   return (
     <section id="missions" className="dossier-section dossier-shell mission-section">
       <div className="wrap">
-        <DossierSectionHead eyebrow="Operações" title="Missões por jogo" accent="var(--money)" right={`${filtered.length} arquivos de missão`} />
+        <DossierSectionHead tkey="section.missions" eyebrow="Operações" title="Missões por jogo" accent="var(--money)" right={`${filtered.length} arquivos de missão`} />
         <div className="dossier-mission-intro card">
           <Corners />
           <div>
@@ -1389,7 +1393,7 @@ const VehiclesDossierSection = ({ onOpenDossier }) => {
   return (
     <section id="vehicles" className="dossier-section dossier-shell vehicle-section">
       <div className="wrap">
-        <DossierSectionHead eyebrow="Garagem criminal" title="Veículos por jogo" accent="var(--copper)" right={`${filtered.length} arquivos de frota`} />
+        <DossierSectionHead tkey="section.vehicles" eyebrow="Garagem criminal" title="Veículos por jogo" accent="var(--copper)" right={`${filtered.length} arquivos de frota`} />
         <div className="dossier-vehicle-intro card">
           <Corners />
           <div>
@@ -1949,7 +1953,7 @@ const WeaponsDossierSection = ({ onOpenDossier }) => {
   return (
     <section id="weapons" className="dossier-section dossier-shell alt weapon-section">
       <div className="wrap">
-        <DossierSectionHead eyebrow="Arsenal criminal" title="Armas por jogo" accent="var(--siren)" right={`${filtered.length} arquivos de arsenal`} />
+        <DossierSectionHead tkey="section.weapons" eyebrow="Arsenal criminal" title="Armas por jogo" accent="var(--siren)" right={`${filtered.length} arquivos de arsenal`} />
         <div className="dossier-weapon-intro card">
           <Corners />
           <div>
@@ -1980,7 +1984,7 @@ const WeaponsDossierSection = ({ onOpenDossier }) => {
 const DevelopmentDossierSection = () => (
   <section id="development" className="dossier-section dossier-shell">
     <div className="wrap">
-      <DossierSectionHead eyebrow="Bastidores" title="Por trás do desenvolvimento" accent="var(--money)" right="história real separada da lore" />
+      <DossierSectionHead tkey="section.development" eyebrow="Bastidores" title="Por trás do desenvolvimento" accent="var(--money)" right="história real separada da lore" />
       <div className="dossier-dev-grid">
         {developmentData.map((item) => (
           <article key={item.id} className="card dossier-dev-card">
@@ -2032,7 +2036,7 @@ const CharactersDossierSection = ({ onOpenDossier }) => {
   return (
     <section id="characters" className="dossier-section dossier-shell alt">
       <div className="wrap">
-        <DossierSectionHead eyebrow="Base de dados" title="Dossiê de personagens" accent="var(--neon)" right={`${filtered.length} fichas ativas`} />
+        <DossierSectionHead tkey="section.characters" eyebrow="Base de dados" title="Dossiê de personagens" accent="var(--neon)" right={`${filtered.length} fichas ativas`} />
         <div className="dossier-filterbar wide">
           <label><span>Busca</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Nome, jogo, facção, relação..." /></label>
           <label><span>Filtro</span><select value={filter} onChange={(e) => setFilter(e.target.value)}>{characterFilterOptions.map((option) => <option key={option}>{option}</option>)}</select></label>
@@ -2160,7 +2164,7 @@ const CitiesDossierSection = ({ onOpenDossier }) => {
   return (
     <section id="cities" className="dossier-section dossier-shell">
       <div className="wrap">
-        <DossierSectionHead eyebrow="Mapa urbano" title="Cidades e estados" accent="var(--copper)" right="inspirações, distritos, facções e eventos" />
+        <DossierSectionHead tkey="section.cities" eyebrow="Mapa urbano" title="Cidades e estados" accent="var(--copper)" right="inspirações, distritos, facções e eventos" />
         <div className="dossier-city-layout">
           <CityMapPanel selectedKey={selectedKey} onSelect={setSelected} />
           <aside className="card dossier-city-selected">
@@ -2219,7 +2223,7 @@ const FactionsDossierSection = ({ onOpenDossier }) => {
   return (
     <section id="gangs" className="dossier-section dossier-shell alt">
       <div className="wrap">
-        <DossierSectionHead eyebrow="Painel criminal" title="Gangues e organizações" accent="var(--siren)" right={`${filtered.length} entidades no banco`} />
+        <DossierSectionHead tkey="section.gangs" eyebrow="Painel criminal" title="Gangues e organizações" accent="var(--siren)" right={`${filtered.length} entidades no banco`} />
         <div className="dossier-filterbar">
           <label><span>Busca</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Leone, FIB, Lost MC, negócios..." /></label>
           <label><span>Tipo</span><select value={category} onChange={(e) => setCategory(e.target.value)}><option value="all">Todos</option>{categories.map((c) => <option key={c}>{c}</option>)}</select></label>
@@ -2254,7 +2258,7 @@ const FactionsDossierSection = ({ onOpenDossier }) => {
 const UniversesDossierSection = () => (
   <section id="universes" className="dossier-section dossier-shell">
     <div className="wrap">
-      <DossierSectionHead eyebrow="Canon" title="Universos GTA" accent="var(--neon)" right="2D, 3D e HD não são a mesma continuidade" />
+      <DossierSectionHead tkey="section.universes" eyebrow="Canon" title="Universos GTA" accent="var(--neon)" right="2D, 3D e HD não são a mesma continuidade" />
       <div className="dossier-universe-grid">
         {universeData.map((universe) => (
           <article key={universe.id} className={`card dossier-universe-card ${universe.tone}`}>
@@ -2285,7 +2289,7 @@ const UniversesDossierSection = () => (
 const RockstarPeopleGrid = () => (
   <div className="dossier-rockstar-people">
     <DossierSectionHead
-      eyebrow="Arquivo de pessoas"
+      tkey="section.rockstar-people" eyebrow="Arquivo de pessoas"
       title="Criadores, produtores e desenvolvedores"
       accent="var(--neon)"
       right={`${rockstarPeopleData.length} perfis com fotos reais e fontes`}
@@ -2336,7 +2340,7 @@ const RockstarPeopleGrid = () => (
 const RockstarDossierSection = () => (
   <section id="rockstar" className="dossier-section dossier-shell alt">
     <div className="wrap">
-      <DossierSectionHead eyebrow="História real" title="Rockstar Games e Rockstar North" accent="var(--evidence)" right="da DMA Design à era HD" />
+      <DossierSectionHead tkey="section.rockstar" eyebrow="História real" title="Rockstar Games e Rockstar North" accent="var(--evidence)" right="da DMA Design à era HD" />
       <div className="dossier-rockstar-layout">
         <div className="dossier-rockstar-timeline">
           {rockstarHistoryData.map((item) => (
@@ -2404,7 +2408,7 @@ const GTAOnlineDossierSection = ({ onOpenDossier }) => {
   return (
     <section id="gtaonline" className="dossier-section dossier-shell">
       <div className="wrap">
-        <DossierSectionHead eyebrow="Plataforma viva" title="GTA Online" accent="var(--money)" right={`${onlineDlcData.length} DLCs catalogadas`} />
+        <DossierSectionHead tkey="section.gtaonline" eyebrow="Plataforma viva" title="GTA Online" accent="var(--money)" right={`${onlineDlcData.length} DLCs catalogadas`} />
         <div className="dossier-online-intro">
           <div>
             <h3>Não é apenas multiplayer: é uma carreira criminal contínua.</h3>
@@ -2544,7 +2548,7 @@ const GlossaryDossierSection = ({ onOpenDossier }) => {
   return (
     <section id="glossary" className="dossier-section dossier-shell alt">
       <div className="wrap">
-        <DossierSectionHead eyebrow="Referência" title="Glossário GTA" accent="var(--copper)" right={`${filtered.length} termos`} />
+        <DossierSectionHead tkey="section.glossary" eyebrow="Referência" title="Glossário GTA" accent="var(--copper)" right={`${filtered.length} termos`} />
         <div className="dossier-filterbar single">
           <label><span>Busca</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Canon, FIB, heist, Leonida..." /></label>
         </div>
@@ -2581,7 +2585,7 @@ const GlossaryDossierSection = ({ onOpenDossier }) => {
 const ConnectionsImpactSection = ({ compact = false }) => (
   <div className={compact ? "dossier-extra-block compact" : "dossier-section dossier-shell dossier-extra-block"}>
     <div className={compact ? "" : "wrap"}>
-      {!compact && <DossierSectionHead eyebrow="Leitura editorial" title="Conexões, ordem de jogo e impacto" accent="var(--evidence)" right="contexto cultural sem misturar com canon" />}
+      {!compact && <DossierSectionHead tkey="section.connections" eyebrow="Leitura editorial" title="Conexões, ordem de jogo e impacto" accent="var(--evidence)" right="contexto cultural sem misturar com canon" />}
       <div className="dossier-extra-grid">
         <article className="card">
           <Corners />
@@ -2631,12 +2635,17 @@ const DossierFooter = () => {
     <div className="wrap">
       <div className="dossier-footer-grid">
         <div>
-          <h2>Grand Theft Auto Dossiê</h2>
-          <p>Arquivo editorial de fã, em português do Brasil, com imagens promocionais oficiais creditadas e conteúdo separado entre lore, desenvolvimento real e impacto cultural.</p>
+          <h2>{window.__t ? window.__t("footer.title", "Grand Theft Auto Dossiê") : "Grand Theft Auto Dossiê"}</h2>
+          <p>{window.__t ? window.__t("footer.about", "Arquivo editorial de fã, com imagens promocionais oficiais creditadas e conteúdo separado entre lore, desenvolvimento real e impacto cultural.") : "Arquivo editorial de fã, com imagens promocionais oficiais creditadas e conteúdo separado entre lore, desenvolvimento real e impacto cultural."}</p>
           {media?.notice && <p className="dossier-media-notice">{media.notice}</p>}
+          {typeof VILanguagePicker !== "undefined" && (
+            <div className="dossier-footer-lang">
+              <VILanguagePicker />
+            </div>
+          )}
         </div>
         <div>
-          <h3>Fontes-base consultadas</h3>
+          <h3>{window.__t ? window.__t("footer.sources", "Fontes-base consultadas") : "Fontes-base consultadas"}</h3>
           <ul>
             {dossierSourcesData.map((source) => (
               <li key={source.url}><a href={source.url} target="_blank" rel="noreferrer">{source.label}</a><span>{source.note}</span></li>

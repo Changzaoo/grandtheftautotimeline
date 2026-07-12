@@ -1,0 +1,1545 @@
+/* ============================================================================
+ * THEME-VI — "Vice Sunset" · repaginação total no estilo rockstargames.com/VI
+ * ----------------------------------------------------------------------------
+ * Carregado DEPOIS de styles.css e theme-neo.css: vence por cascata em
+ * seletores de mesma especificidade e usa !important apenas onde a camada
+ * anterior também usou. Nenhuma imagem externa — só CSS e SVG data-URI.
+ *
+ * ÍNDICE
+ *  01. Variáveis (paleta Vice Sunset)
+ *  02. Céu global com progressão por scroll (body) + brilhos fixos
+ *  03. Tipografia (chrome text, serifada itálica, citações)
+ *  04. Assinaturas .vi-* reutilizáveis
+ *      .vi-sky (--dawn/--dusk/--night) · .vi-grain · .vi-chrome-text
+ *      .vi-serif · .vi-quote · .vi-polaroid · .vi-gallery · .vi-ticker
+ *      .vi-btn / .vi-btn--ghost · .vi-countdown · .vi-badge · .vi-palms
+ *      .vi-vhs · .vi-char-panel · .vi-veil · .vi-stars
+ *  05. Picker de idiomas (.vi-lang-*)
+ *  06. Repaginação: HUD / nav / bottom-nav / back-top
+ *  07. Repaginação: hero
+ *  08. Repaginação: seções, cabeçalhos, tape, eyebrow
+ *  09. Repaginação: cards, chips, fontes de dados, filtros, modais
+ *  10. Repaginação: footer (noite estrelada)
+ *  11. Selection, scrollbar, focus, boot screen
+ *  12. Responsivo
+ *  13. prefers-reduced-motion
+ * ========================================================================== */
+
+/* ============================================================================
+ * 01. VARIÁVEIS — paleta "Vice sunset"
+ * ========================================================================== */
+:root{
+  --vi-pink:#ff2d7c;
+  --vi-pink-2:#f152ff;
+  --vi-coral:#ff8a3d;
+  --vi-gold:#ffd166;
+  --vi-purple:#7b2ff7;
+  --vi-purple-deep:#2b1055;
+  --vi-night:#0b0d2a;
+  --vi-cream:#fff5ec;
+  --vi-ink:#33051c;              /* texto escuro sobre rosa/dourado (AA) */
+  --vi-glass:rgba(24,8,48,.62);
+  --vi-glass-2:rgba(40,12,64,.55);
+  --vi-edge:rgba(255,45,124,.24);
+  --vi-edge-hi:rgba(255,45,124,.55);
+  --vi-glow-pink:0 0 26px rgba(255,45,124,.4);
+  --vi-glow-gold:0 0 26px rgba(255,209,102,.35);
+  --vi-grad-sunset:linear-gradient(90deg,var(--vi-pink),var(--vi-coral) 52%,var(--vi-gold));
+  --vi-grad-chrome:linear-gradient(178deg,#fff8ef 6%,var(--vi-gold) 34%,var(--vi-coral) 58%,var(--vi-pink) 88%);
+  --vi-grain-url:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%25' height='100%25' filter='url(%23g)'/></svg>");
+  --vi-palms-url:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='200' viewBox='0 0 1200 200'><g fill='%23090418'><path d='M0 200v-16c96-8 214-12 336-10 138 2 258 10 388 10 158 0 316-8 476-16V200z'/><ellipse cx='300' cy='194' rx='110' ry='24'/><ellipse cx='680' cy='198' rx='150' ry='26'/><ellipse cx='1050' cy='192' rx='120' ry='24'/><path d='M138 200c8-52 10-96 4-132l16-2c8 40 4 86-6 134z'/><path d='M152 70c-30-26-64-34-96-24 34-22 74-14 102 10-4-34-22-60-50-72 34 6 56 32 62 66 12-30 36-48 66-50-28 12-46 34-52 62 26-16 56-16 82 0-30-6-58 2-80 22z'/><circle cx='148' cy='68' r='7'/><circle cx='160' cy='74' r='6'/><path d='M528 200c-6-60-2-112 12-152l15 4c-12 40-14 90-7 148z'/><path d='M546 56c-34-22-70-26-104-10 36-26 78-22 108 4-8-36-30-60-62-68 38 2 64 26 74 62 8-32 30-54 62-60-28 16-44 40-46 70 28-20 60-24 88-10-32-2-60 10-80 32z'/><circle cx='544' cy='56' r='7'/><circle cx='556' cy='62' r='6'/><path d='M918 200c4-42 4-78-2-108l13-2c8 32 6 70-1 110z'/><path d='M926 96c-24-18-50-22-76-12 28-18 58-14 80 4-6-26-20-44-42-52 26 4 44 22 52 48 8-24 24-40 48-44-22 12-34 30-36 52 20-14 44-16 66-6-24-2-44 6-60 22z'/><circle cx='924' cy='96' r='5'/></g></svg>");
+}
+
+/* ============================================================================
+ * 02. CÉU GLOBAL — pôr-do-sol que PROGRIDE com o scroll
+ * ----------------------------------------------------------------------------
+ * O degradê é aplicado no body (não fixo): ele cobre a altura TOTAL do
+ * documento, então rolar a página atravessa naturalmente entardecer rosa →
+ * crepúsculo roxo → noite azul. As seções ganham véus translúcidos (bloco 08)
+ * para deixar o céu aparecer mantendo contraste AA.
+ * ========================================================================== */
+html{background:var(--vi-night)}
+html,body{background-color:var(--vi-night)}
+body{
+  color:var(--vi-cream);
+  background:
+    /* sol poente no alto da página */
+    radial-gradient(760px 420px at 82% 340px, rgba(255,209,102,.32), rgba(255,138,61,.16) 42%, transparent 72%),
+    radial-gradient(1100px 560px at 12% 0%, rgba(255,45,124,.26), transparent 62%),
+    radial-gradient(900px 520px at 88% 26%, rgba(241,82,255,.14), transparent 60%),
+    /* progressão vertical: entardecer → crepúsculo → noite */
+    linear-gradient(180deg,
+      #46102e 0%,
+      #5c163a 5%,
+      #6f1d44 11%,
+      #6b2158 20%,
+      #551b66 30%,
+      #3f1668 42%,
+      #2b1055 56%,
+      #200d47 70%,
+      #140a38 84%,
+      #0b0d2a 100%);
+}
+
+/* brilho de horizonte que "respira" atrás de tudo (substitui a aurora neo) */
+body::before{
+  content:"";position:fixed;inset:-18%;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(44% 32% at 22% 26%, rgba(255,45,124,.14), transparent 70%),
+    radial-gradient(46% 30% at 80% 20%, rgba(255,138,61,.13), transparent 70%),
+    radial-gradient(52% 36% at 52% 88%, rgba(123,47,247,.14), transparent 72%);
+  mix-blend-mode:screen;filter:blur(10px);
+  animation:vi-glow-drift 34s ease-in-out infinite alternate;
+}
+@keyframes vi-glow-drift{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(-2%,1.6%,0) scale(1.05)}
+  100%{transform:translate3d(2%,-1.4%,0) scale(1.03)}
+}
+
+/* barra de progresso de scroll (mantém o contrato --scroll-p do theme-neo) */
+body::after{
+  content:"";position:fixed;top:0;left:0;height:3px;z-index:99999;
+  width:var(--scroll-p,0%);transition:width .1s ease;
+  background:var(--vi-grad-sunset);
+  box-shadow:0 0 12px rgba(255,45,124,.55);
+}
+
+/* ============================================================================
+ * 03. TIPOGRAFIA — manchetes chrome + serifada itálica
+ * ========================================================================== */
+.vi-serif{
+  font-family:"Playfair Display",Georgia,serif;
+  font-style:italic;font-weight:600;letter-spacing:.01em;
+}
+
+.vi-chrome-text{
+  color:var(--vi-gold); /* fallback sem background-clip */
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 4px 22px rgba(255,45,124,.28));
+}
+
+/* citação gigante serifada itálica com aspas decorativas */
+.vi-quote{
+  position:relative;margin:0;padding:26px 18px 18px 58px;
+  font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;
+  font-size:clamp(24px,3.6vw,44px);line-height:1.22;color:var(--vi-cream);
+  text-wrap:balance;
+}
+.vi-quote::before{
+  content:"\201C";position:absolute;left:0;top:-6px;
+  font-family:"Playfair Display",Georgia,serif;font-style:italic;
+  font-size:clamp(84px,11vw,150px);line-height:1;
+  color:var(--vi-pink);opacity:.9;text-shadow:0 0 34px rgba(255,45,124,.45);
+}
+.vi-quote em{font-style:italic;color:var(--vi-gold)}
+.vi-quote cite{
+  display:block;margin-top:16px;
+  font-family:"Space Mono",ui-monospace,monospace;font-style:normal;
+  font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#ff9ec4;
+}
+
+/* ============================================================================
+ * 04. ASSINATURAS VISUAIS .vi-*
+ * ========================================================================== */
+
+/* ---- .vi-grain — grão de filme (overlay dentro de qualquer bloco) -------- */
+.vi-grain{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+  background-image:var(--vi-grain-url);
+  opacity:.12;mix-blend-mode:overlay;
+}
+.vi-grain--fixed{position:fixed;z-index:85;opacity:.07}
+
+/* ---- .vi-veil — véu escuro translúcido p/ garantir AA sobre degradês ----- */
+.vi-veil{
+  background:rgba(18,6,38,.66);
+  border:1px solid rgba(255,45,124,.18);
+  border-radius:14px;padding:22px;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+
+/* ---- .vi-stars — campo de estrelas (usado também no footer/night) -------- */
+.vi-stars{
+  position:absolute;inset:0;pointer-events:none;z-index:-1;
+  background-image:
+    radial-gradient(1.6px 1.6px at 24px 34px, rgba(255,255,255,.95), transparent),
+    radial-gradient(1px 1px at 118px 92px, rgba(255,255,255,.7), transparent),
+    radial-gradient(1.3px 1.3px at 202px 44px, rgba(255,214,165,.85), transparent),
+    radial-gradient(1px 1px at 64px 156px, rgba(255,255,255,.55), transparent),
+    radial-gradient(1.7px 1.7px at 168px 176px, rgba(196,222,255,.8), transparent),
+    radial-gradient(1px 1px at 232px 128px, rgba(255,255,255,.6), transparent);
+  background-size:260px 220px;background-repeat:repeat;
+  opacity:.7;animation:vi-twinkle 7s ease-in-out infinite alternate;
+}
+@keyframes vi-twinkle{from{opacity:.45}to{opacity:.85}}
+
+/* ---- .vi-sky — céu por seção, com progressão dawn → dusk → night ---------
+ * Aplique junto de .dossier-section: <section class="dossier-section vi-sky vi-sky--dawn">
+ * Os fundos são translúcidos de propósito: somam-se ao céu global do body.  */
+.vi-sky{
+  position:relative;
+  background-size:100% 160%;background-position:0 0;
+  animation:vi-sky-drift 36s ease-in-out infinite alternate;
+}
+@keyframes vi-sky-drift{from{background-position:0 0}to{background-position:0 28%}}
+.vi-sky--dawn{
+  background-image:linear-gradient(180deg,
+    rgba(255,138,61,.28) 0%,
+    rgba(255,45,124,.22) 38%,
+    rgba(123,47,247,.14) 74%,
+    rgba(43,16,85,.30) 100%);
+}
+.vi-sky--dusk{
+  background-image:linear-gradient(180deg,
+    rgba(241,82,255,.16) 0%,
+    rgba(123,47,247,.20) 42%,
+    rgba(43,16,85,.34) 100%);
+}
+.vi-sky--night{
+  background-image:linear-gradient(180deg,
+    rgba(43,16,85,.30) 0%,
+    rgba(20,10,56,.44) 46%,
+    rgba(11,13,42,.62) 100%);
+}
+.vi-sky--night::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
+  background-image:
+    radial-gradient(1.6px 1.6px at 24px 34px, rgba(255,255,255,.95), transparent),
+    radial-gradient(1px 1px at 118px 92px, rgba(255,255,255,.7), transparent),
+    radial-gradient(1.3px 1.3px at 202px 44px, rgba(255,214,165,.85), transparent),
+    radial-gradient(1px 1px at 64px 156px, rgba(255,255,255,.55), transparent),
+    radial-gradient(1.7px 1.7px at 168px 176px, rgba(196,222,255,.8), transparent);
+  background-size:260px 220px;background-repeat:repeat;
+  -webkit-mask:linear-gradient(180deg,#000 0 55%,transparent 96%);
+          mask:linear-gradient(180deg,#000 0 55%,transparent 96%);
+  opacity:.65;animation:vi-twinkle 7s ease-in-out infinite alternate;
+}
+
+/* ---- .vi-palms — silhueta de palmeiras na base da seção ------------------ */
+.vi-palms{
+  position:absolute;left:0;right:0;bottom:-1px;height:170px;z-index:1;
+  pointer-events:none;
+  background:var(--vi-palms-url) bottom center/auto 100% repeat-x;
+  opacity:.9;
+}
+.vi-palms--far{height:110px;opacity:.5;filter:blur(1px)}
+
+/* ---- .vi-polaroid — foto com borda branca, fita adesiva e rotação -------- */
+.vi-polaroid{
+  position:relative;display:block;margin:0;
+  background:#fdf6ec;color:#241026;
+  padding:12px 12px 46px;border-radius:3px;
+  box-shadow:0 24px 50px -18px rgba(10,2,26,.75),0 4px 14px rgba(10,2,26,.4);
+  transform:rotate(-2.2deg);
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.vi-polaroid:nth-child(even){transform:rotate(1.8deg)}
+.vi-polaroid:hover{transform:rotate(0) scale(1.02);box-shadow:0 34px 70px -22px rgba(10,2,26,.85),0 0 34px rgba(255,45,124,.25)}
+.vi-polaroid::before{ /* fita adesiva */
+  content:"";position:absolute;top:-14px;left:50%;width:96px;height:28px;z-index:3;
+  transform:translateX(-50%) rotate(-3deg);
+  background:linear-gradient(180deg,rgba(255,236,170,.85),rgba(255,224,150,.65));
+  clip-path:polygon(3% 0,97% 4%,100% 92%,0 100%);
+  box-shadow:0 3px 8px rgba(10,2,26,.25);
+}
+.vi-polaroid img,
+.vi-polaroid .vi-polaroid-img{
+  display:block;width:100%;aspect-ratio:4/3.4;object-fit:cover;
+  background:linear-gradient(150deg,#5c163a,#2b1055);
+  filter:saturate(1.12) contrast(1.05);border-radius:2px;
+}
+.vi-polaroid figcaption,
+.vi-polaroid .vi-polaroid-caption{
+  position:absolute;left:14px;right:14px;bottom:12px;
+  font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;
+  font-size:15px;color:#3c1030;text-align:center;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ---- .vi-gallery — galeria horizontal com scroll-snap --------------------
+ * Filhos diretos viram slides (flex:0 0 auto). Combina com .vi-polaroid.    */
+.vi-gallery{
+  display:flex;gap:26px;align-items:stretch;
+  overflow-x:auto;overflow-y:hidden;
+  scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  padding:26px 6px 30px;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:var(--vi-pink) rgba(11,13,42,.6);
+}
+.vi-gallery>*{flex:0 0 auto;scroll-snap-align:center;max-width:min(78vw,420px)}
+.vi-gallery::-webkit-scrollbar{height:10px}
+.vi-gallery::-webkit-scrollbar-thumb{background:var(--vi-grad-sunset);border-radius:99px;border:2px solid rgba(11,13,42,.9)}
+
+/* ---- .vi-ticker — letreiro marquee infinito -------------------------------
+ * Uso: <div class="vi-ticker"><div class="vi-ticker-track"> CONTEÚDO ×2 </div></div>
+ * (repita o conteúdo duas vezes dentro da track para o loop ser perfeito)   */
+.vi-ticker{
+  display:flex;overflow:hidden;position:relative;
+  border-block:1px solid rgba(255,45,124,.35);
+  background:rgba(14,4,36,.66);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+.vi-ticker::before,.vi-ticker::after{ /* fade nas bordas */
+  content:"";position:absolute;top:0;bottom:0;width:70px;z-index:2;pointer-events:none;
+}
+.vi-ticker::before{left:0;background:linear-gradient(90deg,rgba(14,4,36,.9),transparent)}
+.vi-ticker::after{right:0;background:linear-gradient(270deg,rgba(14,4,36,.9),transparent)}
+.vi-ticker-track{
+  display:flex;gap:46px;flex:0 0 auto;min-width:100%;
+  padding:13px 23px;white-space:nowrap;align-items:center;
+  font-family:"Anton",sans-serif;font-size:15px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--vi-cream);
+  animation:vi-ticker-slide 36s linear infinite;
+}
+.vi-ticker-track span{display:inline-flex;align-items:center;gap:18px}
+.vi-ticker-track .sep{color:var(--vi-pink);text-shadow:0 0 12px rgba(255,45,124,.7)}
+.vi-ticker-track em{
+  font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;
+  letter-spacing:.02em;text-transform:none;color:var(--vi-gold);
+}
+.vi-ticker:hover .vi-ticker-track{animation-play-state:paused}
+@keyframes vi-ticker-slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---- .vi-btn — botões pílula com borda em degradê ------------------------ */
+.vi-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:15px 30px;border-radius:999px;border:0;cursor:pointer;
+  font-family:"Anton",sans-serif;font-size:15px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--vi-ink);text-decoration:none;position:relative;
+  background:var(--vi-grad-sunset);
+  box-shadow:0 10px 30px -10px rgba(255,45,124,.55),inset 0 1px 0 rgba(255,255,255,.35);
+  transition:transform .18s ease,box-shadow .25s ease,filter .2s ease;
+}
+.vi-btn:hover{transform:translateY(-2px);filter:saturate(1.15);box-shadow:0 16px 40px -12px rgba(255,45,124,.7),0 0 30px rgba(255,138,61,.35),inset 0 1px 0 rgba(255,255,255,.4)}
+.vi-btn:active{transform:translateY(0)}
+.vi-btn--ghost{
+  color:var(--vi-cream);
+  background:
+    linear-gradient(rgba(20,7,44,.82),rgba(20,7,44,.82)) padding-box,
+    var(--vi-grad-sunset) border-box;
+  border:2px solid transparent;
+  box-shadow:0 0 0 rgba(0,0,0,0);
+}
+.vi-btn--ghost:hover{
+  color:#fff;
+  background:
+    linear-gradient(rgba(48,10,52,.85),rgba(30,8,52,.85)) padding-box,
+    var(--vi-grad-sunset) border-box;
+  box-shadow:var(--vi-glow-pink);
+}
+.vi-btn--sm{padding:10px 18px;font-size:12px}
+
+/* ---- .vi-badge — selo "19.11.2026" ---------------------------------------- */
+.vi-badge{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:8px 16px;border-radius:999px;
+  font-family:"Space Mono",ui-monospace,monospace;font-size:12px;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--vi-gold);
+  background:
+    linear-gradient(rgba(20,7,44,.86),rgba(20,7,44,.86)) padding-box,
+    var(--vi-grad-sunset) border-box;
+  border:1.5px solid transparent;
+  box-shadow:0 0 22px rgba(255,45,124,.2);
+}
+.vi-badge b,.vi-badge strong{color:#fff;font-weight:700}
+.vi-badge--solid{
+  background:var(--vi-grad-sunset);color:var(--vi-ink);
+  border:0;padding:9.5px 17.5px;font-weight:700;
+  box-shadow:0 8px 24px -8px rgba(255,45,124,.6);
+}
+
+/* ---- .vi-countdown — contagem regressiva com dígitos enormes --------------
+ * Uso: <div class="vi-countdown">
+ *        <span class="vi-countdown-cell"><b class="vi-countdown-num">132</b>
+ *        <small class="vi-countdown-label">dias</small></span>
+ *        <span class="vi-countdown-sep">:</span> ...
+ *      </div>                                                                */
+.vi-countdown{
+  display:flex;align-items:baseline;justify-content:center;
+  gap:clamp(10px,3vw,30px);flex-wrap:wrap;
+}
+.vi-countdown-cell{display:grid;justify-items:center;gap:4px}
+.vi-countdown-num{
+  font-family:"Anton",sans-serif;font-weight:400;
+  font-size:clamp(52px,11vw,148px);line-height:.9;
+  font-variant-numeric:tabular-nums;letter-spacing:.01em;
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 6px 30px rgba(255,45,124,.35));
+}
+.vi-countdown-label{
+  font-family:"Space Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.32em;text-transform:uppercase;color:#ffb9d3;
+}
+.vi-countdown-sep{
+  align-self:center;
+  font-family:"Anton",sans-serif;font-size:clamp(34px,6vw,80px);line-height:1;
+  color:var(--vi-pink);opacity:.75;text-shadow:0 0 18px rgba(255,45,124,.6);
+  animation:vi-cd-pulse 1s steps(1) infinite;
+}
+@keyframes vi-cd-pulse{0%,100%{opacity:.8}50%{opacity:.25}}
+
+/* ---- .vi-vhs — timestamp VHS no canto com chromatic aberration ------------ */
+.vi-vhs{
+  position:absolute;top:14px;left:16px;z-index:5;pointer-events:none;
+  font-family:"Space Mono",ui-monospace,monospace;font-size:12.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:#fff;
+  text-shadow:
+    -1.6px 0 rgba(255,45,124,.85),
+     1.6px 0 rgba(94,225,255,.85),
+     0 0 10px rgba(0,0,0,.6);
+}
+.vi-vhs::before{
+  content:"\25CF REC";margin-right:12px;color:#ff5252;
+  animation:vi-blink 1.2s steps(1) infinite;
+}
+.vi-vhs--br{top:auto;left:auto;right:16px;bottom:14px}
+.vi-vhs--tr{left:auto;right:16px}
+@keyframes vi-blink{0%,55%{opacity:1}56%,100%{opacity:.15}}
+
+/* ---- .vi-char-panel — painel de personagem em tela cheia ------------------
+ * <section class="vi-char-panel [vi-char-panel--right]">
+ *   <span class="vi-char-role">…</span>
+ *   <h3 class="vi-char-name">LUCIA</h3>
+ *   <p class="vi-char-quote">“…”</p>
+ * </section>                                                                 */
+.vi-char-panel{
+  position:relative;overflow:hidden;
+  min-height:86vh;min-height:86svh;
+  display:grid;align-content:center;justify-items:start;gap:16px;
+  padding:14vh 6vw;text-align:left;
+}
+.vi-char-panel::before{ /* véu radial p/ leitura sobre o céu */
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(72% 80% at 30% 55%, rgba(16,5,36,.62), rgba(16,5,36,.14) 70%, transparent 100%);
+}
+.vi-char-panel--right{justify-items:end;text-align:right}
+.vi-char-panel--right::before{background:radial-gradient(72% 80% at 70% 55%, rgba(16,5,36,.62), rgba(16,5,36,.14) 70%, transparent 100%)}
+.vi-char-panel>*{position:relative;z-index:2}
+.vi-char-role{
+  font-family:"Space Mono",ui-monospace,monospace;font-size:12px;
+  letter-spacing:.34em;text-transform:uppercase;color:#ffb9d3;
+}
+.vi-char-name{
+  margin:0;font-family:"Anton",sans-serif;font-weight:400;text-transform:uppercase;
+  font-size:clamp(64px,14vw,220px);line-height:.84;letter-spacing:.005em;
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 10px 44px rgba(255,45,124,.32));
+}
+.vi-char-quote{
+  margin:6px 0 0;max-width:30ch;
+  font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;
+  font-size:clamp(19px,2.6vw,32px);line-height:1.3;color:#ffe9d8;
+}
+.vi-char-panel .vi-char-quote em{color:var(--vi-gold)}
+
+/* ============================================================================
+ * 05. PICKER DE IDIOMAS — .vi-lang-* (funciona na nav e no rodapé)
+ * ========================================================================== */
+.vi-lang-picker{position:relative;display:inline-flex;flex:0 0 auto}
+.vi-lang-btn{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:9px 16px;border-radius:999px;cursor:pointer;
+  font-family:"Space Mono",ui-monospace,monospace;font-size:12px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--vi-cream);
+  background:
+    linear-gradient(rgba(20,7,44,.8),rgba(20,7,44,.8)) padding-box,
+    var(--vi-grad-sunset) border-box;
+  border:1.5px solid transparent;
+  transition:box-shadow .25s ease,color .2s ease,transform .18s ease;
+}
+.vi-lang-btn:hover,.vi-lang-btn[aria-expanded="true"]{
+  color:#fff;transform:translateY(-1px);box-shadow:var(--vi-glow-pink);
+}
+.vi-lang-btn svg{width:16px;height:16px;flex:0 0 auto;color:var(--vi-gold)}
+.vi-lang-btn .caret{font-size:9px;opacity:.7}
+.vi-lang-menu{
+  position:absolute;top:calc(100% + 10px);right:0;z-index:130;
+  min-width:238px;max-width:min(320px,86vw);max-height:min(420px,62vh);
+  overflow:auto;padding:8px;border-radius:16px;
+  background:
+    linear-gradient(rgba(18,7,42,.94),rgba(14,5,36,.94)) padding-box,
+    var(--vi-grad-sunset) border-box;
+  border:1.5px solid transparent;
+  -webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);
+  box-shadow:0 34px 80px -28px rgba(4,0,16,.9),0 0 40px -12px rgba(255,45,124,.35);
+  scrollbar-width:thin;scrollbar-color:var(--vi-pink) rgba(11,13,42,.6);
+}
+.vi-lang-menu::-webkit-scrollbar{width:8px}
+.vi-lang-menu::-webkit-scrollbar-thumb{background:var(--vi-grad-sunset);border-radius:99px}
+.vi-lang-item{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:11px 13px;border:0;border-radius:10px;cursor:pointer;
+  background:transparent;color:#f6ebff;text-align:left;text-decoration:none;
+  font-family:"Space Grotesk",system-ui,sans-serif;font-size:14px;line-height:1.2;
+  transition:background .15s ease,color .15s ease;
+}
+.vi-lang-item small{
+  margin-left:auto;font-family:"Space Mono",ui-monospace,monospace;
+  font-size:10px;letter-spacing:.14em;text-transform:uppercase;opacity:.55;
+}
+.vi-lang-item:hover{background:rgba(255,45,124,.14);color:#fff}
+.vi-lang-item.active{
+  background:linear-gradient(90deg,rgba(255,45,124,.32),rgba(255,138,61,.18));
+  color:#fff;box-shadow:inset 3px 0 0 var(--vi-pink);
+}
+.vi-lang-item.active small{opacity:.85;color:var(--vi-gold)}
+/* idioma ainda sem tradução: visível, mas desabilitado e marcado "em breve" */
+.vi-lang-item--soon{opacity:.5;cursor:not-allowed}
+.vi-lang-item--soon:hover{background:transparent;color:#f6ebff}
+.vi-lang-item .vi-lang-soon{
+  margin-left:8px;font-style:normal;font-family:"Space Mono",ui-monospace,monospace;
+  font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--vi-gold);opacity:.8;white-space:nowrap;
+}
+.vi-lang-item--soon small{margin-left:0}
+/* variante para abrir para CIMA (rodapé) */
+.vi-lang-menu--up,
+.dossier-footer .vi-lang-menu,
+.dossier-bottom-nav .vi-lang-menu{top:auto;bottom:calc(100% + 10px)}
+.dossier-footer .vi-lang-picker{margin-top:14px}
+
+/* ============================================================================
+ * 06. HUD / NAV — barra minimalista translúcida com blur
+ * ========================================================================== */
+.dossier-hud{
+  animation:none; /* desliga o neon-border do theme-neo */
+  background:linear-gradient(180deg,rgba(18,6,40,.9),rgba(18,6,40,.56));
+  border-bottom:1px solid rgba(255,45,124,.16);
+  -webkit-backdrop-filter:blur(22px) saturate(150%);backdrop-filter:blur(22px) saturate(150%);
+}
+.dossier-hud::after{
+  background:linear-gradient(90deg,transparent,var(--vi-pink),var(--vi-coral),var(--vi-gold),transparent);
+  background-size:200% 100%;opacity:.85;
+}
+.dossier-hud nav a{border-radius:999px}
+.dossier-hud nav a:hover{
+  background:rgba(255,45,124,.1);border-color:rgba(255,45,124,.38);color:#fff;
+  box-shadow:0 0 18px rgba(255,45,124,.2);transform:translateY(-1px);
+}
+.dossier-hud nav a.active{
+  background:var(--vi-grad-sunset);color:var(--vi-ink);border-color:transparent;
+  box-shadow:0 0 22px rgba(255,45,124,.45),0 6px 18px -6px rgba(4,0,16,.7);
+}
+.dossier-hud nav a.active span{color:var(--vi-ink)}
+.dossier-hud nav a span{color:#c99ab4}
+.dossier-brand-logo{filter:drop-shadow(0 0 16px rgba(255,45,124,.4))}
+.dossier-brand:hover .dossier-brand-logo{filter:drop-shadow(0 0 24px rgba(255,209,102,.55))}
+.dossier-menu{border-color:rgba(255,45,124,.4);background:rgba(20,7,44,.85);border-radius:999px}
+.dossier-hud nav.open{background:rgba(14,5,36,.97);border-bottom-color:rgba(255,45,124,.25)}
+
+.dossier-bottom-nav{
+  background:rgba(12,4,32,.94);border-top:1px solid rgba(255,45,124,.28);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  box-shadow:0 -18px 44px rgba(4,0,16,.8);
+}
+.dossier-bottom-nav a{border-radius:999px}
+.dossier-bottom-nav a.active{
+  background:var(--vi-grad-sunset);border-color:transparent;color:var(--vi-ink);
+  box-shadow:0 0 18px rgba(255,45,124,.4);
+}
+.dossier-bottom-nav a.active span{color:var(--vi-ink)}
+
+.dossier-back-top{
+  border-color:rgba(255,45,124,.6);color:#ff9ec4;border-radius:999px;
+  background:rgba(16,5,36,.86);box-shadow:0 0 26px rgba(255,45,124,.26);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.dossier-back-top:hover{
+  background:var(--vi-grad-sunset);color:var(--vi-ink);
+  box-shadow:0 0 34px rgba(255,45,124,.55);
+}
+
+/* ============================================================================
+ * 07. HERO — céu de entardecer, sol, título chrome
+ * ========================================================================== */
+.dossier-hero{border-bottom:1px solid rgba(255,45,124,.22)}
+.dossier-hero .dossier-map-bg{opacity:.14;mix-blend-mode:screen}
+.dossier-hero .dossier-hero-siren{
+  height:280px;opacity:.85;
+  background:linear-gradient(90deg,rgba(255,45,124,.3),rgba(255,138,61,.26) 46%,rgba(123,47,247,.3));
+}
+.dossier-hero::after{
+  background:
+    radial-gradient(120% 90% at 50% 26%, transparent 40%, rgba(24,7,44,.5) 100%),
+    linear-gradient(180deg, transparent 52%, rgba(70,20,72,.55) 82%, rgba(85,27,102,.35) 100%);
+}
+.dossier-hero-copy .tape{animation:none}
+.dossier-hero-copy h1{
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  -webkit-text-fill-color:transparent;
+  text-shadow:none;filter:drop-shadow(0 8px 40px rgba(255,45,124,.3));
+}
+.dossier-hero-copy h1::after{
+  background:var(--vi-grad-sunset);box-shadow:var(--vi-glow-pink);
+}
+.dossier-hero-copy p{color:#ffe4d2}
+.dossier-quick-tabs a{
+  border-radius:999px;background:rgba(22,7,46,.7);border-color:rgba(255,45,124,.26);
+}
+.dossier-quick-tabs a:hover{
+  border-color:var(--vi-gold);color:#fff;
+  box-shadow:0 0 22px rgba(255,138,61,.32),0 10px 24px -12px rgba(4,0,16,.8);
+}
+.dossier-quick-tabs a svg{color:var(--vi-gold)}
+.dossier-hero-panel{
+  border-color:rgba(255,209,102,.3);
+  background:linear-gradient(160deg,rgba(56,14,62,.66),rgba(20,7,44,.82));
+  box-shadow:0 40px 90px -42px rgba(4,0,16,.95),inset 0 1px 0 rgba(255,255,255,.07);
+}
+.dossier-hero-panel::before{background:var(--vi-grad-sunset)}
+.dossier-case-top strong{color:var(--vi-gold)}
+.dossier-stat{border-color:rgba(255,45,124,.2);background:linear-gradient(180deg,rgba(255,45,124,.08),rgba(255,255,255,.015))}
+.dossier-evidence-strip span{
+  background:linear-gradient(180deg,rgba(255,45,124,.18),rgba(255,45,124,.06));
+  border-color:rgba(255,45,124,.34);color:#ffcede;box-shadow:0 0 16px rgba(255,45,124,.14);
+}
+
+/* ============================================================================
+ * 08. SEÇÕES — véus translúcidos p/ o céu do body aparecer + cabeçalhos
+ * ========================================================================== */
+.dossier-section{background:transparent}
+/* véu escuro translúcido ATRÁS do conteúdo (z-index:-1: as seções têm
+ * content-visibility:auto = paint containment = stacking context próprio)   */
+.dossier-section::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
+  background:rgba(12,4,32,.30);
+}
+.dossier-section.alt{background:linear-gradient(180deg,rgba(20,6,44,.18),rgba(24,8,52,.34) 40%,rgba(20,6,44,.18))}
+.mission-section{background:linear-gradient(180deg,rgba(16,10,44,.2),rgba(38,14,66,.3) 48%,rgba(16,10,44,.2))}
+.vehicle-section{background:linear-gradient(180deg,rgba(22,10,52,.2),rgba(44,14,70,.3) 48%,rgba(22,10,52,.2))}
+.weapon-section{background:linear-gradient(180deg,rgba(30,8,44,.24),rgba(52,12,60,.32) 48%,rgba(30,8,44,.24))}
+.dossier-section.gta6{background:linear-gradient(180deg,rgba(40,8,56,.26),rgba(64,12,72,.4) 46%,rgba(30,8,52,.26))}
+/* o theme-neo transforma o ::before de seções adjacentes num hairline branco
+ * (especificidade 0,2,1); devolvemos o véu escuro aqui com a mesma força     */
+.dossier-section + .dossier-section::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:-1;
+  width:auto;height:auto;transform:none;left:0;
+  background:rgba(12,4,32,.30);
+}
+.dossier-section-head{position:relative}
+.dossier-section-head::after{
+  background:linear-gradient(90deg,var(--vi-pink),var(--vi-coral),transparent);
+  opacity:.9;
+}
+.dossier-section-head h2,.sec-head h2{
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 6px 30px rgba(255,45,124,.22));
+}
+.dossier-section-head h2 em,.sec-head h2 em{
+  background:linear-gradient(92deg,var(--vi-gold),var(--vi-pink-2));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.dossier-eyebrow{color:#ff9ec4;letter-spacing:.26em}
+.dossier-head-note{color:#d3a8c2}
+
+/* tape agora em rosa neon */
+.tape{
+  background:linear-gradient(90deg,var(--vi-pink),var(--vi-pink-2));
+  color:var(--vi-ink);box-shadow:0 0 28px rgba(255,45,124,.45);
+}
+.tape::before,.tape::after{
+  background:repeating-linear-gradient(135deg,var(--vi-pink) 0 8px,var(--vi-ink) 8px 12px);
+}
+
+/* marquee legado recolorido */
+.marquee{border-block-color:rgba(255,45,124,.3);background:rgba(14,4,36,.7)}
+.marquee .track{color:#ffd9e6}
+.marquee .track .sep{color:var(--vi-gold)}
+
+/* hairline entre seções */
+.dossier-section + .dossier-section{border-top:1px solid rgba(255,45,124,.12)}
+
+/* ============================================================================
+ * 09. CARDS / CHIPS / CONTROLES / MODAIS
+ * ========================================================================== */
+.card,
+.dossier-game-card,.dossier-mission-card,.dossier-vehicle-card,.dossier-weapon-card,
+.dossier-character-card,.dossier-faction-card,.dossier-city-card,.dossier-universe-card,
+.dossier-person-card,.dossier-online-dlc-card,.dossier-glossary-item,.dossier-timeline-card,
+.dossier-release-card,.dossier-dev-card,.dossier-online-timeline article,.dossier-fact-columns article,
+.dossier-extra-grid>article,.dossier-rockstar-row{
+  background:linear-gradient(165deg,rgba(52,14,66,.6),rgba(18,7,42,.84));
+  border:1px solid var(--vi-edge);
+  border-radius:14px;
+  box-shadow:0 20px 44px -28px rgba(4,0,16,.9);
+}
+.card{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+.card .corner{border-color:var(--vi-gold);opacity:.45}
+.card::after,
+.dossier-game-card::after,.dossier-mission-card::after,.dossier-vehicle-card::after,
+.dossier-weapon-card::after,.dossier-character-card::after,.dossier-city-card::after,
+.dossier-universe-card::after,.dossier-person-card::after,.dossier-online-dlc-card::after,
+.dossier-glossary-item::after{
+  background:var(--vi-grad-sunset);
+}
+.card:hover,
+.dossier-game-card:hover,.dossier-mission-card:hover,.dossier-vehicle-card:hover,
+.dossier-weapon-card:hover,.dossier-character-card:hover,.dossier-city-card:hover,
+.dossier-universe-card:hover,.dossier-person-card:hover,.dossier-online-dlc-card:hover,
+.dossier-glossary-item:hover{
+  transform:translateY(-4px);
+  border-color:var(--vi-edge-hi);
+  box-shadow:
+    0 32px 70px -34px rgba(4,0,16,.95),
+    0 0 0 1px rgba(255,255,255,.05) inset,
+    0 0 34px -8px rgba(255,45,124,.35);
+}
+.neo-tilt .neo-tilt-glow{
+  background:radial-gradient(220px 220px at var(--mx,50%) var(--my,50%), rgba(255,45,124,.18), transparent 60%);
+}
+section#gta6 .card::before{
+  background:conic-gradient(from 0deg,transparent,rgba(255,45,124,.14),transparent 30%);
+}
+
+/* kicker / chips / fontes */
+.dossier-card-kicker{color:var(--vi-gold)}
+.tag{border-radius:999px}
+.tag.pink{background:rgba(255,45,124,.16);border-color:rgba(255,45,124,.45);color:#ffc1d9}
+.tag.pink .dot{background:var(--vi-pink);box-shadow:0 0 10px var(--vi-pink)}
+.tag.yellow{color:#ffe3a8;border-color:rgba(255,209,102,.45);background:rgba(255,209,102,.08)}
+.tag.yellow .dot{background:var(--vi-gold)}
+.dossier-source-row a{
+  border-color:rgba(255,45,124,.3);background:rgba(255,45,124,.07);color:#ffb9d3;border-radius:999px;
+}
+.dossier-source-row a:hover{border-color:rgba(255,45,124,.7);box-shadow:0 0 16px rgba(255,45,124,.22)}
+.dossier-details summary{color:var(--vi-gold)}
+.dossier-details{border-color:rgba(255,45,124,.16);background:rgba(255,45,124,.045)}
+.dossier-meta-grid div{border-color:rgba(255,209,102,.2)}
+.dossier-meta-grid strong{color:var(--vi-cream)}
+.dossier-note-card{background:rgba(255,45,124,.07)}
+.dossier-note-card strong{color:var(--vi-gold)}
+.hl{background:linear-gradient(transparent 55%, rgba(255,45,124,.4) 55%)}
+
+/* botões legados (.btn) viram pílulas vice */
+.btn{border-radius:999px}
+.dossier-shell .btn{border-radius:999px}
+.btn.solid{
+  background:var(--vi-grad-sunset);color:var(--vi-ink);border-color:transparent;
+}
+.btn.solid:hover{box-shadow:0 0 0 1px rgba(51,5,28,.5) inset,0 0 28px rgba(255,45,124,.5)}
+.btn.neon{color:#ffb9d3;border-color:rgba(255,45,124,.6)}
+.btn.neon:hover{box-shadow:0 0 24px rgba(255,45,124,.5),0 0 0 1px rgba(255,45,124,.6) inset;color:#fff}
+
+/* segmented + filtros + inputs */
+.dossier-segmented{border-radius:999px;border-color:rgba(255,45,124,.28);background:rgba(16,5,36,.8)}
+.dossier-segmented button{border-radius:999px}
+.dossier-segmented button.active{
+  background:var(--vi-grad-sunset);color:var(--vi-ink);
+  box-shadow:0 0 18px rgba(255,45,124,.4);
+}
+.dossier-filterbar input,
+.dossier-filterbar select{
+  border-radius:999px;border-color:rgba(255,45,124,.24);background:rgba(16,5,36,.8);
+}
+.dossier-filterbar input:focus,.dossier-filterbar select:focus,
+input[type="text"]:focus,select:focus{
+  border-color:var(--vi-pink)!important;
+  box-shadow:0 0 0 1px rgba(255,45,124,.45),0 0 22px rgba(255,45,124,.3)!important;
+}
+
+/* estrelas de procurado */
+.stars i.on{background-color:var(--vi-gold);box-shadow:0 0 14px rgba(255,209,102,.85)}
+
+/* modais */
+.dossier-modal{
+  border-color:rgba(255,45,124,.35);border-radius:18px;
+  background:linear-gradient(180deg,#221040,#120726);
+  box-shadow:0 50px 130px rgba(4,0,16,.8),0 0 60px -20px rgba(255,45,124,.35);
+}
+.dossier-modal header{background:rgba(20,8,44,.96);border-bottom-color:rgba(255,45,124,.2)}
+.dossier-modal header h2{
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.dossier-modal header p{color:#ff9ec4}
+.dossier-modal header button{border-radius:999px;border-color:rgba(255,45,124,.4)}
+.dossier-modal-back{background:rgba(10,3,26,.84)}
+.dossier-modal-field{border-color:rgba(255,45,124,.16)}
+.dossier-modal-field>span{color:var(--vi-gold)}
+
+/* timeline / cronologia */
+.dossier-chronology::before{
+  background:repeating-linear-gradient(180deg,var(--vi-pink) 0 12px,transparent 12px 22px);opacity:.5;
+}
+.dossier-time-pin::before{
+  background:var(--vi-pink);
+  box-shadow:0 0 0 5px rgba(255,45,124,.16),0 0 22px var(--vi-pink);
+}
+.dossier-time-pin strong{color:var(--vi-gold)}
+.dossier-timeline-cover span,.dossier-cover-mini span,.dossier-cover-art span{color:var(--vi-gold)}
+.timeline .spine{background:repeating-linear-gradient(180deg,var(--vi-pink) 0 12px,transparent 12px 22px)}
+.timeline .row .pin .dot{background:var(--vi-pink);box-shadow:0 0 0 4px rgba(255,45,124,.2),0 0 24px var(--vi-pink)}
+.timeline .row .pin .yr{color:var(--vi-gold)}
+
+/* GTA VI — empurra o rosa mais forte */
+.dossier-gta6-hero>div:first-child{
+  border-color:rgba(255,45,124,.42);
+  background:linear-gradient(160deg,rgba(255,45,124,.14),rgba(123,47,247,.08));
+  box-shadow:0 0 46px -16px rgba(255,45,124,.45);
+  border-radius:18px;
+}
+.dossier-gta6-hero h3{
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.dossier-leonida-map{border-color:rgba(255,45,124,.32);border-radius:18px}
+.dossier-leonida-map span{color:var(--vi-pink);text-shadow:0 0 28px rgba(255,45,124,.65)}
+.dossier-leonida-map i{background:var(--vi-gold);box-shadow:0 0 20px var(--vi-gold)}
+.dossier-fact-columns .confirmed{border-color:rgba(255,209,102,.4)}
+.dossier-fact-columns .interpretation{border-color:rgba(255,138,61,.4)}
+.dossier-fact-columns .unconfirmed{border-color:rgba(241,82,255,.4)}
+
+/* glossário */
+.dossier-glossary-item h3{color:var(--vi-gold)}
+.dossier-glossary-item:hover{border-color:rgba(255,209,102,.42);box-shadow:0 0 24px rgba(255,209,102,.1)}
+.glossary-item.highlighted{box-shadow:0 0 0 2px var(--vi-pink)}
+
+/* ============================================================================
+ * 10. FOOTER — noite azul com estrelas
+ * ========================================================================== */
+.dossier-footer{
+  position:relative;overflow:hidden;
+  background:linear-gradient(180deg,rgba(11,13,42,.2),#0b0d2a 46%);
+  border-top:1px solid rgba(255,45,124,.24);
+}
+.dossier-footer::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(1.6px 1.6px at 24px 34px, rgba(255,255,255,.9), transparent),
+    radial-gradient(1px 1px at 118px 92px, rgba(255,255,255,.65), transparent),
+    radial-gradient(1.3px 1.3px at 202px 44px, rgba(255,214,165,.8), transparent),
+    radial-gradient(1px 1px at 64px 156px, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.7px 1.7px at 168px 176px, rgba(196,222,255,.75), transparent);
+  background-size:260px 220px;background-repeat:repeat;
+  -webkit-mask:linear-gradient(180deg,#000 0 60%,transparent 100%);
+          mask:linear-gradient(180deg,#000 0 60%,transparent 100%);
+  opacity:.6;animation:vi-twinkle 7s ease-in-out infinite alternate;
+}
+.dossier-footer .wrap{position:relative;z-index:2}
+.dossier-footer h2{
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.dossier-footer a{color:var(--vi-gold)}
+.dossier-footer a:hover{color:#ffb9d3}
+.dossier-media-notice{border-color:rgba(255,45,124,.3);background:rgba(255,45,124,.06)}
+footer{background:#0b0d2a;border-top-color:rgba(255,45,124,.2)}
+
+/* ============================================================================
+ * 11. SELECTION / SCROLLBAR / FOCUS / BOOT
+ * ========================================================================== */
+::selection{background:var(--vi-pink);color:#1c0312}
+
+html{scrollbar-color:var(--vi-pink) #120826}
+*{scrollbar-color:var(--vi-pink) rgba(18,8,38,.92)}
+::-webkit-scrollbar{width:14px;height:14px}
+::-webkit-scrollbar-track{
+  background:
+    linear-gradient(90deg,transparent 0 4px,rgba(255,255,255,.06) 4px 5px,transparent 5px 100%),
+    #120826;
+  border:1px solid rgba(255,45,124,.14);
+  box-shadow:inset 0 0 0 1px rgba(4,0,16,.7);
+}
+::-webkit-scrollbar-thumb{
+  min-height:56px;min-width:56px;
+  border:3px solid #120826;border-radius:999px;
+  background:linear-gradient(180deg,var(--vi-pink),var(--vi-coral) 62%,var(--vi-gold));
+  box-shadow:0 0 14px rgba(255,45,124,.45),inset 0 0 0 1px rgba(255,255,255,.22);
+}
+::-webkit-scrollbar-thumb:horizontal{
+  background:linear-gradient(90deg,var(--vi-pink),var(--vi-coral) 62%,var(--vi-gold));
+}
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:horizontal:hover{
+  background:linear-gradient(180deg,#ff5c99,var(--vi-coral) 55%,#ffe08f);
+  box-shadow:0 0 18px rgba(255,45,124,.65),inset 0 0 0 1px rgba(255,255,255,.3);
+}
+::-webkit-scrollbar-button{
+  width:14px;height:14px;
+  background:radial-gradient(circle at 50% 50%,rgba(255,45,124,.35),transparent 40%),#120826;
+  border:1px solid rgba(255,45,124,.16);
+}
+::-webkit-scrollbar-button:horizontal:start,
+::-webkit-scrollbar-button:vertical:start{background:linear-gradient(180deg,rgba(255,45,124,.4),transparent),#120826}
+::-webkit-scrollbar-button:horizontal:end,
+::-webkit-scrollbar-button:vertical:end{background:linear-gradient(0deg,rgba(123,47,247,.4),transparent),#120826}
+::-webkit-scrollbar-corner{background:linear-gradient(135deg,rgba(255,45,124,.3),rgba(123,47,247,.3)),#120826}
+.hud nav,.dossier-hud nav,.modal,.dossier-modal{
+  scrollbar-color:var(--vi-pink) rgba(18,8,38,.92);
+}
+
+/* foco visível acessível */
+a:focus-visible,button:focus-visible,
+.vi-btn:focus-visible,.vi-lang-btn:focus-visible,.vi-lang-item:focus-visible{
+  outline:2px solid var(--vi-gold);outline-offset:2px;border-radius:6px;
+}
+.vi-btn:focus-visible,.vi-lang-btn:focus-visible{border-radius:999px}
+
+/* boot screen recolorido */
+#neo-boot{background:radial-gradient(900px 600px at 50% 30%, #35104e, #0b0d2a 78%)}
+#neo-boot .neo-boot-badge{color:var(--vi-gold)}
+#neo-boot h1{text-shadow:0 0 30px rgba(255,45,124,.55)}
+#neo-boot h1 em{background:var(--vi-grad-sunset);-webkit-background-clip:text;background-clip:text;color:transparent}
+#neo-boot .neo-boot-bar i{
+  background:var(--vi-grad-sunset);box-shadow:0 0 18px rgba(255,45,124,.65);
+}
+
+/* toasts / overlays de easter egg no clima vice */
+.neo-toast{border-color:rgba(255,209,102,.55);border-left-color:var(--vi-gold);box-shadow:0 0 28px rgba(255,209,102,.22),0 18px 40px -18px #000}
+.neo-toast b{color:var(--vi-gold)}
+.neo-toast.warn{border-color:rgba(255,45,124,.6);border-left-color:var(--vi-pink)}
+.neo-toast.warn b{color:var(--vi-pink)}
+
+/* ============================================================================
+ * 12. RESPONSIVO — mobile first nos módulos novos
+ * ========================================================================== */
+@media (max-width:900px){
+  .vi-char-panel{min-height:72vh;min-height:72svh;padding:10vh 6vw}
+  .vi-quote{padding-left:44px}
+  .vi-gallery{gap:18px;padding:20px 4px 24px}
+  .vi-gallery>*{max-width:82vw}
+}
+@media (max-width:680px){
+  .vi-char-panel{min-height:62vh;min-height:62svh;gap:12px}
+  .vi-char-name{font-size:clamp(52px,17vw,110px)}
+  .vi-char-quote{font-size:17px;max-width:100%}
+  .vi-countdown{gap:12px}
+  .vi-countdown-num{font-size:clamp(44px,15vw,84px)}
+  .vi-countdown-sep{display:none}
+  .vi-ticker-track{font-size:12.5px;gap:30px;padding:11px 16px}
+  .vi-polaroid{transform:rotate(-1.2deg)}
+  .vi-polaroid:nth-child(even){transform:rotate(1deg)}
+  .vi-palms{height:120px}
+  .vi-quote{font-size:21px;padding:20px 8px 12px 38px}
+  .vi-quote::before{font-size:72px}
+  .vi-badge{font-size:10.5px;letter-spacing:.18em;padding:7px 13px}
+  .vi-lang-menu{right:auto;left:0}
+  .dossier-bottom-nav .vi-lang-menu,
+  .dossier-footer .vi-lang-menu{left:0;right:auto}
+  .vi-vhs{font-size:10.5px}
+  .vi-veil{padding:16px;border-radius:12px}
+}
+
+/* ============================================================================
+ * 13. PREFERS-REDUCED-MOTION — desliga marquee e loops pesados
+ * ========================================================================== */
+@media (prefers-reduced-motion: reduce){
+  body::before{animation:none}
+  .vi-sky{animation:none}
+  .vi-sky--night::after,
+  .vi-stars,
+  .dossier-footer::before{animation:none;opacity:.6}
+  .vi-ticker-track{animation:none;flex-wrap:wrap;white-space:normal}
+  .vi-countdown-sep{animation:none;opacity:.7}
+  .vi-vhs::before{animation:none;opacity:1}
+  .vi-gallery{scroll-behavior:auto}
+  .vi-polaroid,.vi-polaroid:nth-child(even){transform:none;transition:none}
+  .vi-btn,.vi-lang-btn{transition:none}
+  .vi-btn:hover,.vi-lang-btn:hover{transform:none}
+  .dossier-hud::after{animation:none}
+  .card:hover,
+  .dossier-game-card:hover,.dossier-mission-card:hover,.dossier-vehicle-card:hover,
+  .dossier-weapon-card:hover,.dossier-character-card:hover,.dossier-city-card:hover,
+  .dossier-universe-card:hover,.dossier-person-card:hover,.dossier-online-dlc-card:hover,
+  .dossier-glossary-item:hover{transform:none}
+}
+
+/* ===== 14. COMPONENTES DAS SEÇÕES VI (complemento) =====
+ * Estilos para sections-vi.jsx (VIHero / VICharactersSection /
+ * VIPlacesSection / VIInfoSection). Apenas ACRESCENTA — nada acima muda.
+ * ------------------------------------------------------------------------- */
+
+/* ---- 14.0 base: seções, botão primário, badges, countdown, ticker -------- */
+.vi-section{position:relative;scroll-margin-top:84px}
+.vi-characters,.vi-places,.vi-info{isolation:isolate}
+
+/* alias/variante do botão sólido do tema, com anel de brilho extra */
+.vi-btn--primary{
+  box-shadow:
+    0 14px 40px -12px rgba(255,45,124,.7),
+    0 0 30px rgba(255,138,61,.3),
+    inset 0 0 0 1.5px rgba(255,245,236,.28),
+    inset 0 1px 0 rgba(255,255,255,.4);
+}
+.vi-btn--primary:hover{
+  box-shadow:
+    0 18px 48px -12px rgba(255,45,124,.85),
+    0 0 40px rgba(255,138,61,.45),
+    inset 0 0 0 1.5px rgba(255,245,236,.4),
+    inset 0 1px 0 rgba(255,255,255,.45);
+}
+
+/* variantes de selo (o .vi-badge base usa borda em degradê via border-box) */
+.vi-badge--vi{
+  background:var(--vi-grad-sunset);color:var(--vi-ink);border-color:transparent;
+  font-weight:700;letter-spacing:.2em;
+  box-shadow:0 8px 26px -8px rgba(255,45,124,.6),inset 0 1px 0 rgba(255,255,255,.35);
+}
+.vi-badge--official{
+  color:#ffe3a8;
+  background:
+    linear-gradient(rgba(38,26,6,.86),rgba(38,26,6,.86)) padding-box,
+    linear-gradient(90deg,var(--vi-gold),var(--vi-coral)) border-box;
+  box-shadow:0 0 18px rgba(255,209,102,.22);
+}
+.vi-badge--rumor{
+  color:#dcbdff;
+  background:
+    linear-gradient(rgba(28,10,52,.9),rgba(28,10,52,.9)) padding-box,
+    linear-gradient(90deg,var(--vi-purple),var(--vi-pink-2)) border-box;
+  box-shadow:0 0 18px rgba(123,47,247,.3);
+}
+.vi-badge--incident{
+  color:#ffb3ad;
+  background:
+    linear-gradient(rgba(50,10,16,.9),rgba(50,10,16,.9)) padding-box,
+    linear-gradient(90deg,#ff5252,var(--vi-coral)) border-box;
+  box-shadow:0 0 18px rgba(255,82,82,.26);
+}
+.vi-badge--price{
+  color:var(--vi-ink);border-color:transparent;font-weight:700;letter-spacing:.14em;
+  background:linear-gradient(120deg,#ffe9ad,var(--vi-gold) 55%,var(--vi-coral));
+  box-shadow:0 6px 18px -6px rgba(255,209,102,.55);
+}
+
+/* countdown: o JSX usa <strong>/<small> dentro de .vi-countdown-cell
+ * (não .vi-countdown-num/.vi-countdown-label) — espelhamos os estilos aqui */
+.vi-countdown-cell strong{
+  font-family:"Anton",sans-serif;font-weight:400;
+  font-size:clamp(52px,11vw,148px);line-height:.9;
+  font-variant-numeric:tabular-nums;letter-spacing:.01em;
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 6px 30px rgba(255,45,124,.35));
+}
+.vi-countdown-cell small{
+  font-family:"Space Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.32em;text-transform:uppercase;color:#ffb9d3;
+}
+.vi-hero-seal .vi-countdown-cell strong{font-size:clamp(38px,6.5vw,92px)}
+.vi-hero-seal .vi-countdown-sep{font-size:clamp(24px,4vw,56px)}
+.vi-countdown--compact{gap:clamp(8px,1.6vw,18px);justify-content:flex-start}
+.vi-countdown--compact .vi-countdown-cell strong{font-size:clamp(34px,4.6vw,60px)}
+.vi-countdown--compact .vi-countdown-cell small{font-size:10px;letter-spacing:.24em}
+.vi-countdown--compact .vi-countdown-sep{font-size:clamp(18px,2.4vw,34px)}
+.vi-countdown--done{
+  padding:16px 24px;border-radius:14px;
+  border:1px dashed rgba(255,209,102,.55);background:rgba(255,209,102,.08);
+}
+.vi-countdown--done strong{
+  font-family:"Anton",sans-serif;font-weight:400;letter-spacing:.08em;text-transform:uppercase;
+  font-size:clamp(20px,3.2vw,34px);line-height:1.1;text-align:center;
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+
+/* ticker: itens e separador ✦ */
+.vi-ticker-item{display:inline-flex;align-items:center;gap:18px}
+.vi-ticker-sep{
+  font-style:normal;font-size:.85em;line-height:1;
+  color:var(--vi-pink);text-shadow:0 0 12px rgba(255,45,124,.7);
+}
+
+/* palmeiras em SVG inline (VIPalmsArt): o .vi-palms base foi pensado para
+ * background-image — aqui zeramos o fundo para a arte não duplicar */
+svg.vi-palms{display:block;background:none;width:100%;height:clamp(120px,22vw,210px)}
+
+/* .vi-vhs aplicado a CONTÊINERES (arte de personagem, foto da polaroid,
+ * thumb vazia de trailer): devolve o fluxo normal e ancora o "● REC" */
+.vi-char-art,.vi-polaroid-photo,.vi-trailer-thumb{
+  position:relative;top:auto;left:auto;right:auto;bottom:auto;
+}
+.vi-char-art::before,.vi-polaroid-photo::before,.vi-trailer-thumb--empty::before{
+  position:absolute;top:12px;left:14px;z-index:4;margin:0;
+  font-family:"Space Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;
+}
+
+/* ---- 14.1 HERÓI (#overview) ---------------------------------------------- */
+.vi-hero{
+  position:relative;overflow:hidden;
+  display:grid;grid-template-rows:1fr auto;
+  min-height:100vh;min-height:100svh;
+}
+.vi-hero>.vi-sky{position:absolute;inset:0;z-index:0;overflow:hidden}
+.vi-hero>.vi-sky::after{ /* véu radial central p/ contraste AA do título */
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(62% 54% at 50% 46%, rgba(18,6,38,.46), transparent 76%);
+}
+.vi-sky-sun{ /* sol retrô com fatias horizontais, atrás do título */
+  --vi-sun-mask:linear-gradient(180deg,
+    #000 0 58%,transparent 58% 62%,
+    #000 62% 71%,transparent 71% 74.5%,
+    #000 74.5% 82%,transparent 82% 85%,
+    #000 85% 91%,transparent 91% 93.5%,
+    #000 93.5% 100%);
+  position:absolute;left:50%;top:clamp(64px,13vh,150px);
+  transform:translateX(-50%);
+  width:clamp(190px,30vw,380px);aspect-ratio:1;border-radius:50%;
+  background:linear-gradient(180deg,#fff6cf 0%,var(--vi-gold) 28%,var(--vi-coral) 58%,var(--vi-pink) 100%);
+  -webkit-mask:var(--vi-sun-mask);mask:var(--vi-sun-mask);
+  filter:drop-shadow(0 0 70px rgba(255,138,61,.55));
+  opacity:.92;
+}
+.vi-hero-inner{
+  position:relative;z-index:2;
+  display:grid;justify-items:center;align-content:center;text-align:center;
+  padding:clamp(110px,16vh,170px) 18px clamp(56px,9vh,96px);
+}
+.vi-hero-eyebrow{margin-bottom:clamp(16px,3vh,28px)}
+.vi-hero-title{
+  margin:0;font-family:"Anton",sans-serif;font-weight:400;text-transform:uppercase;
+  font-size:clamp(52px,11vw,158px);line-height:.9;letter-spacing:.01em;text-wrap:balance;
+}
+.vi-hero-subtitle{
+  margin:14px 0 0;font-size:clamp(18px,2.6vw,30px);line-height:1.3;
+  color:#ffe4d2;text-wrap:balance;
+}
+.vi-hero-seal{
+  display:grid;justify-items:center;gap:16px;
+  margin:clamp(26px,4.5vh,42px) 0 0;
+}
+.vi-hero-release-note{
+  font-family:"Space Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.2em;text-transform:uppercase;color:#ffb9d3;
+  max-width:64ch;line-height:1.9;
+}
+.vi-hero-actions{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:14px;
+  margin-top:clamp(22px,4vh,36px);
+}
+/* atalhos: pílulas pequenas em fileira (herda a base .dossier-quick-tabs) */
+.vi-hero-quick{justify-content:center;gap:9px;margin-top:clamp(26px,4.5vh,44px);max-width:880px}
+.vi-hero-quick a{
+  padding:8px 14px;font-size:11px;letter-spacing:.08em;
+  background:rgba(22,7,46,.72);border-color:rgba(255,45,124,.26);
+}
+.vi-hero-quick a svg{width:13px;height:13px;flex:0 0 auto}
+.vi-hero .vi-ticker{position:relative;z-index:2}
+
+/* ---- 14.2 PERSONAGENS (#vi-characters) ------------------------------------
+ * Painéis alternados em tela larga: arte em gradiente + corpo editorial.
+ * .vi-char-panel--flip = espelho do --right existente (harmonizado).        */
+.vi-char-panel--flip{justify-items:end;text-align:right}
+.vi-char-panel--flip::before{
+  background:radial-gradient(72% 80% at 70% 55%, rgba(16,5,36,.62), rgba(16,5,36,.14) 70%, transparent 100%);
+}
+.vi-char-list{display:grid;gap:clamp(22px,4vw,44px);margin-top:12px}
+.vi-char-list .vi-char-panel{
+  display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
+  align-items:stretch;align-content:stretch;justify-items:stretch;
+  gap:0;padding:0;min-height:min(520px,72vh);text-align:left;
+}
+.vi-char-list .vi-char-panel--flip{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)}
+.vi-char-list .vi-char-panel--flip .vi-char-art{order:2}
+.vi-char-list .vi-char-panel--flip .vi-char-body{justify-items:end;text-align:right}
+
+/* arte: gradiente inline do personagem + nome-fantasma + monograma + anéis */
+.vi-char-art{
+  z-index:1;display:grid;place-items:center;overflow:hidden;
+  min-height:clamp(280px,42vw,540px);
+}
+.vi-char-art-ghost{
+  position:absolute;left:50%;top:54%;z-index:1;
+  transform:translate(-50%,-50%) rotate(-8deg);
+  font-size:clamp(96px,17vw,240px);line-height:1;white-space:nowrap;
+  color:rgba(255,255,255,.1);text-shadow:none;letter-spacing:.02em;
+  mix-blend-mode:overlay;pointer-events:none;
+}
+.vi-char-initials{
+  position:relative;z-index:3;
+  font-size:clamp(96px,14vw,190px);line-height:1;font-weight:700;
+  color:var(--vi-a,#ff3d8a); /* fallback sem background-clip */
+  background:linear-gradient(165deg,#fff8ef 4%,var(--vi-a,#ff3d8a) 44%,var(--vi-b,#3c1361) 100%);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 12px 36px rgba(6,2,16,.6));
+  text-shadow:none;
+}
+.vi-char-rings{
+  position:absolute;inset:0;margin:auto;z-index:2;display:block;
+  width:min(78%,360px);height:auto;aspect-ratio:1;opacity:.85;
+  animation:vi-rings-spin 46s linear infinite;
+}
+@keyframes vi-rings-spin{to{transform:rotate(360deg)}}
+
+/* corpo editorial */
+.vi-char-body{
+  display:grid;gap:12px;align-content:center;justify-items:start;
+  padding:clamp(24px,4.5vw,54px);
+}
+.vi-char-list .vi-char-role{font-size:10.5px;letter-spacing:.26em}
+.vi-char-list .vi-char-name{
+  margin:2px 0 4px;
+  font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;
+  text-transform:none;font-size:clamp(42px,6vw,92px);line-height:1;letter-spacing:.005em;
+}
+.vi-char-list .vi-char-tagline{
+  margin:0;padding:0;font-size:clamp(19px,2.2vw,28px);line-height:1.3;color:var(--vi-gold);
+}
+.vi-char-list .vi-char-tagline::before{content:none}
+.vi-char-desc{margin:0;max-width:58ch;font-size:15px;line-height:1.7;color:#f0dfef}
+.vi-char-list .vi-char-quote{
+  margin:10px 0 0;padding-left:18px;border-left:3px solid var(--vi-pink);
+}
+.vi-char-list .vi-char-quote p{margin:0}
+.vi-char-list .vi-char-quote cite{
+  display:block;margin-top:10px;
+  font-family:"Space Mono",ui-monospace,monospace;font-style:normal;
+  font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:#ff9ec4;
+}
+.vi-char-list .vi-char-panel--flip .vi-char-quote{
+  border-left:0;border-right:3px solid var(--vi-pink);
+  padding-left:0;padding-right:18px;
+}
+
+/* ---- 14.3 LUGARES (#vi-places) -------------------------------------------- */
+.vi-places-intro{
+  display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;
+  padding:clamp(20px,3.2vw,32px);margin-bottom:6px;
+}
+.vi-places-intro>div{flex:1 1 320px;display:grid;gap:10px;justify-items:start}
+.vi-places-intro>.vi-badge{flex:0 0 auto;margin-top:4px}
+.vi-places-intro h3{
+  margin:0;font-size:clamp(22px,2.8vw,32px);line-height:1.15;
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.vi-places-intro p{margin:0;max-width:70ch;line-height:1.65;color:#efdff0}
+.vi-places-intro .vi-quote{font-size:clamp(19px,2.4vw,30px);padding:14px 6px 4px 44px;color:#ffe9d8}
+.vi-places-intro .vi-quote::before{font-size:clamp(56px,7vw,90px);top:-4px}
+.vi-gallery-hint{
+  margin:2px 6px 0;text-align:right;
+  font-family:"Space Mono",ui-monospace,monospace;font-size:11px;
+  letter-spacing:.22em;text-transform:uppercase;color:#ff9ec4;opacity:.85;
+}
+
+/* polaroid rica (foto em gradiente + legenda em bloco), rotação via --vi-rot */
+.vi-gallery .vi-polaroid{
+  width:min(74vw,340px);padding:12px 12px 16px;
+  transform:rotate(var(--vi-rot,-2deg));
+}
+.vi-gallery .vi-polaroid:nth-child(even){transform:rotate(var(--vi-rot,1.8deg))}
+.vi-gallery .vi-polaroid:hover{transform:rotate(0) scale(1.02)}
+.vi-polaroid-photo{
+  z-index:auto;display:block;width:100%;aspect-ratio:4/3.4;
+  overflow:hidden;border-radius:2px;
+  filter:saturate(1.12) contrast(1.05);
+}
+.vi-polaroid-horizon{ /* faixa de céu/horizonte dentro da foto */
+  position:absolute;left:0;right:0;bottom:0;height:44%;z-index:1;
+  background:linear-gradient(180deg,
+    transparent 0,
+    rgba(255,224,150,.55) 12%,
+    rgba(255,45,124,.28) 45%,
+    rgba(24,10,50,.72) 100%);
+}
+.vi-polaroid-horizon::before{ /* linha de brilho no horizonte */
+  content:"";position:absolute;top:8%;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,244,214,.95),transparent);
+  filter:blur(.5px);
+}
+.vi-polaroid-mark{
+  position:absolute;left:10px;right:10px;bottom:10px;z-index:3;
+  font-family:"Anton",sans-serif;font-weight:400;text-transform:uppercase;
+  font-size:clamp(20px,2.4vw,28px);line-height:1;letter-spacing:.06em;
+  text-align:left;text-shadow:none;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.vi-polaroid .vi-polaroid-caption{ /* legenda em bloco (anula o abs/ellipsis) */
+  position:static;left:auto;right:auto;bottom:auto;
+  display:grid;gap:6px;justify-items:start;
+  padding:12px 4px 2px;text-align:left;
+  font-family:"Space Grotesk",system-ui,sans-serif;font-style:normal;font-weight:400;
+  font-size:13px;line-height:1.5;color:#4a1837;
+  white-space:normal;overflow:visible;text-overflow:clip;
+}
+.vi-polaroid-caption strong{font-size:18px;line-height:1.15;color:#241026}
+.vi-polaroid-caption .vi-quote{
+  display:block;margin:0;padding:0;
+  font-size:15px;line-height:1.35;color:#7c2350;
+}
+.vi-polaroid-caption .vi-quote::before{content:none}
+.vi-polaroid-caption p{margin:0;color:#5d2c49}
+.vi-polaroid-vibe{justify-self:start;margin-top:2px;font-size:10px;letter-spacing:.16em;padding:6px 12px}
+
+/* ---- 14.4 DOSSIÊ VI (#gta6): títulos de bloco ------------------------------ */
+.vi-block-title{
+  display:flex;align-items:center;gap:16px;
+  margin:clamp(40px,7vw,64px) 0 18px;
+  font-size:clamp(24px,3.4vw,38px);line-height:1.15;color:var(--vi-cream);
+}
+.vi-block-title::after{
+  content:"";flex:1;height:1px;min-width:40px;
+  background:linear-gradient(90deg,rgba(255,45,124,.55),transparent);
+}
+
+/* lançamento: copy + countdown compacto + adiamentos */
+.vi-release-card{margin-top:6px;padding:clamp(20px,3.4vw,34px)}
+.vi-release-grid{
+  display:grid;grid-template-columns:1fr;
+  gap:clamp(20px,3.4vw,40px);align-items:start;
+}
+.vi-release-copy{display:grid;gap:14px;justify-items:start}
+.vi-release-copy h3{
+  margin:0;font-size:clamp(24px,3vw,36px);line-height:1.15;
+  background:var(--vi-grad-chrome);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.vi-release-copy p{margin:0;max-width:64ch;line-height:1.65;color:#f2e3f0}
+.vi-release-side{display:grid;gap:18px;align-content:start;padding-top:6px}
+
+/* adiamentos: datas antigas riscadas, data vigente em dourado */
+.vi-delay-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.vi-delay{
+  display:grid;gap:3px;padding:12px 14px 12px 16px;border-radius:10px;
+  border:1px solid rgba(255,45,124,.2);border-left:3px solid var(--vi-coral);
+  background:rgba(255,45,124,.06);
+}
+.vi-delay strong{font-size:14px;letter-spacing:.02em;color:var(--vi-cream)}
+.vi-delay span{font-size:13px;line-height:1.55;color:#eadcec}
+.vi-delay--superada{
+  border-color:rgba(255,255,255,.12);border-left-color:rgba(255,255,255,.28);
+  background:rgba(255,255,255,.04);
+}
+.vi-delay--superada strong{
+  color:#cdbecf;
+  text-decoration:line-through;
+  text-decoration-color:rgba(255,45,124,.6);
+  text-decoration-thickness:2px;
+}
+.vi-delay--vigente{
+  border-color:rgba(255,209,102,.4);border-left-color:var(--vi-gold);
+  background:linear-gradient(90deg,rgba(255,209,102,.12),rgba(255,45,124,.05));
+  box-shadow:0 0 24px -8px rgba(255,209,102,.35);
+}
+.vi-delay--vigente strong{color:var(--vi-gold)}
+
+/* edições: cards de loja premium */
+.vi-editions-grid{
+  display:grid;gap:clamp(16px,2.4vw,26px);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));
+}
+.vi-edition{display:flex;flex-direction:column;gap:10px;padding:clamp(18px,2.8vw,26px)}
+.vi-edition-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.vi-edition-head h4{margin:0;font-size:18px;line-height:1.2;color:var(--vi-cream)}
+.vi-edition p{margin:0;font-size:14px;line-height:1.6;color:#ecdcee}
+.vi-edition p.vi-edition-pricebr{
+  font-family:"Space Mono",ui-monospace,monospace;font-size:12px;
+  letter-spacing:.06em;color:var(--vi-gold);
+}
+.vi-edition .dossier-list{margin-top:2px}
+.vi-edition--ultimate{ /* borda em degradê dourado→rosa */
+  border-color:transparent;
+  background:
+    linear-gradient(165deg,rgba(56,20,60,.88),rgba(20,8,44,.94)) padding-box,
+    linear-gradient(140deg,var(--vi-gold),#ffedb0 22%,var(--vi-coral) 52%,var(--vi-pink) 100%) border-box;
+  box-shadow:0 26px 60px -30px rgba(4,0,16,.95),0 0 38px -10px rgba(255,209,102,.4);
+}
+.vi-edition--ultimate:hover{border-color:transparent}
+.vi-edition--ultimate::after{background:linear-gradient(90deg,var(--vi-gold),var(--vi-pink))}
+.vi-edition--bonus{
+  border:1px dashed rgba(255,209,102,.45);
+  background:linear-gradient(165deg,rgba(64,42,10,.3),rgba(18,7,42,.88));
+}
+
+/* trailers: grid estilo mídia oficial */
+.vi-trailers-grid{
+  display:grid;gap:clamp(16px,2.4vw,26px);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));
+}
+.vi-trailer{display:flex;flex-direction:column}
+.vi-trailer-thumb{z-index:auto;display:block;aspect-ratio:16/9;overflow:hidden}
+.vi-trailer-thumb img{
+  display:block;width:100%;height:100%;object-fit:cover;
+  filter:saturate(1.1) contrast(1.04);
+  transition:transform .35s ease;
+}
+.vi-trailer-thumb:hover img{transform:scale(1.05)}
+.vi-trailer-play{
+  position:absolute;inset:0;margin:auto;
+  width:64px;height:64px;padding-left:4px;border-radius:50%;
+  display:grid;place-items:center;font-size:20px;color:var(--vi-ink);
+  background:var(--vi-grad-sunset);
+  box-shadow:0 10px 30px -8px rgba(255,45,124,.65);
+  transition:transform .25s ease;
+}
+.vi-trailer-thumb:hover .vi-trailer-play{transform:scale(1.08)}
+.vi-trailer-thumb--empty{ /* placeholder "SEM SINAL" em gradiente + scanlines */
+  display:grid;place-items:center;padding:18px;text-align:center;
+  background:
+    repeating-linear-gradient(180deg,rgba(255,255,255,.05) 0 2px,transparent 2px 5px),
+    radial-gradient(80% 90% at 50% 12%, rgba(241,82,255,.25), transparent 60%),
+    linear-gradient(165deg,#3a0f52,#170a32 58%,#0b0d2a);
+}
+.vi-trailer-thumb--empty span:not(.vi-grain){
+  position:relative;z-index:2;
+  font-family:"Space Mono",ui-monospace,monospace;font-size:12px;
+  letter-spacing:.3em;text-transform:uppercase;line-height:1.9;color:#e7d7ff;
+}
+.vi-trailer-body{
+  flex:1;display:flex;flex-direction:column;gap:10px;
+  padding:clamp(16px,2.4vw,22px);
+}
+.vi-trailer-body h4{margin:0;font-size:19px;line-height:1.25;letter-spacing:.04em;color:var(--vi-cream)}
+.vi-trailer-body p{margin:0;font-size:14px;line-height:1.6;color:#e8d9ea}
+.vi-trailer-body .vi-btn{
+  margin-top:auto;align-self:flex-start;
+  padding:11px 20px;font-size:12.5px;
+}
+.vi-trailer-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.vi-trailer--rumor{border-color:rgba(123,47,247,.5)}
+.vi-trailer--rumor:hover{
+  border-color:rgba(241,82,255,.65);
+  box-shadow:0 32px 70px -34px rgba(4,0,16,.95),0 0 34px -8px rgba(123,47,247,.45);
+}
+.vi-trailer--rumor::after{background:linear-gradient(90deg,var(--vi-purple),var(--vi-pink-2))}
+
+/* linha do tempo de anúncios */
+.vi-ann-card{padding:clamp(18px,3vw,30px)}
+.vi-ann-timeline{list-style:none;margin:0;padding:0;position:relative}
+.vi-ann-timeline::before{ /* espinha pontilhada, mesmo desenho da cronologia */
+  content:"";position:absolute;top:10px;bottom:10px;left:8px;width:2px;
+  background:repeating-linear-gradient(180deg,rgba(255,45,124,.6) 0 12px,transparent 12px 22px);
+}
+.vi-ann{
+  position:relative;display:grid;grid-template-columns:150px minmax(0,1fr);
+  gap:16px;padding:16px 0 16px 30px;
+}
+.vi-ann+.vi-ann{border-top:1px dashed rgba(255,45,124,.18)}
+.vi-ann::before{ /* pino colorido por tipo (oficial=dourado por padrão) */
+  content:"";position:absolute;left:3px;top:24px;width:12px;height:12px;border-radius:50%;
+  background:var(--vi-gold);
+  box-shadow:0 0 0 4px rgba(255,209,102,.16),0 0 16px var(--vi-gold);
+}
+.vi-ann--rumor::before{
+  background:#c084ff;
+  box-shadow:0 0 0 4px rgba(123,47,247,.2),0 0 16px rgba(192,132,255,.8);
+}
+.vi-ann--incidente::before{
+  background:#ff5252;
+  box-shadow:0 0 0 4px rgba(255,82,82,.18),0 0 16px rgba(255,82,82,.8);
+}
+.vi-ann-date{
+  padding-top:3px;
+  font-family:"Space Mono",ui-monospace,monospace;font-size:11.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--vi-gold);
+}
+.vi-ann-body strong{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  font-size:15.5px;line-height:1.3;color:var(--vi-cream);
+}
+.vi-ann-body .vi-badge{font-size:9px;letter-spacing:.16em;padding:3px 9px}
+.vi-ann-body p{margin:6px 0 0;font-size:14px;line-height:1.6;color:#e6d6e8}
+
+/* OFICIAL (dourado) × RUMOR (roxo, selo carimbado) */
+.vi-facts-columns{
+  display:grid;gap:clamp(16px,2.4vw,26px);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));
+  align-items:stretch;
+}
+.vi-facts{padding:clamp(18px,3vw,28px)}
+.vi-facts-head{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:8px}
+.vi-facts-head h4{margin:0;font-size:17px;line-height:1.3;color:var(--vi-cream)}
+.vi-facts--official{
+  border-color:rgba(255,209,102,.5);
+  background:linear-gradient(165deg,rgba(64,42,10,.38),rgba(18,7,42,.86));
+  box-shadow:0 20px 44px -28px rgba(4,0,16,.9),0 0 30px -12px rgba(255,209,102,.35);
+}
+.vi-facts--official::after{background:linear-gradient(90deg,var(--vi-gold),var(--vi-coral))}
+.vi-facts--official .dossier-list li::marker{color:var(--vi-gold)}
+.vi-facts--rumor{
+  border-color:rgba(123,47,247,.55);
+  background:linear-gradient(165deg,rgba(64,22,110,.42),rgba(18,7,42,.86));
+  box-shadow:0 20px 44px -28px rgba(4,0,16,.9),0 0 30px -12px rgba(123,47,247,.4);
+}
+.vi-facts--rumor::after{background:linear-gradient(90deg,var(--vi-purple),var(--vi-pink-2))}
+.vi-facts--rumor .dossier-list li::marker{color:#c084ff}
+.vi-facts-head .vi-badge--rumor{ /* o selo, com jeitão de carimbo torto */
+  transform:rotate(-2.5deg);
+  outline:1px dashed rgba(220,189,255,.55);outline-offset:2px;
+}
+
+/* FAQ minimalista elegante (details/summary) */
+.vi-faq-card{padding:clamp(14px,2.6vw,26px)}
+.vi-faq{
+  margin:0;padding:4px 2px;border:0;border-radius:0;background:transparent;
+  border-bottom:1px solid rgba(255,45,124,.16);
+}
+.vi-faq:last-of-type{border-bottom:0}
+.vi-faq summary{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:14px 4px;list-style:none;cursor:pointer;
+  font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;
+  font-size:clamp(16px,2vw,19px);line-height:1.35;color:var(--vi-cream);
+  transition:color .2s ease;
+}
+.vi-faq summary::-webkit-details-marker{display:none}
+.vi-faq summary::marker{content:""}
+.vi-faq summary:hover{color:var(--vi-gold)}
+.vi-faq summary::after{
+  content:"+";flex:0 0 auto;width:26px;height:26px;
+  display:grid;place-items:center;border-radius:50%;
+  border:1px solid rgba(255,45,124,.45);
+  font-family:"Space Mono",ui-monospace,monospace;font-style:normal;
+  font-size:15px;line-height:1;color:var(--vi-pink);
+  transition:transform .25s ease,background .25s ease,color .25s ease;
+}
+.vi-faq[open] summary::after{
+  transform:rotate(45deg);
+  background:var(--vi-grad-sunset);border-color:transparent;color:var(--vi-ink);
+}
+.vi-faq p{margin:0 0 14px;padding:0 4px;max-width:72ch;font-size:14.5px;line-height:1.65;color:#eadcf0}
+
+/* ---- 14.5 responsivo (mobile-first: acima ajusta o desktop) --------------- */
+@media (min-width:961px){
+  .vi-release-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr)}
+  .vi-release-side{border-left:1px solid rgba(255,45,124,.18);padding-left:clamp(20px,2.6vw,36px)}
+}
+@media (max-width:880px){
+  .vi-char-list .vi-char-panel,
+  .vi-char-list .vi-char-panel--flip{grid-template-columns:1fr;min-height:0}
+  .vi-char-list .vi-char-panel--flip .vi-char-art{order:0}
+  .vi-char-art{min-height:min(64vw,340px)}
+  .vi-char-list .vi-char-panel--flip .vi-char-body{justify-items:start;text-align:left}
+  .vi-char-list .vi-char-panel--flip .vi-char-quote{
+    border-right:0;border-left:3px solid var(--vi-pink);
+    padding-right:0;padding-left:18px;
+  }
+}
+@media (max-width:680px){
+  .vi-hero-inner{padding-top:clamp(96px,15vh,130px)}
+  .vi-hero-quick{gap:7px}
+  .vi-hero-quick a{padding:7px 11px;font-size:10.5px}
+  .vi-countdown-cell strong{font-size:clamp(44px,15vw,84px)}
+  .vi-hero-seal .vi-countdown-cell strong{font-size:clamp(34px,11vw,64px)}
+  .vi-countdown--compact .vi-countdown-cell strong{font-size:clamp(30px,9vw,48px)}
+  .vi-gallery .vi-polaroid{width:min(82vw,320px)}
+  .vi-ann{grid-template-columns:1fr;gap:4px;padding-left:26px}
+  .vi-ann-timeline::before{left:6px}
+  .vi-ann::before{left:1px;top:20px}
+  .vi-block-title{gap:12px}
+}
+
+/* ---- 14.6 prefers-reduced-motion ------------------------------------------ */
+@media (prefers-reduced-motion: reduce){
+  .vi-char-rings{animation:none}
+  .vi-gallery .vi-polaroid,
+  .vi-gallery .vi-polaroid:nth-child(even),
+  .vi-gallery .vi-polaroid:hover{transform:none;transition:none}
+  .vi-trailer-thumb img,.vi-trailer-play{transition:none}
+  .vi-trailer-thumb:hover img{transform:none}
+  .vi-trailer-thumb:hover .vi-trailer-play{transform:none}
+  .vi-faq summary,.vi-faq summary::after{transition:none}
+  .vi-btn--primary:hover{transform:none}
+}

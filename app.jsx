@@ -24,11 +24,21 @@ const ConnectionsSec = M(ConnectionsImpactSection);
 const HeroSec        = M(DossierHero);
 const FooterSec      = M(DossierFooter);
 
+/* Novos módulos VI (tolerantes a ausência: se um módulo não estiver no bundle,
+ * o app usa o equivalente antigo ou simplesmente não renderiza a seção). */
+const VIHeroSec   = typeof VIHero !== "undefined" ? M(VIHero) : null;
+const VICharsSec  = typeof VICharactersSection !== "undefined" ? M(VICharactersSection) : null;
+const VIPlacesSec = typeof VIPlacesSection !== "undefined" ? M(VIPlacesSection) : null;
+const VIInfoSec   = typeof VIInfoSection !== "undefined" ? M(VIInfoSection) : null;
+const EggsSec     = typeof EasterEggsSection !== "undefined" ? M(EasterEggsSection) : null;
+const MystSec     = typeof MysteriesSection !== "undefined" ? M(MysteriesSection) : null;
+
 /* ---- Scroll reveal ----
  * One shared IntersectionObserver toggles a class as elements enter/leave the
  * viewport. Animation is pure opacity+transform (see styles.css), so it is
- * GPU-composited and stays cheap even with many cards. Respects reduced-motion. */
-function useScrollReveal(){
+ * GPU-composited and stays cheap even with many cards. Respects reduced-motion.
+ * Re-runs when `version` changes (troca de idioma remonta a árvore). */
+function useScrollReveal(version){
   React.useLayoutEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -56,14 +66,18 @@ function useScrollReveal(){
 
     targets.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [version]);
 }
 
 function App(){
   const [dossier, setDossier] = React.useState(null);
   const [active, setActive] = React.useState("overview");
+  /* i18n: quando o idioma muda, `version` muda e a árvore inteira remonta
+   * (key no Fragment abaixo), reavaliando todos os fallbacks __t/__tt. */
+  const i18n = typeof useI18n !== "undefined" ? useI18n() : { version: 0 };
+  const version = i18n.version || 0;
 
-  useScrollReveal();
+  useScrollReveal(version);
 
   // Scroll-spy (highlights the active nav item). Only <App> + the small nav
   // re-render here; the memoized sections above are untouched.
@@ -74,7 +88,7 @@ function App(){
     }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
     ids.forEach((id) => { const el = document.getElementById(id); if (el) obs.observe(el); });
     return () => obs.disconnect();
-  }, []);
+  }, [version]);
 
   React.useEffect(() => {
     const id = decodeURIComponent(window.location.hash.replace("#", ""));
@@ -92,9 +106,9 @@ function App(){
   }, []);
 
   return (
-    <>
+    <React.Fragment key={version}>
       <DossierHUDNav active={active} onJump={setActive} />
-      <HeroSec />
+      {VIHeroSec ? <VIHeroSec /> : <HeroSec />}
       <TimelineSec onOpenDossier={setDossier} />
       <GamesSec onOpenDossier={setDossier} />
       <MissionsSec onOpenDossier={setDossier} />
@@ -107,12 +121,16 @@ function App(){
       <UniversesSec />
       <RockstarSec />
       <GTAOnlineSec onOpenDossier={setDossier} />
-      <GTA6Sec />
+      {VICharsSec && <VICharsSec />}
+      {VIPlacesSec && <VIPlacesSec />}
+      {VIInfoSec ? <VIInfoSec /> : <GTA6Sec />}
+      {EggsSec && <EggsSec />}
+      {MystSec && <MystSec />}
       <GlossarySec onOpenDossier={setDossier} />
       <ConnectionsSec />
       <FooterSec />
       <DossierRecordModal record={dossier} onClose={() => setDossier(null)} />
-    </>
+    </React.Fragment>
   );
 }
 

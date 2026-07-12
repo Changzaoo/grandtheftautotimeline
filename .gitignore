@@ -15,3 +15,6 @@ public/vendor/
 !public/index.html
 
 _smoke.js
+
+.vercel
+.env*
