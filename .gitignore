@@ -18,3 +18,4 @@ _smoke.js
 
 .vercel
 .env*
+i18n/_content.json

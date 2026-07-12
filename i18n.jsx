@@ -76,46 +76,148 @@ window.__tt = function (prefix, id, field, fallback) {
   return window.__t(prefix + "." + id + "." + field, fallback);
 };
 
+/* ---------- 5b. Tradução do CONTEÚDO dos dados (cards do dossiê) ----------
+ * O conteúdo do dossiê original (personagens, cidades, jogos, glossário, etc.)
+ * vive em estruturas de dados renderizadas cruas, sem __tt. Para traduzir 100%
+ * do site sem editar centenas de pontos de render, traduzimos o conteúdo por
+ * MUTAÇÃO in-place das estruturas quando o idioma muda: cada string de um campo
+ * de EXIBIÇÃO é trocada pela tradução (chave "c"+hash do texto pt). Campos de
+ * LÓGICA (tone, universe, category, type, id, gameId, URLs, datas, mídia, cor)
+ * ficam intactos — filtros, classes e vínculos continuam funcionando. Como a
+ * App remonta na troca de idioma (key=version), ela relê os dados traduzidos. */
+function i18nHash(str) {
+  var h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (var i = 0, ch; i < str.length; i++) {
+    ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 2654435761);
+    h2 = Math.imul(h2 ^ ch, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507); h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507); h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+window.__i18nHash = i18nHash;
+
+/* Campos de EXIBIÇÃO que devem ser traduzidos (allowlist — o resto passa
+ * intacto). Mantenha em sincronia com i18n/extract-content.js. */
+var I18N_TR_FIELDS = new Set([
+  "name","nick","title","subtitle","heading","headline","subhead","kicker","lead","body",
+  "summary","description","desc","overview","intro","importance","biography","bio",
+  "storyArc","fate","role","details","detail","impact","contributions","narrativeImportance",
+  "uncertainty","fullStory","developmentHistory","precisionNotes","relationships","totalLabel",
+  "label","caption","alt","credit","definition","expanded","whyItMatters","note","notes",
+  "quote","tagline","blurb","context","meaning","text","beats","protagonist","game","era",
+  "status","coverage","brought","story","plot","trivia","aliases","tags",
+  "highlights","facts","examples","importantEvents","systems","modes","businesses","themes",
+  "enemies","allies","antagonists","leaders","supportingCharacters","characters","factions",
+  "affiliations","districts","vehicles","relatedTerms","appearsIn","relatedGames","games",
+  "features","points","bullets","items","modules","perks","objectives"
+]);
+/* Globais de dados do dossiê a traduzir (definidos antes deste módulo no bundle). */
+var I18N_DATA_GLOBALS = [
+  "universeData","rockstarHistoryData","rockstarPeopleData","timelineChronologicalData",
+  "releaseTimelineData","gamesData","charactersData","citiesData","factionsData",
+  "developmentData","onlineTimelineData","onlineDlcData","gta6FactsData","connectionsData",
+  "recommendedOrderData","impactData","glossaryData","missionDossierData",
+  "vehicleDossierData","weaponDossierData"
+];
+var i18nDataOriginals = null; /* snapshot pt-BR (fonte) capturado no 1º apply */
+
+function i18nApplyData() {
+  try {
+    if (!i18nDataOriginals) {
+      i18nDataOriginals = {};
+      for (var j = 0; j < I18N_DATA_GLOBALS.length; j++) {
+        var nm = I18N_DATA_GLOBALS[j];
+        if (window[nm]) { try { i18nDataOriginals[nm] = JSON.parse(JSON.stringify(window[nm])); } catch (e) {} }
+      }
+    }
+    var pt = window.__lang === i18nDefaultLang;
+    var tr = function (s) { var t = s.trim(); return pt || !t ? s : window.__t("c" + i18nHash(t), s); };
+    var into = function (live, orig, field) {
+      if (Array.isArray(orig)) {
+        for (var i = 0; i < orig.length; i++) {
+          if (typeof orig[i] === "string") { if (field && I18N_TR_FIELDS.has(field) && typeof live[i] === "string") live[i] = tr(orig[i]); }
+          else if (orig[i] && typeof orig[i] === "object" && live[i]) into(live[i], orig[i], field);
+        }
+      } else if (orig && typeof orig === "object") {
+        for (var k in orig) {
+          if (!Object.prototype.hasOwnProperty.call(orig, k)) continue;
+          var ov = orig[k];
+          if (typeof ov === "string") { if (I18N_TR_FIELDS.has(k) && typeof live[k] === "string") live[k] = tr(ov); }
+          else if (ov && typeof ov === "object" && live[k]) into(live[k], ov, k);
+        }
+      }
+    };
+    for (var g = 0; g < I18N_DATA_GLOBALS.length; g++) {
+      var n = I18N_DATA_GLOBALS[g];
+      if (window[n] && i18nDataOriginals[n]) into(window[n], i18nDataOriginals[n], null);
+    }
+  } catch (e) { /* nunca deixar a tradução de dados quebrar a troca de idioma */ }
+}
+/* Expostos para i18n/extract-content.js (mesma hash/allowlist/globais). */
+window.__i18nTrFields = I18N_TR_FIELDS;
+window.__i18nDataGlobals = I18N_DATA_GLOBALS;
+
 /* ---------- 6. Troca de idioma ---------- */
 function i18nApply(code) {
   window.__lang = code;
+  i18nApplyData();
   try { window.localStorage.setItem(i18nStorageKey, code); } catch (err) { /* modo privado etc. */ }
   document.documentElement.lang = code;
   window.__i18nVersion = (window.__i18nVersion || 0) + 1;
   window.dispatchEvent(new CustomEvent("i18n:changed", { detail: { lang: code } }));
 }
 
+/* Carrega um script de catálogo uma vez (dedup por src), com cache-busting.
+ * Erro NÃO bloqueia: o arquivo de conteúdo é opcional (pode ainda não existir
+ * para um idioma) e a UI já traduz com o catálogo base. */
+function i18nLoadScript(src, onDone) {
+  const full = src + (window.__BUILD_VERSION ? "?v=" + window.__BUILD_VERSION : "");
+  const existing = document.querySelector('script[data-i18n-src="' + src + '"]');
+  if (existing) {
+    if (existing.getAttribute("data-i18n-done")) { onDone(); return; }
+    existing.addEventListener("load", onDone);
+    existing.addEventListener("error", onDone);
+    return;
+  }
+  const script = document.createElement("script");
+  script.src = full;
+  script.async = true;
+  script.setAttribute("data-i18n-src", src);
+  const done = function () { script.setAttribute("data-i18n-done", "1"); onDone(); };
+  script.addEventListener("load", done);
+  script.addEventListener("error", function () {
+    console.warn('[i18n] falha/ausência de ' + src + " — seguindo com o que houver.");
+    script.setAttribute("data-i18n-done", "1");
+    onDone();
+  });
+  document.head.appendChild(script);
+}
+
+const i18nContentLoaded = {}; /* code -> true quando i18n/<code>.content.js já tentou carregar */
+
+/* Carrega o catálogo base (UI) e, em seguida, o de conteúdo (cards do dossiê),
+ * depois aplica. Conteúdo é opcional: se faltar, a UI ainda traduz. */
 window.__setLang = function (code) {
   if (!i18nIsValid(code)) {
     console.warn('[i18n] código de idioma desconhecido: "' + code + '"');
     return;
   }
-  if (i18nCatalogReady(code)) { i18nApply(code); return; }
+  if (code === i18nDefaultLang) { i18nApply(code); return; } /* pt-BR: fallbacks inline */
+  if (i18nCatalogReady(code) && i18nContentLoaded[code]) { i18nApply(code); return; }
 
-  const i18nOnCatalogLoad = function () {
-    if (i18nCatalogReady(code)) i18nApply(code);
-    else console.warn('[i18n] i18n/' + code + '.js carregou mas não registrou I18N_CATALOGS["' + code + '"]; mantendo "' + window.__lang + '".');
-  };
-
-  const existing = document.querySelector('script[data-i18n-lang="' + code + '"]');
-  if (existing) {
-    /* Já injetado e ainda carregando: apenas pega carona no load em andamento. */
-    existing.addEventListener("load", i18nOnCatalogLoad);
-    return;
-  }
-
-  const script = document.createElement("script");
-  /* ?v=<build> evita catálogo obsoleto em cache após um deploy (o arquivo
-   * i18n/<code>.js mantém a mesma URL entre versões). */
-  script.src = "i18n/" + code + ".js" + (window.__BUILD_VERSION ? "?v=" + window.__BUILD_VERSION : "");
-  script.async = true;
-  script.setAttribute("data-i18n-lang", code);
-  script.addEventListener("load", i18nOnCatalogLoad);
-  script.addEventListener("error", function () {
-    console.warn('[i18n] falha ao carregar i18n/' + code + ".js — mantendo \"" + window.__lang + '".');
-    script.remove(); /* permite nova tentativa num próximo clique */
+  i18nLoadScript("i18n/" + code + ".js", function () {
+    if (!i18nCatalogReady(code)) {
+      console.warn('[i18n] i18n/' + code + '.js não registrou o catálogo; mantendo "' + window.__lang + '".');
+      return;
+    }
+    if (i18nContentLoaded[code]) { i18nApply(code); return; }
+    i18nLoadScript("i18n/" + code + ".content.js", function () {
+      i18nContentLoaded[code] = true;
+      i18nApply(code);
+    });
   });
-  document.head.appendChild(script);
 };
 
 /* ---------- 3. Estado inicial (NÃO detecta navigator.language) ---------- */
