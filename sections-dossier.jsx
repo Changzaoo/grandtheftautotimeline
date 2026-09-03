@@ -1229,6 +1229,13 @@ const imageHasGameCode = (fileTitle = "", code = "") =>
 const imageFileNameOf = (src = "") => {
   try { return decodeURIComponent(String(src).split("/revision/")[0].split("/").pop() || ""); } catch (e) { return String(src); }
 };
+/* true se o arquivo carrega o código DESTE jogo. Usado para exigir que a
+ * imagem de um item seja daquele jogo, e não a arte genérica da página do wiki
+ * (que costuma ser a versão mais recente da arma/veículo). */
+const imageMatchesGame = (src, allowedCodes = []) => {
+  const file = imageFileNameOf(src);
+  return !!file && allowedCodes.some((c) => imageHasGameCode(file, c));
+};
 /* true se o arquivo carrega o código de OUTRO jogo (e nenhum dos códigos aceitos). */
 const imageBelongsToOtherGame = (src, allowedCodes = []) => {
   const file = imageFileNameOf(src);
@@ -1277,16 +1284,11 @@ const vehicleFallbackMediaByGameAndName = {
   }
 };
 
-const contextualVehicleMedia = (item, vehicle) => {
-  const direct = vehicleFallbackMediaByGameAndName[vehicle?.id]?.[normalizeText(vehicleItemName(item))];
-  if (direct) return direct;
-  if (!vehicle?.media) return null;
-  return {
-    ...vehicle.media,
-    alt: `Imagem contextual relacionada a ${vehicleItemName(item)}`,
-    caption: `${vehicle.media.caption || "GTA"} - contexto visual`
-  };
-};
+/* Imagens escolhidas à mão para os itens genéricos do dossiê de GTA VI
+ * ("viaturas e perseguições policiais" etc.). São imagens DAQUELE item, não a
+ * arte do jogo repetida — por isso continuam valendo. */
+const curatedVehicleMedia = (item, vehicle) =>
+  vehicleFallbackMediaByGameAndName[vehicle?.id]?.[normalizeText(vehicleItemName(item))] || null;
 
 const vehicleUniversePageSuffix = (vehicle) => {
   if (vehicle?.universe?.includes("2D")) return "2D Universe";
@@ -1348,7 +1350,12 @@ const vehicleImageScore = (fileTitle = "", item, vehicle) => {
   const compactStem = normalizeText(vehicleItemName(item).replace(/[^a-z0-9]/gi, ""));
   if (stem && title.includes(stem)) score += 35;
   if (compactStem && title.includes(compactStem)) score += 35;
-  if (/front|frontquarter|ingame|screenshot/.test(title)) score += 12;
+  /* Preferir o veículo como ele é no jogo: render frontal/traseiro-quartal ou
+   * captura in-game. Arte promocional e ilustração ficam atrás. */
+  if (/front|frontquarter|ingame|screenshot/.test(title)) score += 24;
+  else if (/artwork|concept|promo|render/.test(title)) score += 6;
+  /* Sem código de jogo no nome, provavelmente é imagem genérica da série. */
+  if (!needles.some((needle) => imageHasGameCode(fileTitle, needle))) score -= 30;
   if (/png|jpg|jpeg/.test(title)) score += 3;
   return score;
 };
@@ -1430,7 +1437,7 @@ const hydrateVehicleGroupMedia = async (groups, vehicle) => {
     !galleryMedia.get(vehicleItemKey(item)) &&
     !vehiclePageCandidatesForItem(item, vehicle).some((candidate) => {
       const m = pageMedia.get(normalizeText(candidate));
-      return m && !imageBelongsToOtherGame(m.src, vehicleImageNeedlesByGameId[vehicle?.id] || []);
+      return m && imageMatchesGame(m.src, vehicleImageNeedlesByGameId[vehicle?.id] || []);
     })
   );
   const heuristicMedia = await loadVehicleHeuristicMediaByItem(missingAfterKnown, vehicle);
@@ -1444,8 +1451,11 @@ const hydrateVehicleGroupMedia = async (groups, vehicle) => {
         galleryMedia.get(vehicleItemKey(normalizedItem)) ||
         heuristicMedia.get(vehicleItemKey(normalizedItem)) ||
         vehiclePageCandidatesForItem(normalizedItem, vehicle).map((candidate) => pageMedia.get(normalizeText(candidate)))
-          .find((m) => m && !imageBelongsToOtherGame(m.src, vehicleImageNeedlesByGameId[vehicle?.id] || [])) ||
-        contextualVehicleMedia(normalizedItem, vehicle);
+          .find((m) => m && imageMatchesGame(m.src, vehicleImageNeedlesByGameId[vehicle?.id] || [])) ||
+        curatedVehicleMedia(normalizedItem, vehicle) ||
+        /* Mesma regra das armas: sem foto daquele jogo, marcador "imagem
+         * pendente" em vez da arte do jogo repetida em todos os cards. */
+        null;
       return { ...normalizedItem, media };
     })
   }));
@@ -1807,13 +1817,11 @@ const weaponPageAliasesByName = {
   "up n atomizer": ["Up-n-Atomizer"]
 };
 
-const contextualWeaponMedia = (item, weapon) => {
-  if (!weapon?.media) return null;
-  return {
-    ...weapon.media,
-    alt: `Imagem contextual relacionada a ${weaponItemName(item)}`,
-    caption: `${weapon.media.caption || "GTA Wiki"} - contexto visual`
-  };
+/* Sprites das eras 2D/3D são pequenos; ampliados com suavização viram borrão.
+ * Marcamos no load, quando dá para saber o tamanho real do arquivo. */
+const markSpriteOnLoad = (event) => {
+  const img = event.target;
+  if (img && img.naturalWidth && img.naturalWidth < 140) img.classList.add("is-sprite");
 };
 
 const weaponPageCandidatesForItem = (item, weapon) => {
@@ -1869,7 +1877,16 @@ const weaponImageScore = (fileTitle = "", item, weapon) => {
   const compactStem = normalizeText(weaponItemName(item).replace(/[^a-z0-9]/gi, ""));
   if (stem && title.includes(stem)) score += 35;
   if (compactStem && title.includes(compactStem)) score += 35;
-  if (/icon|hud|model|holding|aiming|rgsc|rscstats|ingame|pickup/.test(title)) score += 14;
+  /* O que se quer é a ARMA como ela aparece no jogo. Antes, ícone de HUD e
+   * render do modelo valiam o mesmo, então um quadradinho de interface (ou o
+   * ícone de pickup) ganhava de um render — daí a sensação de imagem "que não
+   * representa o modelo do jogo". Agora o modelo pesa bem mais. */
+  if (/model|render|ingame|holding|aiming|rgsc/.test(title)) score += 30;
+  else if (/icon|hud|pickup|rscstats/.test(title)) score += 6;
+  /* Arquivo sem NENHUM código de jogo costuma ser arte genérica da série (a
+   * mesma imagem em todas as fichas). Serve como último recurso, não como
+   * primeira escolha. */
+  if (!needles.some((needle) => imageHasGameCode(fileTitle, needle))) score -= 30;
   if (/png|jpg|jpeg/.test(title)) score += 3;
   return score;
 };
@@ -2002,7 +2019,7 @@ const hydrateWeaponGroupMedia = async (groups, weapon) => {
     !galleryMedia.get(weaponItemKey(item)) &&
     !weaponPageCandidatesForItem(item, weapon).some((candidate) => {
       const m = pageMedia.get(normalizeText(candidate));
-      return m && !imageBelongsToOtherGame(m.src, weaponImageNeedlesByGameId[weapon?.id] || []);
+      return m && imageMatchesGame(m.src, weaponImageNeedlesByGameId[weapon?.id] || []);
     })
   );
   const heuristicMedia = await loadWeaponHeuristicMediaByItem(missingAfterKnown, weapon);
@@ -2016,8 +2033,12 @@ const hydrateWeaponGroupMedia = async (groups, weapon) => {
         galleryMedia.get(weaponItemKey(normalizedItem)) ||
         heuristicMedia.get(weaponItemKey(normalizedItem)) ||
         weaponPageCandidatesForItem(normalizedItem, weapon).map((candidate) => pageMedia.get(normalizeText(candidate)))
-          .find((m) => m && !imageBelongsToOtherGame(m.src, weaponImageNeedlesByGameId[weapon?.id] || [])) ||
-        contextualWeaponMedia(normalizedItem, weapon);
+          .find((m) => m && imageMatchesGame(m.src, weaponImageNeedlesByGameId[weapon?.id] || [])) ||
+        /* Sem imagem daquele jogo, o card mostra o marcador "imagem pendente".
+         * Antes caía na arte do JOGO como "contexto visual" — o mesmo quadro
+         * repetido em dezenas de armas, que era justamente o que não
+         * representava o modelo. Placeholder honesto é melhor. */
+        null;
       return { ...normalizedItem, media };
     })
   }));
@@ -2249,7 +2270,8 @@ const CharactersDossierSection = ({ onOpenDossier }) => {
                     <small>{character.universe}</small>
                   </div>
                 )}
-                <span>{character.media?.relatedOnly ? "arquivo relacionado" : character.id}</span>
+                {/* O carimbo com o id do registro ("vi-cat-lori-heder") ficava
+                    escrito por cima da foto. É dado interno, não conteúdo. */}
               </div>
               <div className="dossier-card-body">
                 <DossierChips items={[character.role, character.importance]} limit={2} />
@@ -2947,7 +2969,7 @@ const VehicleGroupsPanel = ({ groups, query }) => {
                 <a className={`dossier-vehicle-model-card ${media ? "has-media" : ""}`} href={source} target="_blank" rel="noreferrer" key={`${group.label}-${vehicleItemKey(vehicle)}`}>
                   <span className="dossier-vehicle-model-thumb">
                     {media?.src ? (
-                      <img src={media.src} alt={media.alt || `Imagem de ${name}`} loading="lazy" referrerPolicy="no-referrer" />
+                      <img src={media.src} alt={media.alt || `Imagem de ${name}`} loading="lazy" referrerPolicy="no-referrer" onLoad={markSpriteOnLoad} />
                     ) : (
                       <span className="dossier-vehicle-model-placeholder"><DossierIcon type="car" /> imagem pendente</span>
                     )}
@@ -2992,7 +3014,7 @@ const WeaponGroupsPanel = ({ groups, query }) => {
                 <a className={`dossier-weapon-model-card ${media ? "has-media" : ""}`} href={source} target="_blank" rel="noreferrer" key={`${group.label}-${weaponItemKey(weapon)}`}>
                   <span className="dossier-weapon-model-thumb">
                     {media?.src ? (
-                      <img src={media.src} alt={media.alt || `Imagem de ${name}`} loading="lazy" referrerPolicy="no-referrer" />
+                      <img src={media.src} alt={media.alt || `Imagem de ${name}`} loading="lazy" referrerPolicy="no-referrer" onLoad={markSpriteOnLoad} />
                     ) : (
                       <span className="dossier-weapon-model-placeholder"><DossierIcon type="weapon" /> imagem pendente</span>
                     )}

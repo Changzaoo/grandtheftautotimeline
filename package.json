@@ -5,6 +5,8 @@
   "description": "Dossie interativo GTA - build estatico pre-compilado (sem Babel no navegador).",
   "scripts": {
     "build": "node build.js",
+    "smoke": "node build.js && node _smoke.js",
+    "catalog": "node scripts/build-vi-catalog.js && node scripts/build-vi-bridge.js",
     "i18n:extract": "node build.js && node i18n/extract-content.js",
     "i18n:translate": "node i18n/translate.js",
     "i18n:content": "node i18n/build-content.js",

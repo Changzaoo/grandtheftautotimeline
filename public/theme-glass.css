@@ -179,6 +179,26 @@
   mask-image:linear-gradient(90deg,transparent 0,#000 46px,#000 calc(100% - 46px),transparent 100%);
 }
 
+/* ------------------------------------ 03c. grades de itens (armas/veículos) */
+/* `auto-fit` colapsa as trilhas vazias: um grupo com 2 itens virava dois cards
+ * ocupando metade da tela cada, com a miniatura esticada. `auto-fill` mantém as
+ * trilhas, então dois itens ficam do mesmo tamanho dos das outras fileiras. */
+.dossier-weapon-name-grid,
+.dossier-vehicle-name-grid{
+  grid-template-columns:repeat(auto-fill,minmax(156px,1fr));
+}
+.dossier-weapon-model-thumb img,
+.dossier-vehicle-model-thumb img{object-fit:contain;padding:6px}
+/* Boa parte das artes das eras 2D/3D são sprites minúsculos: ampliados com
+ * suavização viram um borrão. A classe vem do JS quando a imagem carregada é
+ * de fato pequena — em render 3D de alta resolução, `pixelated` estragaria. */
+.dossier-weapon-model-thumb img.is-sprite,
+.dossier-vehicle-model-thumb img.is-sprite{
+  image-rendering:-webkit-optimize-contrast;
+  image-rendering:crisp-edges;
+  image-rendering:pixelated;
+}
+
 /* ------------------------------------------------------- 04. scrollbars */
 /* Menus: barra totalmente invisível — a posição é comunicada pelo item ativo,
  * que a própria navegação centraliza ao rolar a página. */
