@@ -213,6 +213,18 @@ const findGameForTimeline = (item) => {
 const DossierHUDNav = ({ active, onJump }) => {
   const [open, setOpen] = React.useState(false);
   const navItems = dossierNav();
+  /* A aba da seção em que o usuário está fica em destaque E visível: quando
+   * `active` muda, o menu horizontal rola até centralizar o item ativo. */
+  const navRef = React.useRef(null);
+  React.useEffect(() => {
+    const nav = navRef.current;
+    if (!nav || !active) return;
+    const el = nav.querySelector("a.active");
+    if (!el || nav.scrollWidth <= nav.clientWidth) return;
+    const left = el.offsetLeft - (nav.clientWidth - el.offsetWidth) / 2;
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    try { nav.scrollTo({ left: Math.max(0, left), behavior: reduce ? "auto" : "smooth" }); } catch (e) { nav.scrollLeft = Math.max(0, left); }
+  }, [active]);
   const jumpToTop = () => {
     onJump && onJump("overview");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -225,12 +237,13 @@ const DossierHUDNav = ({ active, onJump }) => {
           <a className="dossier-brand" href="#overview" onClick={() => onJump && onJump("overview")}>
             <img className="dossier-brand-logo" src="assets/dossier-logo.png" alt="Dossiê Criminal - Arquivo GTA" />
           </a>
-          <nav className={open ? "open" : ""}>
+          <nav ref={navRef} className={open ? "open" : ""} aria-label="Seções do arquivo">
             {navItems.map((n) => (
               <a
                 key={n.id}
                 href={`#${n.id}`}
                 className={active === n.id ? "active" : ""}
+                aria-current={active === n.id ? "location" : undefined}
                 onClick={() => {
                   setOpen(false);
                   onJump && onJump(n.id);
@@ -1066,6 +1079,23 @@ const loadVehicleFileMediaMap = async (fileTitles) => {
   return mediaByFile;
 };
 
+/* Código de jogo no nome do arquivo (ex.: "Adder-GTAV-front.png"), ancorado:
+ * "GTAV" casa "-GTAV-", "-GTAVe-", "-GTAVpc." mas NÃO "-GTAVC-" nem "-GTAVI-".
+ * Sem isso, imagens de Vice City / GTA VI apareciam nas fichas de GTA V, e
+ * Liberty City Stories nas de London — o motivo das fotos "trocadas". */
+const imageHasGameCode = (fileTitle = "", code = "") =>
+  new RegExp("(^|[^A-Za-z0-9])" + code.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "(?:[a-z]{1,3})?(?=[^A-Za-z0-9]|$)").test(String(fileTitle));
+const imageFileNameOf = (src = "") => {
+  try { return decodeURIComponent(String(src).split("/revision/")[0].split("/").pop() || ""); } catch (e) { return String(src); }
+};
+/* true se o arquivo carrega o código de OUTRO jogo (e nenhum dos códigos aceitos). */
+const imageBelongsToOtherGame = (src, allowedCodes = []) => {
+  const file = imageFileNameOf(src);
+  if (!file) return false;
+  const all = window.__ALL_IMAGE_GAME_CODES || [];
+  if (allowedCodes.some((c) => imageHasGameCode(file, c))) return false;
+  return all.some((c) => imageHasGameCode(file, c));
+};
 const vehicleImageNeedlesByGameId = {
   "gta-1": ["GTA1"],
   "london-1969": ["GTAL69", "GTAL"],
@@ -1170,8 +1200,9 @@ const vehicleImageScore = (fileTitle = "", item, vehicle) => {
   let score = 0;
   const needles = vehicleImageNeedlesByGameId[vehicle?.id] || [];
   needles.forEach((needle) => {
-    if (title.includes(normalizeText(needle))) score += 80;
+    if (imageHasGameCode(fileTitle, needle)) score += 80;
   });
+  if (!needles.some((needle) => imageHasGameCode(fileTitle, needle)) && imageBelongsToOtherGame(fileTitle, needles)) return -100;
   const stem = normalizeText(vehicleItemName(item));
   const compactStem = normalizeText(vehicleItemName(item).replace(/[^a-z0-9]/gi, ""));
   if (stem && title.includes(stem)) score += 35;
@@ -1256,7 +1287,10 @@ const hydrateVehicleGroupMedia = async (groups, vehicle) => {
     !vehicleItemMedia(item) &&
     !fileMedia.get(normalizeText(item?.imageTitle || "")) &&
     !galleryMedia.get(vehicleItemKey(item)) &&
-    !vehiclePageCandidatesForItem(item, vehicle).some((candidate) => pageMedia.get(normalizeText(candidate)))
+    !vehiclePageCandidatesForItem(item, vehicle).some((candidate) => {
+      const m = pageMedia.get(normalizeText(candidate));
+      return m && !imageBelongsToOtherGame(m.src, vehicleImageNeedlesByGameId[vehicle?.id] || []);
+    })
   );
   const heuristicMedia = await loadVehicleHeuristicMediaByItem(missingAfterKnown, vehicle);
   return groups.map((group) => ({
@@ -1268,14 +1302,16 @@ const hydrateVehicleGroupMedia = async (groups, vehicle) => {
         fileMedia.get(normalizeText(normalizedItem.imageTitle || "")) ||
         galleryMedia.get(vehicleItemKey(normalizedItem)) ||
         heuristicMedia.get(vehicleItemKey(normalizedItem)) ||
-        vehiclePageCandidatesForItem(normalizedItem, vehicle).map((candidate) => pageMedia.get(normalizeText(candidate))).find(Boolean) ||
+        vehiclePageCandidatesForItem(normalizedItem, vehicle).map((candidate) => pageMedia.get(normalizeText(candidate)))
+          .find((m) => m && !imageBelongsToOtherGame(m.src, vehicleImageNeedlesByGameId[vehicle?.id] || [])) ||
         contextualVehicleMedia(normalizedItem, vehicle);
       return { ...normalizedItem, media };
     })
   }));
 };
 
-const loadVehicleCategoryGroup = async (categoryTitle) => {
+const loadVehicleCategoryGroup = async (categoryTitle, vehicle) => {
+  const allowed = vehicleImageNeedlesByGameId[vehicle?.id] || [];
   const items = new Map();
   let cmcontinue = "";
   do {
@@ -1296,7 +1332,9 @@ const loadVehicleCategoryGroup = async (categoryTitle) => {
       const item = {
         name: title,
         pageTitle: page.title,
-        media: vehicleMediaFromSource(title, page.title, page.thumbnail?.source)
+        media: page.thumbnail?.source && !imageBelongsToOtherGame(page.thumbnail.source, allowed)
+          ? vehicleMediaFromSource(title, page.title, page.thumbnail.source)
+          : null
       };
       items.set(vehicleItemKey(item), item);
     });
@@ -1310,7 +1348,7 @@ const loadVehicleGroups = async (vehicle) => {
   if (vehicleGroupCache.has(cacheKey)) return vehicleGroupCache.get(cacheKey);
   let groups = [];
   if (vehicle.categoryTitle) {
-    groups = await loadVehicleCategoryGroup(vehicle.categoryTitle);
+    groups = await loadVehicleCategoryGroup(vehicle.categoryTitle, vehicle);
   } else if (vehicle.apiPage) {
     const data = await fetch(vehicleApiUrl({
       action: "parse",
@@ -1603,6 +1641,12 @@ const weaponImageNeedlesByGameId = {
   "gta-vi": ["GTAVI"]
 };
 
+/* União de todos os códigos de jogo conhecidos (para detectar "outro jogo"). */
+window.__ALL_IMAGE_GAME_CODES = [...new Set([
+  ...Object.values(vehicleImageNeedlesByGameId).flat(),
+  ...Object.values(weaponImageNeedlesByGameId).flat()
+])].sort((a, b) => b.length - a.length);
+
 const weaponPageAliasesByName = {
   "ak 47": ["AK47"],
   "automatic 9mm": ["Automatic 9mm"],
@@ -1677,8 +1721,9 @@ const weaponImageScore = (fileTitle = "", item, weapon) => {
   let score = 0;
   const needles = weaponImageNeedlesByGameId[weapon?.id] || [];
   needles.forEach((needle) => {
-    if (title.includes(normalizeText(needle))) score += 80;
+    if (imageHasGameCode(fileTitle, needle)) score += 80;
   });
+  if (!needles.some((needle) => imageHasGameCode(fileTitle, needle)) && imageBelongsToOtherGame(fileTitle, needles)) return -100;
   const stem = normalizeText(weaponItemName(item));
   const compactStem = normalizeText(weaponItemName(item).replace(/[^a-z0-9]/gi, ""));
   if (stem && title.includes(stem)) score += 35;
@@ -1814,7 +1859,10 @@ const hydrateWeaponGroupMedia = async (groups, weapon) => {
     !weaponItemMedia(item) &&
     !fileMedia.get(normalizeText(item?.imageTitle || "")) &&
     !galleryMedia.get(weaponItemKey(item)) &&
-    !weaponPageCandidatesForItem(item, weapon).some((candidate) => pageMedia.get(normalizeText(candidate)))
+    !weaponPageCandidatesForItem(item, weapon).some((candidate) => {
+      const m = pageMedia.get(normalizeText(candidate));
+      return m && !imageBelongsToOtherGame(m.src, weaponImageNeedlesByGameId[weapon?.id] || []);
+    })
   );
   const heuristicMedia = await loadWeaponHeuristicMediaByItem(missingAfterKnown, weapon);
   return groups.map((group) => ({
@@ -1826,14 +1874,16 @@ const hydrateWeaponGroupMedia = async (groups, weapon) => {
         fileMedia.get(normalizeText(normalizedItem.imageTitle || "")) ||
         galleryMedia.get(weaponItemKey(normalizedItem)) ||
         heuristicMedia.get(weaponItemKey(normalizedItem)) ||
-        weaponPageCandidatesForItem(normalizedItem, weapon).map((candidate) => pageMedia.get(normalizeText(candidate))).find(Boolean) ||
+        weaponPageCandidatesForItem(normalizedItem, weapon).map((candidate) => pageMedia.get(normalizeText(candidate)))
+          .find((m) => m && !imageBelongsToOtherGame(m.src, weaponImageNeedlesByGameId[weapon?.id] || [])) ||
         contextualWeaponMedia(normalizedItem, weapon);
       return { ...normalizedItem, media };
     })
   }));
 };
 
-const loadWeaponCategoryGroup = async (categoryTitle) => {
+const loadWeaponCategoryGroup = async (categoryTitle, weapon) => {
+  const allowed = weaponImageNeedlesByGameId[weapon?.id] || [];
   const items = new Map();
   let cmcontinue = "";
   do {
@@ -1854,7 +1904,9 @@ const loadWeaponCategoryGroup = async (categoryTitle) => {
       const item = {
         name: title,
         pageTitle: page.title,
-        media: weaponMediaFromSource(title, page.title, page.thumbnail?.source)
+        media: page.thumbnail?.source && !imageBelongsToOtherGame(page.thumbnail.source, allowed)
+          ? weaponMediaFromSource(title, page.title, page.thumbnail.source)
+          : null
       };
       items.set(weaponItemKey(item), item);
     });
@@ -1868,7 +1920,7 @@ const loadWeaponGroups = async (weapon) => {
   if (weaponGroupCache.has(cacheKey)) return weaponGroupCache.get(cacheKey);
   let groups = [];
   if (weapon.categoryTitle) {
-    groups = await loadWeaponCategoryGroup(weapon.categoryTitle);
+    groups = await loadWeaponCategoryGroup(weapon.categoryTitle, weapon);
   } else if (weapon.apiPage) {
     const data = await fetch(vehicleApiUrl({
       action: "parse",

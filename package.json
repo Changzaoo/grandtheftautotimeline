@@ -4,7 +4,10 @@
   "private": true,
   "description": "Dossie interativo GTA - build estatico pre-compilado (sem Babel no navegador).",
   "scripts": {
-    "build": "node build.js"
+    "build": "node build.js",
+    "smoke": "node build.js && node _smoke.js",
+    "live": "node scripts/refresh-vi-live.js",
+    "catalog": "node scripts/build-vi-catalog.js"
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

@@ -406,16 +406,16 @@ const vehicleDossierData = [
     city: "Leonida e Vice City",
     apiPage: "Vehicles in GTA VI",
     source: gtaWikiVehicleSource("Vehicles in GTA VI"),
-    totalLabel: "lista completa não confirmada antes do lançamento",
-    coverage: ["carros modernos", "picapes", "barcos", "aeronaves", "viaturas", "praia/pântano", "não confirmado"],
-    highlights: ["car culture de Leonida", "tráfego de Vice City", "barcos e costa", "viaturas e perseguições"],
-    summary: "GTA VI ainda não tem frota completa confirmada. O dossiê registra apenas o que a Rockstar mostrou oficialmente e separa isso de leitura de trailer, vazamento ou especulação.",
+    totalLabel: "mais de 260 modelos catalogados pelo GTA Wiki; lista oficial só no lançamento",
+    coverage: ["carros modernos e clássicos", "picapes", "motos e motos de trilha", "barcos, jet skis e aerobarcos", "helicópteros e jatinhos", "viaturas", "patinetes e bicicletas", "bonde"],
+    highlights: ["Buffalo STX", "Banshee", "Avarus (Final Chapter MC)", "aerobarco", "jet ski", "patinete elétrico", "Ambrosia Raceway", "combustível e postos"],
+    summary: "O Extended Look (27/08/2026) confirmou combustível de verdade, furto por nível de segurança, dano por componente e uma frota que vai de conversíveis clássicos a aerobarcos e patinetes. A lista completa continua não oficial — o catálogo automático do site traz cada modelo já visto.",
     systems: [
-      "A Rockstar já mostrou Leonida/Vice City com forte cultura automotiva, costa, estradas, vida noturna, policiamento e tráfego denso.",
-      "Modelos específicos, lista completa, dirigibilidade, classes e lojas ainda não foram detalhados oficialmente.",
+      "Sistemas mostrados pela Rockstar: medidor de combustível e postos, recarga de elétricos, app WAINK para avaliar carros parados, slim jim/vidro quebrado/clonador de chave conforme a segurança do carro, Pay 'n' Spray e concessionárias.",
+      "Física mais pesada, ruas mais estreitas e trânsito denso; espelhos com reflexo real e interiores detalhados foram relatados nas prévias.",
       "Qualquer nome não confirmado pela Rockstar deve aparecer como interpretação, referência visual ou dado de wiki sujeito a revisão."
     ],
-    precisionNotes: ["Não há lista completa oficial de veículos de GTA VI em 28 de maio de 2026; a página do GTA Wiki mistura material oficial revelado e itens de vazamentos com aviso."],
+    precisionNotes: ["Em 3 de setembro de 2026 não há lista oficial de veículos; o GTA Wiki cataloga mais de 260 modelos vistos em trailers, screenshots, no Extended Look e em vazamentos (marcados). A seção Catálogo VI importa essa lista automaticamente, só com imagens rotuladas GTA VI."],
     fallbackGroups: [
       {
         label: "Confirmado em alto nível / material promocional",
@@ -435,7 +435,7 @@ const vehicleDossierData = [
 const vehicleMediaById = {
   "gta-1": gtaWikiVehicleImage("Mamba", "https://static.wikia.nocookie.net/gtawiki/images/2/21/Mamba-GTA1.png/revision/latest?cb=20091013164934", "Mamba em Grand Theft Auto"),
   "london-1969": gtaWikiVehicleImage("James Bomb", "https://static.wikia.nocookie.net/gtawiki/images/b/b9/JamesBomb-GTAL69.png/revision/latest?cb=20091011035848", "James Bomb em GTA: London 1969"),
-  "london-1961": gtaWikiVehicleImage("Myni", "https://static.wikia.nocookie.net/gtawiki/images/9/91/Myni-GTAL.png/revision/latest?cb=20090929153104", "Myni no pacote London"),
+  "london-1961": gtaWikiVehicleImage("Bentover", "https://static.wikia.nocookie.net/gtawiki/images/4/49/Bentover-GTAL61.png/revision/latest?cb=20090929145539", "Bentover em GTA: London 1961"),
   "gta-2": gtaWikiVehicleImage("Furore GT", "https://static.wikia.nocookie.net/gtawiki/images/5/50/FuroreGT-GTA2.png/revision/latest?cb=20091114141306", "Furore GT em GTA 2"),
   "gta-iii": gtaWikiVehicleImage("Banshee (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/3/3a/Banshee-GTA3-front.jpg/revision/latest?cb=20230709090037", "Banshee em GTA III"),
   "vice-city": gtaWikiVehicleImage("Infernus", "https://static.wikia.nocookie.net/gtawiki/images/f/f0/Infernus-GTAVC-FrontQuarter.png/revision/latest?cb=20240911013848", "Infernus em GTA: Vice City"),
@@ -446,13 +446,14 @@ const vehicleMediaById = {
   "gta-iv": gtaWikiVehicleImage("Sultan RS", "https://static.wikia.nocookie.net/gtawiki/images/8/83/SultanRS-GTAIV-front.png/revision/latest?cb=20160523142419", "Sultan RS em GTA IV"),
   "lost-and-damned": gtaWikiVehicleImage("Hexer", "https://static.wikia.nocookie.net/gtawiki/images/d/d0/Hexer-TLAD-front.png/revision/latest?cb=20170921192709", "Hexer em The Lost and Damned"),
   "ballad-gay-tony": gtaWikiVehicleImage("Buzzard", "https://static.wikia.nocookie.net/gtawiki/images/4/4e/Buzzard-TBoGT-front.png/revision/latest?cb=20160207232138", "Buzzard em The Ballad of Gay Tony"),
-  "chinatown-wars": gtaWikiVehicleImage("Infernus", "https://static.wikia.nocookie.net/gtawiki/images/8/82/Infernus-GTACW-front.jpg/revision/latest?cb=20181006001640", "Infernus em Chinatown Wars"),
+  "chinatown-wars": gtaWikiVehicleImage("Hellenbach GT", "https://static.wikia.nocookie.net/gtawiki/images/4/42/Hellenbach-GTACW-front.jpg/revision/latest?cb=20181006001601", "Hellenbach em Chinatown Wars"),
   "gta-v": gtaWikiVehicleImage("Adder", "https://static.wikia.nocookie.net/gtawiki/images/9/9e/Adder-GTAV-front.png/revision/latest?cb=20230402200727", "Adder em GTA V"),
   "gta-online": gtaWikiVehicleImage("Oppressor Mk II", "https://static.wikia.nocookie.net/gtawiki/images/8/85/OppressorMkII-GTAO-front.png/revision/latest?cb=20180725181109", "Oppressor Mk II em GTA Online"),
-  "trilogy-definitive": gtaWikiVehicleImage("Banshee (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/6/6b/Banshee-GTAIII-FrontQuarter.png/revision/latest?cb=20240824134033", "Banshee da era 3D remasterizada"),
-  "gta-vi": gtaWikiVehicleImage("Vehicles in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/6/64/Banshee-GTAVI-Trailer2.png/revision/latest?cb=20250506212454", "Banshee visto em material de GTA VI", {
-    alt: "Veiculo visto em material promocional de GTA VI; lista completa ainda nao confirmada",
-    caption: "GTA Wiki - GTA VI, veiculo visto em trailer"
+  "trilogy-definitive": gtaWikiVehicleImage("Sabre", "https://static.wikia.nocookie.net/gtawiki/images/0/0b/Sabre-GTASAde-front.png/revision/latest?cb=20211204202725", "Sabre em San Andreas - The Definitive Edition"),
+  "gta-vi": gtaWikiVehicleImage("Vehicles in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/5/57/AmbrosiaRacewayPark-GTAVI-ExtendedLook.png/revision/latest?cb=20260829190137", "Ambrosia Raceway Park no Extended Look de GTA VI", {
+    alt: "Corrida em Ambrosia Raceway Park, cena do Extended Look de GTA VI (27/08/2026); lista completa de veiculos ainda nao confirmada",
+    caption: "GTA Wiki - GTA VI, Extended Look (27/08/2026)",
+    fit: "cover"
   })
 };
 

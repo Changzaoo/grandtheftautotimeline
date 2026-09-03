@@ -9,7 +9,7 @@ const DIST = path.join(PUBLIC, "dist");
 const VENDOR = path.join(PUBLIC, "vendor");
 
 const STATIC_FILES = ["index.html", "styles.css", "theme-neo.css", "theme-vi.css"];
-const STATIC_DIRS = ["assets", "i18n"];
+const STATIC_DIRS = ["assets", "i18n", "live"];
 
 const SOURCES = [
   "components.jsx",
@@ -31,6 +31,8 @@ const SOURCES = [
   "sections-rockstar.jsx",
   "sections-dossier.jsx",
   "sections-vi.jsx",
+  "sections-vi-live.jsx",
+  "sections-vi-catalog.jsx",
   "sections-easter-eggs.jsx",
   "sections-mysteries.jsx",
   "app.jsx",

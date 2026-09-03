@@ -299,19 +299,13 @@
     var TOTAL_SECRETS = 8;
     var found = {};
     try { found = JSON.parse(localStorage.getItem("neoSecrets") || "{}"); } catch (e) { found = {}; }
-    var hud = el("div"); hud.id = "neo-secrets";
-    hud.title = "Segredos encontrados — explore o site, digite cheats e tente o Konami code";
-    document.body.appendChild(hud);
-    function renderHud() {
-      var c = Object.keys(found).length;
-      hud.innerHTML = '<span class="star"></span> Segredos <b>' + c + "/" + TOTAL_SECRETS + "</b>";
-    }
+    /* HUD "Segredos x/8" removido a pedido — os easter eggs continuam funcionando, só não há contador na tela. */
+    function renderHud() {}
     function discover(id) {
       if (found[id]) return false;
       found[id] = 1;
       try { localStorage.setItem("neoSecrets", JSON.stringify(found)); } catch (e) {}
       renderHud();
-      hud.style.transform = "scale(1.12)"; setTimeout(function () { hud.style.transform = ""; }, 260);
       if (Object.keys(found).length === TOTAL_SECRETS) {
         setTimeout(function () { toast("100% — Todos os segredos encontrados. Respeito.", "ok", 5200); confetti(); }, 500);
       }

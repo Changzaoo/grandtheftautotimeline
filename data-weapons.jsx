@@ -402,16 +402,16 @@ const weaponDossierData = [
     city: "Leonida e Vice City",
     categoryTitle: "Category:Weapons in GTA VI",
     source: gtaWikiWeaponSource("Weapons in GTA VI"),
-    totalLabel: "lista completa não confirmada antes do lançamento",
-    coverage: ["armas vistas em material promocional", "itens de categoria wiki", "não confirmado", "leaks com cautela"],
-    highlights: ["Baseball Bat", "Crowbar", "Flashlight", "Golf Balls", "Sniper/Rifles em categoria", "itens não confirmados"],
-    summary: "GTA VI ainda não tem arsenal completo oficial. O dossiê carrega a categoria pública do GTA Wiki, mas marca tudo como sujeito a revisão até a Rockstar confirmar.",
+    totalLabel: "36 armas catalogadas pelo GTA Wiki; arsenal oficial só no lançamento",
+    coverage: ["pistolas e revólveres", "escopetas", "fuzis automáticos", "submetralhadoras", "sniper de ferrolho", "corpo a corpo (taco, pé de cabra, salto agulha)", "arremessáveis (fire bottle, flashbang)", "itens improvisados (bolas e tacos de golfe)"],
+    highlights: ["Bolt Action Sniper", "Mustang .357", "Compact Submachine Gun", "fuzil estilo M16", "Baseball Bat", "Crowbar", "Fire Bottle", "Flashbangs"],
+    summary: "O Extended Look (27/08/2026) mostrou cobertura com mira em câmera lenta (vermelho mata, amarelo incapacita), desarme, fogo de supressão, troca instantânea entre duas armas e limite de duas curtas escondidas + duas longas visíveis. O arsenal completo segue não oficial; o dossiê carrega a categoria do GTA Wiki com aviso.",
     systems: [
-      "A Rockstar mostrou crime armado, polícia, assaltos e perseguições em Leonida, mas não publicou tabela oficial de armas.",
+      "Sistemas mostrados pela Rockstar: cobertura peek-and-shoot, mira em câmera lenta com pontos letais e de incapacitação, desarme, kill-cam, drive-by de janelas, caçambas, helicópteros e até nadando; Ammu-Nation e customização mais profunda que GTA V.",
       "A categoria do GTA Wiki pode misturar material promocional, leitura visual e conteúdo de vazamentos; por isso o dossiê separa fonte de confirmação.",
       "A ficha de VI é uma área de monitoramento, não uma afirmação final de cânone."
     ],
-    precisionNotes: ["Em 28 de maio de 2026, antes do lançamento oficial, não há lista completa oficial de armas de GTA VI publicada pela Rockstar."],
+    precisionNotes: ["Em 3 de setembro de 2026 não há tabela oficial de armas de GTA VI; a categoria do GTA Wiki (36 páginas) mistura material oficial e itens de vazamentos, marcados. Limites de porte e habilidades por personagem vêm das prévias hands-off."],
     tags: ["HD Universe", "GTA VI", "Leonida", "não confirmado", "monitoramento"]
   }
 ];
@@ -433,7 +433,7 @@ const weaponMediaById = {
   "chinatown-wars": gtaWikiWeaponImage("Chainsaw", "https://static.wikia.nocookie.net/gtawiki/images/7/7d/Chainsaw-GTACW-Android.png/revision/latest?cb=20150305191800", "Chainsaw em Chinatown Wars"),
   "gta-v": gtaWikiWeaponImage("Railgun", "https://static.wikia.nocookie.net/gtawiki/images/2/2e/Railgun-GTAV.png/revision/latest?cb=20180108210857", "Railgun em GTA V"),
   "gta-online": gtaWikiWeaponImage("Up-n-Atomizer", "https://static.wikia.nocookie.net/gtawiki/images/0/08/UpnAtomizer-GTAO-RGSC.png/revision/latest?cb=20190110134620", "Up-n-Atomizer em GTA Online"),
-  "trilogy-definitive": gtaWikiWeaponImage("Minigun", "https://static.wikia.nocookie.net/gtawiki/images/4/4f/Minigun-GTASA.png/revision/latest?cb=20240609061425", "Minigun da era 3D remasterizada"),
+  "trilogy-definitive": gtaWikiWeaponImage("Chainsaw", "https://static.wikia.nocookie.net/gtawiki/images/2/2c/Chainsaw-GTAVCDE-HUDicon.png/revision/latest?cb=20211117164057", "Chainsaw em Vice City - The Definitive Edition"),
   "gta-vi": gtaWikiWeaponImage("Weapons in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/1/17/Pistol-GTAVI-Trailer1Artwork.jpg/revision/latest?cb=20250816021143", "Pistol vista em material de GTA VI", {
     alt: "Arma vista em material promocional de GTA VI; arsenal completo ainda nao confirmado",
     caption: "GTA Wiki - GTA VI, arma vista em trailer"

@@ -56,3 +56,21 @@ Smoke test (renderiza a árvore inteira via ReactDOMServer com DOM stubado — p
 ```bash
 npm run build && node _smoke.js   # precisa terminar "SMOKE OK"
 ```
+
+## GTA VI — atualização automática (set/2026)
+
+O site se mantém atualizado sozinho em três camadas, sem chave de API:
+
+| Camada | Arquivo | Como funciona |
+| --- | --- | --- |
+| **Radar ao vivo** (`#vi-live`) | `api/vi-live.js` + `lib/vi-live-core.js` | Função serverless da Vercel. Lê o canal oficial da Rockstar no YouTube (RSS), o Newswire (descoberta via Google News RSS restrito a rockstargames.com), imprensa pt-BR/EN e as páginas de GTA VI editadas recentemente no GTA Wiki. Cache de 30 min na CDN (`s-maxage`). Fallback: `live/vi-live.json`. |
+| **Catálogo de GTA VI** (`#vi-catalog`) | `scripts/build-vi-catalog.js` → `live/vi-catalog.json` | Importa as categorias públicas do GTA Wiki (veículos, armas, personagens, gangues, locais por condado, marcas, fauna, rádios). Só aceita imagens com `GTAVI` no nome do arquivo. |
+| **Robô** | `.github/workflows/vi-live.yml` | A cada 6 h regenera os dois JSONs e faz commit se algo mudou; a Vercel publica em seguida. |
+
+Comandos: `npm run live` (snapshot do radar), `npm run catalog` (catálogo), `npm run smoke` (build + smoke test).
+
+A base curada de GTA VI (lançamento, edições, Extended Look, **mecânicas** com separação "mostrado pela Rockstar" × "relatado em prévia", trilha, FAQ) continua em `data-vi.jsx`; a seção `#vi-mechanics` vem de `VI_DATA.mechanics`.
+
+### Imagens por jogo
+
+`sections-dossier.jsx` só aceita, para cada ficha, arquivos do GTA Wiki cujo código de jogo no nome (`-GTAV-`, `-GTAVC-`, `-GTAVI-`, `-TLAD-`…) bata com o jogo da ficha (`imageHasGameCode`, ancorado — `GTAV` não casa `GTAVC`). Miniaturas de página vindas de outro jogo são descartadas (`imageBelongsToOtherGame`) e caem no "contexto visual" da ficha, nunca numa foto de outro título.

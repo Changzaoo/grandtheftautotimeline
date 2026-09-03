@@ -1,9 +1,17 @@
 /* ============ GTA VI DATA (window.VI_DATA) ============
  * Dados da experiência GTA VI no estilo do site oficial.
- * Fonte primária: Rockstar Games (rockstargames.com/VI, Newswire) e
- * cobertura de imprensa de 2023-2026. Tudo que é rumor está marcado.
+ * Fonte primária: Rockstar Games (rockstargames.com/VI, Newswire, canal
+ * oficial no YouTube), o "Grand Theft Auto VI: An Extended Look" (27/08/2026)
+ * e as prévias de imprensa liberadas no mesmo dia (IGN, The New York Times,
+ * Kinda Funny, TGG, Dazed). Tudo que é rumor, estimativa ou leitura de
+ * imprensa está marcado como tal.
+ * Última revisão editorial: 3 de setembro de 2026.
  * Este arquivo NÃO renderiza nada: apenas expõe window.VI_DATA.
  * Ordem no bundle: data-vi.jsx ANTES de sections-vi.jsx.
+ *
+ * A camada "ao vivo" (sections-vi-live.jsx + api/vi-live.js) complementa este
+ * arquivo com anúncios oficiais, notícias e edições do GTA Wiki sem precisar
+ * de novo build — este arquivo é a base curada; a live é o radar.
  */
 
 /* Helpers i18n seguros (pendurados em window para evitar redeclaração
@@ -13,6 +21,11 @@ window.__T = window.__T || ((k, f) => (window.__t ? window.__t(k, f) : f));
 window.__TT = window.__TT || ((p, id, field, fb) => (window.__tt ? window.__tt(p, id, field, fb) : fb));
 
 window.VI_DATA = {
+  meta: {
+    revisedAt: "2026-09-03",
+    revisedLabel: "3 de setembro de 2026"
+  },
+
   /* ---------- Lançamento, edições e pré-venda ---------- */
   release: {
     date: "2026-11-19",
@@ -20,12 +33,20 @@ window.VI_DATA = {
     weekday: "quinta-feira",
     /* Meia-noite no fuso da Costa Leste dos EUA (Leonida/Flórida) */
     countdownTarget: "2026-11-19T00:00:00-05:00",
+    unlockNote: "Desbloqueio à meia-noite no horário local de cada região (informação da Rockstar reproduzida pela imprensa).",
     platforms: ["PlayStation 5", "Xbox Series X|S"],
     pcStatus: "Versão de PC não anunciada (histórico da Rockstar sugere chegada posterior — expectativa, não confirmação).",
     preorderSince: "2026-06-25",
     preorderSinceLabel: "25 de junho de 2026",
     preorderBonus: "Vintage Vice City Pack",
     preorderDeadlineLabel: "pré-vendas confirmadas até 19 de novembro de 2026",
+    preload: {
+      id: "vi-preload",
+      date: "2026-11-12",
+      dateLabel: "12 de novembro de 2026",
+      detail: "Quem comprar a versão digital pode baixar o jogo com antecedência a partir de 12 de novembro, exatamente uma semana antes do lançamento. Na edição física, o pré-load só começa quando o código chega — a caixa traz código de download, não disco.",
+      sizeNote: "A Rockstar não divulgou o tamanho do arquivo. A faixa de 150 a 200 GB que circula na imprensa é estimativa, não dado oficial."
+    },
     editions: [
       {
         id: "vi-ed-standard",
@@ -81,16 +102,28 @@ window.VI_DATA = {
       {
         id: "vi-delay-2",
         label: "19 de novembro de 2026",
-        detail: "Segundo adiamento, anunciado em 6 de novembro de 2025. É a data oficial vigente.",
+        detail: "Segundo adiamento, anunciado em 6 de novembro de 2025. Data oficial vigente, reafirmada pela Rockstar em agosto de 2026 ('quase lá').",
         status: "vigente"
       }
     ]
   },
 
-  /* ---------- Trailers ---------- */
+  /* ---------- Hardware oficial licenciado ---------- */
+  hardware: [
+    {
+      id: "vi-hw-dualsense",
+      name: "DualSense edição limitada GTA VI (2 versões)",
+      dateLabel: "anunciado em 3 de setembro de 2026 (State of Play)",
+      desc: "A Sony revelou dois controles DualSense oficiais: o branco, inspirado na Vice City ao amanhecer (praias, tons pastel), e o preto, inspirado na vida noturna e nos neons. Logo do jogo no touchpad, palmeiras e botões com brilho. Preço sugerido de US$ 84,99; pré-venda em 10 de setembro; lançamento em 19 de novembro de 2026. A versão preta é exclusiva da PlayStation Direct nos EUA, Reino Unido e principais mercados europeus.",
+      status: "oficial"
+    }
+  ],
+
+  /* ---------- Trailers e apresentações oficiais ---------- */
   trailers: [
     {
       id: "vi-trailer-1",
+      kind: "trailer",
       title: "Trailer 1 — Bem-vindos a Leonida",
       date: "2023-12-05",
       dateLabel: "5 de dezembro de 2023",
@@ -107,6 +140,7 @@ window.VI_DATA = {
     },
     {
       id: "vi-trailer-2",
+      kind: "trailer",
       title: "Trailer 2 — Jason e Lucia",
       date: "2025-05-06",
       dateLabel: "6 de maio de 2025",
@@ -122,21 +156,217 @@ window.VI_DATA = {
       ]
     },
     {
+      id: "vi-extended-look",
+      kind: "showcase",
+      title: "An Extended Look — 26 minutos de gameplay",
+      date: "2026-08-27",
+      dateLabel: "27 de agosto de 2026",
+      youtubeId: "tJbzMqJGH4k",
+      url: "https://www.youtube.com/watch?v=tJbzMqJGH4k",
+      rumor: false,
+      desc: "A grande apresentação de gameplay: cerca de 26 minutos capturados em um PlayStation 5, estreando na Netflix às 15h (horário do Leste dos EUA) e chegando ao YouTube da Rockstar e ao site oficial às 21h. Mostra assaltos, perseguições, a troca entre Jason e Lucia, o sistema de procurado de seis estrelas, a vida noturna de Vice City e o dia a dia do casal em Leonida — na prática, o 'Trailer 3' que os fãs esperavam.",
+      highlights: [
+        "Anunciado em 6 de agosto de 2026 pela Newswire e por um teaser no canal oficial",
+        "Estreia inédita na Netflix antes dos canais da própria Rockstar; 31,1 milhões de visualizações na plataforma em quatro dias e nº 1 em 87 dos 93 países medidos (dados divulgados pela imprensa)",
+        "Pré-vendas subiram 436% no dia da estreia, segundo a Sensor Tower (estimativa de mercado, não número da Rockstar)",
+        "Disponível também para download no site oficial (arquivo de 14,2 GB)",
+        "Trilha: 14 músicas, de Depeche Mode e Phil Collins a Kodak Black e Sexyy Red — lista completa abaixo"
+      ]
+    },
+    {
       id: "vi-trailer-3",
-      title: "Trailer 3 — aguardado",
+      kind: "trailer",
+      title: "Trailer 3 / próximo vídeo — sem anúncio",
       date: null,
       dateLabel: "sem data oficial",
       youtubeId: null,
       url: null,
       rumor: true,
-      desc: "A Rockstar ainda não anunciou o Trailer 3. Com a pré-venda aberta e o site oficial recebendo atualizações em julho de 2026, a imprensa especializada projeta uma estreia entre o fim de julho e meados de agosto — trate como especulação até o anúncio oficial.",
+      desc: "Depois do Extended Look, a Rockstar não anunciou um novo trailer. A imprensa projeta uma peça final de marketing (trailer de lançamento) entre outubro e a semana do lançamento — projeção, não anúncio. Qualquer novo vídeo oficial aparece automaticamente na seção 'Ao vivo' deste arquivo.",
       highlights: [
-        "Sinais apontados por fãs: atualizações recentes no site oficial da Rockstar",
-        "Projeção da imprensa: fim de julho a meados de agosto de 2026",
-        "Nada confirmado pela Rockstar — rumor até segunda ordem"
+        "Nada anunciado pela Rockstar até 3 de setembro de 2026",
+        "Projeção da imprensa: trailer de lançamento perto de 19 de novembro",
+        "Acompanhe a seção 'Ao vivo': ela lê o canal oficial da Rockstar no YouTube"
       ]
     }
   ],
+
+  /* ---------- Mecânicas confirmadas ----------
+   * status: "oficial" = mostrado pela Rockstar no Extended Look, nos trailers
+   * ou dito por ela; "previa" = relatado por veículos que assistiram à sessão
+   * hands-off no Rockstar North (julho/2026, embargo 27/08/2026). */
+  mechanics: [
+    {
+      id: "vi-mech-duo",
+      icon: "users",
+      title: "Dois protagonistas, uma vida a dois",
+      status: "oficial",
+      summary: "Jason e Lucia são jogáveis e a troca acontece a qualquer momento, com a câmera subindo e cruzando o mapa até o outro personagem — o sistema de GTA V, agora com o casal dividindo carro, tiroteio e rotina.",
+      items: [
+        { text: "Troca de personagem a qualquer momento no mundo aberto (pode ficar bloqueada em trechos da história).", status: "oficial" },
+        { text: "Em perseguições, dá para escolher quem dirige e quem atira — e trocar de papel no meio da fuga.", status: "oficial" },
+        { text: "Quando estão juntos, o outro protagonista acompanha ('tag-along'); separados, cada um segue sua rotina.", status: "oficial" },
+        { text: "Sistema de relacionamento opcional: explorar, fazer compras, salão, academia e assaltos juntos aproximam o casal; ligações, mensagens, andar de mãos dadas e abrir portas mudam com a intimidade. Não há bônus de gameplay pelo romance.", status: "previa" },
+        { text: "O casal vive de graça numa propriedade de Brian Heder nos Leonida Keys; os dois têm rotinas próprias e recebem visitas no refúgio.", status: "oficial" }
+      ]
+    },
+    {
+      id: "vi-mech-combat",
+      icon: "weapon",
+      title: "Combate e tiro",
+      status: "oficial",
+      summary: "Tiroteio em terceira pessoa com cobertura, mira em câmera lenta que marca pontos letais (vermelho) e articulações para incapacitar (amarelo), desarme, fogo de supressão e kill-cams no estilo Max Payne.",
+      items: [
+        { text: "Cobertura com 'espiar e atirar' e câmera lenta ao mirar: pontos vermelhos matam, pontos amarelos derrubam sem matar; dá para acertar a arma e desarmar o inimigo.", status: "oficial" },
+        { text: "Habilidades próprias: a de Jason destaca pontos fracos em câmera lenta; a de Lucia foca disparos únicos precisos.", status: "previa" },
+        { text: "Fogo de supressão desorienta inimigos e civis; a barra de estamina pesa no combate.", status: "previa" },
+        { text: "Troca instantânea entre as duas armas empunhadas sem abrir a roda; algumas armas são de uma mão só (a escopeta recarrega e é 'pega' com uma mão).", status: "oficial" },
+        { text: "Limite realista: dois revólveres/pistolas escondidos e duas armas longas visíveis. O resto fica no porta-malas.", status: "previa" },
+        { text: "Corpo a corpo com prompts contextuais — inclusive esfaqueada com salto agulha — e animações novas de luta.", status: "oficial" },
+        { text: "Abraçadeiras para render, refém como escudo e carregar corpos (relatado nas prévias). Agachar existe; deitar não.", status: "previa" },
+        { text: "Drive-by pela janela, da caçamba de picape, do banco do helicóptero e até nadando.", status: "oficial" },
+        { text: "Arsenal visto: pistolas, escopetas, fuzis automáticos (um deles no estilo M16). Ammu-Nation volta, com customização mais profunda que em GTA V.", status: "oficial" }
+      ]
+    },
+    {
+      id: "vi-mech-wanted",
+      icon: "star",
+      title: "Procurado de 6 estrelas e perfil criminal",
+      status: "oficial",
+      summary: "As seis estrelas voltam. Crimes precisam ser vistos e denunciados; a polícia monta um retrato do suspeito (rosto, roupa, arma, carro) e estrelas vazias mostram que ela busca alguém sem saber quem.",
+      items: [
+        { text: "Seis níveis de procurado, com escalada de viaturas → agentes armados → helicópteros.", status: "oficial" },
+        { text: "Sistema de testemunhas: se ninguém viu ou denunciou, não há estrela. Estrelas vazias = polícia procurando sem identificação completa.", status: "oficial" },
+        { text: "A polícia guarda descrição de aparência, roupa, arma e veículo. Máscara, troca de roupa, troca de carro e separar o casal ajudam a escapar.", status: "oficial" },
+        { text: "Ruas densas de Vice City complicam fugas de carro em níveis altos; a pé, becos e quintais viram rota.", status: "oficial" },
+        { text: "Perfil Criminal: parecido com a Honra de RDR2, mas considera as circunstâncias — violência gratuita repetida pesa; gestos pequenos (jogar lixo no lixo) contam a favor; a violência de missões não é punida.", status: "oficial" }
+      ]
+    },
+    {
+      id: "vi-mech-robbery",
+      icon: "database",
+      title: "Assaltos, roubos e economia",
+      status: "oficial",
+      summary: "Toda loja pode ser roubada, com escolha entre velocidade e lucro. Carros roubados têm níveis de segurança, ferramentas específicas e um app que avalia o alvo antes do crime.",
+      items: [
+        { text: "Assaltos grandes e roubos pequenos: lojas de conveniência, postos, lojas de celular, bares, casas de drogas — de fininho ou na força.", status: "oficial" },
+        { text: "Escolhas no cofre: explodir rápido (danifica os valores) ou achar a combinação (mais dinheiro, mais risco de polícia esperando na porta).", status: "oficial" },
+        { text: "Receptadores ('fences') diferentes para joias, dinheiro marcado e veículos. Dinheiro de assalto precisa ser lavado.", status: "previa" },
+        { text: "Dinheiro cai no chão se você morre; deposite no caixa eletrônico — a conta bancária é conjunta do casal. Há dois saldos: em mãos e no banco.", status: "previa" },
+        { text: "Furto de carro parado por níveis: carro velho = chave-mestra ('slim jim') ou vidro quebrado; carro de luxo = clonador de chave ou ferramenta avançada, liberada com progressão.", status: "oficial" },
+        { text: "App WAINK: escaneia carros estacionados e mostra valor, custo de registro, se está trancado, alarme e rastreador. Dano reduz o valor de venda.", status: "oficial" },
+        { text: "Pay 'n' Spray volta para repintar e 'regularizar' o carro; concessionárias e showrooms para comprar; garagens com armário de armas.", status: "previa" }
+      ]
+    },
+    {
+      id: "vi-mech-vehicles",
+      icon: "car",
+      title: "Direção, combustível e frota",
+      status: "oficial",
+      summary: "Física mais pesada, ruas mais estreitas e combustível de verdade: postos servem para abastecer, elétricos recarregam em estações, e o dano é por componente — faróis estilhaçam e o carro degrada em tempo real.",
+      items: [
+        { text: "Medidor de combustível e postos funcionais; o tanque dura bastante para não virar chatice. Carros elétricos carregam em estações.", status: "oficial" },
+        { text: "Direção 'um pouco mais desafiadora' e exigente de habilidade, nas palavras de Rob Nelson; trânsito mais denso.", status: "previa" },
+        { text: "Espelhos com reflexo real, interiores detalhados (pedais, volante, quebra-sol) e menu de interação (porta-malas, capô, portas).", status: "previa" },
+        { text: "Dano por componente: faróis quebram, peças soltam, o carro pega fogo aos poucos.", status: "oficial" },
+        { text: "Vistos no Extended Look: conversível clássico vermelho, viaturas, helicópteros, aerobarco (fanboat), van, jatinho, jet ski, motos de trilha, patinete elétrico, caiaque e corridas em Ambrosia Raceway.", status: "oficial" },
+        { text: "Bonde público em Vice City; app Ryde Me (carona) e Scooter Bros (entrega de veículo) pelo celular.", status: "previa" }
+      ]
+    },
+    {
+      id: "vi-mech-body",
+      icon: "users",
+      title: "Corpo, aparência e rotina",
+      status: "oficial",
+      summary: "O corpo responde ao que você faz: comer engorda, treinar define, noites em claro, bebedeiras e perseguições longas marcam o rosto. Cabelo, barba, unhas e tatuagens têm lojas próprias.",
+      items: [
+        { text: "Peso muda com a comida; academia com minigame de ritmo nos gatilhos; músculos aparecem com treino.", status: "oficial" },
+        { text: "Estatísticas rastreadas: Saúde, Cardio, Forma, Estamina e Força.", status: "previa" },
+        { text: "Cabelo cresce só no salão (não automaticamente como em RDR2); aparar e raspar em casa; unhas de Lucia com tamanho, cor e estilo.", status: "previa" },
+        { text: "Refúgios vivos: geladeira com comida e bebida, TV com canais e comerciais (Angstipan, o sanduíche Prairie de '30 mil calorias'), charutos, pertences pessoais.", status: "oficial" },
+        { text: "Porta-malas guarda armas e roupas reserva para preparar assalto e fuga.", status: "oficial" }
+      ]
+    },
+    {
+      id: "vi-mech-world",
+      icon: "map",
+      title: "Mundo reativo: NPCs, animais e Foco",
+      status: "oficial",
+      summary: "Mais de 600 mil animações (contra 55 mil em GTA V e 300 mil em RDR2). NPCs reagem a olhares e perseguições, reconhecem Jason e Lucia, e a habilidade Foco destaca oportunidades sem marcar tudo no mapa.",
+      items: [
+        { text: "Diálogo contextual com arma guardada: Cumprimentar, Provocar; em situações tensas: Acalmar ou Instigar (herança de RDR2).", status: "oficial" },
+        { text: "Animais: cachorros podem ser acariciados, repreendidos ou estudados; jacarés, javalis, cobras, flamingos, golfinhos e tubarões; espécies descobertas entram em um catálogo; há zoológico.", status: "oficial" },
+        { text: "Foco: destaca rotas de fuga, posição da polícia, pontos fracos e objetos úteis.", status: "oficial" },
+        { text: "Eventos de rua e cultura viral: o 'Trunk Challenge' (um homem pendurado no porta-malas em live com comentários), influencers e vídeos virais por toda Leonida.", status: "oficial" },
+        { text: "Celular com feeds sociais, app de fitness, banco, WAINK, Ryde Me; Snapmatic volta, mas Jason e Lucia não publicam (foragidos não deixam rastro digital).", status: "oficial" },
+        { text: "Vice City tem cerca de duas vezes o tamanho de Los Santos; o mapa inteiro é cerca de três vezes a área jogável de RDR2 (Rob Nelson à imprensa). Mais de 50 grafiteiros reais assinaram murais.", status: "previa" }
+      ]
+    },
+    {
+      id: "vi-mech-activities",
+      icon: "star",
+      title: "Atividades e minigames",
+      status: "oficial",
+      summary: "Basquete, sinuca, musculação, natação, mergulho, caiaque, pesca, caça, base jump, paraquedas, estande de tiro, corridas de carro e de moto de trilha, jet ski, aerobarco, patinete, mini golfe, zoológico, bares e clubes.",
+      items: [
+        { text: "Parasail, corridas de monster truck e passeios de barco também apareceram nas prévias.", status: "previa" },
+        { text: "Sem tênis, surfe ou skate completos, segundo a imprensa.", status: "previa" },
+        { text: "Modo Foto confirmado; Director Mode não estará no lançamento (imprensa).", status: "previa" }
+      ]
+    },
+    {
+      id: "vi-mech-story",
+      icon: "file",
+      title: "História, capítulos e escolhas",
+      status: "oficial",
+      summary: "Um assalto a banco que dá errado revela uma conspiração que atravessa Leonida. A campanha é dividida em capítulos, com decisões grandes de efeito imediato e escolhas pequenas que se acumulam.",
+      items: [
+        { text: "Missões com várias rotas de fuga e menos separação entre 'missão' e mundo aberto.", status: "oficial" },
+        { text: "Rob Nelson levou cerca de 80 horas em uma jogada com história principal e objetivos opcionais — não é a duração oficial da campanha.", status: "previa" },
+        { text: "Sem microtransações no single-player e sem IA generativa na produção — Rob Nelson (Rockstar North) à Kinda Funny. Sobre o próximo GTA Online, a Rockstar não comenta.", status: "oficial" },
+        { text: "Boobie Ike, Raul Bautista, Brian Heder, Lori e Cal Hampton aparecem no Extended Look; o Jack of Hearts (clube de Boobie) e a Only Raw Records estão no mapa.", status: "oficial" }
+      ]
+    },
+    {
+      id: "vi-mech-tech",
+      icon: "file",
+      title: "Técnica e apresentação",
+      status: "previa",
+      summary: "Tudo que a Rockstar mostrou rodava em um PlayStation 5. Resolução, modos de desempenho e PS5 Pro seguem sem detalhe oficial.",
+      items: [
+        { text: "Alvo relatado pela imprensa: 1440p a 30 fps nos consoles; o Extended Look aparenta ~30 fps.", status: "previa" },
+        { text: "Terceira pessoa apenas; primeira pessoa só na mira de certas armas. Feedback háptico do DualSense.", status: "previa" },
+        { text: "Pesquisa de campo: anos visitando Miami e região, conversas com ex-criminosos, policiais, promoters e vendedores de armas; pilotos de corrida reais na equipe de direção.", status: "oficial" }
+      ]
+    }
+  ],
+
+  /* ---------- Trilha sonora confirmada ---------- */
+  soundtrack: {
+    intro: "Músicas ouvidas nos vídeos oficiais. A trilha completa (rádios, artistas exclusivos) não foi anunciada.",
+    extendedLook: [
+      { id: "vi-song-1", title: "Pop Bottles", artist: "Birdman feat. Lil Wayne", at: "0:06" },
+      { id: "vi-song-2", title: "Pound Town", artist: "Sexyy Red & Tay Keith", at: "0:46" },
+      { id: "vi-song-3", title: "Skrilla", artist: "Kodak Black", at: "1:45" },
+      { id: "vi-song-4", title: "Let Your Love Flow", artist: "The Bellamy Brothers", at: "6:00" },
+      { id: "vi-song-5", title: "Love Bites", artist: "Def Leppard", at: "6:43" },
+      { id: "vi-song-6", title: "People Are People", artist: "Depeche Mode", at: "8:21" },
+      { id: "vi-song-7", title: "But I Think It's a Dream", artist: "Captain & Tennille", at: "9:49" },
+      { id: "vi-song-8", title: "Cars and Girls", artist: "Prefab Sprout", at: "10:39" },
+      { id: "vi-song-9", title: "Off the Grid", artist: "!!! (Chk Chk Chk) feat. Meah Pace", at: "12:25" },
+      { id: "vi-song-10", title: "Devil Woman", artist: "Cliff Richard", at: "16:49" },
+      { id: "vi-song-11", title: "Se Me Nota (Agárrame)", artist: "Chimbala x Omega", at: "20:07" },
+      { id: "vi-song-12", title: "Against All Odds (Take a Look at Me Now)", artist: "Phil Collins", at: "21:33" },
+      { id: "vi-song-13", title: "Mine O' Mine", artist: "Aluna & Jayda G", at: "21:55" },
+      { id: "vi-song-14", title: "Inner Light", artist: "Elderbrook & Bob Moses", at: "25:44" }
+    ],
+    trailers: [
+      { id: "vi-song-t1", title: "Love Is A Long Road", artist: "Tom Petty", where: "Trailer 1" },
+      { id: "vi-song-t2", title: "Hot Together", artist: "The Pointer Sisters", where: "Trailer 2" },
+      { id: "vi-song-t3", title: "Everybody Have Fun Tonight", artist: "Wang Chung", where: "site oficial / material de 2025" },
+      { id: "vi-song-t4", title: "Child Support", artist: "Zenglen", where: "site oficial / material de 2025" }
+    ]
+  },
 
   /* ---------- Personagens (8 grupos do site oficial) ---------- */
   characters: [
@@ -175,7 +405,7 @@ window.VI_DATA = {
       name: "Boobie Ike",
       role: "Lenda de Vice City · império do entretenimento",
       tagline: "Uma lenda local de Vice City — e ele age como tal.",
-      desc: "Boobie é um dos poucos que transformaram os anos de rua em um império legítimo: imóveis, uma casa de striptease e um estúdio de gravação. Pode parecer que só pensa em si, mas é na parceria com o jovem Dre'Quan na Only Raw Records que ele mais aposta.",
+      desc: "Boobie é um dos poucos que transformaram os anos de rua em um império legítimo: imóveis, o clube Jack of Hearts e um estúdio de gravação. Pode parecer que só pensa em si, mas é na parceria com o jovem Dre'Quan na Only Raw Records que ele mais aposta. No Extended Look, é um carregamento ligado a Boobie que dá errado e abre a história.",
       quote: "Sou todo sorrisos — até a hora de falar de negócios.",
       quoteSource: "Site oficial (adaptação)",
       palette: { a: "#f5c518", b: "#4a1d6e" }
@@ -228,7 +458,7 @@ window.VI_DATA = {
       id: "vi-leonida",
       name: "Estado de Leonida",
       tagline: "Somente em Leonida.",
-      desc: "A versão Rockstar da Flórida: um estado inteiro de neon, pântano, usinas de açúcar e ruína turística, onde Vice City é só o começo. Seis regiões confirmadas pelo site oficial formam o maior e mais imersivo mundo da série até aqui.",
+      desc: "A versão Rockstar da Flórida: um estado inteiro de neon, pântano, usinas de açúcar e ruína turística, onde Vice City é só o começo. Seis regiões confirmadas pelo site oficial formam o maior e mais imersivo mundo da série até aqui — segundo Rob Nelson, cerca de três vezes a área jogável de Red Dead Redemption 2.",
       vibe: "Sol, suor e más decisões"
     },
     list: [
@@ -236,7 +466,7 @@ window.VI_DATA = {
         id: "vi-vice-city",
         name: "Vice City",
         tagline: "O lado mais sombrio do lugar mais ensolarado da América.",
-        desc: "A metrópole encharcada de neon segue sendo a capital do sol e da diversão — o glamour, o corre e a ganância da América capturados em uma única cidade. Fortunas nascem e desaparecem entre a orla, os condomínios e os bastidores da noite.",
+        desc: "A metrópole encharcada de neon segue sendo a capital do sol e da diversão — o glamour, o corre e a ganância da América capturados em uma única cidade. Fortunas nascem e desaparecem entre a orla, os condomínios e os bastidores da noite. Tem cerca do dobro do tamanho de Los Santos.",
         vibe: "Neon, grana e fachadas bonitas demais para ser verdade",
         grad: ["#ff9a3d", "#ff3d8a", "#5b2a86"]
       },
@@ -244,7 +474,7 @@ window.VI_DATA = {
         id: "vi-leonida-keys",
         name: "Leonida Keys",
         tagline: "O dress code é casual e os bares estão sempre abastecidos.",
-        desc: "A vida neste arquipélago tropical não é chique, mas é fácil. Pegue seu drinque e estique a cadeira de praia — só fique atento: você está na porta de algumas das águas mais bonitas e perigosas de toda a América.",
+        desc: "A vida neste arquipélago tropical não é chique, mas é fácil. Pegue seu drinque e estique a cadeira de praia — só fique atento: você está na porta de algumas das águas mais bonitas e perigosas de toda a América. É aqui que Jason e Lucia moram, numa propriedade de Brian Heder.",
         vibe: "Chinelo, isca viva e contrabando ao pôr do sol",
         grad: ["#ffd36b", "#39c6a5", "#0e5b6b"]
       },
@@ -268,7 +498,7 @@ window.VI_DATA = {
         id: "vi-ambrosia",
         name: "Ambrosia",
         tagline: "Indústria americana e valores à moda antiga — custe o que custar.",
-        desc: "No coração de Leonida, a refinaria de açúcar Allied Crystal garante os empregos, enquanto o moto clube local fornece praticamente todo o resto. Cidade de chaminés, poeira e lealdades antigas.",
+        desc: "No coração de Leonida, a refinaria de açúcar Allied Crystal garante os empregos, enquanto o moto clube local fornece praticamente todo o resto. Cidade de chaminés, poeira e lealdades antigas — e do Ambrosia Raceway Park, pista de corrida vista no Extended Look.",
         vibe: "Fumaça de usina, moto clube e suor",
         grad: ["#e8c66b", "#a65f2e", "#3a2a1c"]
       },
@@ -286,20 +516,25 @@ window.VI_DATA = {
   /* ---------- Confirmado vs. rumor ---------- */
   facts: {
     confirmed: [
-      { id: "vi-fact-release", text: "Lançamento em 19 de novembro de 2026 (quinta-feira) para PlayStation 5 e Xbox Series X|S, após dois adiamentos oficiais." },
-      { id: "vi-fact-duo", text: "Dois protagonistas jogáveis — Jason Duval e Lucia Caminos — presos a uma conspiração que atravessa o estado depois que um trabalho fácil dá errado." },
+      { id: "vi-fact-release", text: "Lançamento em 19 de novembro de 2026 (quinta-feira) para PlayStation 5 e Xbox Series X|S, após dois adiamentos oficiais. Pré-load digital a partir de 12 de novembro." },
+      { id: "vi-fact-extended", text: "'An Extended Look' (27/08/2026): cerca de 26 minutos de gameplay capturados em um PS5, com estreia na Netflix e depois no YouTube e no site da Rockstar." },
+      { id: "vi-fact-duo", text: "Dois protagonistas jogáveis — Jason Duval e Lucia Caminos — com troca a qualquer momento, presos a uma conspiração que atravessa o estado depois que um assalto dá errado." },
+      { id: "vi-fact-mechanics", text: "Mecânicas mostradas pela Rockstar: procurado de 6 estrelas com testemunhas, Perfil Criminal, combustível e postos, furto de carros por nível de segurança, app WAINK, corpo que muda com comida e treino, animais interativos e mais de 600 mil animações." },
       { id: "vi-fact-map", text: "Ambientação no estado de Leonida: Vice City mais cinco regiões nomeadas (Leonida Keys, Grassrivers, Port Gellhorn, Ambrosia e Mount Kalaga)." },
-      { id: "vi-fact-trailer2", text: "O Trailer 2 foi capturado inteiramente em um PlayStation 5, combinando gameplay e cutscenes." },
-      { id: "vi-fact-preorder", text: "Pré-venda aberta em 25 de junho de 2026: Standard por US$ 79,99 e Ultimate por US$ 99,99, ambas com o bônus Vintage Vice City Pack até o lançamento." },
+      { id: "vi-fact-nomtx", text: "Sem microtransações no single-player e sem IA generativa no desenvolvimento, segundo Rob Nelson, co-chefe do Rockstar North (agosto de 2026)." },
+      { id: "vi-fact-preorder", text: "Pré-venda aberta em 25 de junho de 2026: Standard por US$ 79,99 e Ultimate por US$ 99,99, ambas com o bônus Vintage Vice City Pack até o lançamento. Edição física vem com código de download." },
       { id: "vi-fact-ultimate", text: "A Ultimate Edition inclui duas missões exclusivas, cinco lojas exclusivas, veículos clássicos e revólveres gravados do Vercetti Estate." },
-      { id: "vi-fact-universe", text: "GTA VI pertence ao HD Universe (o mesmo de GTA IV e GTA V), com história independente — não é preciso jogar os anteriores." },
-      { id: "vi-fact-site", text: "O site oficial apresenta oito grupos de personagens — de Cal Hampton e Boobie Ike a Raul Bautista e Brian Heder — cada um com sua própria teia de interesses." }
+      { id: "vi-fact-dualsense", text: "Dois controles DualSense oficiais (branco 'amanhecer' e preto 'noite'), anunciados pela Sony em 3 de setembro de 2026, por US$ 84,99." },
+      { id: "vi-fact-universe", text: "GTA VI pertence ao HD Universe (o mesmo de GTA IV e GTA V), com história independente — não é preciso jogar os anteriores." }
     ],
     rumors: [
       { id: "vi-rumor-pc", text: "Versão de PC: não anunciada. O histórico de GTA V e Red Dead Redemption 2 sugere chegada posterior aos consoles — expectativa da comunidade, não confirmação." },
-      { id: "vi-rumor-trailer3", text: "Trailer 3: projeções da imprensa apontam para o fim de julho ou agosto de 2026, alimentadas por atualizações no site oficial. A Rockstar não anunciou nada." },
-      { id: "vi-rumor-mapsize", text: "Tamanho do mapa: estimativas de fãs a partir de trailers e vazamentos falam no maior mapa da série. A Rockstar nunca divulgou números oficiais." },
-      { id: "vi-rumor-online", text: "Novo GTA Online: nada oficial sobre o componente online de GTA VI. Por ora, GTA Online segue vivo dentro de GTA V." },
+      { id: "vi-rumor-trailer3", text: "Trailer de lançamento / Trailer 3: nada anunciado depois do Extended Look. Projeções da imprensa apontam para outubro ou a semana do lançamento." },
+      { id: "vi-rumor-size", text: "Tamanho do arquivo: a Rockstar não divulgou. A faixa de 150 a 200 GB é estimativa da imprensa e da comunidade." },
+      { id: "vi-rumor-tech", text: "1440p a 30 fps, terceira pessoa apenas e ausência de Director Mode são relatos de prévias hands-off — a Rockstar não publicou ficha técnica." },
+      { id: "vi-rumor-length", text: "'80 horas' foi a jogada pessoal de Rob Nelson com objetivos opcionais; a duração oficial da campanha não foi divulgada." },
+      { id: "vi-rumor-online", text: "Novo GTA Online: a Rockstar se recusou a comentar. Nada oficial sobre o componente online de GTA VI; o GTA Online atual segue dentro de GTA V." },
+      { id: "vi-rumor-leak-2026", text: "O vazamento de agosto de 2026 (clipes de gameplay e uma suposta imagem do mapa) era real — a Rockstar chamou de 'de partir o coração' — mas mostra build de desenvolvimento, não o produto final." },
       { id: "vi-rumor-leak", text: "O mega-vazamento de setembro de 2022 (cerca de 90 vídeos) era real, mas mostrava uma build antiga de desenvolvimento — nada dali deve ser tratado como conteúdo final." }
     ]
   },
@@ -372,9 +607,65 @@ window.VI_DATA = {
     {
       id: "vi-ann-2026-07",
       dateLabel: "Julho de 2026",
-      title: "À espera do Trailer 3",
-      desc: "O site oficial recebe atualizações e a imprensa projeta o Trailer 3 para o fim de julho ou agosto. Sem qualquer anúncio da Rockstar — pura especulação por enquanto.",
-      kind: "rumor"
+      title: "Prévias a portas fechadas no Rockstar North",
+      desc: "IGN, The New York Times, Kinda Funny, TGG e Dazed assistem a cerca de 30 minutos de gameplay em Edimburgo — Rob Nelson no controle, ninguém de fora jogou. Embargo até 27 de agosto.",
+      kind: "oficial"
+    },
+    {
+      id: "vi-ann-2026-08-06",
+      dateLabel: "6 de agosto de 2026",
+      title: "'An Extended Look' anunciado para 27 de agosto",
+      desc: "Newswire e teaser no YouTube: a apresentação estreia na Netflix às 15h (ET) e chega ao canal da Rockstar e ao site oficial às 21h (ET).",
+      kind: "oficial"
+    },
+    {
+      id: "vi-ann-2026-08-18",
+      dateLabel: "18 a 21 de agosto de 2026",
+      title: "Vazamento de gameplay",
+      desc: "Nove dias antes do Extended Look, cerca de dois minutos de gameplay vazam, seguidos por mais de uma dezena de clipes (Jason jogando basquete no refúgio, praia lotada, colônia nudista) e uma suposta imagem do mapa. A Bloomberg relata funcionários 'irritados'.",
+      kind: "incidente"
+    },
+    {
+      id: "vi-ann-2026-08-26",
+      dateLabel: "26 de agosto de 2026",
+      title: "Rockstar reconhece o vazamento",
+      desc: "Em nota, a Rockstar chama os clipes de 'de partir o coração para a nossa equipe', diz que 'não era assim que queríamos que vocês vissem o jogo' e garante que o desenvolvimento está 'quase lá'.",
+      kind: "oficial"
+    },
+    {
+      id: "vi-ann-2026-08-27",
+      dateLabel: "27 de agosto de 2026",
+      title: "An Extended Look + fim do embargo das prévias",
+      desc: "Cerca de 26 minutos de gameplay em PS5: assaltos, troca de protagonistas, seis estrelas, combustível, WAINK, animais, refúgios e vida noturna. Prévias de IGN, NYT e Kinda Funny saem na mesma hora; pré-vendas sobem 436% no dia (Sensor Tower).",
+      kind: "oficial"
+    },
+    {
+      id: "vi-ann-2026-08-29",
+      dateLabel: "28 e 29 de agosto de 2026",
+      title: "Sem microtransações, sem IA generativa",
+      desc: "Rob Nelson (Rockstar North) confirma à Kinda Funny que o single-player não terá monetização e que nenhuma IA generativa foi usada no jogo. Sobre GTA Online, silêncio.",
+      kind: "oficial"
+    },
+    {
+      id: "vi-ann-2026-09-03",
+      dateLabel: "3 de setembro de 2026",
+      title: "DualSense oficiais de GTA VI",
+      desc: "No State of Play, a Sony revela dois controles de edição limitada (branco 'amanhecer' e preto 'noite'), US$ 84,99, pré-venda em 10 de setembro e lançamento junto com o jogo.",
+      kind: "oficial"
+    },
+    {
+      id: "vi-ann-2026-11-12",
+      dateLabel: "12 de novembro de 2026",
+      title: "Pré-load digital",
+      desc: "Uma semana antes do lançamento, quem comprou a versão digital pode começar o download.",
+      kind: "oficial"
+    },
+    {
+      id: "vi-ann-2026-11-19",
+      dateLabel: "19 de novembro de 2026",
+      title: "Lançamento",
+      desc: "Grand Theft Auto VI chega ao PlayStation 5 e ao Xbox Series X|S.",
+      kind: "oficial"
     }
   ],
 
@@ -383,7 +674,22 @@ window.VI_DATA = {
     {
       id: "vi-faq-date",
       q: "Quando GTA VI será lançado?",
-      a: "Em 19 de novembro de 2026, uma quinta-feira. A data foi confirmada pela Rockstar em novembro de 2025, após dois adiamentos (a janela original era 2025 e depois 26 de maio de 2026)."
+      a: "Em 19 de novembro de 2026, uma quinta-feira. A data foi confirmada pela Rockstar em novembro de 2025, após dois adiamentos (a janela original era 2025 e depois 26 de maio de 2026), e reafirmada em agosto de 2026."
+    },
+    {
+      id: "vi-faq-preload",
+      q: "Quando começa o pré-load?",
+      a: "Em 12 de novembro de 2026, uma semana antes, para quem comprou a versão digital. Na edição física, o pré-load depende do código de download que vem na caixa (não há disco)."
+    },
+    {
+      id: "vi-faq-extended",
+      q: "O que é o 'Extended Look'?",
+      a: "É a apresentação de gameplay de 27 de agosto de 2026: cerca de 26 minutos capturados em um PS5, com estreia na Netflix e depois no YouTube e no site da Rockstar. Mostra assaltos, perseguições, troca de protagonistas, o sistema de procurado, animais, refúgios e a vida noturna de Vice City."
+    },
+    {
+      id: "vi-faq-mechanics",
+      q: "Quais mecânicas já estão confirmadas?",
+      a: "Troca entre Jason e Lucia a qualquer momento, procurado de seis estrelas com testemunhas, Perfil Criminal, combustível e postos, furto de carros por nível de segurança com o app WAINK, cobertura com mira em câmera lenta, corpo que muda com comida e treino, animais interativos e refúgios funcionais. A seção 'Mecânicas' detalha tudo e separa o que a Rockstar mostrou do que a imprensa relatou."
     },
     {
       id: "vi-faq-platforms",
@@ -399,6 +705,11 @@ window.VI_DATA = {
       id: "vi-faq-price",
       q: "Quanto custa?",
       a: "Standard Edition por US$ 79,99 e Ultimate Edition por US$ 99,99. Na pré-venda brasileira, os valores divulgados pelas lojas foram R$ 449,90 e R$ 549,90, respectivamente."
+    },
+    {
+      id: "vi-faq-mtx",
+      q: "Vai ter microtransação?",
+      a: "No single-player, não: Rob Nelson, co-chefe do Rockstar North, disse à Kinda Funny que não há monetização na campanha e que nenhuma IA generativa foi usada. Sobre o futuro GTA Online, a Rockstar não comentou."
     },
     {
       id: "vi-faq-preorder",
@@ -423,17 +734,27 @@ window.VI_DATA = {
     {
       id: "vi-faq-map",
       q: "Qual o tamanho do mapa?",
-      a: "A Rockstar não divulgou números. Estimativas de fãs a partir dos trailers apontam o maior mapa da série, mas isso segue não oficial."
+      a: "Sem número oficial. Rob Nelson disse à imprensa que o mapa tem cerca de três vezes a área jogável de Red Dead Redemption 2 e que Vice City tem o dobro de Los Santos."
+    },
+    {
+      id: "vi-faq-size",
+      q: "Quantos GB vai ocupar?",
+      a: "A Rockstar não divulgou. A imprensa estima entre 150 e 200 GB; reserve espaço e comece o pré-load em 12 de novembro."
     },
     {
       id: "vi-faq-online",
       q: "E o modo online?",
-      a: "Nada foi anunciado sobre o componente online de GTA VI. O GTA Online atual continua funcionando dentro de GTA V."
+      a: "Nada foi anunciado sobre o componente online de GTA VI — a Rockstar se recusou a comentar nas prévias. O GTA Online atual continua funcionando dentro de GTA V."
     },
     {
       id: "vi-faq-trailer3",
-      q: "Quando sai o Trailer 3?",
-      a: "Não há data oficial. Em julho de 2026, a imprensa projeta uma estreia entre o fim de julho e meados de agosto, com base em atualizações do site da Rockstar — trate como rumor."
+      q: "Vai ter Trailer 3?",
+      a: "Depois do Extended Look, a Rockstar não anunciou novo vídeo. A imprensa projeta um trailer de lançamento perto de 19 de novembro. Qualquer vídeo novo do canal oficial aparece sozinho na seção 'Ao vivo' deste site."
+    },
+    {
+      id: "vi-faq-controller",
+      q: "Tem controle oficial?",
+      a: "Sim: dois DualSense de edição limitada anunciados pela Sony em 3 de setembro de 2026 (branco 'Vice City ao amanhecer' e preto 'vida noturna'), por US$ 84,99, pré-venda em 10 de setembro e lançamento em 19 de novembro."
     },
     {
       id: "vi-faq-canon",

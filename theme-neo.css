@@ -332,21 +332,7 @@ input[type="text"]:focus,select:focus{
 }
 .neo-secret-heart.on{opacity:1;transform:translate(-50%,-50%) scale(1)}
 
-/* secrets-found HUD (bottom-left, subtle until hovered) */
-#neo-secrets{
-  position:fixed;left:16px;bottom:16px;z-index:99950;
-  display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:99px;
-  font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--neo-gold);background:rgba(6,8,14,.7);border:1px solid rgba(255,210,63,.3);
-  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
-  box-shadow:0 0 20px rgba(255,210,63,.12);opacity:.55;transition:opacity .25s ease, transform .25s ease;cursor:help
-}
-#neo-secrets:hover{opacity:1;transform:translateY(-2px)}
-#neo-secrets b{color:#fff}
-#neo-secrets .star{width:14px;height:14px;display:inline-block;background:var(--neo-gold);
-  -webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7L12 17.3 5.7 21l1.7-7L2 9.2l7.1-.6z'/></svg>") center/contain no-repeat;
-          mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 2l2.9 6.6 7.1.6-5.4 4.7 1.7 7L12 17.3 5.7 21l1.7-7L2 9.2l7.1-.6z'/></svg>") center/contain no-repeat}
-@media (max-width:680px){#neo-secrets{bottom:96px}}
+/* HUD 'Segredos x/8' removido (enhance.jsx não cria mais #neo-secrets). */
 
 /* screen-wide effect flashes (HESOYAM heal = green, etc.) */
 #neo-flash{position:fixed;inset:0;z-index:99975;pointer-events:none;opacity:0}

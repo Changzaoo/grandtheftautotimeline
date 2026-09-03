@@ -32,6 +32,9 @@ const VIPlacesSec = typeof VIPlacesSection !== "undefined" ? M(VIPlacesSection) 
 const VIInfoSec   = typeof VIInfoSection !== "undefined" ? M(VIInfoSection) : null;
 const EggsSec     = typeof EasterEggsSection !== "undefined" ? M(EasterEggsSection) : null;
 const MystSec     = typeof MysteriesSection !== "undefined" ? M(MysteriesSection) : null;
+const VIMechSec   = typeof VIMechanicsSection !== "undefined" ? M(VIMechanicsSection) : null;
+const VICatSec    = typeof VICatalogSection !== "undefined" ? M(VICatalogSection) : null;
+const VILiveSec   = typeof VILiveSection !== "undefined" ? M(VILiveSection) : null;
 
 /* ---- Scroll reveal ----
  * One shared IntersectionObserver toggles a class as elements enter/leave the
@@ -79,15 +82,36 @@ function App(){
 
   useScrollReveal(version);
 
-  // Scroll-spy (highlights the active nav item). Only <App> + the small nav
-  // re-render here; the memoized sections above are untouched.
+  // Scroll-spy: a seção ativa é a ÚLTIMA cujo topo já passou de uma linha a
+  // ~38% da altura da tela. Diferente do IntersectionObserver anterior, nunca
+  // "perde" a seção (seções muito longas ou muito curtas também são marcadas)
+  // e o menu acompanha exatamente onde o usuário está. Só <App> + nav
+  // re-renderizam; as seções memoizadas não são tocadas.
   React.useEffect(() => {
     const ids = (window.dossierNavData || NAV).map((n) => n.id);
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) setActive(e.target.id); });
-    }, { rootMargin: "-40% 0px -55% 0px", threshold: 0 });
-    ids.forEach((id) => { const el = document.getElementById(id); if (el) obs.observe(el); });
-    return () => obs.disconnect();
+    let raf = 0;
+    const compute = () => {
+      raf = 0;
+      const line = window.scrollY + Math.min(window.innerHeight * 0.38, 340);
+      let current = ids[0], best = -Infinity;
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top + window.scrollY;
+        if (top <= line && top > best) { best = top; current = id; }
+      }
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) current = ids[ids.length - 1];
+      setActive((prev) => (prev === current ? prev : current));
+    };
+    const onScroll = () => { if (!raf) raf = window.requestAnimationFrame(compute); };
+    compute();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
   }, [version]);
 
   React.useEffect(() => {
@@ -124,6 +148,9 @@ function App(){
       {VICharsSec && <VICharsSec />}
       {VIPlacesSec && <VIPlacesSec />}
       {VIInfoSec ? <VIInfoSec /> : <GTA6Sec />}
+      {VIMechSec && <VIMechSec />}
+      {VICatSec && <VICatSec />}
+      {VILiveSec && <VILiveSec />}
       {EggsSec && <EggsSec />}
       {MystSec && <MystSec />}
       <GlossarySec onOpenDossier={setDossier} />

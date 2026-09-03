@@ -15,9 +15,12 @@ const dossierNavData = [
   { id: "rockstar", label: "Rockstar Games", k: "12" },
   { id: "gtaonline", label: "GTA Online", k: "13" },
   { id: "gta6", label: "GTA VI", k: "14" },
-  { id: "eastereggs", label: "Easter Eggs", k: "15" },
-  { id: "mysteries", label: "Mistérios", k: "16" },
-  { id: "glossary", label: "Glossário", k: "17" }
+  { id: "vi-mechanics", label: "Mecânicas VI", k: "15" },
+  { id: "vi-catalog", label: "Catálogo VI", k: "16" },
+  { id: "vi-live", label: "Ao Vivo", k: "17" },
+  { id: "eastereggs", label: "Easter Eggs", k: "18" },
+  { id: "mysteries", label: "Mistérios", k: "19" },
+  { id: "glossary", label: "Glossário", k: "20" }
 ];
 window.dossierNavData = dossierNavData;
 
@@ -1022,19 +1025,19 @@ const gamesData = [
     city: "Leonida, Vice City",
     protagonist: "Lucia Caminos e Jason Duval",
     antagonists: ["Nao confirmado"],
-    supportingCharacters: ["Cal Hampton", "Boobie Ike", "Dre'Quan Priest", "Real Dimez", "Raul Bautista", "Brian Heder"],
+    supportingCharacters: ["Cal Hampton", "Boobie Ike", "Dre'Quan Priest", "Real Dimez", "Raul Bautista", "Brian Heder", "Lori Heder"],
     summary:
       "Lucia e Jason dependem um do outro depois que um servico da errado e os joga numa conspiracao em Leonida.",
     fullStory:
-      "A sinopse oficial indica um casal criminoso em Vice City/Leonida, preso ao lado mais sombrio do lugar mais ensolarado dos Estados Unidos. Alem disso, a Rockstar ainda preserva detalhes essenciais da trama, antagonistas e estrutura de missoes.",
+      "Jason e Lucia, um casal no estilo Bonnie & Clyde, veem um assalto a banco dar errado e caem numa conspiração que atravessa o estado de Leonida — do neon de Vice City aos Keys, pântanos de Grassrivers e usinas de Ambrosia. O Extended Look (27/08/2026) mostrou a abertura com um carregamento ligado a Boobie Ike, a rotina do casal no refúgio, assaltos com escolhas de risco e a polícia montando o perfil dos dois. Antagonistas e capítulos seguem sob sigilo.",
     developmentHistory:
-      "Anunciado oficialmente pela Rockstar, GTA VI e posicionado como a proxima grande entrada da era HD. A data oficial atual e 19 de novembro de 2026 para PlayStation 5 e Xbox Series X|S.",
+      "Confirmado em fevereiro de 2022, revelado com o Trailer 1 em dezembro de 2023, adiado duas vezes e mostrado em 26 minutos de gameplay em 27 de agosto de 2026 (estreia na Netflix). Sem microtransações no single-player e sem IA generativa, segundo o Rockstar North. Lançamento em 19 de novembro de 2026 para PlayStation 5 e Xbox Series X|S, com pré-load em 12 de novembro.",
     importance:
       "Proximo capitulo principal da serie e retorno de Vice City em escala moderna.",
     themes: ["Leonida", "Vice City moderna", "casal criminoso", "redes sociais", "sátira contemporanea"],
-    factions: ["Nao confirmado", "policia local", "crime moderno"],
+    factions: ["Final Chapter MC (moto clube de Ambrosia)", "PTT Youngin$", "Only Raw Records", "polícia de Leonida"],
     relatedGames: ["GTA Vice City", "Vice City Stories", "GTA Online"],
-    tags: ["HD Universe", "GTA VI", "Fatos confirmados", "Nao lancado"]
+    tags: ["HD Universe", "GTA VI", "Fatos confirmados", "Extended Look", "Nao lancado"]
   }
 ];
 
@@ -4046,24 +4049,25 @@ const onlineDlcData = [
 
 const gta6FactsData = {
   confirmed: [
-    "Data oficial atual: 19 de novembro de 2026.",
-    "Plataformas anunciadas: PlayStation 5 e Xbox Series X|S.",
-    "Estado: Leonida, inspirado na Florida.",
-    "Cidade principal destacada: Vice City moderna.",
-    "Protagonistas: Lucia Caminos e Jason Duval.",
-    "Premissa oficial: um servico simples da errado e joga a dupla numa conspiracao criminosa em Leonida."
+    "Data oficial atual: 19 de novembro de 2026; pré-load digital a partir de 12 de novembro.",
+    "Plataformas anunciadas: PlayStation 5 e Xbox Series X|S. Edição física vem com código de download.",
+    "Estado: Leonida, inspirado na Flórida — Vice City, Leonida Keys, Grassrivers, Port Gellhorn, Ambrosia e Mount Kalaga.",
+    "Protagonistas: Lucia Caminos e Jason Duval, com troca de personagem a qualquer momento (Extended Look, 27/08/2026).",
+    "Mecânicas mostradas pela Rockstar: procurado de 6 estrelas com testemunhas, Perfil Criminal, combustível e postos, furto de carros por nível de segurança (app WAINK), corpo que muda com comida e treino, animais interativos, mais de 600 mil animações.",
+    "Sem microtransações no single-player e sem IA generativa (Rob Nelson, Rockstar North, agosto de 2026).",
+    "Premissa oficial: um assalto que dá errado joga a dupla numa conspiração criminosa que atravessa Leonida."
   ],
   interpretation: [
-    "A dinamica Lucia/Jason sugere leitura de casal criminoso contemporaneo.",
-    "Trailers e pagina oficial enfatizam redes sociais, cultura viral, praias, pantanos e policia em ambiente de satira da Florida.",
-    "Temas provaveis: golpes, fama instantanea, vigilancia, violencia viral e economia criminal moderna."
+    "A dinâmica Lucia/Jason é o eixo: relacionamento opcional, rotina no refúgio dos Keys e papéis trocáveis em fugas.",
+    "Trailers, site e Extended Look enfatizam redes sociais, cultura viral (Trunk Challenge), praias, pântanos e polícia em sátira da Flórida.",
+    "Números da imprensa (mapa 3x RDR2, Vice City 2x Los Santos, ~80 h de jogo) vêm de prévias hands-off, não de ficha técnica oficial."
   ],
   notConfirmed: [
-    "Antagonistas principais.",
-    "Mapa completo e todas as cidades/condados.",
-    "Sistema de troca entre protagonistas.",
-    "Integração futura com GTA Online.",
-    "Detalhes de engine, ray tracing ou modo PC no lancamento."
+    "Antagonistas principais e estrutura completa dos capítulos.",
+    "Mapa completo oficial (a suposta imagem de agosto de 2026 é vazamento).",
+    "Integração futura com GTA Online — a Rockstar se recusa a comentar.",
+    "Resolução, modos de desempenho, PS5 Pro e versão de PC.",
+    "Tamanho do arquivo (150-200 GB é estimativa)."
   ]
 };
 
@@ -4767,7 +4771,7 @@ const gtaWikiGameMediaById = {
   "gta-v": gtaWikiImage("Grand Theft Auto V", "https://static.wikia.nocookie.net/gtawiki/images/7/76/CoverArt-GTAV.png/revision/latest/scale-to-width-down/972?cb=20250708181846", { fit: "contain" }),
   "gta-online": gtaWikiImage("Grand Theft Auto Online", "https://static.wikia.nocookie.net/gtawiki/images/6/65/GTAOnline-BoxArt.jpg/revision/latest/scale-to-width-down/972?cb=20260330025009", { fit: "contain" }),
   "trilogy-definitive": gtaWikiImage("Grand Theft Auto: The Trilogy - The Definitive Edition", "https://static.wikia.nocookie.net/gtawiki/images/2/26/GTATheTrilogy-TheDefinitiveEdition-MicrosoftStoreBoxArt.jpg/revision/latest?cb=20211026162226", { fit: "contain" }),
-  "gta-vi": gtaWikiImage("Grand Theft Auto VI", "https://static.wikia.nocookie.net/gtawiki/images/a/a5/Artwork-Trailer2Thumbnail2-GTAVI.jpg/revision/latest/scale-to-width-down/1200?cb=20260330025009", { position: "center" })
+  "gta-vi": gtaWikiImage("Grand Theft Auto VI", "https://static.wikia.nocookie.net/gtawiki/images/1/15/StarfishIsland-GTAVI-ExtendedLook.jpeg/revision/latest/scale-to-width-down/1200?cb=20260828185720", { position: "center" })
 };
 
 const officialMediaByCharacterId = {
@@ -4801,10 +4805,10 @@ const gtaWikiCharacterMediaById = {
   "tommy-vercetti": gtaWikiImage("Tommy Vercetti", "https://static.wikia.nocookie.net/gtawiki/images/a/ae/TommyVercetti-GTAVC.jpg/revision/latest?cb=20220618090315", { position: "center 18%" }),
   "cj": gtaWikiImage("Carl Johnson", "https://static.wikia.nocookie.net/gtawiki/images/7/70/CJ-GTASA.png/revision/latest?cb=20260330025009", { position: "center 16%" }),
   "mike": gtaWikiImage("Mike", "https://static.wikia.nocookie.net/gtawiki/images/a/a5/Mike-GTAA.jpg/revision/latest?cb=20230521021239"),
-  "toni-cipriani": gtaWikiImage("Toni Cipriani", "https://static.wikia.nocookie.net/gtawiki/images/e/e1/ToniCipriani-GTAIII.png/revision/latest?cb=20230406180025"),
-  "vic-vance": gtaWikiImage("Victor Vance", "https://static.wikia.nocookie.net/gtawiki/images/c/cb/VictorVance-GTAVC2.png/revision/latest?cb=20230419175026"),
+  "toni-cipriani": gtaWikiImage("Toni Cipriani", "https://static.wikia.nocookie.net/gtawiki/images/7/7c/ToniCipriani-GTALCS.png/revision/latest?cb=20230308121254"),
+  "vic-vance": gtaWikiImage("Victor Vance", "https://static.wikia.nocookie.net/gtawiki/images/c/c4/VictorVance-GTAVCS.png/revision/latest?cb=20230419191046"),
   "niko-bellic": gtaWikiImage("Niko Bellic", "https://static.wikia.nocookie.net/gtawiki/images/9/9e/NikoBellic-GTAIV-Portrait.png/revision/latest?cb=20260212152128"),
-  "johnny-klebitz": gtaWikiImage("Johnny Klebitz", "https://static.wikia.nocookie.net/gtawiki/images/4/43/JohnnyKlebitz-GTAV.png/revision/latest?cb=20230630145509"),
+  "johnny-klebitz": gtaWikiImage("Johnny Klebitz", "https://static.wikia.nocookie.net/gtawiki/images/2/29/JohnnyKlebitz-TLAD.jpg/revision/latest?cb=20260301101036", { position: "center 20%" }),
   "luis-lopez": gtaWikiImage("Luis Fernando Lopez", "https://static.wikia.nocookie.net/gtawiki/images/b/b4/LuisFernandoLopez-TBOGT.jpg/revision/latest?cb=20220806150957"),
   "huang-lee": gtaWikiImage("Huang Lee", "https://static.wikia.nocookie.net/gtawiki/images/8/84/HuangLee-GTACW.png/revision/latest?cb=20230616145140"),
   "michael-de-santa": gtaWikiImage("Michael De Santa", "https://static.wikia.nocookie.net/gtawiki/images/2/27/MichaelDeSanta-GTAOee-Portrait.png/revision/latest?cb=20251210124259"),
@@ -4821,8 +4825,8 @@ const gtaWikiCharacterMediaById = {
   "mallorie-bardas": gtaWikiImage("Mallorie Bardas", "https://static.wikia.nocookie.net/gtawiki/images/5/5a/MallorieBardas-GTAIV.jpg/revision/latest?cb=20220807003948"),
   "lester-crest": gtaWikiImage("Lester Crest", "https://static.wikia.nocookie.net/gtawiki/images/0/0d/LesterCrest-GTAOe-2019Portrait.png/revision/latest?cb=20220726003738"),
   "lamar-davis": gtaWikiImage("Lamar Davis", "https://static.wikia.nocookie.net/gtawiki/images/6/61/LamarDavis-GTAOe-2021Portrait.png/revision/latest?cb=20240122033958"),
-  "amanda-de-santa": gtaWikiImage("Amanda De Santa", "https://static.wikia.nocookie.net/gtawiki/images/6/65/AmandaDeSanta-GTAOee-Portrait.png/revision/latest?cb=20251205171844"),
-  "jimmy-de-santa": gtaWikiImage("Jimmy De Santa", "https://static.wikia.nocookie.net/gtawiki/images/2/25/JimmyDeSanta-GTAO.png/revision/latest?cb=20191214061001"),
+  "amanda-de-santa": gtaWikiImage("Amanda De Santa", "https://static.wikia.nocookie.net/gtawiki/images/f/fa/AmandaDeSanta-GTAV-TrailerScreenshot1.jpg/revision/latest?cb=20130527074801"),
+  "jimmy-de-santa": gtaWikiImage("Jimmy De Santa", "https://static.wikia.nocookie.net/gtawiki/images/6/61/JimmyDeSanta-GTA5.png/revision/latest?cb=20210904182751"),
   "tracey-de-santa": gtaWikiImage("Tracey De Santa", "https://static.wikia.nocookie.net/gtawiki/images/d/d2/TraceyDeSanta-GTAVee.png/revision/latest?cb=20220322175113"),
   "dave-norton": gtaWikiImage("Dave Norton", "https://static.wikia.nocookie.net/gtawiki/images/a/af/DaveNorton-GTAVee.png/revision/latest?cb=20220322175028"),
   "steve-haines": gtaWikiImage("Steve Haines", "https://static.wikia.nocookie.net/gtawiki/images/2/22/SteveHaines-GTAVee.png/revision/latest?cb=20220319175004"),
@@ -4863,8 +4867,8 @@ const gtaWikiCharacterMediaById = {
   "t-bone-mendez": gtaWikiImage("T-Bone Mendez", "https://static.wikia.nocookie.net/gtawiki/images/d/d8/T-BoneMendez-GTASA.jpg/revision/latest?cb=20230630072032"),
   "og-loc": gtaWikiImage("OG Loc (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/0/02/OGLoc-GTASA.png/revision/latest?cb=20230630161100"),
   "johnny-sindacco": gtaWikiImage("Johnny Sindacco", "https://static.wikia.nocookie.net/gtawiki/images/d/d4/JohnnySindacco-GTASA.png/revision/latest?cb=20230705121700"),
-  "billy-grey": gtaWikiImage("Billy Grey", "https://static.wikia.nocookie.net/gtawiki/images/9/94/BillyGrey-TBOGT.jpg/revision/latest?cb=20260214040810"),
-  "ashley-butler": gtaWikiImage("Ashley Butler", "https://static.wikia.nocookie.net/gtawiki/images/c/c7/AshleyButler-GTAVee.png/revision/latest?cb=20220620214254"),
+  "billy-grey": gtaWikiImage("Billy Grey", "https://static.wikia.nocookie.net/gtawiki/images/c/c9/BillyGrey-TLAD.png/revision/latest?cb=20220807034343"),
+  "ashley-butler": gtaWikiImage("Ashley Butler", "https://static.wikia.nocookie.net/gtawiki/images/4/47/AshleyButler-TLAD.png/revision/latest?cb=20220621025145"),
   "tony-prince": gtaWikiImage("Tony Prince", "https://static.wikia.nocookie.net/gtawiki/images/a/a3/TonyPrince-GTAO-AfterHoursTrailer.png/revision/latest?cb=20180719212937"),
   "yusuf-amir": gtaWikiImage("Yusuf Amir", "https://static.wikia.nocookie.net/gtawiki/images/8/8e/YusufAmir-GTAOe-Portrait.png/revision/latest?cb=20231212102317"),
   "mori-kibbutz": gtaWikiImage("Mori Kibbutz", "https://static.wikia.nocookie.net/gtawiki/images/5/5a/MoriKibbutz-TBOGT.png/revision/latest?cb=20220325174322"),
@@ -4921,7 +4925,6 @@ const cityGalleryMediaById = {
   ],
   "san-andreas": [
     gtaWikiCityMediaById["san-andreas"],
-    gtaWikiCityMediaById["los-santos"],
     gtaWikiCityMediaById["san-fierro"],
     gtaWikiCityMediaById["las-venturas"],
     officialMediaByCityId["san-andreas"]
@@ -5158,7 +5161,6 @@ const refinedCityUniverseGalleryMediaById = {
       cityPhoto("Ocean Drive", "https://static.wikia.nocookie.net/gtawiki/images/e/ee/OceanDrive-GTAVC.png/revision/latest?cb=20190120113556", "Ocean Drive"),
       cityPhoto("Vice Point", "https://static.wikia.nocookie.net/gtawiki/images/6/63/VicePoint-GTAVC-northwards.jpg/revision/latest?cb=20091126151624", "Vice Point"),
       cityPhoto("Starfish Island", "https://static.wikia.nocookie.net/gtawiki/images/1/1b/StarfishIsland-GTAVC-AerialView.jpg/revision/latest?cb=20100914052419", "Starfish Island"),
-      cityPhoto("Downtown Vice City", "https://static.wikia.nocookie.net/gtawiki/images/a/ae/Downtown-GTAVCS-Night.jpg/revision/latest?cb=20181024113133", "Downtown Vice City"),
       cityPhoto("Hyman Memorial Stadium", "https://static.wikia.nocookie.net/gtawiki/images/8/89/HymanMemorialStadium-GTAVC-exterior.jpg/revision/latest?cb=20241224202640", "Hyman Memorial Stadium"),
       cityPhoto("Lighthouse", "https://static.wikia.nocookie.net/gtawiki/images/6/67/Lighthouse-GTAVC-1.png/revision/latest?cb=20181013140010", "Vice City Lighthouse"),
       cityPhoto("Links Bridge", "https://static.wikia.nocookie.net/gtawiki/images/f/f3/LinksBridge-GTAVC.png/revision/latest?cb=20250116200903", "Links Bridge"),
@@ -5279,8 +5281,7 @@ const refinedCityUniverseGalleryMediaById = {
       cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/9/98/LudendorffAerialView-GTAV.jpg/revision/latest?cb=20140603103957", "Ludendorff aerial view"),
       cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/b/b6/LudendorffChurch-GTAV-Night.png/revision/latest?cb=20131103125443", "Ludendorff Church at night"),
       cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/0/08/PollockCinema-GTAV-Night.png/revision/latest?cb=20210909151932", "Pollock Cinema"),
-      cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/b/b0/RearBuildings-GTAVpc-NorthYankton.png/revision/latest?cb=20240720170337", "Ludendorff rear buildings"),
-      cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/d/d4/CavalryBoulevard-GTAOe.png/revision/latest?cb=20241014181251", "Cavalry Boulevard")
+      cityPhoto("Ludendorff", "https://static.wikia.nocookie.net/gtawiki/images/b/b0/RearBuildings-GTAVpc-NorthYankton.png/revision/latest?cb=20240720170337", "Ludendorff rear buildings")
     ],
     "leonida": [
       cityPhoto("Leonida Keys", "https://static.wikia.nocookie.net/gtawiki/images/9/9a/OfficialScreenshots-GTAVI-PromotionalWebsite-LeonidaKeys-SS1.jpg/revision/latest?cb=20250506164232", "Leonida Keys 1"),
@@ -5362,7 +5363,7 @@ const gtaWikiFactionMediaById = {
   "madrazo-cartel": gtaWikiImage("Madrazo Cartel", "https://static.wikia.nocookie.net/gtawiki/images/8/8c/Madrazo-beat-Michael-GTAV.png/revision/latest/scale-to-width-down/1200?cb=20210604172412"),
   "merryweather": gtaWikiImage("Merryweather Security", "https://static.wikia.nocookie.net/gtawiki/images/1/1c/MerryweatherSecurity-GTAV-Logo.png/revision/latest/scale-to-width-down/1200?cb=20200707082416", { fit: "contain" }),
   "fib": gtaWikiImage("Federal Investigation Bureau", "https://static.wikia.nocookie.net/gtawiki/images/e/e3/FIB-GTAIV-Logo.png/revision/latest?cb=20240514140746", { fit: "contain" }),
-  "iaa": gtaWikiImage("International Affairs Agency", "https://static.wikia.nocookie.net/gtawiki/images/d/df/ULPHQ-Exterior-GTAIV.png/revision/latest/scale-to-width-down/1200?cb=20220529210118"),
+  "iaa": gtaWikiImage("International Affairs Agency", "https://static.wikia.nocookie.net/gtawiki/images/b/b2/IAAHeadquarters-GTAV.png/revision/latest/scale-to-width-down/1200?cb=20190115110427"),
   "noose": gtaWikiImage("National Office of Security Enforcement", "https://static.wikia.nocookie.net/gtawiki/images/0/0a/NOOSE-GTAV-Logo.png/revision/latest?cb=20190409192026", { fit: "contain" }),
   "lspd": gtaWikiImage("Los Santos Police Department (HD Universe)", "https://static.wikia.nocookie.net/gtawiki/images/e/e9/Gta5-police-station-map_03.png/revision/latest/scale-to-width-down/1200?cb=20140325120451"),
   "lcpd": gtaWikiImage("Liberty City Police Department (3D Universe)", "https://static.wikia.nocookie.net/gtawiki/images/b/b8/LCPDHQ-GTAIII-Portland.jpg/revision/latest/scale-to-width-down/1200?cb=20230506160310"),
@@ -5386,7 +5387,7 @@ const rockstarHistoryMedia = [
   gtaWikiImage("Rockstar North", "https://static.wikia.nocookie.net/gtawiki/images/d/d4/RockstarNorthandDMADesign.png/revision/latest?cb=20240304054229", { fit: "contain" }),
   gtaWikiImage("Race'n'Chase", "https://static.wikia.nocookie.net/gtawiki/images/0/0b/RaceNChase-PossibleScreenshot.jpg/revision/latest?cb=20140927111915"),
   gtaWikiGameMediaById["gta-1"],
-  gtaWikiImage("Rockstar Games", "https://static.wikia.nocookie.net/gtawiki/images/f/fe/SentinelClassic-GTAO-front-RockstarGamesLivery.png/revision/latest/scale-to-width-down/1200?cb=20190531084843"),
+  gtaWikiImage("Rockstar Games", "https://static.wikia.nocookie.net/gtawiki/images/0/0e/Rockstar_Games.png/revision/latest?cb=20241106091551", { fit: "contain" }),
   gtaWikiImage("Rockstar North", "https://static.wikia.nocookie.net/gtawiki/images/d/d4/RockstarNorthandDMADesign.png/revision/latest?cb=20240304054229", { fit: "contain" }),
   gtaWikiGameMediaById["gta-iii"],
   gtaWikiGameMediaById["san-andreas"],
@@ -5842,8 +5843,8 @@ const gtaWikiGlossaryMediaByTerm = {
   "2D Universe": gtaWikiUniverseMediaById["2d"],
   "3D Universe": gtaWikiUniverseMediaById["3d"],
   "HD Universe": gtaWikiUniverseMediaById["hd"],
-  "Wanted Level": gtaWikiImage("Wanted Level in GTA V", "https://static.wikia.nocookie.net/gtawiki/images/c/c6/TrevorNaked-GTAV.jpg/revision/latest/scale-to-width-down/1200?cb=20130801091403"),
-  "Heist": gtaWikiImage("Heists", "https://static.wikia.nocookie.net/gtawiki/images/c/c1/PestControl-GTAV.png/revision/latest?cb=20111104103445"),
+  "Wanted Level": gtaWikiImage("Wanted Level", "https://static.wikia.nocookie.net/gtawiki/images/7/79/GTAIV-Wanted-Level-Stars-Icons.jpg/revision/latest/scale-to-width-down/1200?cb=20260902123748", { fit: "contain" }),
+  "Heist": gtaWikiImage("Heists", "https://static.wikia.nocookie.net/gtawiki/images/9/9a/PacificStandard-GTAO.png/revision/latest?cb=20170528151440"),
   "C.R.A.S.H.": gtaWikiFactionMediaById["crash"],
   "FIB": gtaWikiFactionMediaById["fib"],
   "IAA": gtaWikiFactionMediaById["iaa"],

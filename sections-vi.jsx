@@ -129,6 +129,8 @@ const VIPalmsArt = () => (
 const VIHero = () => {
   const data = viData();
   const release = data.release || {};
+  const showcase = (data.trailers || []).find((t) => t.id === "vi-extended-look");
+  const showcaseUrl = (showcase && showcase.url) || "https://www.youtube.com/watch?v=tJbzMqJGH4k";
   const trailer2 = (data.trailers || []).find((t) => t.id === "vi-trailer-2");
   const trailer2Url = (trailer2 && trailer2.url) || "https://www.youtube.com/watch?v=VQRLujxTm3c";
 
@@ -148,6 +150,9 @@ const VIHero = () => {
     [__T("nav.vi-characters", "Personagens VI"), "vi-characters", "users"],
     [__T("nav.vi-places", "Leonida"), "vi-places", "map"],
     [__T("nav.gta6", "GTA VI"), "gta6", "star"],
+    [__T("nav.vi-mechanics", "Mecânicas VI"), "vi-mechanics", "weapon"],
+    [__T("nav.vi-catalog", "Catálogo VI"), "vi-catalog", "database"],
+    [__T("nav.vi-live", "Ao Vivo"), "vi-live", "star"],
     [__T("nav.eastereggs", "Easter Eggs"), "eastereggs", "star"],
     [__T("nav.mysteries", "Mistérios"), "mysteries", "file"]
   ];
@@ -185,16 +190,19 @@ const VIHero = () => {
           </span>
           <VICountdown />
           <span className="vi-hero-release-note">
-            {__T("vi.hero.release-note", "PlayStation 5 · Xbox Series X|S · pré-venda aberta desde 25.06.2026")}
+            {__T("vi.hero.release-note2", "PlayStation 5 · Xbox Series X|S · pré-venda aberta · pré-load em 12.11.2026")}
           </span>
         </div>
 
         <div className="vi-hero-actions">
-          <a className="vi-btn vi-btn--primary" href={trailer2Url} target="_blank" rel="noreferrer">
+          <a className="vi-btn vi-btn--primary" href={showcaseUrl} target="_blank" rel="noreferrer">
+            {__T("vi.hero.watch-extended", "Assistir ao Extended Look (26 min)")}
+          </a>
+          <a className="vi-btn vi-btn--ghost" href={trailer2Url} target="_blank" rel="noreferrer">
             {__T("vi.hero.watch-trailer", "Assistir Trailer 2")}
           </a>
-          <a className="vi-btn vi-btn--ghost" href="#timeline">
-            {__T("vi.hero.explore", "Explorar o arquivo")}
+          <a className="vi-btn vi-btn--ghost" href="#vi-mechanics">
+            {__T("vi.hero.mechanics", "Mecânicas confirmadas")}
           </a>
         </div>
 
@@ -378,6 +386,9 @@ const VITrailerCard = ({ trailer }) => {
       <div className="vi-trailer-body">
         <div className="vi-trailer-meta">
           <span className="vi-badge">{__TT("vi", trailer.id, "dateLabel", trailer.dateLabel)}</span>
+          {trailer.kind === "showcase" && (
+            <span className="vi-badge vi-badge--official">{__T("vi.badge.gameplay", "GAMEPLAY OFICIAL")}</span>
+          )}
           {trailer.rumor && (
             <span className="vi-badge vi-badge--rumor">{__T("vi.badge.rumor", "RUMOR")}</span>
           )}
@@ -430,16 +441,18 @@ const VIInfoSection = () => {
               <h3 className="vi-serif">{__T("vi.info.release-title", "A contagem regressiva está valendo")}</h3>
               <p>
                 {__T(
-                  "vi.info.release-desc",
-                  "Depois de dois adiamentos, a Rockstar cravou a data: Jason e Lucia chegam a Leonida em 19 de novembro de 2026. A pré-venda mundial está aberta desde 25 de junho de 2026."
+                  "vi.info.release-desc2",
+                  "Depois de dois adiamentos, a Rockstar cravou a data: Jason e Lucia chegam a Leonida em 19 de novembro de 2026. A pré-venda está aberta desde 25 de junho, o Extended Look de 27 de agosto mostrou 26 minutos de gameplay e o pré-load começa em 12 de novembro."
                 )}
               </p>
               <MetaGrid rows={[
                 [__T("vi.info.meta-date", "Data oficial"), `${release.dateLabel || "19 de novembro de 2026"} (${release.weekday || "quinta-feira"})`],
                 [__T("vi.info.meta-platforms", "Plataformas"), (release.platforms || []).join(" · ")],
                 [__T("vi.info.meta-preorder", "Pré-venda desde"), release.preorderSinceLabel || "25 de junho de 2026"],
+                [__T("vi.info.meta-preload", "Pré-load digital"), (release.preload && release.preload.dateLabel) || "12 de novembro de 2026"],
                 [__T("vi.info.meta-bonus", "Bônus de pré-venda"), release.preorderBonus || "Vintage Vice City Pack"]
               ]} />
+              {release.preload && <p className="vi-release-preload">{__TT("vi", release.preload.id, "detail", release.preload.detail)} {__TT("vi", release.preload.id, "sizeNote", release.preload.sizeNote)}</p>}
             </div>
             <div className="vi-release-side">
               <VICountdown compact />
@@ -501,6 +514,52 @@ const VIInfoSection = () => {
             <VITrailerCard key={trailer.id} trailer={trailer} />
           ))}
         </div>
+
+        {/* Hardware oficial */}
+        {(data.hardware || []).length > 0 && (
+          <div className="vi-hw-grid">
+            {(data.hardware || []).map((hw) => (
+              <article key={hw.id} className="card vi-hw">
+                <Corners />
+                <div className="vi-edition-head">
+                  <h4>{__TT("vi", hw.id, "name", hw.name)}</h4>
+                  <span className="vi-badge vi-badge--official">{__T("vi.badge.official", "OFICIAL")}</span>
+                </div>
+                <p className="vi-edition-pricebr">{__TT("vi", hw.id, "dateLabel", hw.dateLabel)}</p>
+                <p>{__TT("vi", hw.id, "desc", hw.desc)}</p>
+              </article>
+            ))}
+          </div>
+        )}
+
+        {/* Trilha sonora */}
+        {data.soundtrack && (
+          <>
+            <h3 className="vi-block-title vi-serif">{__T("vi.info.soundtrack-title", "Trilha sonora confirmada")}</h3>
+            <div className="card vi-soundtrack">
+              <Corners />
+              <p className="vi-soundtrack-intro">{__T("vi.info.soundtrack-intro", data.soundtrack.intro)}</p>
+              <div className="vi-soundtrack-cols">
+                <div>
+                  <h4>{__T("vi.info.soundtrack-extended", "No Extended Look (27/08/2026)")}</h4>
+                  <ol className="vi-song-list">
+                    {(data.soundtrack.extendedLook || []).map((s) => (
+                      <li key={s.id}><span className="vi-song-at">{s.at}</span><strong>{s.title}</strong><em>{s.artist}</em></li>
+                    ))}
+                  </ol>
+                </div>
+                <div>
+                  <h4>{__T("vi.info.soundtrack-trailers", "Nos trailers e no site oficial")}</h4>
+                  <ul className="vi-song-list">
+                    {(data.soundtrack.trailers || []).map((s) => (
+                      <li key={s.id}><strong>{s.title}</strong><em>{s.artist}</em><span className="vi-song-where">{__TT("vi", s.id, "where", s.where)}</span></li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Linha do tempo de anúncios */}
         <h3 className="vi-block-title vi-serif">{__T("vi.info.timeline-title", "Linha do tempo dos anúncios")}</h3>
@@ -572,10 +631,81 @@ const VIInfoSection = () => {
   );
 };
 
+/* ============ 5. MECÂNICAS (id="vi-mechanics") ============ */
+const VIMechCard = ({ mech, index }) => {
+  const items = mech.items || [];
+  const officialCount = items.filter((i) => i.status === "oficial").length;
+  return (
+    <article className={`card vi-mech vi-mech--${mech.status || "oficial"}`} style={{ "--vi-i": index }}>
+      <Corners />
+      <div className="vi-mech-head">
+        <span className="vi-mech-icon" aria-hidden="true"><DossierIcon type={mech.icon || "star"} /></span>
+        <div>
+          <h4 className="vi-serif">{__TT("vi", mech.id, "title", mech.title)}</h4>
+          <div className="vi-mech-badges">
+            <span className={`vi-badge ${mech.status === "previa" ? "vi-badge--rumor" : "vi-badge--official"}`}>
+              {mech.status === "previa" ? __T("vi.mech.previa", "RELATADO EM PRÉVIA") : __T("vi.mech.oficial", "MOSTRADO PELA ROCKSTAR")}
+            </span>
+            <span className="vi-badge">{officialCount}/{items.length} {__T("vi.mech.official-count", "oficiais")}</span>
+          </div>
+        </div>
+      </div>
+      <p className="vi-mech-summary">{__TT("vi", mech.id, "summary", mech.summary)}</p>
+      <ul className="vi-mech-list">
+        {items.map((item, i) => (
+          <li key={i} className={`vi-mech-item vi-mech-item--${item.status || "oficial"}`}>
+            <span className="vi-mech-pin" title={item.status === "previa" ? __T("vi.mech.previa-title", "Relatado por imprensa que assistiu à sessão hands-off") : __T("vi.mech.oficial-title", "Mostrado ou dito pela Rockstar")} aria-hidden="true" />
+            <span>{__TT("vi", mech.id, `item-${i + 1}`, item.text)}</span>
+            {item.status === "previa" && <small className="vi-mech-src">{__T("vi.mech.previa-short", "prévia")}</small>}
+          </li>
+        ))}
+      </ul>
+    </article>
+  );
+};
+
+const VIMechanicsSection = () => {
+  const data = viData();
+  const mechanics = data.mechanics || [];
+  const showcase = (data.trailers || []).find((t) => t.id === "vi-extended-look");
+  const total = mechanics.reduce((n, m) => n + (m.items || []).length, 0);
+  const official = mechanics.reduce((n, m) => n + (m.items || []).filter((i) => i.status === "oficial").length, 0);
+  return (
+    <section id="vi-mechanics" className="dossier-section dossier-shell vi-section vi-mechanics">
+      <div className="wrap">
+        <DossierSectionHead
+          eyebrow={__T("vi.mech.eyebrow", "Como GTA VI joga")}
+          title={__T("vi.mech.title", "Mecânicas confirmadas")}
+          accent="var(--evidence, #ffd166)"
+          right={`${official} ${__T("vi.mech.right-a", "fatos mostrados pela Rockstar")} · ${total - official} ${__T("vi.mech.right-b", "relatados em prévias")}`}
+        />
+        <div className="card vi-mech-intro">
+          <Corners />
+          <div>
+            <span className="vi-badge vi-badge--official">{__T("vi.mech.intro-badge", "FONTE: EXTENDED LOOK · 27.08.2026")}</span>
+            <p>
+              {__T("vi.mech.intro", "Tudo abaixo vem dos 26 minutos de gameplay que a Rockstar publicou em 27 de agosto de 2026 e das prévias hands-off liberadas no mesmo dia (IGN, The New York Times, Kinda Funny, TGG, Dazed). Pino dourado = a Rockstar mostrou ou disse; pino roxo = a imprensa relatou depois de assistir Rob Nelson jogar no Rockstar North.")}
+            </p>
+          </div>
+          {showcase && showcase.url && (
+            <a className="vi-btn vi-btn--primary" href={showcase.url} target="_blank" rel="noreferrer">
+              {__T("vi.mech.watch", "Ver o Extended Look")}
+            </a>
+          )}
+        </div>
+        <div className="vi-mech-grid">
+          {mechanics.map((mech, index) => <VIMechCard key={mech.id} mech={mech} index={index} />)}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 Object.assign(window, {
   VIHero,
   VICountdown,
   VICharactersSection,
   VIPlacesSection,
-  VIInfoSection
+  VIInfoSection,
+  VIMechanicsSection
 });

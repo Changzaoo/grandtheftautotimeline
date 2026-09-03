@@ -42,7 +42,7 @@ const ROCKSTAR_HISTORY = {
   gta6_next: {
     title: "GTA VI — O Próximo Capítulo",
     year: "2026",
-    content: "Anunciado em dezembro de 2024, GTA VI será lançado em 19 de novembro de 2026 (início exclusivo PS5, depois outras plataformas). Ambientado em Leonida (baseada na Flórida moderna), com Vice City no coração. Protagonistas: Lucia Caminos e Jason Duval. Tema: crime moderno, redes sociais, influencers, golpes digitais e sátira do século XXI."
+    content: "Revelado em dezembro de 2023 e mostrado em 26 minutos de gameplay em agosto de 2026, GTA VI será lançado em 19 de novembro de 2026 para PlayStation 5 e Xbox Series X|S (PC não anunciado). Ambientado em Leonida (a Flórida do universo GTA), com Vice City no coração. Protagonistas: Lucia Caminos e Jason Duval. Tema: crime moderno, redes sociais, influencers, golpes digitais e sátira do século XXI."
   }
 };
 
