@@ -133,6 +133,52 @@
 }
 .dossier-bottom-nav a.active span{color:#5c3050}
 
+/* ------------------------------------- 03b. gesto lateral nas barras */
+/* As duas barras deslizam para o lado: no toque pela rolagem nativa (com
+ * inércia), no desktop arrastando com o mouse ou girando a roda. `touch-action:
+ * pan-x` deixa claro para o navegador que o gesto horizontal é da barra e o
+ * vertical continua sendo da página — sem isso o dedo trava entre os dois. */
+.dossier-hud nav,
+.dossier-bottom-nav{
+  overflow-x:auto;
+  overflow-y:hidden;
+  touch-action:pan-x;
+  -webkit-overflow-scrolling:touch;   /* inércia no iOS */
+  overscroll-behavior-x:contain;      /* não arrasta a página junto */
+  cursor:grab;
+}
+.dossier-hud nav.is-dragging,
+.dossier-bottom-nav.is-dragging{
+  cursor:grabbing;
+  scroll-behavior:auto;               /* durante o arrasto, resposta imediata */
+  user-select:none;
+}
+.dossier-hud nav.is-dragging a,
+.dossier-bottom-nav.is-dragging a{pointer-events:none}
+
+/* Com a scrollbar invisível, a borda esfumaçada é o que avisa que há mais
+ * itens para aquele lado. As classes vêm do JS conforme a posição. */
+.dossier-hud nav,
+.dossier-bottom-nav{
+  -webkit-mask-image:none;
+  mask-image:none;
+}
+.dossier-hud nav.has-more-end,
+.dossier-bottom-nav.has-more-end{
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 46px),transparent 100%);
+  mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 46px),transparent 100%);
+}
+.dossier-hud nav.has-more-start,
+.dossier-bottom-nav.has-more-start{
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 46px,#000 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 46px,#000 100%);
+}
+.dossier-hud nav.has-more-start.has-more-end,
+.dossier-bottom-nav.has-more-start.has-more-end{
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 46px,#000 calc(100% - 46px),transparent 100%);
+  mask-image:linear-gradient(90deg,transparent 0,#000 46px,#000 calc(100% - 46px),transparent 100%);
+}
+
 /* ------------------------------------------------------- 04. scrollbars */
 /* Menus: barra totalmente invisível — a posição é comunicada pelo item ativo,
  * que a própria navegação centraliza ao rolar a página. */

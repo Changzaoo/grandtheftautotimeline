@@ -219,25 +219,149 @@ const findGameForTimeline = (item) => {
   });
 };
 
+/* ---------------------------------------------------------------------------
+ * Barras de navegação horizontais: elas seguem o scroll da PÁGINA (centralizam
+ * a seção ativa) e aceitam o gesto do USUÁRIO (deslizar de lado para ver os
+ * outros itens). As duas coisas disputam a mesma propriedade `scrollLeft`, por
+ * isso o gesto tem prioridade: enquanto o usuário mexe — e por um tempo depois
+ * — a centralização automática fica suspensa, senão a barra "puxaria de volta"
+ * no meio do movimento.
+ * ------------------------------------------------------------------------- */
+const NAV_USER_HOLD_MS = 2600; /* quanto tempo o gesto do usuário tem prioridade */
+
+/* Arrastar com o mouse/caneta (o toque já rola nativamente) + roda do mouse
+ * convertida em rolagem lateral. Devolve um marcador de "usuário mexeu agora".
+ * Também marca o gesto de toque, para o auto-centralizar não brigar com ele. */
+const useNavGestures = (ref, markInteraction) => {
+  React.useEffect(() => {
+    const nav = ref.current;
+    if (!nav) return undefined;
+
+    let dragging = false;
+    let moved = 0;
+    let startX = 0;
+    let startScroll = 0;
+
+    const onPointerDown = (event) => {
+      /* Só arrasto com mouse/caneta: no toque o navegador já faz rolagem
+       * nativa, com inércia — sequestrar isso deixaria o gesto pior. */
+      if (event.pointerType === "touch") { markInteraction(); return; }
+      if (event.button !== 0) return;
+      dragging = true;
+      moved = 0;
+      startX = event.clientX;
+      startScroll = nav.scrollLeft;
+      nav.classList.add("is-dragging");
+    };
+    const onPointerMove = (event) => {
+      if (!dragging) return;
+      const delta = event.clientX - startX;
+      if (Math.abs(delta) > 3) {
+        moved = Math.max(moved, Math.abs(delta));
+        markInteraction();
+        nav.scrollLeft = startScroll - delta;
+        /* Enquanto arrasta, o cursor não deve virar seleção de texto. */
+        event.preventDefault();
+      }
+    };
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      nav.classList.remove("is-dragging");
+      /* Um arrasto de verdade não deve disparar o link sob o cursor. */
+      if (moved > 6) {
+        const swallow = (e) => { e.preventDefault(); e.stopPropagation(); };
+        nav.addEventListener("click", swallow, { capture: true, once: true });
+        window.setTimeout(() => nav.removeEventListener("click", swallow, { capture: true }), 0);
+      }
+    };
+    /* Roda vertical sobre a barra = andar de lado, como no macOS. */
+    const onWheel = (event) => {
+      if (nav.scrollWidth <= nav.clientWidth) return;
+      if (Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+      nav.scrollLeft += event.deltaY;
+      markInteraction();
+      event.preventDefault();
+    };
+    const onTouch = () => markInteraction();
+
+    nav.addEventListener("pointerdown", onPointerDown);
+    nav.addEventListener("pointermove", onPointerMove);
+    nav.addEventListener("pointerup", endDrag);
+    nav.addEventListener("pointercancel", endDrag);
+    nav.addEventListener("pointerleave", endDrag);
+    nav.addEventListener("wheel", onWheel, { passive: false });
+    nav.addEventListener("touchstart", onTouch, { passive: true });
+    nav.addEventListener("touchmove", onTouch, { passive: true });
+    return () => {
+      nav.removeEventListener("pointerdown", onPointerDown);
+      nav.removeEventListener("pointermove", onPointerMove);
+      nav.removeEventListener("pointerup", endDrag);
+      nav.removeEventListener("pointercancel", endDrag);
+      nav.removeEventListener("pointerleave", endDrag);
+      nav.removeEventListener("wheel", onWheel);
+      nav.removeEventListener("touchstart", onTouch);
+      nav.removeEventListener("touchmove", onTouch);
+    };
+  }, [ref, markInteraction]);
+};
+
+/* Sombra nas pontas: com a scrollbar invisível, é o que avisa que há mais
+ * itens para o lado. Atualiza no scroll (inclusive no deslize do dedo) e ao
+ * redimensionar. */
+const useNavEdgeHints = (ref) => {
+  React.useEffect(() => {
+    const nav = ref.current;
+    if (!nav) return undefined;
+    let raf = 0;
+    const apply = () => {
+      raf = 0;
+      const max = nav.scrollWidth - nav.clientWidth;
+      nav.classList.toggle("has-more-start", nav.scrollLeft > 4);
+      nav.classList.toggle("has-more-end", max > 4 && nav.scrollLeft < max - 4);
+    };
+    const schedule = () => { if (!raf) raf = window.requestAnimationFrame(apply); };
+    apply();
+    nav.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      nav.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (raf) window.cancelAnimationFrame(raf);
+    };
+  }, [ref]);
+};
+
 const DossierHUDNav = ({ active, onJump }) => {
   const [open, setOpen] = React.useState(false);
   const navItems = dossierNav();
-  /* A aba da seção em que o usuário está fica em destaque E visível: quando
-   * `active` muda, o menu horizontal rola até centralizar o item ativo. */
   const navRef = React.useRef(null);
   const bottomNavRef = React.useRef(null);
+
+  /* Momento do último gesto do usuário nas barras (ref, não state: mudar isso
+   * não precisa re-renderizar nada). */
+  const lastTouchRef = React.useRef(0);
+  const markInteraction = React.useCallback(() => { lastTouchRef.current = Date.now(); }, []);
+
+  useNavGestures(navRef, markInteraction);
+  useNavGestures(bottomNavRef, markInteraction);
+  useNavEdgeHints(navRef);
+  useNavEdgeHints(bottomNavRef);
+
+  /* Centraliza o item ativo nas DUAS barras: a do topo (desktop) e a de baixo
+   * (mobile). Ambas rolam na horizontal e a de baixo fica visível o tempo todo
+   * no celular — sem isto, a seção atual sai de vista ao rolar a página. */
   React.useEffect(() => {
     if (!active) return;
+    if (Date.now() - lastTouchRef.current < NAV_USER_HOLD_MS) return; /* o dedo manda */
     const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    /* Centraliza o item ativo nas DUAS barras: a do topo (desktop) e a de
-     * baixo (mobile). Ambas rolam na horizontal e a de baixo fica visível o
-     * tempo todo no celular — sem isto, a seção atual sai de vista. */
     for (const nav of [navRef.current, bottomNavRef.current]) {
       if (!nav) continue;
       const el = nav.querySelector("a.active");
       if (!el || nav.scrollWidth <= nav.clientWidth) continue;
       const left = el.offsetLeft - (nav.clientWidth - el.offsetWidth) / 2;
       const target = Math.max(0, Math.min(left, nav.scrollWidth - nav.clientWidth));
+      if (Math.abs(nav.scrollLeft - target) < 8) continue; /* já está no lugar */
       try { nav.scrollTo({ left: target, behavior: reduce ? "auto" : "smooth" }); }
       catch (e) { nav.scrollLeft = target; }
     }
