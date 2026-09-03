@@ -76,15 +76,20 @@ window.__tt = function (prefix, id, field, fallback) {
   return window.__t(prefix + "." + id + "." + field, fallback);
 };
 
-/* ---------- 5b. Tradução do CONTEÚDO dos dados (cards do dossiê) ----------
- * O conteúdo do dossiê original (personagens, cidades, jogos, glossário, etc.)
- * vive em estruturas de dados renderizadas cruas, sem __tt. Para traduzir 100%
- * do site sem editar centenas de pontos de render, traduzimos o conteúdo por
- * MUTAÇÃO in-place das estruturas quando o idioma muda: cada string de um campo
- * de EXIBIÇÃO é trocada pela tradução (chave "c"+hash do texto pt). Campos de
- * LÓGICA (tone, universe, category, type, id, gameId, URLs, datas, mídia, cor)
- * ficam intactos — filtros, classes e vínculos continuam funcionando. Como a
- * App remonta na troca de idioma (key=version), ela relê os dados traduzidos. */
+/* ---------- 5b. Tradução do CONTEÚDO (dados do bundle + JSON ao vivo) ----------
+ * O conteúdo do dossiê (personagens, cidades, jogos, glossário…) vive em
+ * estruturas de dados renderizadas cruas. Para traduzir 100% do site sem editar
+ * centenas de pontos de render, traduzimos por MUTAÇÃO in-place: cada string de
+ * um campo de EXIBIÇÃO vira a tradução da chave "c"+hash(texto original).
+ * Campos de LÓGICA (id, gameId, universe, URLs, datas, cor, mídia) ficam
+ * intactos. Como a App remonta na troca de idioma (key=version), ela relê os
+ * dados já traduzidos.
+ *
+ * IMPORTANTE: os data-*.jsx declaram `const universeData = …` no topo do bundle.
+ * Em script clássico, `const` de topo NÃO vira propriedade de window — por isso
+ * o registro abaixo referencia os identificadores DIRETAMENTE (mesmo escopo de
+ * script), com typeof para tolerar um módulo ausente. Ler window["universeData"]
+ * devolvia undefined e a tradução de conteúdo nunca era aplicada no navegador. */
 function i18nHash(str) {
   var h1 = 0xdeadbeef, h2 = 0x41c6ce57;
   for (var i = 0, ch; i < str.length; i++) {
@@ -97,9 +102,39 @@ function i18nHash(str) {
   return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
 }
 window.__i18nHash = i18nHash;
+window.__i18nKey = function (text) { return "c" + i18nHash(String(text).trim()); };
 
-/* Campos de EXIBIÇÃO que devem ser traduzidos (allowlist — o resto passa
- * intacto). Mantenha em sincronia com i18n/extract-content.js. */
+/* __TF: texto com placeholders {0},{1}… vindo de template literals do JSX
+ * (gerado pelo plugin i18n/babel-plugin-autotext.js). */
+window.__TF = function (key, pattern, values) {
+  var tpl = window.__t(key, pattern);
+  return String(tpl).replace(/\{(\d+)\}/g, function (m, i) {
+    var v = values[Number(i)];
+    return v === undefined || v === null ? "" : String(v);
+  });
+};
+
+/* Mapa reverso tradução -> original. As heurísticas do site que classificam por
+ * PALAVRA (tons de badge, filtros de tipo de missão/veículo/arma) precisam do
+ * texto original, senão deixam de casar quando o idioma muda. */
+var i18nBackMap = new Map();
+function i18nRemember(translated, original) {
+  if (translated && original && translated !== original) i18nBackMap.set(translated, original);
+}
+/* __PT(valor): texto de origem (ou o próprio valor). Aceita string, array ou
+ * objeto e mapeia recursivamente. */
+window.__PT = function (v) {
+  if (typeof v === "string") return i18nBackMap.get(v) || v;
+  if (Array.isArray(v)) return v.map(window.__PT);
+  if (v && typeof v === "object") {
+    var o = {};
+    for (var k in v) if (Object.prototype.hasOwnProperty.call(v, k)) o[k] = window.__PT(v[k]);
+    return o;
+  }
+  return v;
+};
+
+/* Campos de EXIBIÇÃO traduzidos (allowlist — o resto passa intacto). */
 var I18N_TR_FIELDS = new Set([
   "name","nick","title","subtitle","heading","headline","subhead","kicker","lead","body",
   "summary","description","desc","overview","intro","importance","biography","bio",
@@ -111,58 +146,172 @@ var I18N_TR_FIELDS = new Set([
   "highlights","facts","examples","importantEvents","systems","modes","businesses","themes",
   "enemies","allies","antagonists","leaders","supportingCharacters","characters","factions",
   "affiliations","districts","vehicles","relatedTerms","appearsIn","relatedGames","games",
-  "features","points","bullets","items","modules","perks","objectives"
+  "features","points","bullets","items","modules","perks","objectives",
+  /* --- campos que faltavam e deixavam blocos inteiros em português --- */
+  "where","how","clues","theories","resolution","q","a","content","development","vibe",
+  "protagonista","antagonistas","aliados","inimigos","visualStyle","certainty","rarity",
+  "realWorldInspiration","characteristics","quoteSource","sub","occupation","kind","species",
+  "genre","class","legacy","curiosity","curiosities","reason","result","verdict","evidence",
+  "conclusion","period","scope","focus","goal","warning","type","category","universeAppearances",
+  "weapons","animals","radio","locations","home","voice","manufacturer","body_","source"
 ]);
-/* Globais de dados do dossiê a traduzir (definidos antes deste módulo no bundle). */
-var I18N_DATA_GLOBALS = [
-  "universeData","rockstarHistoryData","rockstarPeopleData","timelineChronologicalData",
-  "releaseTimelineData","gamesData","charactersData","citiesData","factionsData",
-  "developmentData","onlineTimelineData","onlineDlcData","gta6FactsData","connectionsData",
-  "recommendedOrderData","impactData","glossaryData","missionDossierData",
-  "vehicleDossierData","weaponDossierData"
-];
-var i18nDataOriginals = null; /* snapshot pt-BR (fonte) capturado no 1º apply */
+/* Campos NUNCA traduzidos (lógica, ids, URLs, mídia, datas). Vence a allowlist. */
+var I18N_SKIP_FIELDS = new Set([
+  "id","gameId","url","src","href","image","page","pageTitle","apiPage","sourcePage",
+  "officialSource","color","grad","icon","key","code","lang","editedAt","date","releaseDate",
+  "storyYear","releaseYear","year","dateLabel","priceBR","universe","tone","group","capacity"
+]);
+
+/* Registro dos dados do bundle: identificadores do MESMO escopo de script
+ * (data-*.jsx vêm antes deste arquivo), com typeof para tolerar ausência. */
+function i18nCollectData() {
+  var reg = {};
+  var put = function (name, value) { if (value && typeof value === "object") reg[name] = value; };
+  put("universeData", typeof universeData !== "undefined" ? universeData : null);
+  put("rockstarHistoryData", typeof rockstarHistoryData !== "undefined" ? rockstarHistoryData : null);
+  put("rockstarPeopleData", typeof rockstarPeopleData !== "undefined" ? rockstarPeopleData : null);
+  put("timelineChronologicalData", typeof timelineChronologicalData !== "undefined" ? timelineChronologicalData : null);
+  put("releaseTimelineData", typeof releaseTimelineData !== "undefined" ? releaseTimelineData : null);
+  put("gamesData", typeof gamesData !== "undefined" ? gamesData : null);
+  put("charactersData", typeof charactersData !== "undefined" ? charactersData : null);
+  put("citiesData", typeof citiesData !== "undefined" ? citiesData : null);
+  put("factionsData", typeof factionsData !== "undefined" ? factionsData : null);
+  put("developmentData", typeof developmentData !== "undefined" ? developmentData : null);
+  put("onlineTimelineData", typeof onlineTimelineData !== "undefined" ? onlineTimelineData : null);
+  put("onlineDlcData", typeof onlineDlcData !== "undefined" ? onlineDlcData : null);
+  put("gta6FactsData", typeof gta6FactsData !== "undefined" ? gta6FactsData : null);
+  put("connectionsData", typeof connectionsData !== "undefined" ? connectionsData : null);
+  put("recommendedOrderData", typeof recommendedOrderData !== "undefined" ? recommendedOrderData : null);
+  put("impactData", typeof impactData !== "undefined" ? impactData : null);
+  put("glossaryData", typeof glossaryData !== "undefined" ? glossaryData : null);
+  put("glossaryDetailData", typeof glossaryDetailData !== "undefined" ? glossaryDetailData : null);
+  put("missionDossierData", typeof missionDossierData !== "undefined" ? missionDossierData : null);
+  put("vehicleDossierData", typeof vehicleDossierData !== "undefined" ? vehicleDossierData : null);
+  put("weaponDossierData", typeof weaponDossierData !== "undefined" ? weaponDossierData : null);
+  put("dossierNavData", typeof dossierNavData !== "undefined" ? dossierNavData : null);
+  put("dossierSourcesData", typeof dossierSourcesData !== "undefined" ? dossierSourcesData : null);
+  put("CHARACTERS", typeof CHARACTERS !== "undefined" ? CHARACTERS : null);
+  put("CITIES", typeof CITIES !== "undefined" ? CITIES : null);
+  put("GAMES", typeof GAMES !== "undefined" ? GAMES : null);
+  put("GANGS", typeof GANGS !== "undefined" ? GANGS : null);
+  put("TIMELINE", typeof TIMELINE !== "undefined" ? TIMELINE : null);
+  put("WEAPONS", typeof WEAPONS !== "undefined" ? WEAPONS : null);
+  put("VEHICLES", typeof VEHICLES !== "undefined" ? VEHICLES : null);
+  put("CLASSIFIED", typeof CLASSIFIED !== "undefined" ? CLASSIFIED : null);
+  put("NAV", typeof NAV !== "undefined" ? NAV : null);
+  put("PERSONAGENS_COMPLETOS", typeof PERSONAGENS_COMPLETOS !== "undefined" ? PERSONAGENS_COMPLETOS : null);
+  put("CIDADES_COMPLETAS", typeof CIDADES_COMPLETAS !== "undefined" ? CIDADES_COMPLETAS : null);
+  put("ORGANIZACOES_COMPLETAS", typeof ORGANIZACOES_COMPLETAS !== "undefined" ? ORGANIZACOES_COMPLETAS : null);
+  put("UNIVERSOS_GTA", typeof UNIVERSOS_GTA !== "undefined" ? UNIVERSOS_GTA : null);
+  put("GAMES_COMPLETE", typeof GAMES_COMPLETE !== "undefined" ? GAMES_COMPLETE : null);
+  put("ROCKSTAR_HISTORY", typeof ROCKSTAR_HISTORY !== "undefined" ? ROCKSTAR_HISTORY : null);
+  put("RADIOS", typeof RADIOS !== "undefined" ? RADIOS : null);
+  put("ROLE_FILTERS", typeof ROLE_FILTERS !== "undefined" ? ROLE_FILTERS : null);
+  put("VI_DATA", window.VI_DATA);
+  put("EASTER_EGGS_DATA", window.EASTER_EGGS_DATA);
+  put("MYSTERIES_DATA", window.MYSTERIES_DATA);
+  return reg;
+}
+
+var i18nData = i18nCollectData();
+var i18nDataOriginals = null; /* snapshot da fonte, capturado no 1º apply */
+
+/* Percorre `live` espelhando `orig` (snapshot da fonte) e troca in-place cada
+ * campo de exibição pela tradução. Traduzir sempre a partir do snapshot evita
+ * traduzir uma tradução ao alternar idiomas. */
+function i18nWalkInto(live, orig, field, tr) {
+  if (Array.isArray(orig)) {
+    for (var i = 0; i < orig.length; i++) {
+      if (typeof orig[i] === "string") {
+        if (field && I18N_TR_FIELDS.has(field) && typeof live[i] === "string") live[i] = tr(orig[i]);
+      } else if (orig[i] && typeof orig[i] === "object" && live[i]) i18nWalkInto(live[i], orig[i], field, tr);
+    }
+    return;
+  }
+  if (orig && typeof orig === "object") {
+    for (var k in orig) {
+      if (!Object.prototype.hasOwnProperty.call(orig, k)) continue;
+      if (I18N_SKIP_FIELDS.has(k)) continue;
+      var ov = orig[k];
+      if (typeof ov === "string") {
+        if (I18N_TR_FIELDS.has(k) && typeof live[k] === "string") live[k] = tr(ov);
+      } else if (ov && typeof ov === "object" && live[k]) i18nWalkInto(live[k], ov, k, tr);
+    }
+  }
+}
+
+/* Tradutor de uma string pela chave de hash, memorizando o caminho de volta. */
+function i18nTr(s) {
+  var t = String(s).trim();
+  if (!t) return s;
+  var out = window.__t("c" + i18nHash(t), s);
+  if (out !== s) i18nRemember(out, s);
+  return out;
+}
+window.__TX = i18nTr;
 
 function i18nApplyData() {
   try {
     if (!i18nDataOriginals) {
       i18nDataOriginals = {};
-      for (var j = 0; j < I18N_DATA_GLOBALS.length; j++) {
-        var nm = I18N_DATA_GLOBALS[j];
-        if (window[nm]) { try { i18nDataOriginals[nm] = JSON.parse(JSON.stringify(window[nm])); } catch (e) {} }
+      for (var n in i18nData) {
+        if (!Object.prototype.hasOwnProperty.call(i18nData, n)) continue;
+        try { i18nDataOriginals[n] = JSON.parse(JSON.stringify(i18nData[n])); } catch (e) {}
       }
     }
     var pt = window.__lang === i18nDefaultLang;
-    var tr = function (s) { var t = s.trim(); return pt || !t ? s : window.__t("c" + i18nHash(t), s); };
-    var into = function (live, orig, field) {
-      if (Array.isArray(orig)) {
-        for (var i = 0; i < orig.length; i++) {
-          if (typeof orig[i] === "string") { if (field && I18N_TR_FIELDS.has(field) && typeof live[i] === "string") live[i] = tr(orig[i]); }
-          else if (orig[i] && typeof orig[i] === "object" && live[i]) into(live[i], orig[i], field);
-        }
-      } else if (orig && typeof orig === "object") {
-        for (var k in orig) {
-          if (!Object.prototype.hasOwnProperty.call(orig, k)) continue;
-          var ov = orig[k];
-          if (typeof ov === "string") { if (I18N_TR_FIELDS.has(k) && typeof live[k] === "string") live[k] = tr(ov); }
-          else if (ov && typeof ov === "object" && live[k]) into(live[k], ov, k);
-        }
-      }
-    };
-    for (var g = 0; g < I18N_DATA_GLOBALS.length; g++) {
-      var n = I18N_DATA_GLOBALS[g];
-      if (window[n] && i18nDataOriginals[n]) into(window[n], i18nDataOriginals[n], null);
+    var tr = pt ? function (s) { return s; } : i18nTr;
+    for (var g in i18nData) {
+      if (!Object.prototype.hasOwnProperty.call(i18nData, g)) continue;
+      if (i18nDataOriginals[g]) i18nWalkInto(i18nData[g], i18nDataOriginals[g], null, tr);
     }
   } catch (e) { /* nunca deixar a tradução de dados quebrar a troca de idioma */ }
 }
-/* Expostos para i18n/extract-content.js (mesma hash/allowlist/globais). */
+
+/* Tradução de JSON buscado em runtime (live/vi-catalog.json, live/vi-live.json).
+ * Esses arquivos vêm do GTA Wiki em INGLÊS; a chave continua sendo o hash do
+ * texto original, então o pt-BR TAMBÉM recebe tradução quando há catálogo.
+ * Uso: setState({ data: window.__i18nLive(json) }). */
+window.__i18nLive = function (obj) {
+  try {
+    if (!obj || typeof obj !== "object") return obj;
+    var copy = JSON.parse(JSON.stringify(obj));
+    i18nWalkInto(copy, obj, null, i18nTr);
+    return copy;
+  } catch (e) { return obj; }
+};
+
+/* Expostos para i18n/extract-content.js (mesma hash/allowlist/dados). */
 window.__i18nTrFields = I18N_TR_FIELDS;
-window.__i18nDataGlobals = I18N_DATA_GLOBALS;
+window.__i18nSkipFields = I18N_SKIP_FIELDS;
+window.__i18nData = i18nData;
+window.__i18nDataGlobals = Object.keys(i18nData);
 
 /* ---------- 6. Troca de idioma ---------- */
+/* <title> e <meta name=description> vivem no HTML, fora da árvore React —
+ * sem isto a aba do navegador e o compartilhamento ficam sempre em português. */
+function i18nApplyHead() {
+  try {
+    var title = document.querySelector("title");
+    var desc = document.querySelector('meta[name="description"]');
+    var ogt = document.querySelector('meta[property="og:title"]');
+    var ogd = document.querySelector('meta[property="og:description"]');
+    var each = [[title, "textContent"], [desc, "content"], [ogt, "content"], [ogd, "content"]];
+    for (var i = 0; i < each.length; i++) {
+      var el = each[i][0], prop = each[i][1];
+      if (!el) continue;
+      if (!el.getAttribute("data-i18n-src")) el.setAttribute("data-i18n-src", prop === "content" ? el.getAttribute("content") : el.textContent);
+      var src = el.getAttribute("data-i18n-src");
+      var out = window.__lang === i18nDefaultLang ? src : i18nTr(src);
+      if (prop === "content") el.setAttribute("content", out); else el.textContent = out;
+    }
+  } catch (e) { /* head opcional */ }
+}
+
 function i18nApply(code) {
   window.__lang = code;
   i18nApplyData();
+  i18nApplyHead();
   try { window.localStorage.setItem(i18nStorageKey, code); } catch (err) { /* modo privado etc. */ }
   document.documentElement.lang = code;
   window.__i18nVersion = (window.__i18nVersion || 0) + 1;
@@ -204,8 +353,16 @@ window.__setLang = function (code) {
     console.warn('[i18n] código de idioma desconhecido: "' + code + '"');
     return;
   }
-  if (code === i18nDefaultLang) { i18nApply(code); return; } /* pt-BR: fallbacks inline */
   if (i18nCatalogReady(code) && i18nContentLoaded[code]) { i18nApply(code); return; }
+  /* pt-BR não tem catálogo de UI (fallbacks inline), mas TEM catálogo de
+   * conteúdo: os JSON ao vivo (live/vi-catalog.json) vêm em inglês. */
+  if (code === i18nDefaultLang) {
+    i18nLoadScript("i18n/pt-BR.content.js", function () {
+      i18nContentLoaded[code] = true;
+      i18nApply(code);
+    });
+    return;
+  }
 
   i18nLoadScript("i18n/" + code + ".js", function () {
     if (!i18nCatalogReady(code)) {
@@ -226,7 +383,10 @@ window.__setLang = function (code) {
   try { stored = window.localStorage.getItem(i18nStorageKey); } catch (err) { /* ignora */ }
   window.__lang = i18nIsValid(stored) ? stored : i18nDefaultLang;
   window.__i18nVersion = window.__i18nVersion || 0;
-  if (i18nCatalogReady(window.__lang)) {
+  if (window.__lang === i18nDefaultLang) {
+    document.documentElement.lang = window.__lang;
+    window.__setLang(window.__lang); /* busca i18n/pt-BR.content.js (JSON ao vivo) */
+  } else if (i18nCatalogReady(window.__lang)) {
     document.documentElement.lang = window.__lang;
   } else {
     /* Idioma salvo depende de catálogo externo: injeta já; quando o arquivo

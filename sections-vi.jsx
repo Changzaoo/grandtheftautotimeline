@@ -152,7 +152,6 @@ const VIHero = () => {
     [__T("nav.gta6", "GTA VI"), "gta6", "star"],
     [__T("nav.vi-mechanics", "Mecânicas VI"), "vi-mechanics", "weapon"],
     [__T("nav.vi-catalog", "Catálogo VI"), "vi-catalog", "database"],
-    [__T("nav.vi-live", "Ao Vivo"), "vi-live", "star"],
     [__T("nav.eastereggs", "Easter Eggs"), "eastereggs", "star"],
     [__T("nav.mysteries", "Mistérios"), "mysteries", "file"]
   ];

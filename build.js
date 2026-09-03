@@ -11,41 +11,22 @@ const VENDOR = path.join(PUBLIC, "vendor");
 const STATIC_FILES = ["index.html", "styles.css", "theme-neo.css", "theme-vi.css"];
 const STATIC_DIRS = ["assets", "i18n", "live"];
 
-const SOURCES = [
-  "components.jsx",
-  "data.jsx",
-  "data-gta.jsx",
-  "data-dossier.jsx",
-  "data-missions.jsx",
-  "data-vehicles.jsx",
-  "data-weapons.jsx",
-  "data-vi.jsx",
-  "data-easter-eggs.jsx",
-  "data-mysteries.jsx",
-  "i18n.jsx",
-  "sections-1.jsx",
-  "sections-2.jsx",
-  "sections-3.jsx",
-  "sections-4.jsx",
-  "sections-expanded.jsx",
-  "sections-rockstar.jsx",
-  "sections-dossier.jsx",
-  "sections-vi.jsx",
-  "sections-vi-live.jsx",
-  "sections-vi-catalog.jsx",
-  "sections-easter-eggs.jsx",
-  "sections-mysteries.jsx",
-  "app.jsx",
-  "enhance.jsx"
-];
+const { SOURCES, JSX_AUTOTEXT_FILES } = require("./sources.js");
+const autotext = require("./i18n/babel-plugin-autotext.js");
+const AUTOTEXT = new Set(JSX_AUTOTEXT_FILES);
 
 function ensureDir(dir){ fs.mkdirSync(dir, { recursive: true }); }
 
+/* Todo texto literal do JSX passa pelo plugin i18n/babel-plugin-autotext.js,
+ * que o envolve em window.__T("c<hash>", "texto pt-BR"). É o que permite
+ * traduzir o site inteiro sem anotar centenas de pontos de render à mão. */
 function transpile(file){
   const code = fs.readFileSync(path.join(ROOT, file), "utf8");
+  const plugins = AUTOTEXT.has(file) ? [[autotext, {}]] : [];
   const out = babel.transformSync(code, {
     filename: file,
     presets: [["@babel/preset-react", { runtime: "classic" }]],
+    plugins,
     compact: false, comments: false, sourceMaps: false
   });
   return out.code;
@@ -82,14 +63,19 @@ function availableLangs(){
   const refCount = fs.existsSync(enPath) ? catalogKeyCount(enPath).keys : 0;
 
   for (const f of fs.readdirSync(dir)){
-    if (!f.endsWith(".js")) continue;
+    if (!f.endsWith(".js") || f.endsWith(".content.js")) continue;
     const code = f.slice(0, -3);
     if (code.startsWith("_") || SKIP.has(code) || avail.includes(code)) continue;
     const info = catalogKeyCount(path.join(dir, f));
     /* só anuncia se o catálogo carrega, casa o código do arquivo e tem a
      * contagem canônica de chaves (== en.js) — parciais ficam de fora. */
-    if (info.code === code && refCount > 0 && info.keys === refCount) avail.push(code);
-    else if (info.code === code && info.keys > 0) {
+    const hasContent = fs.existsSync(path.join(dir, code + ".content.js"));
+    if (info.code === code && (info.keys === refCount || (hasContent && info.keys > 0))) {
+      avail.push(code);
+      if (refCount > 0 && info.keys !== refCount) {
+        process.stdout.write("  ~ i18n/" + f + ": UI " + info.keys + "/" + refCount + " chaves (resto cai no pt-BR)\n");
+      }
+    } else if (info.code === code && info.keys > 0) {
       process.stdout.write("  ! i18n/" + f + " incompleto (" + info.keys + "/" + refCount + " chaves) — não anunciado\n");
     }
   }

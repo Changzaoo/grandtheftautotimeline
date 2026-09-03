@@ -1600,14 +1600,14 @@ ul.vi-song-list li{grid-template-columns:1fr;grid-template-areas:"title" "artist
 .vi-cat-intro p{margin:0;max-width:80ch;font-size:14.5px;line-height:1.65;color:#e6d6e8}
 .vi-cat-toolbar{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;justify-content:space-between;margin:0 0 12px}
 .vi-cat-tabs{display:flex;flex-wrap:wrap;gap:8px}
-.vi-cat-tabs button,.vi-cat-facets button,.vi-live-filter button{
+.vi-cat-tabs button,.vi-cat-facets button{
   appearance:none;cursor:pointer;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(18,7,42,.7);color:#e6d6e8;
   font-family:"Space Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:8px 13px;
   transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease
 }
 .vi-cat-tabs button b,.vi-cat-facets button b{margin-left:6px;font-weight:700;color:var(--vi-gold)}
-.vi-cat-tabs button:hover,.vi-cat-facets button:hover,.vi-live-filter button:hover{border-color:rgba(255,209,102,.6);transform:translateY(-1px)}
-.vi-cat-tabs button.on,.vi-cat-facets button.on,.vi-live-filter button.on{background:var(--vi-gold);border-color:var(--vi-gold);color:#1a1000}
+.vi-cat-tabs button:hover,.vi-cat-facets button:hover{border-color:rgba(255,209,102,.6);transform:translateY(-1px)}
+.vi-cat-tabs button.on,.vi-cat-facets button.on{background:var(--vi-gold);border-color:var(--vi-gold);color:#1a1000}
 .vi-cat-tabs button.on b{color:#1a1000}
 .vi-cat-search{flex:1 1 260px;max-width:420px}
 .vi-cat-search input{
@@ -1622,7 +1622,20 @@ ul.vi-song-list li{grid-template-columns:1fr;grid-template-areas:"title" "artist
 .vi-cat-media{position:relative;display:block;aspect-ratio:16/10;background:linear-gradient(160deg,#3c1361,#0a0712);overflow:hidden}
 .vi-cat-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
 .vi-cat-card:hover .vi-cat-media img{transform:scale(1.04)}
-.vi-cat-card--vehicles .vi-cat-media img,.vi-cat-card--weapons .vi-cat-media img{object-fit:contain;background:radial-gradient(circle at 50% 60%,rgba(255,255,255,.08),transparent 70%)}
+/* Retratos, logos e fauna são quadrados/verticais: mostramos a imagem inteira
+ * sobre um borrão dela mesma, em vez de cortar o rosto no quadro 16/10. */
+.vi-cat-card--vehicles .vi-cat-media img,.vi-cat-card--weapons .vi-cat-media img,
+.vi-cat-card--characters .vi-cat-media img,.vi-cat-card--animals .vi-cat-media img,
+.vi-cat-card--businesses .vi-cat-media img,.vi-cat-card--radio .vi-cat-media img,
+.vi-cat-card--gangs .vi-cat-media img{object-fit:contain;position:relative;z-index:1}
+.vi-cat-card--characters .vi-cat-media::before,.vi-cat-card--animals .vi-cat-media::before,
+.vi-cat-card--businesses .vi-cat-media::before,.vi-cat-card--radio .vi-cat-media::before,
+.vi-cat-card--gangs .vi-cat-media::before,.vi-cat-card--vehicles .vi-cat-media::before,
+.vi-cat-card--weapons .vi-cat-media::before{
+  content:"";position:absolute;inset:-14%;z-index:0;
+  background-image:var(--media-src);background-size:cover;background-position:center;
+  filter:blur(22px) saturate(1.15) brightness(.5)
+}
 .vi-cat-initials{position:absolute;inset:0;display:grid;place-items:center;font-size:44px;color:rgba(255,255,255,.22);letter-spacing:.06em}
 .vi-cat-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px}
 .vi-cat-badges{display:flex;flex-wrap:wrap;gap:5px}
@@ -1635,53 +1648,9 @@ ul.vi-song-list li{grid-template-columns:1fr;grid-template-areas:"title" "artist
 .vi-cat-more{display:flex;justify-content:center;margin:20px 0 6px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-/* ---- radar ao vivo ---- */
-.vi-live-status{display:flex;align-items:center;gap:10px;margin:0 0 18px;font-family:"Space Mono",ui-monospace,monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:#d8c6db}
-.vi-live-status em{font-style:normal;text-transform:none;letter-spacing:0;color:#a892ad}
-.vi-live-dot{width:10px;height:10px;border-radius:50%;background:#39c6a5;box-shadow:0 0 0 3px rgba(57,198,165,.2),0 0 12px #39c6a5;animation:viLivePulse 1.6s ease-in-out infinite}
-.vi-live-dot--loading{background:var(--vi-gold);box-shadow:0 0 0 3px rgba(255,209,102,.2),0 0 12px var(--vi-gold)}
-.vi-live-dot--error{background:#ff5252;box-shadow:0 0 0 3px rgba(255,82,82,.2);animation:none}
-@keyframes viLivePulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.25);opacity:.7}}
-@media (prefers-reduced-motion:reduce){.vi-live-dot{animation:none}}
-.vi-live-grid{display:grid;gap:clamp(12px,1.8vw,18px);grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));margin-bottom:12px}
-.vi-live-card{display:flex;flex-direction:column;padding:0;overflow:hidden;text-decoration:none;color:inherit}
-.vi-live-thumb{position:relative;aspect-ratio:16/9;background:#120a24;overflow:hidden}
-.vi-live-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
-.vi-live-card:hover .vi-live-thumb img{transform:scale(1.04)}
-.vi-live-thumb-empty{position:absolute;inset:0;display:grid;place-items:center;font-family:"Anton",Impact,sans-serif;font-size:40px;color:rgba(255,209,102,.5)}
-.vi-live-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px}
-.vi-live-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
-.vi-live-time{font-family:"Space Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#a892ad}
-.vi-live-body h4{margin:0;font-size:15.5px;line-height:1.3;color:var(--vi-cream)}
-.vi-live-body p{margin:0;font-size:12.5px;line-height:1.5;color:#cbb7d0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.vi-live-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
-.vi-live-tag{font-size:8.5px;letter-spacing:.14em;padding:2px 7px;background:rgba(255,255,255,.06)}
-.vi-live-tag--mecnica{border-color:rgba(255,209,102,.7);color:var(--vi-gold)}
-.vi-live-tag--vazamento{border-color:rgba(255,82,82,.7);color:#ff8a8a}
-.vi-live-tag--trailer{border-color:rgba(57,198,165,.7);color:#7fe3cc}
-.vi-live-other{margin:6px 0 20px;font-size:13px;line-height:1.6;color:#cbb7d0}
-.vi-live-other a{color:#f1e3f2;text-decoration:underline dotted}
-.vi-live-columns{display:grid;gap:clamp(16px,2.4vw,26px);grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))}
-.vi-live-press,.vi-live-wiki{padding:clamp(16px,2.6vw,26px)}
-.vi-live-filter{margin-left:auto;display:flex;gap:4px}
-.vi-live-filter button{padding:5px 9px;font-size:10px}
-.vi-live-list{list-style:none;margin:8px 0 0;padding:0}
-.vi-live-list li{display:flex;flex-direction:column;gap:3px;padding:10px 0;border-bottom:1px dashed rgba(255,45,124,.16)}
-.vi-live-list li:last-child{border-bottom:0}
-.vi-live-list a{color:var(--vi-cream);text-decoration:none;font-size:14.5px;line-height:1.35}
-.vi-live-list a:hover{color:var(--vi-gold)}
-.vi-live-src{font-family:"Space Mono",ui-monospace,monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#a892ad}
-.vi-live-list--wiki li{flex-direction:row;gap:12px;align-items:flex-start}
-.vi-live-list--wiki img,.vi-live-wiki-ph{flex:0 0 64px;width:64px;height:64px;border-radius:8px;object-fit:cover;background:#1c1030}
-.vi-live-wiki-ph{display:grid;place-items:center;font-family:"Anton",Impact,sans-serif;color:rgba(255,255,255,.3)}
-.vi-live-list--wiki div{display:flex;flex-direction:column;gap:3px;min-width:0}
-.vi-live-list--wiki small{font-size:12px;color:#cbb7d0;line-height:1.45}
-.vi-live-empty{font-size:13.5px;color:#cbb7d0;margin:8px 0 14px}
-.vi-live-disclaimer{margin:14px 0 0;font-size:12px;line-height:1.55;color:#a892ad}
-.vi-live-skeleton .vi-live-thumb{background:linear-gradient(90deg,#120a24 20%,#241540 50%,#120a24 80%);background-size:200% 100%;animation:viLiveShimmer 1.4s linear infinite}
-.vi-live-skeleton .vi-live-body span{display:block;height:12px;border-radius:6px;background:rgba(255,255,255,.08)}
-.vi-live-skeleton .vi-live-body span:first-child{width:70%}
-@keyframes viLiveShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.vi-cat-empty{font-size:13.5px;color:#cbb7d0;margin:8px 0 14px}
+.vi-cat-note{margin:14px 0 0;font-size:12px;line-height:1.55;color:#a892ad}
+
 @media (max-width:680px){
   .vi-cat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .vi-cat-body h4{font-size:14px}

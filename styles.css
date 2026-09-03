@@ -611,7 +611,19 @@ select:focus{
 .dossier-mugshot.has-official{min-height:270px;justify-content:flex-end;padding:0}
 .dossier-mugshot.has-official::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.18) 45%,rgba(0,0,0,.82))}
 .dossier-mugshot-media{position:absolute;inset:0;z-index:0;border:0;border-radius:0}
-.dossier-mugshot-media img{object-position:center 24%}
+/* Retratos do GTA Wiki são 1:1 e o quadro do card é retangular: com "cover" a
+ * cabeça saía do enquadramento em vários personagens. Agora a imagem aparece
+ * inteira (contain) e o fundo é uma cópia ampliada e desfocada dela mesma. */
+.dossier-mugshot-media{background:#0b0a10}
+.dossier-mugshot-media::before{
+  content:"";position:absolute;inset:-14%;z-index:0;
+  background-image:var(--media-src);background-size:cover;background-position:center;
+  filter:blur(24px) saturate(1.2) brightness(.55);
+}
+.dossier-mugshot-media img{
+  position:relative;z-index:1;
+  object-fit:contain;object-position:center top;padding:8px 8px 30px
+}
 .dossier-mugshot.has-official span{position:relative;z-index:2;width:100%;padding:10px 8px;background:rgba(0,0,0,.55);color:#ffe69a}
 .dossier-mugshot-fallback{display:grid;place-items:center;gap:10px;text-align:center;color:var(--evidence)}
 .dossier-mugshot-fallback svg{width:34px;height:34px}

@@ -8,7 +8,7 @@
  * imagem de outro jogo, o item fica sem foto — nunca mostramos um carro de
  * GTA Online como se fosse de GTA VI.
  *
- * Rodado pela GitHub Action (.github/workflows/vi-live.yml) e por `npm run catalog`.
+ * Rodado pela GitHub Action (.github/workflows/vi-catalog.yml) e por `npm run catalog`.
  * Node 18+. Sem dependências. Só usa a API pública (api.php) do GTA Wiki.
  */
 "use strict";

@@ -21,7 +21,9 @@ const useVICatalog = () => {
     let alive = true;
     fetch("live/vi-catalog.json", { cache: "no-cache" })
       .then((r) => { if (!r || !r.ok) throw new Error("HTTP"); return r.json(); })
-      .then((data) => { if (alive) setState({ status: "ok", data }); })
+      /* O catálogo vem do GTA Wiki em inglês: __i18nLive traduz os campos de
+       * exibição para o idioma ativo (inclusive pt-BR) antes de renderizar. */
+      .then((data) => { if (alive) setState({ status: "ok", data: window.__i18nLive ? window.__i18nLive(data) : data }); })
       .catch(() => { if (alive) setState({ status: "error", data: null }); });
     return () => { alive = false; };
   }, []);
@@ -48,7 +50,13 @@ const viCatMetaLine = (item) => {
 const VICatalogCard = ({ item }) => (
   <article className={`card vi-cat-card vi-cat-card--${item.group}${item.image ? "" : " vi-cat-card--noimg"}`}>
     <Corners />
-    <a className="vi-cat-media vi-vhs" href={item.url} target="_blank" rel="noreferrer" aria-label={item.title}>
+    <a
+      className="vi-cat-media vi-vhs"
+      href={item.url} target="_blank" rel="noreferrer" aria-label={item.title}
+      /* --media-src vira o fundo desfocado das fichas que mostram a imagem
+       * inteira (retratos, logos, fauna): nada de rosto cortado. */
+      style={item.image ? { "--media-src": `url("${item.image.replace(/"/g, "%22")}")` } : undefined}
+    >
       {item.image
         ? <img src={item.image} alt={item.title} loading="lazy" referrerPolicy="no-referrer" />
         : <span className="vi-cat-initials vi-serif" aria-hidden="true">{item.title.slice(0, 2).toUpperCase()}</span>}
@@ -118,8 +126,8 @@ const VICatalogSection = () => {
           {data && data.generatedAt && <span className="vi-badge">{__T("vi.cat.generated", "Importado em")} {new Date(data.generatedAt).toLocaleDateString(window.__lang || "pt-BR", { day: "2-digit", month: "short", year: "numeric" })}</span>}
         </div>
 
-        {status === "loading" && <p className="vi-live-empty">{__T("vi.cat.loading", "Abrindo o arquivo de Leonida…")}</p>}
-        {status === "error" && <p className="vi-live-empty">{__T("vi.cat.error", "O catálogo não carregou. Ele é gerado por live/vi-catalog.json — rode `npm run catalog` ou aguarde a próxima atualização automática.")}</p>}
+        {status === "loading" && <p className="vi-cat-empty">{__T("vi.cat.loading", "Abrindo o arquivo de Leonida…")}</p>}
+        {status === "error" && <p className="vi-cat-empty">{__T("vi.cat.error", "O catálogo não carregou. Ele é gerado por live/vi-catalog.json — rode `npm run catalog` ou aguarde a próxima atualização automática.")}</p>}
 
         {status === "ok" && (
           <>
@@ -166,9 +174,9 @@ const VICatalogSection = () => {
                   </div>
                 )}
               </>
-            ) : <p className="vi-live-empty">{__T("vi.cat.empty", "Nada encontrado com esse filtro.")}</p>}
+            ) : <p className="vi-cat-empty">{__T("vi.cat.empty", "Nada encontrado com esse filtro.")}</p>}
 
-            <p className="vi-live-disclaimer">{data.note}</p>
+            <p className="vi-cat-note">{data.note}</p>
           </>
         )}
       </div>

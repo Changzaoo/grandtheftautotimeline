@@ -7,10 +7,58 @@ Site estático em React, **pré-compilado** para carregar rápido (sem Babel no 
 | Camada | Arquivos |
 | --- | --- |
 | Dados | `data*.jsx` (saga), `data-vi.jsx` (GTA VI), `data-easter-eggs.jsx` (105 eggs), `data-mysteries.jsx` (37 casos) |
-| i18n | `i18n.jsx` (runtime + seletor de idiomas), `i18n/<code>.js` (catálogos), `i18n/KEYS.md` (esquema), `i18n/check-catalog.js` (validador) |
+| i18n | `i18n.jsx` (runtime + seletor), `i18n/<code>.js` (catálogo de UI), `i18n/<code>.content.js` (catálogo de conteúdo, gerado), `i18n/translate.js` (tradução automática), `i18n/babel-plugin-autotext.js` (envolve o texto do JSX), `i18n/KEYS.md` (esquema) |
 | Seções | `sections-*.jsx`; novas: `sections-vi.jsx` (herói VI, personagens, Leonida, dossiê VI), `sections-easter-eggs.jsx`, `sections-mysteries.jsx` |
 | Tema | `styles.css` + `theme-neo.css` + **`theme-vi.css`** (Vice Sunset, carregado por último) |
 | App | `app.jsx` (composição, scroll-reveal, remontagem na troca de idioma), `enhance.jsx` (3D, cheat codes de página) |
+
+## Tradução (site inteiro, sem editar texto à mão)
+
+O site tem três origens de texto e as três são traduzidas automaticamente:
+
+| Origem | Como é traduzida |
+| --- | --- |
+| Texto literal do JSX (`<b>Ordem de lançamento</b>`, `placeholder="..."`) | O plugin `i18n/babel-plugin-autotext.js` roda no build e envolve cada texto em `window.__T("c<hash>", "texto pt-BR")` |
+| Estruturas de dados (`data-*.jsx`) | `i18n.jsx` traduz os campos de exibição por mutação in-place, a partir de um snapshot da fonte |
+| JSON buscado em runtime (`live/vi-catalog.json`, em inglês) | `window.__i18nLive(json)` aplica a mesma tradução depois do fetch — inclusive para pt-BR |
+
+A chave de tradução é sempre `c` + hash do texto original, então o mesmo texto
+em qualquer uma das três origens compartilha uma única tradução.
+
+### Fluxo
+
+```bash
+npm run i18n:all      # build -> extrai textos -> traduz o que falta -> rebuild
+```
+
+Ou passo a passo:
+
+```bash
+npm run build             # gera o bundle com o texto já envolvido em __T
+node i18n/extract-content.js   # -> i18n/_content.json (pt) e i18n/_live.json (en)
+node i18n/translate.js         # traduz o que falta -> i18n/parts/<code>.mt.json
+node i18n/build-content.js     # monta i18n/<code>.content.js
+npm run build             # copia os catálogos para public/
+```
+
+`translate.js` é **incremental**: o que já está em `i18n/parts/<code>.mt.json`
+não é traduzido de novo. Rodar depois de acrescentar texto novo custa só o texto
+novo. Traduções feitas à mão em `i18n/parts/<code>.<n>.json` têm prioridade
+sobre a máquina e nunca são sobrescritas.
+
+### Provedor de tradução
+
+Sem configuração, usa o endpoint público do Google Translate (sem chave, pode
+limitar por IP — o script recua e retoma). Para qualidade melhor, defina uma
+variável de ambiente antes de rodar:
+
+| Variável | Provedor |
+| --- | --- |
+| `DEEPL_API_KEY` | DeepL (free: 500 mil caracteres/mês) |
+| `GOOGLE_TRANSLATE_API_KEY` | Google Cloud Translation v2 |
+| `LIBRETRANSLATE_URL` (+ `LIBRETRANSLATE_KEY`) | LibreTranslate |
+
+Para retraduzir tudo de um idioma: `node i18n/translate.js fr --force`.
 
 ## Como editar
 
@@ -57,17 +105,11 @@ Smoke test (renderiza a árvore inteira via ReactDOMServer com DOM stubado — p
 npm run build && node _smoke.js   # precisa terminar "SMOKE OK"
 ```
 
-## GTA VI — atualização automática (set/2026)
+## GTA VI — catálogo automático (set/2026)
 
-O site se mantém atualizado sozinho em três camadas, sem chave de API:
+`scripts/build-vi-catalog.js` importa as categorias públicas do GTA Wiki sobre GTA VI (veículos, armas, personagens, gangues, locais por condado, marcas, fauna, rádios) para `live/vi-catalog.json`, que alimenta a seção **Catálogo VI** (`#vi-catalog`). Só aceita imagens com `GTAVI` no nome do arquivo. A GitHub Action `.github/workflows/vi-catalog.yml` regenera o JSON a cada 6 h e faz commit se algo mudou; a Vercel publica em seguida.
 
-| Camada | Arquivo | Como funciona |
-| --- | --- | --- |
-| **Radar ao vivo** (`#vi-live`) | `api/vi-live.js` + `lib/vi-live-core.js` | Função serverless da Vercel. Lê o canal oficial da Rockstar no YouTube (RSS), o Newswire (descoberta via Google News RSS restrito a rockstargames.com), imprensa pt-BR/EN e as páginas de GTA VI editadas recentemente no GTA Wiki. Cache de 30 min na CDN (`s-maxage`). Fallback: `live/vi-live.json`. |
-| **Catálogo de GTA VI** (`#vi-catalog`) | `scripts/build-vi-catalog.js` → `live/vi-catalog.json` | Importa as categorias públicas do GTA Wiki (veículos, armas, personagens, gangues, locais por condado, marcas, fauna, rádios). Só aceita imagens com `GTAVI` no nome do arquivo. |
-| **Robô** | `.github/workflows/vi-live.yml` | A cada 6 h regenera os dois JSONs e faz commit se algo mudou; a Vercel publica em seguida. |
-
-Comandos: `npm run live` (snapshot do radar), `npm run catalog` (catálogo), `npm run smoke` (build + smoke test).
+Comandos: `npm run catalog` (regenera o catálogo), `npm run smoke` (build + smoke test).
 
 A base curada de GTA VI (lançamento, edições, Extended Look, **mecânicas** com separação "mostrado pela Rockstar" × "relatado em prévia", trilha, FAQ) continua em `data-vi.jsx`; a seção `#vi-mechanics` vem de `VI_DATA.mechanics`.
 

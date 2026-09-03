@@ -17,10 +17,9 @@ const dossierNavData = [
   { id: "gta6", label: "GTA VI", k: "14" },
   { id: "vi-mechanics", label: "Mecânicas VI", k: "15" },
   { id: "vi-catalog", label: "Catálogo VI", k: "16" },
-  { id: "vi-live", label: "Ao Vivo", k: "17" },
-  { id: "eastereggs", label: "Easter Eggs", k: "18" },
-  { id: "mysteries", label: "Mistérios", k: "19" },
-  { id: "glossary", label: "Glossário", k: "20" }
+  { id: "eastereggs", label: "Easter Eggs", k: "17" },
+  { id: "mysteries", label: "Mistérios", k: "18" },
+  { id: "glossary", label: "Glossário", k: "19" }
 ];
 window.dossierNavData = dossierNavData;
 

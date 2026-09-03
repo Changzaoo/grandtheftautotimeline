@@ -34,7 +34,6 @@ const EggsSec     = typeof EasterEggsSection !== "undefined" ? M(EasterEggsSecti
 const MystSec     = typeof MysteriesSection !== "undefined" ? M(MysteriesSection) : null;
 const VIMechSec   = typeof VIMechanicsSection !== "undefined" ? M(VIMechanicsSection) : null;
 const VICatSec    = typeof VICatalogSection !== "undefined" ? M(VICatalogSection) : null;
-const VILiveSec   = typeof VILiveSection !== "undefined" ? M(VILiveSection) : null;
 
 /* ---- Scroll reveal ----
  * One shared IntersectionObserver toggles a class as elements enter/leave the
@@ -150,7 +149,6 @@ function App(){
       {VIInfoSec ? <VIInfoSec /> : <GTA6Sec />}
       {VIMechSec && <VIMechSec />}
       {VICatSec && <VICatSec />}
-      {VILiveSec && <VILiveSec />}
       {EggsSec && <EggsSec />}
       {MystSec && <MystSec />}
       <GlossarySec onOpenDossier={setDossier} />

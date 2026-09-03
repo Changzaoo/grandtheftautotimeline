@@ -31,8 +31,13 @@ const searchRecord = (record, query) => {
   return normalizeText(JSON.stringify(record)).includes(normalizeText(query));
 };
 
+/* Estas heurísticas classificam por PALAVRA-CHAVE em português. Depois da
+ * troca de idioma o texto exibido está traduzido, então normalizamos sempre a
+ * partir do original (window.__PT devolve o texto pt-BR de origem). */
+const ptText = (v) => (window.__PT ? window.__PT(v) : v);
+
 const tagTone = (value = "") => {
-  const v = normalizeText(value);
+  const v = normalizeText(ptText(value));
   if (v.includes("protagon") || v.includes("principal") || v.includes("confirmado")) return "yellow";
   if (v.includes("antagon") || v.includes("traidor") || v.includes("corrupt") || v.includes("morto")) return "red";
   if (v.includes("aliado") || v.includes("online") || v.includes("vivo")) return "green";
@@ -94,8 +99,12 @@ const OfficialMedia = ({ media, className = "" }) => {
     objectPosition: media.position || undefined,
     objectFit: media.fit || undefined
   };
+  /* --media-src alimenta o fundo desfocado (ver .dossier-mugshot-media::before):
+   * assim a foto aparece inteira, sem corte, e o vazio ao redor vira um borrão
+   * da própria imagem em vez de barra preta. */
+  const figureStyle = { "--media-src": `url("${String(media.src).replace(/"/g, "%22")}")` };
   return (
-    <figure className={`official-media ${className}`}>
+    <figure className={`official-media ${className}`} style={figureStyle}>
       <img src={media.src} alt={media.alt || caption} loading="lazy" referrerPolicy="no-referrer" style={imageStyle} />
       <figcaption>
         {media.source ? <a href={media.source} target="_blank" rel="noreferrer">{caption}</a> : caption}
@@ -762,7 +771,7 @@ const missionGameFor = (mission) => gamesData.find((game) => game.id === mission
 
 const matchesMissionType = (mission, type) => {
   if (type === "all") return true;
-  const hay = normalizeText([mission.coverage, mission.tags, mission.highlights, mission.summary, mission.systems].join(" "));
+  const hay = normalizeText(ptText([mission.coverage, mission.tags, mission.highlights, mission.summary, mission.systems]).join(" "));
   const tests = {
     story: ["story", "historia", "campanha", "main", "protagonista"],
     side: ["side", "paralela", "atividade", "random", "strangers", "hobbies"],
@@ -1368,7 +1377,7 @@ const vehicleGameFor = (vehicle) => gamesData.find((game) => game.id === vehicle
 
 const matchesVehicleType = (vehicle, type) => {
   if (type === "all") return true;
-  const hay = normalizeText([vehicle.coverage, vehicle.tags, vehicle.highlights, vehicle.summary].join(" "));
+  const hay = normalizeText(ptText([vehicle.coverage, vehicle.tags, vehicle.highlights, vehicle.summary]).join(" "));
   const tests = {
     land: ["carro", "van", "caminh", "sedan", "suv", "terrestre", "off-road"],
     bikes: ["moto", "biciclet", "bike", "cycles", "bmx"],
@@ -1940,7 +1949,7 @@ const weaponGameFor = (weapon) => gamesData.find((game) => game.id === weapon.ga
 
 const matchesWeaponType = (weapon, type) => {
   if (type === "all") return true;
-  const hay = normalizeText([weapon.coverage, weapon.tags, weapon.highlights, weapon.summary].join(" "));
+  const hay = normalizeText(ptText([weapon.coverage, weapon.tags, weapon.highlights, weapon.summary]).join(" "));
   const tests = {
     melee: ["melee", "corpo", "branca", "motosserra", "katana", "fist", "baseball", "knife"],
     handgun: ["pistola", "pistol", "revolver", "handgun", ".357", ".44"],
@@ -2065,7 +2074,7 @@ const characterFilterOptions = ["Todos", "Protagonistas", "Antagonistas", "Aliad
 
 const matchesCharacterFilter = (character, filter) => {
   if (filter === "Todos") return true;
-  const hay = normalizeText([character.category, character.role, character.tags, character.games, character.affiliations].join(" "));
+  const hay = normalizeText(ptText([character.category, character.role, character.tags, character.games, character.affiliations]).join(" "));
   if (filter === "GTA Online") return hay.includes("online");
   if (filter === "GTA VI") return hay.includes("gta vi");
   if (filter === "Gangues") return hay.includes("gangue") || hay.includes("families") || hay.includes("ballas");

@@ -9,9 +9,9 @@
  * Este arquivo NÃO renderiza nada: apenas expõe window.VI_DATA.
  * Ordem no bundle: data-vi.jsx ANTES de sections-vi.jsx.
  *
- * A camada "ao vivo" (sections-vi-live.jsx + api/vi-live.js) complementa este
- * arquivo com anúncios oficiais, notícias e edições do GTA Wiki sem precisar
- * de novo build — este arquivo é a base curada; a live é o radar.
+ * O catálogo automático (live/vi-catalog.json, gerado por
+ * scripts/build-vi-catalog.js) complementa este arquivo com os verbetes do
+ * GTA Wiki — aqui fica a base curada e verificada.
  */
 
 /* Helpers i18n seguros (pendurados em window para evitar redeclaração
@@ -182,11 +182,11 @@ window.VI_DATA = {
       youtubeId: null,
       url: null,
       rumor: true,
-      desc: "Depois do Extended Look, a Rockstar não anunciou um novo trailer. A imprensa projeta uma peça final de marketing (trailer de lançamento) entre outubro e a semana do lançamento — projeção, não anúncio. Qualquer novo vídeo oficial aparece automaticamente na seção 'Ao vivo' deste arquivo.",
+      desc: "Depois do Extended Look, a Rockstar não anunciou um novo trailer. A imprensa projeta uma peça final de marketing (trailer de lançamento) entre outubro e a semana do lançamento — projeção, não anúncio.",
       highlights: [
         "Nada anunciado pela Rockstar até 3 de setembro de 2026",
         "Projeção da imprensa: trailer de lançamento perto de 19 de novembro",
-        "Acompanhe a seção 'Ao vivo': ela lê o canal oficial da Rockstar no YouTube"
+        "Canal oficial da Rockstar no YouTube é a fonte a acompanhar"
       ]
     }
   ],
@@ -749,7 +749,7 @@ window.VI_DATA = {
     {
       id: "vi-faq-trailer3",
       q: "Vai ter Trailer 3?",
-      a: "Depois do Extended Look, a Rockstar não anunciou novo vídeo. A imprensa projeta um trailer de lançamento perto de 19 de novembro. Qualquer vídeo novo do canal oficial aparece sozinho na seção 'Ao vivo' deste site."
+      a: "Depois do Extended Look, a Rockstar não anunciou novo vídeo. A imprensa projeta um trailer de lançamento perto de 19 de novembro — projeção da imprensa, não anúncio."
     },
     {
       id: "vi-faq-controller",
