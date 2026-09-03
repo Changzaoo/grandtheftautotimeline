@@ -31,7 +31,9 @@ function isTranslatable(s) {
   if (/\.(png|jpe?g|webp|svg|gif|mp4|webm|json|js|css)$/i.test(t)) return false;
   if (/^#[0-9a-f]{3,8}$/i.test(t)) return false;              // cor
   if (/^var\(--/.test(t) || /^--[\w-]+$/.test(t)) return false; // CSS var
-  if (/^[a-z0-9_.:/#-]+$/.test(t)) return false;              // identificador (all, gta-sa, story)
+  /* Identificador técnico (all, gta-sa, story_mode) — MAS uma palavra única só
+   * de letras com 4+ caracteres é texto de verdade ("gangues", "veículos"). */
+  if (/^[a-z0-9_.:/#-]+$/.test(t) && !/^[a-zà-ÿ]{4,}$/u.test(t)) return false;
   if (/^[A-Z0-9]{1,5}$/.test(t)) return false;                // sigla curta (HD, PS5, DLC)
   if (/^[\d.,:/\-\s%+]+$/.test(t)) return false;              // número/data
   return true;

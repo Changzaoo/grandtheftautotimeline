@@ -103,9 +103,64 @@ module.exports = function autotext(babel, opts) {
     return null;
   }
 
+  /* Valores que PARECEM texto de interface mas são CSS/classe/token técnico.
+   * isTranslatable() já barra ids e números; aqui barramos o resto. */
+  const looksLikeStyle = (v) =>
+    /^(var\(|#|rgba?\(|hsla?\()/.test(v) ||
+    /\b\d+(px|rem|em|vh|vw|%|s|ms)\b/.test(v) ||
+    /^span \d+$/.test(v) ||
+    /^[a-z][\w-]*( [a-z][\w-]*)*$/.test(v); /* "card vi-cat-card", "no-referrer" */
+
+  /* Chaves de objeto cujo valor string é texto visível. */
+  const LABEL_KEYS = new Set([...TEXT_ATTRS, "name", "nick", "value", "short", "long", "singular", "plural"]);
+
+  /* Um literal solto (dentro de array ou objeto) só é embrulhado se estiver num
+   * contexto de EXIBIÇÃO. Comparações, chaves de objeto, argumentos de API do
+   * DOM e atributos JSX não-textuais ficam de fora — traduzi-los quebraria a
+   * lógica (ex.: `status === "Falecido"`, `className="card"`). */
+  function inDisplayContext(path) {
+    const p = path.parentPath;
+    if (!p) return false;
+    if (p.isJSXAttribute()) return false;          /* tratado no visitor próprio */
+    if (p.isBinaryExpression() || p.isSwitchCase()) return false;
+    if (p.isImportDeclaration() || p.isCallExpression()) return false;
+    if (p.isMemberExpression()) return false;
+    if (p.isObjectProperty()) {
+      if (p.node.key === path.node) return false;  /* é a chave, não o valor */
+      const k = p.node.key;
+      const name = t.isIdentifier(k) ? k.name : t.isStringLiteral(k) ? k.value : "";
+      return LABEL_KEYS.has(name);
+    }
+    if (p.isArrayExpression()) {
+      /* Array dentro de comparação/lookup técnico não conta. */
+      const gp = p.parentPath;
+      if (gp && (gp.isCallExpression() && !t.isArrayExpression(gp.node.callee))) {
+        const callee = gp.node.callee;
+        const fname = t.isIdentifier(callee) ? callee.name
+          : t.isMemberExpression(callee) && t.isIdentifier(callee.property) ? callee.property.name : "";
+        if (/^(includes|indexOf|has|get|set|add|querySelector|addEventListener|setAttribute)$/.test(fname)) return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
   return {
     name: "i18n-autotext",
     visitor: {
+      /* Texto de interface que vive em arrays/objetos JS e não no JSX —
+       * ex.: [["Cidade", game.city], ["Jogos", …]] renderizado num meta-grid. */
+      StringLiteral(path) {
+        if (path.node[MARK] || isI18nCall(path.parent)) return;
+        const v = path.node.value;
+        if (!isTranslatable(v) || looksLikeStyle(v)) return;
+        /* Exige cara de frase/rótulo: começa maiúsculo ou tem 2+ palavras. */
+        if (!/^[A-ZÀ-Ý]/.test(v.trim()) && !/\s/.test(v.trim())) return;
+        if (!inDisplayContext(path)) return;
+        path.replaceWith(callT(v));
+        path.skip();
+      },
+
       JSXText(path) {
         const raw = path.node.value;
         const cleaned = cleanJsxText(raw);

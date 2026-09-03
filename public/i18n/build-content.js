@@ -20,6 +20,14 @@ if (fs.existsSync(livePath)) Object.assign(contentRef, JSON.parse(fs.readFileSyn
 const refKeys = Object.keys(contentRef);
 const refCount = refKeys.length;
 
+/* Idiomas que herdam o conteúdo de outro (a máquina não distingue a variante).
+ * es-MX reaproveita TUDO de es, inclusive as partes traduzidas à mão. */
+const ALIAS = { "es-MX": "es" };
+/* pt-BR é o idioma-fonte do site: só precisa das chaves dos JSON ao vivo
+ * (live/*.json, escritos em inglês). O resto já está em português no código. */
+const livePath0 = path.join(DIR, "_live.json");
+const LIVE_ONLY = fs.existsSync(livePath0) ? Object.keys(JSON.parse(fs.readFileSync(livePath0, "utf8"))) : [];
+
 const wanted = process.argv.slice(2);
 const codes = new Set();
 if (fs.existsSync(PARTS)) {
@@ -35,8 +43,12 @@ for (const code of [...codes].sort()) {
   if (wanted.length && !wanted.includes(code)) continue;
   const merged = {};
   const all = fs.readdirSync(PARTS);
-  const mt = all.filter((f) => f === code + ".mt.json");
-  const manual = all.filter((f) => new RegExp("^" + esc(code) + "\\.\\d+\\.json$").test(f)).sort();
+  const from = ALIAS[code] || code; /* es-MX lê tudo de es, inclusive as partes manuais */
+  const mt = all.filter((f) => f === from + ".mt.json" || f === code + ".mt.json");
+  const manual = all
+    .filter((f) => new RegExp("^" + esc(from) + "\\.\\d+\\.json$").test(f) ||
+                   new RegExp("^" + esc(code) + "\\.\\d+\\.json$").test(f))
+    .sort();
   for (const pf of mt.concat(manual)) {
     let obj;
     try { obj = JSON.parse(fs.readFileSync(path.join(PARTS, pf), "utf8")); }
@@ -44,14 +56,18 @@ for (const code of [...codes].sort()) {
     for (const k of Object.keys(obj)) if (typeof obj[k] === "string" && obj[k] && k in contentRef) merged[k] = obj[k];
   }
   const have = Object.keys(merged).length;
-  const missing = refKeys.filter((k) => !(k in merged));
+  const expected = code === "pt-BR" ? LIVE_ONLY : refKeys;
+  const missing = expected.filter((k) => !(k in merged));
+  /* I18N_CONTENT_LOADED marca que o catálogo de CONTEÚDO deste idioma já está
+   * em memória — o runtime usa isso para não buscar o arquivo de novo. */
   const body = "(function(){window.I18N_CATALOGS=window.I18N_CATALOGS||{};var c=window.I18N_CATALOGS[" +
     JSON.stringify(code) + "]=window.I18N_CATALOGS[" + JSON.stringify(code) + "]||{};Object.assign(c," +
-    JSON.stringify(merged) + ");})();\n";
+    JSON.stringify(merged) + ");window.I18N_CONTENT_LOADED=window.I18N_CONTENT_LOADED||{};window.I18N_CONTENT_LOADED[" +
+    JSON.stringify(code) + "]=true;})();\n";
   fs.writeFileSync(path.join(DIR, code + ".content.js"), body, "utf8");
   const status = missing.length ? "INCOMPLETO" : "OK";
   if (status !== "OK") anyBad = true;
-  console.log(`${code}.content.js: ${have}/${refCount} chaves${missing.length ? " · faltam " + missing.length : ""} — ${status}`);
+  console.log(`${code}.content.js: ${have}/${expected.length} chaves${missing.length ? " · faltam " + missing.length : ""} — ${status}`);
 }
 if (!codes.size) console.log("Nenhuma parte encontrada em i18n/parts/.");
 process.exit(anyBad ? 1 : 0);

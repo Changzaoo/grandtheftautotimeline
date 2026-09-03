@@ -69,7 +69,18 @@ const i18nIsAvailable = (code) =>
 window.__t = function (key, fallback) {
   const catalog = window.I18N_CATALOGS[window.__lang];
   const value = catalog ? catalog[key] : undefined;
-  return typeof value === "string" && value !== "" ? value : fallback;
+  if (typeof value === "string" && value !== "") return value;
+  /* Chave nomeada ausente do catálogo de UI: tenta o catálogo de CONTEÚDO pela
+   * hash do próprio texto pt-BR. É o que faz um __T("vi.cat.loading", "Abrindo
+   * o arquivo…") ainda traduzir quando ninguém escreveu essa chave à mão. */
+  if (catalog && typeof fallback === "string" && fallback.trim() && key.charAt(0) !== "c") {
+    const byHash = catalog["c" + i18nHash(fallback.trim())];
+    if (typeof byHash === "string" && byHash !== "") {
+      i18nRemember(byHash, fallback);
+      return byHash;
+    }
+  }
+  return fallback;
 };
 
 window.__tt = function (prefix, id, field, fallback) {
@@ -153,13 +164,14 @@ var I18N_TR_FIELDS = new Set([
   "realWorldInspiration","characteristics","quoteSource","sub","occupation","kind","species",
   "genre","class","legacy","curiosity","curiosities","reason","result","verdict","evidence",
   "conclusion","period","scope","focus","goal","warning","type","category","universeAppearances",
-  "weapons","animals","radio","locations","home","voice","manufacturer","body_","source"
+  "weapons","animals","radio","locations","home","voice","manufacturer","source",
+  "business","sizeNote","storyYear","subtitleNote","answer","question","hint","empty","cta"
 ]);
 /* Campos NUNCA traduzidos (lógica, ids, URLs, mídia, datas). Vence a allowlist. */
 var I18N_SKIP_FIELDS = new Set([
   "id","gameId","url","src","href","image","page","pageTitle","apiPage","sourcePage",
   "officialSource","color","grad","icon","key","code","lang","editedAt","date","releaseDate",
-  "storyYear","releaseYear","year","dateLabel","priceBR","universe","tone","group","capacity"
+  "releaseYear","year","dateLabel","priceBR","universe","tone","group","capacity"
 ]);
 
 /* Registro dos dados do bundle: identificadores do MESMO escopo de script
@@ -207,6 +219,28 @@ function i18nCollectData() {
   put("ROCKSTAR_HISTORY", typeof ROCKSTAR_HISTORY !== "undefined" ? ROCKSTAR_HISTORY : null);
   put("RADIOS", typeof RADIOS !== "undefined" ? RADIOS : null);
   put("ROLE_FILTERS", typeof ROLE_FILTERS !== "undefined" ? ROLE_FILTERS : null);
+  /* Mapas de mídia: guardam alt/caption/credit/note exibidos nos cards. */
+  put("officialMediaData", typeof officialMediaData !== "undefined" ? officialMediaData : null);
+  put("officialMediaByGameId", typeof officialMediaByGameId !== "undefined" ? officialMediaByGameId : null);
+  put("officialMediaByCharacterId", typeof officialMediaByCharacterId !== "undefined" ? officialMediaByCharacterId : null);
+  put("officialMediaByCityId", typeof officialMediaByCityId !== "undefined" ? officialMediaByCityId : null);
+  put("gtaWikiGameMediaById", typeof gtaWikiGameMediaById !== "undefined" ? gtaWikiGameMediaById : null);
+  put("gtaWikiCharacterMediaById", typeof gtaWikiCharacterMediaById !== "undefined" ? gtaWikiCharacterMediaById : null);
+  put("gtaWikiCityMediaById", typeof gtaWikiCityMediaById !== "undefined" ? gtaWikiCityMediaById : null);
+  put("gtaWikiFactionMediaById", typeof gtaWikiFactionMediaById !== "undefined" ? gtaWikiFactionMediaById : null);
+  put("gtaWikiUniverseMediaById", typeof gtaWikiUniverseMediaById !== "undefined" ? gtaWikiUniverseMediaById : null);
+  put("gtaWikiGlossaryMediaByTerm", typeof gtaWikiGlossaryMediaByTerm !== "undefined" ? gtaWikiGlossaryMediaByTerm : null);
+  put("glossaryDetailsByTerm", typeof glossaryDetailsByTerm !== "undefined" ? glossaryDetailsByTerm : null);
+  put("rockstarHistoryMedia", typeof rockstarHistoryMedia !== "undefined" ? rockstarHistoryMedia : null);
+  put("gtaOnlineTimelineMedia", typeof gtaOnlineTimelineMedia !== "undefined" ? gtaOnlineTimelineMedia : null);
+  put("gtaOnlineDlcMediaById", typeof gtaOnlineDlcMediaById !== "undefined" ? gtaOnlineDlcMediaById : null);
+  put("vehicleMediaById", typeof vehicleMediaById !== "undefined" ? vehicleMediaById : null);
+  put("weaponMediaById", typeof weaponMediaById !== "undefined" ? weaponMediaById : null);
+  put("cityGalleryMediaById", typeof cityGalleryMediaById !== "undefined" ? cityGalleryMediaById : null);
+  put("cityUniverseGalleryMediaById", typeof cityUniverseGalleryMediaById !== "undefined" ? cityUniverseGalleryMediaById : null);
+  put("curatedCityMediaById", typeof curatedCityMediaById !== "undefined" ? curatedCityMediaById : null);
+  put("refinedCityGalleryMediaById", typeof refinedCityGalleryMediaById !== "undefined" ? refinedCityGalleryMediaById : null);
+  put("refinedCityUniverseGalleryMediaById", typeof refinedCityUniverseGalleryMediaById !== "undefined" ? refinedCityUniverseGalleryMediaById : null);
   put("VI_DATA", window.VI_DATA);
   put("EASTER_EGGS_DATA", window.EASTER_EGGS_DATA);
   put("MYSTERIES_DATA", window.MYSTERIES_DATA);
@@ -345,6 +379,10 @@ function i18nLoadScript(src, onDone) {
 }
 
 const i18nContentLoaded = {}; /* code -> true quando i18n/<code>.content.js já tentou carregar */
+/* O próprio arquivo de conteúdo marca window.I18N_CONTENT_LOADED[code]; assim,
+ * se ele já estiver em memória (pré-carregado ou embutido), não buscamos de novo. */
+const i18nContentReady = (code) =>
+  !!i18nContentLoaded[code] || !!(window.I18N_CONTENT_LOADED && window.I18N_CONTENT_LOADED[code]);
 
 /* Carrega o catálogo base (UI) e, em seguida, o de conteúdo (cards do dossiê),
  * depois aplica. Conteúdo é opcional: se faltar, a UI ainda traduz. */
@@ -353,10 +391,11 @@ window.__setLang = function (code) {
     console.warn('[i18n] código de idioma desconhecido: "' + code + '"');
     return;
   }
-  if (i18nCatalogReady(code) && i18nContentLoaded[code]) { i18nApply(code); return; }
+  if (i18nCatalogReady(code) && i18nContentReady(code)) { i18nApply(code); return; }
   /* pt-BR não tem catálogo de UI (fallbacks inline), mas TEM catálogo de
    * conteúdo: os JSON ao vivo (live/vi-catalog.json) vêm em inglês. */
   if (code === i18nDefaultLang) {
+    if (i18nContentReady(code)) { i18nApply(code); return; }
     i18nLoadScript("i18n/pt-BR.content.js", function () {
       i18nContentLoaded[code] = true;
       i18nApply(code);
@@ -369,7 +408,7 @@ window.__setLang = function (code) {
       console.warn('[i18n] i18n/' + code + '.js não registrou o catálogo; mantendo "' + window.__lang + '".');
       return;
     }
-    if (i18nContentLoaded[code]) { i18nApply(code); return; }
+    if (i18nContentReady(code)) { i18nApply(code); return; }
     i18nLoadScript("i18n/" + code + ".content.js", function () {
       i18nContentLoaded[code] = true;
       i18nApply(code);
