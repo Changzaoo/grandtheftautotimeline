@@ -199,6 +199,17 @@
   image-rendering:pixelated;
 }
 
+/* Alvo de âncora não pode nascer atrás da barra fixa: vale para o clique no
+ * menu (que já desconta a altura no JS) e para quem abre a página direto num
+ * #id, onde só o CSS resolve. */
+.dossier-section,
+.vi-section{scroll-margin-top:74px}
+@media (max-width:680px){
+  /* No celular a barra do topo some e a navegação é a de baixo. */
+  .dossier-section,
+  .vi-section{scroll-margin-top:16px}
+}
+
 /* ------------------------------------------------------- 04. scrollbars */
 /* Menus: barra totalmente invisível — a posição é comunicada pelo item ativo,
  * que a própria navegação centraliza ao rolar a página. */

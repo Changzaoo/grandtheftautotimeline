@@ -232,13 +232,15 @@ const NAV_USER_HOLD_MS = 2600; /* quanto tempo o gesto do usuário tem prioridad
 /* Arrastar com o mouse/caneta (o toque já rola nativamente) + roda do mouse
  * convertida em rolagem lateral. Devolve um marcador de "usuário mexeu agora".
  * Também marca o gesto de toque, para o auto-centralizar não brigar com ele. */
-const useNavGestures = (ref, markInteraction) => {
+const DRAG_THRESHOLD = 6; /* px antes de virar arrasto, e não clique */
+
+const useNavGestures = (ref, markInteraction, dragEndRef) => {
   React.useEffect(() => {
     const nav = ref.current;
     if (!nav) return undefined;
 
+    let pressed = false;
     let dragging = false;
-    let moved = 0;
     let startX = 0;
     let startScroll = 0;
 
@@ -247,33 +249,36 @@ const useNavGestures = (ref, markInteraction) => {
        * nativa, com inércia — sequestrar isso deixaria o gesto pior. */
       if (event.pointerType === "touch") { markInteraction(); return; }
       if (event.button !== 0) return;
-      dragging = true;
-      moved = 0;
+      pressed = true;
+      dragging = false;
       startX = event.clientX;
       startScroll = nav.scrollLeft;
-      nav.classList.add("is-dragging");
+      /* NÃO marcar "is-dragging" aqui: essa classe desliga os links
+       * (pointer-events:none) e um clique simples deixaria de navegar. Ela só
+       * entra quando o ponteiro realmente andou. */
     };
     const onPointerMove = (event) => {
-      if (!dragging) return;
+      if (!pressed) return;
       const delta = event.clientX - startX;
-      if (Math.abs(delta) > 3) {
-        moved = Math.max(moved, Math.abs(delta));
-        markInteraction();
-        nav.scrollLeft = startScroll - delta;
-        /* Enquanto arrasta, o cursor não deve virar seleção de texto. */
-        event.preventDefault();
+      if (!dragging && Math.abs(delta) <= DRAG_THRESHOLD) return;
+      if (!dragging) {
+        dragging = true;
+        nav.classList.add("is-dragging");
       }
+      markInteraction();
+      nav.scrollLeft = startScroll - delta;
+      event.preventDefault(); /* não selecionar texto durante o arrasto */
     };
     const endDrag = () => {
+      if (!pressed) return;
+      pressed = false;
       if (!dragging) return;
       dragging = false;
       nav.classList.remove("is-dragging");
-      /* Um arrasto de verdade não deve disparar o link sob o cursor. */
-      if (moved > 6) {
-        const swallow = (e) => { e.preventDefault(); e.stopPropagation(); };
-        nav.addEventListener("click", swallow, { capture: true, once: true });
-        window.setTimeout(() => nav.removeEventListener("click", swallow, { capture: true }), 0);
-      }
+      /* Marca o instante: o clique que vem logo depois de um arrasto de
+       * verdade é ignorado pelo próprio link (ver onNavClick), sem depender de
+       * um listener de captura correndo contra o disparo do clique. */
+      if (dragEndRef) dragEndRef.current = Date.now();
     };
     /* Roda vertical sobre a barra = andar de lado, como no macOS. */
     const onWheel = (event) => {
@@ -343,8 +348,31 @@ const DossierHUDNav = ({ active, onJump }) => {
   const lastTouchRef = React.useRef(0);
   const markInteraction = React.useCallback(() => { lastTouchRef.current = Date.now(); }, []);
 
-  useNavGestures(navRef, markInteraction);
-  useNavGestures(bottomNavRef, markInteraction);
+  /* Instante em que um arrasto terminou: o clique disparado logo depois não
+   * deve navegar (o usuário estava rolando a barra, não escolhendo a seção). */
+  const dragEndRef = React.useRef(0);
+  useNavGestures(navRef, markInteraction, dragEndRef);
+  useNavGestures(bottomNavRef, markInteraction, dragEndRef);
+
+  /* Navegação explícita, em vez de depender do salto do href="#id": assim dá
+   * para descontar a altura da barra fixa (senão o título da seção fica
+   * escondido atrás dela) e para ignorar o clique que vem de um arrasto. */
+  const onNavClick = React.useCallback((event, id) => {
+    if (Date.now() - dragEndRef.current < 250) { event.preventDefault(); return; }
+    const target = document.getElementById(id);
+    if (!target) return; /* sem o alvo, deixa o href fazer o trabalho */
+    event.preventDefault();
+    setOpen(false);
+    onJump && onJump(id);
+    const hud = document.querySelector(".dossier-hud");
+    const offset = hud && window.getComputedStyle(hud).display !== "none" ? hud.getBoundingClientRect().height + 12 : 12;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    try { window.scrollTo({ top: Math.max(0, top), behavior: reduce ? "auto" : "smooth" }); }
+    catch (e) { window.scrollTo(0, Math.max(0, top)); }
+    /* Mantém o endereço compartilhável sem provocar um segundo salto. */
+    try { window.history.replaceState(null, "", "#" + id); } catch (e) { /* file:// */ }
+  }, [onJump]);
   useNavEdgeHints(navRef);
   useNavEdgeHints(bottomNavRef);
 
@@ -385,10 +413,7 @@ const DossierHUDNav = ({ active, onJump }) => {
                 href={`#${n.id}`}
                 className={active === n.id ? "active" : ""}
                 aria-current={active === n.id ? "location" : undefined}
-                onClick={() => {
-                  setOpen(false);
-                  onJump && onJump(n.id);
-                }}
+                onClick={(event) => onNavClick(event, n.id)}
               >
                 <span>{n.k}</span>{window.__t ? window.__t("nav." + n.id, n.label) : n.label}
               </a>
@@ -404,10 +429,7 @@ const DossierHUDNav = ({ active, onJump }) => {
             key={`bottom-${n.id}`}
             href={`#${n.id}`}
             className={active === n.id ? "active" : ""}
-            onClick={() => {
-              setOpen(false);
-              onJump && onJump(n.id);
-            }}
+            onClick={(event) => onNavClick(event, n.id)}
           >
             <span>{n.k}</span>{window.__t ? window.__t("nav." + n.id, n.label) : n.label}
           </a>
