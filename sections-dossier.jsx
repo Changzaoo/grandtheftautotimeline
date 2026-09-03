@@ -225,14 +225,22 @@ const DossierHUDNav = ({ active, onJump }) => {
   /* A aba da seção em que o usuário está fica em destaque E visível: quando
    * `active` muda, o menu horizontal rola até centralizar o item ativo. */
   const navRef = React.useRef(null);
+  const bottomNavRef = React.useRef(null);
   React.useEffect(() => {
-    const nav = navRef.current;
-    if (!nav || !active) return;
-    const el = nav.querySelector("a.active");
-    if (!el || nav.scrollWidth <= nav.clientWidth) return;
-    const left = el.offsetLeft - (nav.clientWidth - el.offsetWidth) / 2;
+    if (!active) return;
     const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    try { nav.scrollTo({ left: Math.max(0, left), behavior: reduce ? "auto" : "smooth" }); } catch (e) { nav.scrollLeft = Math.max(0, left); }
+    /* Centraliza o item ativo nas DUAS barras: a do topo (desktop) e a de
+     * baixo (mobile). Ambas rolam na horizontal e a de baixo fica visível o
+     * tempo todo no celular — sem isto, a seção atual sai de vista. */
+    for (const nav of [navRef.current, bottomNavRef.current]) {
+      if (!nav) continue;
+      const el = nav.querySelector("a.active");
+      if (!el || nav.scrollWidth <= nav.clientWidth) continue;
+      const left = el.offsetLeft - (nav.clientWidth - el.offsetWidth) / 2;
+      const target = Math.max(0, Math.min(left, nav.scrollWidth - nav.clientWidth));
+      try { nav.scrollTo({ left: target, behavior: reduce ? "auto" : "smooth" }); }
+      catch (e) { nav.scrollLeft = target; }
+    }
   }, [active]);
   const jumpToTop = () => {
     onJump && onJump("overview");
@@ -266,7 +274,7 @@ const DossierHUDNav = ({ active, onJump }) => {
           <button className="dossier-menu" onClick={() => setOpen((v) => !v)} aria-label="Abrir menu">☰</button>
         </div>
       </header>
-      <nav className="dossier-bottom-nav dossier-shell" aria-label="Menu">
+      <nav ref={bottomNavRef} className="dossier-bottom-nav dossier-shell" aria-label="Menu">
         {navItems.map((n) => (
           <a
             key={`bottom-${n.id}`}
@@ -2156,7 +2164,10 @@ const cityUniverseLanes = [
     id: "hd",
     label: "HD Universe",
     note: "continuidade moderna",
-    cities: ["liberty-city", "vice-city", "san-andreas", "los-santos", "blaine-county", "north-yankton", "leonida"]
+    /* Era HD termina em GTA VI: além de Leonida (o estado), cada região
+     * confirmada pela Rockstar tem pino próprio. */
+    cities: ["liberty-city", "vice-city", "san-andreas", "los-santos", "blaine-county", "north-yankton",
+      "leonida", "vi-vice-city", "vi-leonida-keys", "vi-grassrivers", "vi-port-gellhorn", "vi-ambrosia", "vi-mount-kalaga"]
   }
 ];
 

@@ -8,7 +8,7 @@ const PUBLIC = path.join(ROOT, "public");
 const DIST = path.join(PUBLIC, "dist");
 const VENDOR = path.join(PUBLIC, "vendor");
 
-const STATIC_FILES = ["index.html", "styles.css", "theme-neo.css", "theme-vi.css"];
+const STATIC_FILES = ["index.html", "styles.css", "theme-neo.css", "theme-vi.css", "theme-glass.css"];
 const STATIC_DIRS = ["assets", "i18n", "live"];
 
 const { SOURCES, JSX_AUTOTEXT_FILES } = require("./sources.js");
@@ -109,7 +109,7 @@ function stampIndexHtml(version){
   const idx = path.join(PUBLIC, "index.html");
   if (!fs.existsSync(idx)) return;
   let html = fs.readFileSync(idx, "utf8");
-  const assets = ["styles.css", "theme-neo.css", "theme-vi.css", "dist/app.bundle.js"];
+  const assets = ["styles.css", "theme-neo.css", "theme-vi.css", "theme-glass.css", "dist/app.bundle.js"];
   for (const a of assets){
     const esc = a.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     html = html.replace(new RegExp('("' + esc + ')(\\?v=[^"]*)?(")', "g"), '$1?v=' + version + '$3');

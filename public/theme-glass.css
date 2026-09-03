@@ -1,0 +1,292 @@
+/* ============================================================================
+ * THEME-GLASS — acabamento "vidro Apple" refinado
+ * ----------------------------------------------------------------------------
+ * Carregado DEPOIS de styles.css, theme-neo.css e theme-vi.css: é a última
+ * camada da cascata, então refina as superfícies sem reescrever as anteriores.
+ *
+ * O que esta camada faz:
+ *   01. Tokens de vidro (blur, saturação, hairline, sombra em duas alturas)
+ *   02. Barra do topo mais fina e translúcida (desktop) + navegação em pílulas
+ *   03. Barra inferior (mobile) com a mesma linguagem
+ *   04. Scrollbars: invisíveis nos menus, discreta na página
+ *   05. Legendas de crédito sobre as imagens: fora da vista, mantidas para
+ *       leitores de tela (a atribuição continua no DOM)
+ *   06. Cards, painéis, filtros, modais, chips e botões em vidro
+ *   07. Foco visível (acessibilidade) e reduced-motion
+ *
+ * Princípio do vidro Apple: fundo translúcido + blur com saturação, UMA borda
+ * hairline clara no topo, sombra difusa e ampla, raio generoso. Nada de brilho
+ * neon adicional — a luz vem do fundo atravessando o material.
+ * ========================================================================== */
+
+/* ---------------------------------------------------------------- 01. tokens */
+:root{
+  --glass-blur:22px;
+  --glass-blur-strong:34px;
+  --glass-sat:1.5;
+  --glass-fill:rgba(28,14,46,.52);
+  --glass-fill-2:rgba(20,10,36,.42);
+  --glass-fill-solid:rgba(16,7,32,.86);
+  --glass-hairline:rgba(255,255,255,.14);
+  --glass-hairline-soft:rgba(255,255,255,.08);
+  --glass-inner-top:inset 0 1px 0 rgba(255,255,255,.16);
+  --glass-shadow:0 18px 44px -22px rgba(4,0,16,.78), 0 2px 10px -4px rgba(4,0,16,.5);
+  --glass-shadow-lg:0 42px 90px -36px rgba(4,0,16,.86), 0 8px 26px -12px rgba(4,0,16,.6);
+  --glass-radius:18px;
+  --glass-radius-sm:12px;
+}
+
+/* Superfície de vidro reutilizável (mixin manual — CSS puro, sem pré-processador). */
+.dossier-hud,
+.dossier-bottom-nav,
+.dossier-hero-panel,
+.dossier-stat,
+.card,
+.dossier-filterbar input,
+.dossier-filterbar select,
+.vi-lang-btn,
+.vi-lang-menu,
+.dossier-back-top,
+.dossier-modal,
+.modal{
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat));
+  backdrop-filter:blur(var(--glass-blur)) saturate(var(--glass-sat));
+}
+
+/* -------------------------------------------- 02. barra do topo (desktop) */
+/* Mais fina: a barra ocupava ~84px de altura; agora fica em torno de 56px. */
+.dossier-hud{
+  background:linear-gradient(180deg,rgba(30,14,50,.62),rgba(14,6,30,.5));
+  border-bottom:1px solid var(--glass-hairline-soft);
+  box-shadow:var(--glass-shadow);
+}
+.dossier-hud::after{opacity:.35} /* filete neon herdado: só um realce */
+
+.dossier-hud-inner{
+  gap:16px;
+  padding:8px 22px;
+  min-height:56px;
+  align-items:center;
+}
+.dossier-brand-logo{height:34px}
+
+.dossier-hud nav{
+  gap:6px;
+  padding:3px;
+  border-radius:999px;
+  border:1px solid var(--glass-hairline-soft);
+  background:var(--glass-fill-2);
+  box-shadow:var(--glass-inner-top);
+}
+.dossier-hud nav a{
+  padding:7px 13px;
+  font-size:11px;
+  line-height:1.1;
+  border:1px solid transparent;
+  border-radius:999px;
+  background:transparent;
+  color:var(--bone-2);
+  white-space:nowrap;
+  transition:background .22s ease, color .22s ease, box-shadow .22s ease;
+}
+.dossier-hud nav a span{font-size:9px;opacity:.7}
+.dossier-hud nav a:hover{
+  transform:none; /* o vidro reage com luz, não com deslocamento */
+  background:rgba(255,255,255,.09);
+  border-color:var(--glass-hairline-soft);
+  color:#fff;
+  box-shadow:none;
+}
+/* Item ativo: pastilha clara sobre o vidro, como no segmented control do iOS. */
+.dossier-hud nav a.active{
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.86));
+  border-color:transparent;
+  color:#1a0a20;
+  box-shadow:0 1px 2px rgba(4,0,16,.35), 0 6px 16px -8px rgba(4,0,16,.6);
+}
+.dossier-hud nav a.active span{color:#5c3050;opacity:.9}
+
+.dossier-menu{
+  width:40px;height:40px;font-size:19px;
+  border:1px solid var(--glass-hairline);
+  background:var(--glass-fill-2);
+  box-shadow:var(--glass-inner-top);
+}
+
+/* ---------------------------------------- 03. barra inferior (mobile) */
+.dossier-bottom-nav{
+  background:linear-gradient(180deg,rgba(24,10,44,.6),rgba(10,4,24,.78));
+  border-top:1px solid var(--glass-hairline-soft);
+  box-shadow:0 -18px 44px -20px rgba(4,0,16,.85);
+  scroll-behavior:smooth;
+  scroll-padding-inline:44px; /* item ativo nunca encosta na borda ao rolar */
+}
+.dossier-bottom-nav a{
+  border:1px solid transparent;
+  background:rgba(255,255,255,.05);
+  color:var(--bone-2);
+}
+.dossier-bottom-nav a.active{
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(255,255,255,.86));
+  border-color:transparent;color:#1a0a20;
+  box-shadow:0 1px 2px rgba(4,0,16,.4);
+}
+.dossier-bottom-nav a.active span{color:#5c3050}
+
+/* ------------------------------------------------------- 04. scrollbars */
+/* Menus: barra totalmente invisível — a posição é comunicada pelo item ativo,
+ * que a própria navegação centraliza ao rolar a página. */
+.dossier-hud nav,
+.dossier-bottom-nav,
+.dossier-chip-row,
+.vi-lang-menu,
+.vi-gallery{
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+.dossier-hud nav::-webkit-scrollbar,
+.dossier-bottom-nav::-webkit-scrollbar,
+.dossier-chip-row::-webkit-scrollbar,
+.vi-lang-menu::-webkit-scrollbar,
+.vi-gallery::-webkit-scrollbar{width:0;height:0;display:none}
+
+/* Página: barra discreta, sem trilho pintado nem setas — o traço aparece só
+ * como um filete de vidro. */
+html{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.22) transparent}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent;border:0;box-shadow:none}
+::-webkit-scrollbar-corner{background:transparent}
+::-webkit-scrollbar-button{display:none;width:0;height:0;background:transparent}
+::-webkit-scrollbar-thumb{
+  border:3px solid transparent;
+  border-radius:999px;
+  background:rgba(255,255,255,.2);
+  background-clip:content-box;
+  box-shadow:none;
+}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.34);background-clip:content-box}
+::-webkit-scrollbar-thumb:horizontal{
+  border:3px solid transparent;border-radius:999px;
+  background:rgba(255,255,255,.2);background-clip:content-box;box-shadow:none;
+}
+
+/* --------------------------------- 05. legenda de crédito sobre as imagens */
+/* Pedido: nenhuma legenda por cima das fotos. O texto continua no DOM para
+ * leitores de tela e para a atribuição das fontes — apenas sai da vista. */
+.official-media figcaption{
+  position:absolute;
+  width:1px;height:1px;
+  margin:-1px;padding:0;border:0;
+  clip:rect(0 0 0 0);
+  clip-path:inset(50%);
+  overflow:hidden;white-space:nowrap;
+  background:transparent;box-shadow:none;
+}
+
+/* ------------------------------------- 06. cards, painéis, filtros, modais */
+.card,
+.dossier-hero-panel,
+.dossier-stat{
+  border:1px solid var(--glass-hairline-soft);
+  border-radius:var(--glass-radius);
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
+  box-shadow:var(--glass-shadow), var(--glass-inner-top);
+}
+.card:hover{
+  transform:translateY(-2px);
+  border-color:var(--glass-hairline);
+  box-shadow:var(--glass-shadow-lg), var(--glass-inner-top);
+}
+/* Cantos de "dossiê" ficam sutis: no vidro eles competiam com a hairline. */
+.card .corner{opacity:.18}
+
+.dossier-filterbar input,
+.dossier-filterbar select{
+  border:1px solid var(--glass-hairline-soft);
+  border-radius:var(--glass-radius-sm);
+  background:var(--glass-fill-2);
+  color:var(--bone);
+  box-shadow:var(--glass-inner-top);
+}
+.dossier-filterbar input::placeholder{color:rgba(233,231,223,.42)}
+.dossier-filterbar input:focus,
+.dossier-filterbar select:focus{
+  outline:none;
+  border-color:rgba(255,255,255,.3);
+  box-shadow:0 0 0 3px rgba(255,255,255,.1), var(--glass-inner-top);
+}
+
+.dossier-modal,
+.modal{
+  border:1px solid var(--glass-hairline);
+  border-radius:22px;
+  background:var(--glass-fill-solid);
+  box-shadow:var(--glass-shadow-lg), var(--glass-inner-top);
+  -webkit-backdrop-filter:blur(var(--glass-blur-strong)) saturate(var(--glass-sat));
+  backdrop-filter:blur(var(--glass-blur-strong)) saturate(var(--glass-sat));
+}
+
+.tag,
+.vi-badge,
+.dossier-chip-row span{
+  border-radius:999px;
+  border-color:var(--glass-hairline-soft);
+  background:rgba(255,255,255,.06);
+}
+
+.vi-lang-btn,
+.vi-lang-menu{
+  border:1px solid var(--glass-hairline-soft);
+  border-radius:16px;
+  background:var(--glass-fill);
+  box-shadow:var(--glass-shadow), var(--glass-inner-top);
+}
+.vi-lang-btn{border-radius:999px}
+
+.dossier-back-top{
+  border:1px solid var(--glass-hairline);
+  background:var(--glass-fill);
+  box-shadow:var(--glass-shadow), var(--glass-inner-top);
+}
+
+.btn,
+.vi-btn{border-radius:999px}
+
+/* ------------------------------------------- 07. foco e reduced-motion */
+:where(a,button,input,select,textarea):focus-visible{
+  outline:2px solid rgba(255,255,255,.75);
+  outline-offset:2px;
+  border-radius:999px;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .dossier-bottom-nav{scroll-behavior:auto}
+  .card:hover{transform:none}
+}
+
+/* Sem suporte a backdrop-filter (Firefox antigo): fundo sólido equivalente,
+ * senão o texto ficaria sobre um fundo quase transparente. */
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  .dossier-hud,
+  .dossier-bottom-nav,
+  .dossier-modal,
+  .modal,
+  .vi-lang-menu{background:rgba(14,6,30,.96)}
+  .card,
+  .dossier-hero-panel,
+  .dossier-stat{background:rgba(26,14,44,.9)}
+}
+
+/* -------------------------------------------------------- responsivo */
+@media (max-width:980px){
+  .dossier-hud-inner{padding:8px 16px;gap:12px}
+  .dossier-hud nav a{padding:6px 11px;font-size:10.5px}
+}
+@media (max-width:680px){
+  /* A barra de baixo é a navegação principal no celular. */
+  .dossier-bottom-nav{padding:8px 10px calc(8px + env(safe-area-inset-bottom))}
+  .dossier-bottom-nav a{min-height:48px;padding:8px 12px}
+  .card,
+  .dossier-hero-panel,
+  .dossier-stat{border-radius:var(--glass-radius-sm)}
+}

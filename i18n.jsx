@@ -293,8 +293,10 @@ function i18nApplyData() {
         try { i18nDataOriginals[n] = JSON.parse(JSON.stringify(i18nData[n])); } catch (e) {}
       }
     }
-    var pt = window.__lang === i18nDefaultLang;
-    var tr = pt ? function (s) { return s; } : i18nTr;
+    /* Mesmo em pt-BR traduzimos: o catálogo pt-BR contém só as chaves do
+     * conteúdo vindo do GTA Wiki (inglês). Texto que já nasce em português não
+     * tem chave e volta intacto pelo fallback do __t. */
+    var tr = i18nTr;
     for (var g in i18nData) {
       if (!Object.prototype.hasOwnProperty.call(i18nData, g)) continue;
       if (i18nDataOriginals[g]) i18nWalkInto(i18nData[g], i18nDataOriginals[g], null, tr);

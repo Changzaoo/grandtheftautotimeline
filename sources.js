@@ -11,6 +11,8 @@ const SOURCES = [
   "data-vi.jsx",
   "data-easter-eggs.jsx",
   "data-mysteries.jsx",
+  "data-vi-bridge-generated.js",
+  "data-vi-bridge.jsx",
   "i18n.jsx",
   "sections-1.jsx",
   "sections-2.jsx",

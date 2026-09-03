@@ -26,6 +26,8 @@ jobs:
           node-version: 20
       - name: Atualizar catálogo de GTA VI (GTA Wiki)
         run: node scripts/build-vi-catalog.js
+      - name: Regenerar a ponte GTA VI -> dossiê
+        run: node scripts/build-vi-bridge.js
       - name: Instalar dependências (build + i18n)
         run: npm install --no-audit --no-fund
       - name: Traduzir o conteúdo novo do catálogo
@@ -39,7 +41,7 @@ jobs:
         run: |
           git config user.name "gta-dossie-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add live/ i18n/parts/ i18n/*.content.js
+          git add live/ i18n/parts/ i18n/*.content.js data-vi-bridge-generated.js
           if git diff --cached --quiet; then
             echo "Nada mudou."
           else

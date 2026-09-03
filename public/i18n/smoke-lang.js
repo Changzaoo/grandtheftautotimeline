@@ -9,6 +9,10 @@ const fs = require("fs");
 const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const code = process.argv[2] || "en";
+/* pt-BR é o idioma-FONTE do site: nada da UI deve mudar. O que se verifica
+ * nele é o conteúdo vindo do GTA Wiki em inglês (catálogo ao vivo e a ponte
+ * de GTA VI), que precisa aparecer em português. */
+const isSource = code === "pt-BR";
 
 const noop = () => {};
 const proxyNoop = new Proxy(function () {}, { get: () => proxyNoop, apply: () => proxyNoop, construct: () => proxyNoop });
@@ -82,18 +86,18 @@ assert(window.__lang === code, `__lang == "${code}"`);
 const registered = Object.keys(window.__i18nData || {}).length;
 assert(registered > 20, `registro de dados com ${registered} coleções`);
 const uniTranslated = universes.filter((u, i) => u.description && u.description !== universesPt[i]).length;
-assert(uniTranslated > 0, `conteúdo dos dados traduzido (${uniTranslated}/${universes.length} universos)`);
+if (!isSource) assert(uniTranslated > 0, `conteúdo dos dados traduzido (${uniTranslated}/${universes.length} universos)`);
 
 const html = ReactDOMServer.renderToString(captured);
 assert(html.length > 100000, "HTML substancial (" + html.length + " chars)");
-assert(html !== htmlPt, "HTML mudou em relação ao pt-BR");
+if (!isSource) assert(html !== htmlPt, "HTML mudou em relação ao pt-BR");
 
 /* 2. Texto do JSX envolvido automaticamente pelo plugin. */
 const jsxProbe = window.__T("c" + window.__i18nHash("Ordem de lançamento"), "Ordem de lançamento");
-assert(jsxProbe !== "Ordem de lançamento", `texto do JSX traduzido ("${jsxProbe}")`);
+if (!isSource) assert(jsxProbe !== "Ordem de lançamento", `texto do JSX traduzido ("${jsxProbe}")`);
 
 /* 3. Conteúdo dos dados traduzido de fato dentro da árvore renderizada. */
-const ptLeftovers = ["Ordem de lançamento", "Abrir dossiê", "Nome, cidade, protagonista"]
+const ptLeftovers = isSource ? [] : ["Ordem de lançamento", "Abrir dossiê", "Nome, cidade, protagonista"]
   .filter((t) => html.includes(t));
 assert(ptLeftovers.length === 0, "sem texto pt-BR remanescente na UI" + (ptLeftovers.length ? ": " + ptLeftovers.join(" | ") : ""));
 
@@ -101,7 +105,7 @@ assert(ptLeftovers.length === 0, "sem texto pt-BR remanescente na UI" + (ptLefto
  * texto pt-BR de origem. Sem isso, "story"/"side" parariam de casar. */
 const summariesNow = missionsData.map((m) => m.summary).filter((x) => typeof x === "string");
 const changedSum = summariesNow.filter((t, i) => t !== summariesPt[i]).length;
-assert(changedSum > 0, `campo summary traduzido (${changedSum}/${summariesNow.length})`);
+if (!isSource) assert(changedSum > 0, `campo summary traduzido (${changedSum}/${summariesNow.length})`);
 const backOk = summariesNow.filter((t, i) => window.__PT(t) === summariesPt[i]).length;
 assert(backOk === summariesNow.length, `__PT reconstrói o texto de origem (${backOk}/${summariesNow.length})`);
 
@@ -114,6 +118,21 @@ if (code !== "en" && fs.existsSync(catalogPath)) {
   const changed = tr.items.filter((it, i) => it.desc && it.desc !== raw.items[i].desc).length;
   assert(changed > 0, `JSON ao vivo traduzido (${changed}/${raw.items.length} descrições)`);
 }
+
+/* 6. Ponte de GTA VI: as fichas vindas do GTA Wiki (texto em inglês) precisam
+ * sair traduzidas em TODOS os idiomas — inclusive no pt-BR, que é a fonte do
+ * resto do site mas não desse conteúdo. */
+const viChars = ((window.__i18nData || {}).charactersData || []).filter((c) => c.category === "GTA VI");
+assert(viChars.length > 0, `fichas de GTA VI presentes no dossiê (${viChars.length})`);
+if (viChars.length && code !== "en") {
+  const looksEnglish = (t) => / (is|are|was|were|of the) /i.test(String(t || ""));
+  const stillEnglish = viChars.filter((c) => looksEnglish(c.biography)).length;
+  assert(stillEnglish === 0, `fichas de GTA VI traduzidas (${viChars.length - stillEnglish}/${viChars.length})`);
+}
+
+/* 7. As regiões de Leonida entraram nas cidades do dossiê. */
+const viCities = ((window.__i18nData || {}).citiesData || []).filter((c) => String(c.id).indexOf("vi-") === 0);
+assert(viCities.length >= 6, `regiões de Leonida nas cidades (${viCities.length})`);
 
 console.log(bad ? "\nSMOKE-LANG FALHOU (" + code + ")" : "\nSMOKE-LANG OK (" + code + ")");
 process.exit(bad ? 1 : 0);

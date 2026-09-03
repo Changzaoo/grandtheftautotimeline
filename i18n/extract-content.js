@@ -92,6 +92,13 @@ const liveSorted = {}; for (const k of liveKeys) liveSorted[k] = liveOut[k];
 fs.writeFileSync(path.join(__dirname, "_live.json"), JSON.stringify(liveSorted, null, 0), "utf8");
 console.log("JSON ao vivo:", liveKeys.length, "chaves ·", liveKeys.reduce((a, k) => a + liveOut[k].length, 0), "caracteres (fonte em inglês)");
 
+/* Chaves que também existem no conteúdo ao vivo saem do mapa pt: a fonte
+ * delas é o GTA Wiki, em inglês (o bridge de GTA VI traz esse texto para
+ * dentro dos dados do bundle). Traduzir com origem pt estragaria o resultado. */
+let movedToLive = 0;
+for (const k of Object.keys(liveOut)) if (k in out) { delete out[k]; movedToLive++; }
+if (movedToLive) console.log("Chaves com fonte em inglês movidas para _live.json:", movedToLive);
+
 const keys = Object.keys(out);
 console.log("Globais de dados:", globalsHit.length, "·", dataHits, "ocorrências ·", dataKeys, "chaves únicas");
 console.log("Textos JSX:", jsxCollect.size, "chaves (" + (keys.length - dataKeys) + " novas além dos dados)");
