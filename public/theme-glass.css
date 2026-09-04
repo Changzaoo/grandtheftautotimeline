@@ -139,7 +139,8 @@
  * pan-x` deixa claro para o navegador que o gesto horizontal é da barra e o
  * vertical continua sendo da página — sem isso o dedo trava entre os dois. */
 .dossier-hud nav,
-.dossier-bottom-nav{
+.dossier-bottom-nav,
+.vi-gallery{
   overflow-x:auto;
   overflow-y:hidden;
   touch-action:pan-x;
@@ -148,13 +149,16 @@
   cursor:grab;
 }
 .dossier-hud nav.is-dragging,
-.dossier-bottom-nav.is-dragging{
+.dossier-bottom-nav.is-dragging,
+.vi-gallery.is-dragging{
   cursor:grabbing;
   scroll-behavior:auto;               /* durante o arrasto, resposta imediata */
+  scroll-snap-type:none;              /* o encaixe brigaria com o arrasto */
   user-select:none;
 }
 .dossier-hud nav.is-dragging a,
-.dossier-bottom-nav.is-dragging a{pointer-events:none}
+.dossier-bottom-nav.is-dragging a,
+.vi-gallery.is-dragging a{pointer-events:none}
 
 /* Com a scrollbar invisível, a borda esfumaçada é o que avisa que há mais
  * itens para aquele lado. As classes vêm do JS conforme a posição. */
@@ -164,17 +168,20 @@
   mask-image:none;
 }
 .dossier-hud nav.has-more-end,
-.dossier-bottom-nav.has-more-end{
+.dossier-bottom-nav.has-more-end,
+.vi-gallery.has-more-end{
   -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 46px),transparent 100%);
   mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 46px),transparent 100%);
 }
 .dossier-hud nav.has-more-start,
-.dossier-bottom-nav.has-more-start{
+.dossier-bottom-nav.has-more-start,
+.vi-gallery.has-more-start{
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 46px,#000 100%);
   mask-image:linear-gradient(90deg,transparent 0,#000 46px,#000 100%);
 }
 .dossier-hud nav.has-more-start.has-more-end,
-.dossier-bottom-nav.has-more-start.has-more-end{
+.dossier-bottom-nav.has-more-start.has-more-end,
+.vi-gallery.has-more-start.has-more-end{
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 46px,#000 calc(100% - 46px),transparent 100%);
   mask-image:linear-gradient(90deg,transparent 0,#000 46px,#000 calc(100% - 46px),transparent 100%);
 }

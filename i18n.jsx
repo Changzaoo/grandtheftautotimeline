@@ -147,7 +147,7 @@ window.__PT = function (v) {
 
 /* Campos de EXIBIÇÃO traduzidos (allowlist — o resto passa intacto). */
 var I18N_TR_FIELDS = new Set([
-  "name","nick","title","subtitle","heading","headline","subhead","kicker","lead","body",
+  "title","subtitle","heading","headline","subhead","kicker","lead","body",
   "summary","description","desc","overview","intro","importance","biography","bio",
   "storyArc","fate","role","details","detail","impact","contributions","narrativeImportance",
   "uncertainty","fullStory","developmentHistory","precisionNotes","relationships","totalLabel",
@@ -169,6 +169,11 @@ var I18N_TR_FIELDS = new Set([
 ]);
 /* Campos NUNCA traduzidos (lógica, ids, URLs, mídia, datas). Vence a allowlist. */
 var I18N_SKIP_FIELDS = new Set([
+  /* NOMES PRÓPRIOS não se traduzem. "Leonida Keys" virava "Leonida Chaves" e
+   * "Grassrivers" virava "Rios de grama" — além de errado, quebrava buscas e
+   * casamentos por nome (a foto de cada região deixava de ser encontrada).
+   * É também como a própria Rockstar localiza: topônimos e personagens ficam. */
+  "name","nick",
   "id","gameId","url","src","href","image","page","pageTitle","apiPage","sourcePage",
   "officialSource","color","grad","icon","key","code","lang","editedAt","date","releaseDate",
   "releaseYear","year","dateLabel","priceBR","universe","tone","group","capacity"

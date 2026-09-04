@@ -235,10 +235,14 @@ const VIHero = () => {
  * deixamos o degradê como fundo/fallback. */
 const viNormName = (s) => String(s || "").toLowerCase().normalize("NFD")
   .replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
-const viMediaFor = (kind, name) => {
+/* A busca usa o ID (estável) antes do nome exibido: o nome pode estar
+ * traduzido na tela, e aí não casaria com o do wiki. */
+const viMediaFor = (kind, name, id) => {
   const map = window.VI_BRIDGE && window.VI_BRIDGE.media && window.VI_BRIDGE.media[kind];
-  if (!map || !name) return null;
-  const key = viNormName(name);
+  if (!map) return null;
+  const fromId = id ? viNormName(String(id).replace(/^vi-/, "").replace(/-/g, " ")) : "";
+  const key = fromId && map[fromId] ? fromId : viNormName(name);
+  if (!key) return null;
   if (map[key]) return map[key];
   /* "Mount Kalaga National Park" no wiki x "Mount Kalaga" no texto curado. */
   const hit = Object.keys(map).find((k) => k.indexOf(key) === 0 || key.indexOf(k) === 0);
@@ -249,7 +253,7 @@ const viMediaFor = (kind, name) => {
 const VICharPanel = ({ character, index }) => {
   const flip = index % 2 === 1;
   const palette = character.palette || { a: "#ff3d8a", b: "#3c1361" };
-  const photo = character.media || viMediaFor("characters", character.name);
+  const photo = character.media || viMediaFor("characters", character.name, character.id);
   return (
     <article
       className={`card vi-char-panel${flip ? " vi-char-panel--flip" : ""}`}
@@ -320,7 +324,7 @@ const VICharactersSection = () => {
 /* ============ 3. LUGARES (id="vi-places") ============ */
 const VIPolaroid = ({ place, index }) => {
   const grad = place.grad || ["#ff9a3d", "#ff3d8a", "#5b2a86"];
-  const photo = place.media || viMediaFor("locations", place.name);
+  const photo = place.media || viMediaFor("locations", place.name, place.id);
   const rotation = `${(index % 2 === 0 ? -1 : 1) * (1 + (index % 3) * 0.6)}deg`;
   return (
     <figure className="vi-polaroid" role="listitem" style={{ "--vi-rot": rotation }}>
@@ -345,7 +349,17 @@ const VIPolaroid = ({ place, index }) => {
   );
 };
 
+/* As barras de navegação e esta galeria compartilham o mesmo comportamento;
+ * os hooks vivem em sections-dossier.jsx, que vem antes no bundle. Resolvidos
+ * uma vez aqui para não chamar hook dentro de condição. */
+const viUseGestures = typeof useNavGestures === "function" ? useNavGestures : () => {};
+const viUseEdgeHints = typeof useNavEdgeHints === "function" ? useNavEdgeHints : () => {};
+
 const VIPlacesSection = () => {
+  const galleryRef = React.useRef(null);
+  const noop = React.useCallback(() => {}, []);
+  viUseGestures(galleryRef, noop);
+  viUseEdgeHints(galleryRef);
   const places = viData().places || {};
   const intro = places.intro;
   const list = places.list || [];
@@ -369,7 +383,10 @@ const VIPlacesSection = () => {
             <span className="vi-badge">{__TT("vi", intro.id, "vibe", intro.vibe)}</span>
           </div>
         )}
-        <div className="vi-gallery" role="list" aria-label={__T("vi.places.gallery-aria", "Galeria de regiões de Leonida")}>
+        {/* Mesmo tratamento das barras de navegação: arrastar com o mouse,
+            roda do mouse andando de lado e sombra nas pontas avisando que há
+            mais regiões — a scrollbar aqui é invisível. */}
+        <div ref={galleryRef} className="vi-gallery" role="list" aria-label={__T("vi.places.gallery-aria", "Galeria de regiões de Leonida")}>
           {list.map((place, index) => (
             <VIPolaroid key={place.id} place={place} index={index} />
           ))}
