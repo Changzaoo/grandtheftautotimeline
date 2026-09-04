@@ -3,7 +3,9 @@
  * (live/vi-catalog.json, regenerado automaticamente pela GitHub Action):
  * veículos, armas, personagens, gangues, cidades/locais (inclusive fora de
  * Leonida, como o estado de Gloriana), marcas, fauna e rádios.
- * Só mostra imagens com "GTAVI" no nome do arquivo — nada de foto de outro jogo.
+ * Prioriza a arte de GTA VI; quando a ficha é de alguém/algo que volta de um
+ * jogo antigo e ainda não tem arte nova, o card mostra a foto antiga com o
+ * selo "FOTO DE <jogo>". Carro e arma nunca reaproveitam foto de outro jogo.
  */
 window.__T = window.__T || ((k, f) => (window.__t ? window.__t(k, f) : f));
 
@@ -66,6 +68,7 @@ const VICatalogCard = ({ item }) => (
       <div className="vi-cat-badges">
         <span className="vi-badge">{viCatLabel(item.group)}</span>
         {item.status === "mencionado" && <span className="vi-badge vi-badge--rumor">{__T("vi.cat.mentioned", "SÓ MENÇÃO")}</span>}
+        {item.imageGame && <span className="vi-badge" title={__T("vi.cat.legacy-photo-title", "A Rockstar ainda não divulgou arte desta ficha em GTA VI; a foto é do jogo indicado.")}>{__T("vi.cat.legacy-photo", "FOTO DE")} {item.imageGame}</span>}
         {item.leak && <span className="vi-badge vi-badge--incident" title={__T("vi.cat.leak-title", "A página cita material vazado; detalhes podem mudar até o lançamento.")}>{__T("vi.cat.leak", "CITA VAZAMENTO")}</span>}
       </div>
       <h4><a href={item.url} target="_blank" rel="noreferrer">{item.title}</a></h4>
@@ -121,7 +124,7 @@ const VICatalogSection = () => {
         <div className="card vi-cat-intro">
           <Corners />
           <p>
-            {__T("vi.cat.intro", "Personagens, gangues, carros, armas, marcas, animais, rádios e cada cidade, condado e bairro já revelado — de Vice City aos Leonida Keys e até o vizinho estado de Gloriana. Os verbetes vêm das categorias públicas do GTA Wiki e são reimportados pelo robô do site; só entram fotos rotuladas como GTA VI.")}
+            {__T("vi.cat.intro", "Personagens, gangues, carros, armas, marcas, animais, rádios e cada cidade, condado e bairro já revelado — de Vice City aos Leonida Keys e até o vizinho estado de Gloriana. Os verbetes vêm das categorias públicas do GTA Wiki e são reimportados pelo robô do site. As fotos são de GTA VI; quando só existe imagem antiga de quem volta de outro jogo, o card avisa com o selo “foto de”.")}
           </p>
           {data && data.generatedAt && <span className="vi-badge">{__T("vi.cat.generated", "Importado em")} {new Date(data.generatedAt).toLocaleDateString(window.__lang || "pt-BR", { day: "2-digit", month: "short", year: "numeric" })}</span>}
         </div>

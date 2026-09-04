@@ -43,7 +43,10 @@ const listFrom = (s) => clean(s).split(/\s*[,;]\s*|\s+e\s+/).map(clean).filter(B
  * material de build vazada não é fato do jogo. */
 const solid = (it) => it.status !== "mencionado" && !it.leak;
 
-const mediaOf = (it) => (it.image ? { src: it.image, alt: it.title, credit: "Imagem via GTA Wiki / Fandom", source: it.url } : null);
+/* Quando a foto vem de um jogo anterior (personagem/marca que volta), o crédito
+ * diz de onde ela é — o dossiê nunca insinua que é arte de GTA VI. */
+const creditFor = (it) => (it.imageGame ? `Imagem de ${it.imageGame} via GTA Wiki / Fandom` : "Imagem via GTA Wiki / Fandom");
+const mediaOf = (it) => (it.image ? { src: it.image, alt: it.title, credit: creditFor(it), source: it.url } : null);
 
 const characters = byGroup("characters").filter(solid).map((it) => {
   const m = it.meta || {};
@@ -105,7 +108,7 @@ const mediaMap = (group) => {
     out[normName(it.title)] = {
       src: it.image,
       alt: clean(it.title),
-      credit: "Imagem via GTA Wiki / Fandom",
+      credit: creditFor(it),
       source: it.url
     };
   }

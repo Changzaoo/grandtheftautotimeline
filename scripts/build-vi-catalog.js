@@ -4,9 +4,10 @@
  * rádios — e gera um JSON pronto para a seção "Catálogo de GTA VI" do site.
  *
  * Para cada página: ficha (infobox) + primeiro parágrafo + a MELHOR imagem
- * específica de GTA VI (arquivo com "GTAVI" no nome). Se a página só tem
- * imagem de outro jogo, o item fica sem foto — nunca mostramos um carro de
- * GTA Online como se fosse de GTA VI.
+ * (ver pickImage: primeiro arte de GTA VI, depois arquivo sem código de jogo
+ * na página exclusiva do item e, só para gente/marca que volta de outro jogo,
+ * a foto antiga marcada em imageGame). Carro e arma nunca usam foto de outro
+ * jogo — nunca mostramos um veículo de GTA Online como se fosse de GTA VI.
  *
  * Rodado pela GitHub Action (.github/workflows/vi-catalog.yml) e por `npm run catalog`.
  * Node 18+. Sem dependências. Só usa a API pública (api.php) do GTA Wiki.
@@ -147,20 +148,89 @@ function viStatus(fields, text) {
   if (/VI\s*=\s*y/i.test(g) || /\{\{VI\}\}/.test(text)) return "confirmado";
   return "confirmado";
 }
-/* Imagem: só arquivos com GTAVI no nome. Prioriza screenshot oficial/trailer. */
-function imageScore(name) {
-  const n = name.toLowerCase();
-  if (!/gtavi/.test(n)) return -1;
+/* ---------------------------------------------------------------- imagens
+ * Regra antiga: só arquivo com "GTAVI" colado no nome. Isso deixava 138 fichas
+ * com monograma, inclusive gente que o wiki fotografa com outra convenção
+ * ("GTA-VI-Andres-de-Leon.jpg") ou em página exclusiva de VI, onde o arquivo
+ * nem leva código de jogo ("Raymond Main image.png").
+ *
+ * Agora há três níveis, sempre nessa ordem de preferência:
+ *   1. arquivo marcado como GTA VI (GTAVI, GTA-VI, GTA VI…);
+ *   2. arquivo SEM código de jogo cujo nome começa pelo nome da ficha;
+ *   3. só para gente/marcas que voltam de outro jogo (Jack Howitzer), a foto
+ *      do jogo antigo — e aí o item carrega imageGame para a tela avisar.
+ * Carro e arma nunca caem no nível 3: o modelo muda de jogo para jogo. */
+const norm = (s) => String(s).toLowerCase().replace(/\.[a-z0-9]+$/, "").replace(/[^a-z0-9]+/g, "");
+/* Arquivos de interface que o wiki injeta em toda página. */
+const WIKI_CHROME = /^(site-?logo|invisiblehero|unknown|wikipedia-?logo|bleeter|lifeinvader|snapmatic|flag of|placeholder|noimage|no-image|wiki-?wordmark|favicon)/i;
+/* Código de jogo no nome do arquivo -> nome de tela. */
+const GAME_CODES = [
+  ["vi", "GTA VI"], ["v", "GTA V"], ["iv", "GTA IV"], ["iii", "GTA III"], ["sa", "GTA: San Andreas"],
+  ["vcs", "GTA: Vice City Stories"], ["lcs", "GTA: Liberty City Stories"], ["vc", "GTA: Vice City"],
+  ["cw", "GTA: Chinatown Wars"], ["oe", "GTA Online"], ["o", "GTA Online"], ["a", "GTA Advance"], ["2", "GTA 2"]
+];
+function gameOf(name) {
+  const n = String(name).toLowerCase();
+  if (/gta[\s_-]*vi(?![a-z0-9])/.test(n)) return "GTA VI";
+  const m = n.match(/gta[\s_-]*(vcs|lcs|iii|vi|iv|vc|sa|cw|oe|v|o|a|2)(?![a-z])/);
+  if (!m) return "";
+  const hit = GAME_CODES.find(([c]) => c === m[1]);
+  return hit ? hit[1] : "";
+}
+/* Marca e gangue se identificam PELO logotipo; pessoa, carro e lugar, não. */
+const LOGO_GROUPS = new Set(["businesses", "gangs", "radio"]);
+/* Nível 1/2: pontuação de quão boa é a foto para a ficha. 0 = não serve. */
+function imageScore(name, title, group) {
+  const n = String(name).toLowerCase();
+  if (WIKI_CHROME.test(n) || !/\.(png|jpe?g)$/.test(n)) return 0;
   /* Arte GENÉRICA do jogo (logo, capa, key art) não é imagem do item: o
    * Logo-GTAVI.png estava sendo usado como foto de 73 itens diferentes, o que
    * enchia o catálogo de cards idênticos. Rejeição dura, não desconto. */
-  if (/^logo-|-logo\.|^cover-|-cover\.|keyart|boxart|^artwork-gtavi\.|^gtavi\.(png|jpe?g)$/.test(n)) return -1;
-  let s = 10;
-  if (/portrait|frontquarter|front\b|-front/.test(n)) s += 8;
+  if (/^logo-|-logo\.|^cover-|-cover\.|keyart|boxart|^artwork-gtavi\.|^gtavi\.(png|jpe?g)$/.test(n)) return 0;
+  const game = gameOf(n);
+  const belongs = title && norm(n).indexOf(norm(title)) === 0;
+  let s;
+  const untagged = !game;
+  if (game === "GTA VI") s = 10;
+  else if (untagged && belongs) s = 6; /* página exclusiva de VI: arquivo sem código */
+  else return 0;
+  if (belongs) s += 3;
+  if (/portrait|frontquarter|front|-front/.test(n)) s += 8;
   if (/officialscreenshot|extendedlook|trailer|artwork|postcard|promotional/.test(n)) s += 5;
-  if (/map|logo|icon|sign|texture|badge|radar|hud|comparison|leak|beta/.test(n)) s -= 6;
-  if (/\.(png|jpg|jpeg)$/.test(n)) s += 1;
+  const junk = LOGO_GROUPS.has(group)
+    ? /map|icon|texture|radar|hud|comparison|leak|beta/
+    : /map|logo|icon|sign|texture|badge|radar|hud|comparison|leak|beta/;
+  if (junk.test(n)) s -= 6;
+  /* Arquivo sem código de jogo só entra se for claramente a foto principal:
+   * "Jack Howitzer Logo.png" perde para o retrato dele em GTA V. */
+  return s >= (untagged ? 6 : 1) ? s : 0;
+}
+/* Nível 3: retrato de outro jogo, só para quem é a MESMA entidade entre jogos. */
+const CROSS_GAME_GROUPS = new Set(["characters", "gangs", "businesses", "radio", "animals"]);
+function legacyScore(name, title, group) {
+  const n = String(name).toLowerCase();
+  if (WIKI_CHROME.test(n) || !/\.(png|jpe?g)$/.test(n)) return 0;
+  if (!title || norm(n).indexOf(norm(title)) !== 0) return 0; /* tem que ser a foto DELE */
+  const junk = LOGO_GROUPS.has(group)
+    ? /map|icon|texture|radar|hud|comparison|leak|beta|tattoo|poster|website|\.com-/
+    : /map|logo|icon|texture|badge|radar|hud|comparison|leak|beta|tattoo|poster|website|\.com-/;
+  if (junk.test(n)) return 0;
+  let s = 3;
+  if (/portrait/.test(n)) s += 8;
+  if (/artwork|render|screen/.test(n)) s += 2;
   return s;
+}
+/* Escolhe a melhor foto da página: níveis 1/2 primeiro, nível 3 só se sobrar nada. */
+function pickImage(candidates, title, group) {
+  const rank = (score) => candidates.map((n) => ({ n, s: score(n, title, group) })).filter((x) => x.s > 0)
+    .sort((a, b) => b.s - a.s)[0];
+  const best = rank(imageScore);
+  if (best) return { file: best.n, game: "" };
+  if (!CROSS_GAME_GROUPS.has(group)) return null;
+  const legacy = rank(legacyScore);
+  if (!legacy) return null;
+  const game = gameOf(legacy.n);
+  return game && game !== "GTA VI" ? { file: legacy.n, game } : null;
 }
 function infoboxImages(fields) {
   return ["image", "front_image", "front_image2", "image2", "logo", "sign", "map"].map((k) => fields[k]).filter(Boolean)
@@ -249,15 +319,17 @@ async function main() {
       const w = wikitext.get(p.title);
       if (!w) continue;
       const f = infobox(w.text);
+      const shortTitle = p.title.replace(/\s*\((HD|3D|2D) Universe\)$/i, "").replace(/\s*\(GTA [IVX]+\)$/i, "");
       const candidates = [...infoboxImages(f), ...(pageImages.get(p.title) || [])];
-      const best = candidates.map((n) => ({ n, s: imageScore(n) })).filter((x) => x.s > 0).sort((a, b) => b.s - a.s)[0];
-      if (best) wanted.add(best.n);
+      const best = pickImage(candidates, shortTitle, g.key);
+      if (best) wanted.add(best.file);
       const base = {
         group: g.key,
         title: p.title.replace(/\s*\((HD|3D|2D) Universe\)$/i, ""),
         pageTitle: p.title,
         url: `https://gta.fandom.com/wiki/${encodeURIComponent(p.title.replace(/ /g, "_"))}`,
-        imageFile: best ? best.n : "",
+        imageFile: best ? best.file : "",
+        imageGame: best ? best.game : "",
         desc: firstParagraph(w.text),
         status: viStatus(f, w.text),
         leak: /\bleak(ed|s)?\b/i.test(w.text),
@@ -315,6 +387,7 @@ async function main() {
   for (const it of items) {
     it.image = it.imageFile ? (urls.get(it.imageFile) || "") : "";
     delete it.imageFile;
+    if (!it.image || !it.imageGame) delete it.imageGame;
   }
 
   const counts = {};
@@ -326,12 +399,13 @@ async function main() {
   for (const it of items) if (it.image) useCount.set(it.image, (useCount.get(it.image) || 0) + 1);
   let dropped = 0;
   for (const it of items) {
-    if (it.image && useCount.get(it.image) > 5) { it.image = ""; dropped++; }
+    if (it.image && useCount.get(it.image) > 5) { it.image = ""; delete it.imageGame; dropped++; }
   }
   if (dropped) process.stdout.write(`  ! ${dropped} itens perderam imagem genérica (repetida em >5 fichas)
 `);
 
   const withImage = items.filter((i) => i.image).length;
+  const legacyImages = items.filter((i) => i.imageGame).length;
   const out = {
     generatedAt: new Date().toISOString(),
     source: "GTA Wiki (gta.fandom.com) — categorias públicas de GTA VI",
@@ -347,7 +421,7 @@ async function main() {
     return;
   }
   fs.writeFileSync(file, JSON.stringify(out) + "\n", "utf8");
-  process.stdout.write(`OK: ${items.length} itens (${withImage} com imagem de GTA VI) em ${((Date.now() - started) / 1000).toFixed(1)}s -> live/vi-catalog.json\n`);
+  process.stdout.write(`OK: ${items.length} itens (${withImage} com imagem, ${legacyImages} de jogo anterior) em ${((Date.now() - started) / 1000).toFixed(1)}s -> live/vi-catalog.json\n`);
 }
 
 main().catch((err) => { console.error(err); process.exit(1); });

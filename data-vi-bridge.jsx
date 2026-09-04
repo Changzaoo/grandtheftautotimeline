@@ -71,6 +71,21 @@
     "vi-ambrosia": ["ambrosia"],
     "vi-mount-kalaga": ["kalaga", "national park"]
   };
+  /* Foto real das regiões: o catálogo do wiki tem imagem de quase todo local de
+   * Leonida (media.locations, indexado pelo nome normalizado). Sem isso a ficha
+   * da cidade abria só com texto — era o que faltava no painel de Cidades. */
+  const normName = (s) => String(s || "").toLowerCase().normalize("NFD")
+    .replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+  const locationMedia = (name) => {
+    const map = (BRIDGE && BRIDGE.media && BRIDGE.media.locations) || null;
+    if (!map || !name) return null;
+    const key = normName(name);
+    if (map[key]) return map[key];
+    /* "Mount Kalaga National Park" no wiki x "Mount Kalaga" no texto curado. */
+    const hit = Object.keys(map).find((k) => k.indexOf(key) === 0 || key.indexOf(k) === 0);
+    return hit ? map[hit] : null;
+  };
+
   const locationsFor = (regionId) => {
     if (!BRIDGE || !Array.isArray(BRIDGE.locations)) return [];
     const keys = regionKeywords[regionId] || [];
@@ -106,8 +121,13 @@
         characters: meta.chars,
         visualStyle: place.vibe || "",
         themes: meta.themes,
-        media: null,
-        galleryMedia: []
+        media: locationMedia(place.name),
+        /* Bairros e pontos da região entram como galeria da ficha. */
+        galleryMedia: [locationMedia(place.name)]
+          .concat(districts.map(locationMedia))
+          .filter(Boolean)
+          .filter((m, i, all) => all.findIndex((x) => x.src === m.src) === i)
+          .slice(0, 8)
       });
     }
   }
