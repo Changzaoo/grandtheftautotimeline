@@ -228,10 +228,28 @@ const VIHero = () => {
   );
 };
 
+/* ---- Imagem real para os painéis curados de GTA VI ----
+ * Os painéis nasceram com monograma + degradê porque não havia arte. O
+ * catálogo do GTA Wiki (live/vi-catalog.json, via window.VI_BRIDGE) traz foto
+ * de quase todo o elenco e das seis regiões, então usamos a de verdade e
+ * deixamos o degradê como fundo/fallback. */
+const viNormName = (s) => String(s || "").toLowerCase().normalize("NFD")
+  .replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+const viMediaFor = (kind, name) => {
+  const map = window.VI_BRIDGE && window.VI_BRIDGE.media && window.VI_BRIDGE.media[kind];
+  if (!map || !name) return null;
+  const key = viNormName(name);
+  if (map[key]) return map[key];
+  /* "Mount Kalaga National Park" no wiki x "Mount Kalaga" no texto curado. */
+  const hit = Object.keys(map).find((k) => k.indexOf(key) === 0 || key.indexOf(k) === 0);
+  return hit ? map[hit] : null;
+};
+
 /* ============ 2. PERSONAGENS (id="vi-characters") ============ */
 const VICharPanel = ({ character, index }) => {
   const flip = index % 2 === 1;
   const palette = character.palette || { a: "#ff3d8a", b: "#3c1361" };
+  const photo = character.media || viMediaFor("characters", character.name);
   return (
     <article
       className={`card vi-char-panel${flip ? " vi-char-panel--flip" : ""}`}
@@ -239,14 +257,21 @@ const VICharPanel = ({ character, index }) => {
     >
       <Corners />
       <div
-        className="vi-char-art vi-vhs"
-        aria-hidden="true"
+        className={`vi-char-art vi-vhs${photo ? " has-photo" : ""}`}
+        aria-hidden={photo ? undefined : "true"}
         style={{
           background: `linear-gradient(160deg, ${palette.a} 0%, ${palette.b} 72%, #0a0712 100%)`
         }}
       >
-        <span className="vi-char-art-ghost vi-serif">{character.name.split(" ")[0]}</span>
-        <span className="vi-char-initials vi-serif">{viInitialsOf(character.name)}</span>
+        {photo ? (
+          <img className="vi-char-photo" src={photo.src} alt={character.name}
+            loading="lazy" referrerPolicy="no-referrer" />
+        ) : (
+          <React.Fragment>
+            <span className="vi-char-art-ghost vi-serif">{character.name.split(" ")[0]}</span>
+            <span className="vi-char-initials vi-serif">{viInitialsOf(character.name)}</span>
+          </React.Fragment>
+        )}
         <svg className="vi-char-rings" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
           <circle cx="100" cy="100" r="78" fill="none" stroke="rgba(255,255,255,.28)" strokeWidth="1" strokeDasharray="3 6" />
           <circle cx="100" cy="100" r="92" fill="none" stroke="rgba(255,255,255,.14)" strokeWidth="1" />
@@ -295,15 +320,18 @@ const VICharactersSection = () => {
 /* ============ 3. LUGARES (id="vi-places") ============ */
 const VIPolaroid = ({ place, index }) => {
   const grad = place.grad || ["#ff9a3d", "#ff3d8a", "#5b2a86"];
+  const photo = place.media || viMediaFor("locations", place.name);
   const rotation = `${(index % 2 === 0 ? -1 : 1) * (1 + (index % 3) * 0.6)}deg`;
   return (
     <figure className="vi-polaroid" role="listitem" style={{ "--vi-rot": rotation }}>
       <div
-        className="vi-polaroid-photo vi-vhs"
-        aria-hidden="true"
+        className={`vi-polaroid-photo vi-vhs${photo ? " has-photo" : ""}`}
+        aria-hidden={photo ? undefined : "true"}
         style={{ background: `linear-gradient(168deg, ${grad[0]} 0%, ${grad[1]} 55%, ${grad[2]} 100%)` }}
       >
-        <span className="vi-polaroid-horizon" />
+        {photo
+          ? <img className="vi-polaroid-img" src={photo.src} alt={place.name} loading="lazy" referrerPolicy="no-referrer" />
+          : <span className="vi-polaroid-horizon" />}
         <span className="vi-polaroid-mark vi-chrome-text">{place.name}</span>
         <span className="vi-grain" />
       </div>

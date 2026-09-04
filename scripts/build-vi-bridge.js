@@ -94,6 +94,25 @@ const locations = byGroup("locations").filter(solid).map((it) => ({
   area: clean((it.meta || {}).location || it.sub)
 })).filter((l) => l.name);
 
+/* Mídia por NOME, para as seções curadas de GTA VI (personagens e regiões de
+ * Leonida) que só tinham monograma e degradê no lugar da imagem. A chave é o
+ * nome normalizado, porque o texto curado e o wiki nem sempre usam o mesmo id. */
+const normName = (s) => clean(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+const mediaMap = (group) => {
+  const out = {};
+  for (const it of byGroup(group)) {
+    if (!it.image) continue;
+    out[normName(it.title)] = {
+      src: it.image,
+      alt: clean(it.title),
+      credit: "Imagem via GTA Wiki / Fandom",
+      source: it.url
+    };
+  }
+  return out;
+};
+const media = { characters: mediaMap("characters"), locations: mediaMap("locations") };
+
 const counts = {
   vehicles: (catalog.counts && catalog.counts.vehicles) || byGroup("vehicles").length,
   weapons: (catalog.counts && catalog.counts.weapons) || byGroup("weapons").length,
@@ -102,7 +121,7 @@ const counts = {
   radio: byGroup("radio").length
 };
 
-const payload = { generatedAt: catalog.generatedAt, characters, factions, locations, counts };
+const payload = { generatedAt: catalog.generatedAt, characters, factions, locations, counts, media };
 const body =
   "/* GERADO por scripts/build-vi-bridge.js a partir de live/vi-catalog.json.\n" +
   " * NÃO editar à mão — rode o script depois de atualizar o catálogo. */\n" +
@@ -112,3 +131,5 @@ fs.writeFileSync(OUT, body, "utf8");
 console.log("data-vi-bridge-generated.js:",
   characters.length, "personagens ·", factions.length, "gangues ·", locations.length, "locais ·",
   counts.vehicles, "veículos /", counts.weapons, "armas no catálogo");
+console.log("  imagens:", Object.keys(media.characters).length, "de personagens ·",
+  Object.keys(media.locations).length, "de locais");

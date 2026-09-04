@@ -210,6 +210,36 @@
   .vi-section{scroll-margin-top:16px}
 }
 
+/* --------------------------- 03d. fotos nos painéis curados de GTA VI */
+/* Os painéis de personagem e as polaroids das regiões mostravam só monograma
+ * sobre um degradê. Com a foto do catálogo, o degradê vira o fundo por trás
+ * dela — as artes do wiki têm proporções variadas e recortes transparentes. */
+.vi-char-art.has-photo,
+.vi-polaroid-photo.has-photo{position:relative;overflow:hidden}
+.vi-char-photo{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:50% 18%; /* retratos: manter o rosto */
+  z-index:1;
+}
+.vi-polaroid-img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:50% 50%;
+  z-index:1;
+}
+/* O nome gravado por cima continua legível sobre a foto. */
+.vi-polaroid-photo.has-photo .vi-polaroid-mark{
+  z-index:2;
+  text-shadow:0 2px 18px rgba(0,0,0,.75), 0 1px 3px rgba(0,0,0,.9);
+}
+.vi-char-art.has-photo .vi-char-rings,
+.vi-polaroid-photo.has-photo .vi-grain{z-index:2}
+/* Um leve véu embaixo dá contraste para legenda e molduras. */
+.vi-char-art.has-photo::after,
+.vi-polaroid-photo.has-photo::after{
+  content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.12) 55%,rgba(0,0,0,.55));
+}
+
 /* ------------------------------------------------------- 04. scrollbars */
 /* Menus: barra totalmente invisível — a posição é comunicada pelo item ativo,
  * que a própria navegação centraliza ao rolar a página. */
