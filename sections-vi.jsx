@@ -400,27 +400,57 @@ const VIPlacesSection = () => {
 };
 
 /* ============ 4. DOSSIÊ GTA VI (id="gta6") ============ */
+/* O trailer toca AQUI, no player oficial do YouTube embutido, em vez de mandar
+ * o visitante para outra aba. Só carrega o iframe depois do clique (fachada com
+ * a miniatura): três iframes de saída pesariam a página inteira. A escolha de
+ * qualidade é a do próprio player — hospedar cópias do vídeo seria redistribuir
+ * material da Rockstar, e o player oficial já entrega de 144p a 4K. */
 const VITrailerCard = ({ trailer }) => {
   const title = __TT("vi", trailer.id, "title", trailer.title);
+  const [playing, setPlaying] = React.useState(false);
+  const lang = (window.__lang || "pt-BR").split("-")[0];
+  const embedUrl = trailer.youtubeId
+    ? `https://www.youtube-nocookie.com/embed/${trailer.youtubeId}` +
+      `?autoplay=1&rel=0&modestbranding=1&playsinline=1&hl=${encodeURIComponent(lang)}`
+    : "";
   return (
     <article className={`card vi-trailer${trailer.rumor ? " vi-trailer--rumor" : ""}`}>
       <Corners />
-      {trailer.youtubeId ? (
-        <a
+      {trailer.youtubeId && playing ? (
+        <div className="vi-trailer-thumb vi-trailer-player">
+          <iframe
+            src={embedUrl}
+            title={title}
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+            allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
+            frameBorder="0"
+          />
+        </div>
+      ) : trailer.youtubeId ? (
+        <button
+          type="button"
           className="vi-trailer-thumb"
-          href={trailer.url}
-          target="_blank"
-          rel="noreferrer"
-          aria-label={`${__T("vi.trailers.watch-aria", "Assistir no YouTube:")} ${title}`}
+          onClick={() => setPlaying(true)}
+          aria-label={`${__T("vi.trailers.play-aria", "Reproduzir aqui:")} ${title}`}
         >
           <img
-            src={`https://i.ytimg.com/vi/${trailer.youtubeId}/hqdefault.jpg`}
+            /* maxres quando existe (todos os trailers oficiais têm); o
+               onError cai para hqdefault, que sempre existe. */
+            src={`https://i.ytimg.com/vi/${trailer.youtubeId}/maxresdefault.jpg`}
+            onError={(event) => {
+              const img = event.target;
+              if (img.dataset.fallback) return;
+              img.dataset.fallback = "1";
+              img.src = `https://i.ytimg.com/vi/${trailer.youtubeId}/hqdefault.jpg`;
+            }}
             alt={`${__T("vi.trailers.thumb-alt", "Miniatura oficial de")} ${title}`}
             loading="lazy"
             referrerPolicy="no-referrer"
           />
           <span className="vi-trailer-play" aria-hidden="true">▶</span>
-        </a>
+        </button>
       ) : (
         <div className="vi-trailer-thumb vi-trailer-thumb--empty vi-vhs" aria-hidden="true">
           <span>{__T("vi.trailers.no-signal", "SEM SINAL · AGUARDANDO ANÚNCIO")}</span>

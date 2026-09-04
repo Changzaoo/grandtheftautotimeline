@@ -151,6 +151,10 @@ function viStatus(fields, text) {
 function imageScore(name) {
   const n = name.toLowerCase();
   if (!/gtavi/.test(n)) return -1;
+  /* Arte GENÉRICA do jogo (logo, capa, key art) não é imagem do item: o
+   * Logo-GTAVI.png estava sendo usado como foto de 73 itens diferentes, o que
+   * enchia o catálogo de cards idênticos. Rejeição dura, não desconto. */
+  if (/^logo-|-logo\.|^cover-|-cover\.|keyart|boxart|^artwork-gtavi\.|^gtavi\.(png|jpe?g)$/.test(n)) return -1;
   let s = 10;
   if (/portrait|frontquarter|front\b|-front/.test(n)) s += 8;
   if (/officialscreenshot|extendedlook|trailer|artwork|postcard|promotional/.test(n)) s += 5;
@@ -315,6 +319,18 @@ async function main() {
 
   const counts = {};
   for (const g of GROUPS) counts[g.key] = items.filter((i) => i.group === g.key).length;
+  /* Uma mesma imagem em muitos itens é imagem de PÁGINA, não do item (o wiki
+   * cai na arte da categoria quando a ficha não tem foto). Acima do limite,
+   * todos perdem a foto e caem no card de iniciais — honesto e sem repetição. */
+  const useCount = new Map();
+  for (const it of items) if (it.image) useCount.set(it.image, (useCount.get(it.image) || 0) + 1);
+  let dropped = 0;
+  for (const it of items) {
+    if (it.image && useCount.get(it.image) > 5) { it.image = ""; dropped++; }
+  }
+  if (dropped) process.stdout.write(`  ! ${dropped} itens perderam imagem genérica (repetida em >5 fichas)
+`);
+
   const withImage = items.filter((i) => i.image).length;
   const out = {
     generatedAt: new Date().toISOString(),

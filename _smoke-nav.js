@@ -108,6 +108,23 @@ const check = (cond, msg) => { if (cond) console.log("ok:", msg); else { console
     check(window.__scrolled !== null, "clique normal depois do arrasto volta a navegar");
   }
 
+  /* Trailers: a miniatura é um botão e o clique traz o player oficial para
+   * dentro da página (antes o card só levava para o YouTube em outra aba). */
+  const thumb = document.querySelector("button.vi-trailer-thumb");
+  check(!!thumb, "miniatura de trailer é botão (toca na própria página)");
+  check(!!document.querySelector("button.vi-trailer-thumb img[src*='i.ytimg.com']"), "miniatura vem do YouTube");
+  check(document.querySelectorAll("iframe").length === 0, "nenhum iframe carregado antes do clique");
+  if (thumb) {
+    await act(async () => {
+      thumb.dispatchEvent(new window.MouseEvent("click", { bubbles: true, cancelable: true }));
+    });
+    const frame = document.querySelector(".vi-trailer-player iframe");
+    const src = frame ? frame.getAttribute("src") : "";
+    check(!!frame, "player embutido aparece ao clicar");
+    check(src.indexOf("youtube-nocookie.com/embed/") !== -1, "player oficial do YouTube (domínio sem cookies)");
+    check(src.indexOf("autoplay=1") !== -1, "começa a tocar sozinho");
+  }
+
   console.log(bad ? "\nNAV-CLICK FALHOU" : "\nNAV-CLICK OK");
   process.exit(bad ? 1 : 0);
 })().catch((err) => { console.error(err); process.exit(1); });

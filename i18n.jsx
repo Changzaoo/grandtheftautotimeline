@@ -317,7 +317,12 @@ window.__i18nLive = function (obj) {
   try {
     if (!obj || typeof obj !== "object") return obj;
     var copy = JSON.parse(JSON.stringify(obj));
-    i18nWalkInto(copy, obj, null, i18nTr);
+    /* Nos JSON do wiki, `title` é o NOME do item ("Golf Driver", "Fire
+     * Bottle"). Traduzir virava "Motorista de golfe" e "Garrafa de Fogo".
+     * Fora dessa volta, só a descrição e a ficha mudam de idioma. */
+    I18N_SKIP_FIELDS.add("title");
+    try { i18nWalkInto(copy, obj, null, i18nTr); }
+    finally { I18N_SKIP_FIELDS.delete("title"); }
     return copy;
   } catch (e) { return obj; }
 };
