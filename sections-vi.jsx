@@ -88,41 +88,120 @@ const VICountdown = ({ compact = false }) => {
   );
 };
 
-/* ---- Palmeiras em SVG (arte própria, sem imagens externas) ---- */
-const VIPalmSil = ({ x = 0, s = 1, flip = false, opacity = 1 }) => (
-  <g transform={`translate(${x} 250) scale(${flip ? -s : s} ${s})`} opacity={opacity}>
-    <path d="M-4 0 C 2 -52, 12 -104, 30 -148 L 40 -144 C 20 -100, 12 -50, 12 0 Z" />
-    <g transform="translate(36 -148)">
-      <path d="M0 0 C -36 -14, -74 -12, -100 6 C -70 -22, -30 -30, 2 -8 Z" />
-      <path d="M0 0 C -18 -34, -48 -52, -82 -52 C -44 -64, -12 -44, 4 -10 Z" />
-      <path d="M0 0 C 8 -38, 34 -62, 68 -68 C 38 -46, 20 -20, 8 4 Z" />
-      <path d="M0 0 C 34 -18, 70 -18, 96 -2 C 64 -30, 28 -32, -2 -10 Z" />
-      <path d="M0 0 C 36 6, 64 24, 78 50 C 48 28, 18 16, -4 12 Z" />
-      <path d="M0 0 C -32 8, -58 28, -70 54 C -44 30, -16 16, 6 12 Z" />
-      <circle cx="2" cy="2" r="7" />
-      <circle cx="14" cy="9" r="5" />
-      <circle cx="-8" cy="10" r="5" />
-    </g>
-  </g>
-);
+/* ---- Cena do herói em SVG — arte própria, nada é cortado ------------------
+ * Regra desta cena: TODO desenho vive em um <svg> próprio com
+ * preserveAspectRatio="…meet" + height:auto. Assim a viewBox inteira sempre
+ * cabe na caixa, em qualquer largura de tela — nenhuma folha de palmeira
+ * (nem qualquer outro traço) fica cortada, que era o defeito da arte antiga
+ * (uma viewBox única em "slice", que decepava o topo das palmeiras).        */
 
-const VIPalmsArt = () => (
+/* Uma folha desenhada na horizontal (+x), com recorte serrilhado embaixo.
+ * As folhas são posicionadas por rotação a partir da copa. */
+const VI_FROND_PATH =
+  "M0 0 C46 -24 106 -22 152 16 C140 0 122 -8 108 -10 C120 2 128 12 132 22 " +
+  "C112 6 90 -4 70 -6 C82 6 90 16 94 26 C74 10 50 2 26 4 C38 12 46 20 50 28 " +
+  "C34 14 16 8 -2 8 Z";
+
+/* ângulo (graus) + escala de cada folha; y cresce para baixo, então ângulos
+ * negativos apontam para cima. Todas cabem dentro da viewBox 340x460. */
+const VI_FRONDS = [
+  { a: -172, s: 1.00 }, { a: -139, s: 1.06 }, { a: -104, s: 1.10 },
+  { a: -68,  s: 1.06 }, { a: -34,  s: 1.00 }, { a: -6,   s: 0.92 },
+  { a: 24,   s: 0.80 }, { a: 168,  s: 0.86 }
+];
+
+const VIPalm = ({ className = "", flip = false, sway = 10, delay = 0 }) => (
   <svg
-    className="vi-palms"
-    viewBox="0 0 1200 250"
-    preserveAspectRatio="xMidYMax slice"
+    className={`vi-palm ${className}`}
+    viewBox="0 0 340 460"
+    preserveAspectRatio="xMidYMax meet"
+    style={{ "--vi-sway": `${sway}s`, "--vi-sway-delay": `${delay}s` }}
     aria-hidden="true"
     focusable="false"
   >
-    <g fill="rgba(8, 6, 18, 0.94)">
-      <rect x="0" y="242" width="1200" height="8" />
-      <VIPalmSil x={92} s={1.05} />
-      <VIPalmSil x={210} s={0.66} flip opacity={0.82} />
-      <VIPalmSil x={1020} s={1.18} flip />
-      <VIPalmSil x={1130} s={0.7} opacity={0.85} />
-      <VIPalmSil x={620} s={0.42} opacity={0.55} />
+    <g fill="currentColor" transform={flip ? "translate(340 0) scale(-1 1)" : undefined}>
+      {/* tronco */}
+      <path d="M120 460 C118 356 126 268 150 196 L184 190 C158 264 150 356 156 460 Z" />
+      {/* copa: folhas + cocos */}
+      <g transform="translate(170 190)">
+        {VI_FRONDS.map((frond) => (
+          <path key={frond.a} d={VI_FROND_PATH} transform={`rotate(${frond.a}) scale(${frond.s})`} />
+        ))}
+        <circle cx="2" cy="11" r="9" />
+        <circle cx="21" cy="19" r="7" />
+        <circle cx="-15" cy="19" r="7" />
+      </g>
     </g>
   </svg>
+);
+
+/* ---- Fundo do herói: screenshots oficiais de GTA VI em cross-fade --------
+ * Imagens oficiais da Rockstar catalogadas no GTA Wiki (crédito no fim da
+ * cena). Se alguma falhar, ela some e a cena continua de pé só com o degradê,
+ * o sol e as palmeiras. */
+const VI_HERO_SHOTS = [
+  {
+    src: "https://static.wikia.nocookie.net/gtawiki/images/f/fa/OfficialScreenshots-GTAVI-PromotionalWebsite-ViceCity-SS8.jpg/revision/latest/scale-to-width-down/1280?cb=20250506164301",
+    pos: "50% 42%"
+  },
+  {
+    src: "https://static.wikia.nocookie.net/gtawiki/images/7/7b/ViceBeach-GTAVI-Trailer1.png/revision/latest/scale-to-width-down/1280?cb=20231206200047",
+    pos: "50% 48%"
+  },
+  {
+    src: "https://static.wikia.nocookie.net/gtawiki/images/9/9a/OfficialScreenshots-GTAVI-PromotionalWebsite-LeonidaKeys-SS1.jpg/revision/latest/scale-to-width-down/1280?cb=20250506164232",
+    pos: "50% 52%"
+  },
+  {
+    src: "https://static.wikia.nocookie.net/gtawiki/images/f/f3/OfficialScreenshots-GTAVI-PromotionalWebsite-ViceCity-SS4.jpg/revision/latest/scale-to-width-down/1280?cb=20250506164256",
+    pos: "50% 46%"
+  }
+];
+
+const VIHeroBackdrop = () => {
+  const [active, setActive] = React.useState(0);
+  React.useEffect(() => {
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return undefined;
+    const timer = setInterval(() => setActive((i) => (i + 1) % VI_HERO_SHOTS.length), 7600);
+    return () => clearInterval(timer);
+  }, []);
+  return (
+    <div className="vi-hero-shots" aria-hidden="true">
+      {VI_HERO_SHOTS.map((shot, index) => (
+        <img
+          key={shot.src}
+          className={`vi-hero-shot${index === active ? " is-on" : ""}`}
+          src={shot.src}
+          alt=""
+          style={{ objectPosition: shot.pos }}
+          loading={index === 0 ? "eager" : "lazy"}
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onError={(event) => { event.target.classList.add("is-broken"); }}
+        />
+      ))}
+    </div>
+  );
+};
+
+const VIHeroScene = () => (
+  <div className="vi-hero-scene" aria-hidden="true">
+    <VIHeroBackdrop />
+    <span className="vi-hero-grade" />
+    <span className="vi-hero-stars" />
+    <span className="vi-hero-sun" />
+    <span className="vi-hero-horizon" />
+    <div className="vi-hero-palms">
+      <VIPalm className="vi-palm--l1" sway={11} />
+      <VIPalm className="vi-palm--l2" flip sway={14} delay={-4} />
+      <VIPalm className="vi-palm--r1" flip sway={12} delay={-2} />
+      <VIPalm className="vi-palm--r2" sway={15} delay={-6} />
+    </div>
+    <span className="vi-hero-scanlines" />
+    <span className="vi-grain" />
+    <span className="vi-hero-vignette" />
+  </div>
 );
 
 /* ============ 1. HERÓI (id="overview") ============ */
@@ -156,6 +235,14 @@ const VIHero = () => {
     [__T("nav.mysteries", "Mistérios"), "mysteries", "file"]
   ];
 
+  /* Ficha de lançamento em chips (antes era uma linha longa de texto corrido). */
+  const releaseChips = [
+    __T("vi.hero.chip-date", "19.11.2026"),
+    ...(release.platforms || ["PlayStation 5", "Xbox Series X|S"]),
+    __T("vi.hero.chip-preorder", "Pré-venda aberta"),
+    __T("vi.hero.chip-preload", "Pré-load 12.11.2026")
+  ];
+
   const tickerCities = [
     "Liberty City", "Vice City", "San Andreas", "Anywhere City",
     "Londres 1969", "Los Santos", "Las Venturas", "San Fierro",
@@ -165,32 +252,32 @@ const VIHero = () => {
 
   return (
     <section id="overview" className="vi-hero dossier-shell">
-      <div className="vi-sky vi-sky--dawn" aria-hidden="true">
-        <span className="vi-sky-sun" />
-        <VIPalmsArt />
-        <span className="vi-grain" />
-      </div>
+      <VIHeroScene />
 
       <div className="wrap vi-hero-inner">
         <div className="vi-badge vi-hero-eyebrow">
           {__T("vi.hero.eyebrow", "URBAN UNIVERSE · DOSSIÊ GTA · 1997–2026")}
         </div>
 
-        <h1 className="vi-chrome-text vi-hero-title">
-          {__T("hero.title", "GRAND THEFT AUTO")}
+        <h1 className="vi-hero-title">
+          <span className="vi-hero-title-line vi-chrome-text">
+            {__T("hero.title", "GRAND THEFT AUTO")}
+          </span>
         </h1>
         <p className="vi-serif vi-hero-subtitle">
           {__T("hero.subtitle", "O Arquivo Completo da Saga")}
         </p>
 
         <div className="vi-hero-seal">
-          <span className="vi-badge vi-badge--vi">
+          <span className="vi-badge vi-badge--vi vi-hero-seal-badge">
             {__T("vi.hero.seal", "GTA VI — 19.11.2026")}
           </span>
           <VICountdown />
-          <span className="vi-hero-release-note">
-            {__T("vi.hero.release-note2", "PlayStation 5 · Xbox Series X|S · pré-venda aberta · pré-load em 12.11.2026")}
-          </span>
+          <ul className="vi-hero-chips">
+            {releaseChips.map((chip) => (
+              <li key={chip} className="vi-hero-chip">{chip}</li>
+            ))}
+          </ul>
         </div>
 
         <div className="vi-hero-actions">
@@ -213,6 +300,10 @@ const VIHero = () => {
             </a>
           ))}
         </nav>
+
+        <p className="vi-hero-credit">
+          {__T("vi.hero.credit", "Fundo: screenshots oficiais de GTA VI (Rockstar Games), via GTA Wiki.")}
+        </p>
       </div>
 
       <div className="vi-ticker" aria-hidden="true">

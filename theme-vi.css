@@ -1026,7 +1026,7 @@ a:focus-visible,button:focus-visible,
   font-family:"Space Mono",ui-monospace,monospace;font-size:11px;
   letter-spacing:.32em;text-transform:uppercase;color:#ffb9d3;
 }
-.vi-hero-seal .vi-countdown-cell strong{font-size:clamp(38px,6.5vw,92px)}
+.vi-hero-seal .vi-countdown-cell strong{font-size:clamp(34px,5.6vw,78px)}
 .vi-hero-seal .vi-countdown-sep{font-size:clamp(24px,4vw,56px)}
 .vi-countdown--compact{gap:clamp(8px,1.6vw,18px);justify-content:flex-start}
 .vi-countdown--compact .vi-countdown-cell strong{font-size:clamp(34px,4.6vw,60px)}
@@ -1065,66 +1065,223 @@ svg.vi-palms{display:block;background:none;width:100%;height:clamp(120px,22vw,21
   font-family:"Space Mono",ui-monospace,monospace;font-size:11px;letter-spacing:.14em;
 }
 
-/* ---- 14.1 HERÓI (#overview) ---------------------------------------------- */
+/* ---- 14.1 HERÓI (#overview) — cena "Vice City ao entardecer" -------------
+ * Camadas, de trás para a frente:
+ *   .vi-hero-shots     screenshots oficiais de GTA VI em cross-fade + zoom
+ *   .vi-hero-grade     coloração duotone (rosa → roxo → noite) sobre a foto
+ *   .vi-hero-stars     estrelas no topo do céu
+ *   .vi-hero-sun       sol retrô fatiado
+ *   .vi-hero-horizon   brilho quente na linha do horizonte
+ *   .vi-hero-palms     palmeiras (cada uma um SVG inteiro, nunca cortado)
+ *   .vi-hero-scanlines + .vi-grain + .vi-hero-vignette   acabamento VHS
+ * O conteúdo (.vi-hero-inner) fica em z-index 2, acima de tudo isso.       */
 .vi-hero{
-  position:relative;overflow:hidden;
+  position:relative;overflow:hidden;isolation:isolate;
   display:grid;grid-template-rows:1fr auto;
   min-height:100vh;min-height:100svh;
 }
-.vi-hero>.vi-sky{position:absolute;inset:0;z-index:0;overflow:hidden}
-.vi-hero>.vi-sky::after{ /* véu radial central p/ contraste AA do título */
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(62% 54% at 50% 46%, rgba(18,6,38,.46), transparent 76%);
+.vi-hero-scene{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+
+/* --- fundo fotográfico oficial --- */
+.vi-hero-shots{position:absolute;inset:0}
+.vi-hero-shot{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transform:scale(1.12);
+  filter:saturate(1.18) contrast(1.06) brightness(.82);
+  transition:opacity 2.4s ease,transform 12s linear;
+  will-change:opacity,transform;
 }
-.vi-sky-sun{ /* sol retrô com fatias horizontais, atrás do título */
+.vi-hero-shot.is-on{opacity:1;transform:scale(1)}
+.vi-hero-shot.is-broken{display:none}
+
+/* --- coloração: puxa a foto para a paleta Vice sunset e garante contraste - */
+.vi-hero-grade{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(120% 78% at 50% 16%, rgba(255,138,61,.34), transparent 62%),
+    radial-gradient(90% 62% at 8% 92%, rgba(123,47,247,.42), transparent 72%),
+    radial-gradient(88% 60% at 96% 88%, rgba(255,45,124,.30), transparent 74%),
+    linear-gradient(180deg,
+      rgba(9,4,26,.78) 0%,
+      rgba(24,7,52,.42) 22%,
+      rgba(94,17,86,.26) 48%,
+      rgba(14,6,38,.72) 82%,
+      rgba(11,13,42,.96) 100%);
+}
+
+/* --- estrelas no alto (some antes da metade do céu) --- */
+.vi-hero-stars{
+  position:absolute;inset:0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 24px 34px, rgba(255,255,255,.9), transparent),
+    radial-gradient(1px 1px at 118px 92px, rgba(255,255,255,.65), transparent),
+    radial-gradient(1.3px 1.3px at 202px 44px, rgba(255,214,165,.8), transparent),
+    radial-gradient(1px 1px at 64px 156px, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.6px 1.6px at 168px 176px, rgba(196,222,255,.75), transparent);
+  background-size:260px 220px;background-repeat:repeat;
+  -webkit-mask:linear-gradient(180deg,#000 0 28%,transparent 62%);
+          mask:linear-gradient(180deg,#000 0 28%,transparent 62%);
+  opacity:.55;animation:vi-twinkle 7s ease-in-out infinite alternate;
+}
+
+/* --- sol retrô fatiado, atrás do título --- */
+.vi-hero-sun{
   --vi-sun-mask:linear-gradient(180deg,
-    #000 0 58%,transparent 58% 62%,
-    #000 62% 71%,transparent 71% 74.5%,
-    #000 74.5% 82%,transparent 82% 85%,
-    #000 85% 91%,transparent 91% 93.5%,
-    #000 93.5% 100%);
-  position:absolute;left:50%;top:clamp(64px,13vh,150px);
+    #000 0 56%,transparent 56% 60.5%,
+    #000 60.5% 70%,transparent 70% 73.5%,
+    #000 73.5% 81%,transparent 81% 84.5%,
+    #000 84.5% 90.5%,transparent 90.5% 93%,
+    #000 93% 100%);
+  position:absolute;left:50%;top:clamp(46px,9vh,116px);
   transform:translateX(-50%);
-  width:clamp(190px,30vw,380px);aspect-ratio:1;border-radius:50%;
-  background:linear-gradient(180deg,#fff6cf 0%,var(--vi-gold) 28%,var(--vi-coral) 58%,var(--vi-pink) 100%);
-  -webkit-mask:var(--vi-sun-mask);mask:var(--vi-sun-mask);
-  filter:drop-shadow(0 0 70px rgba(255,138,61,.55));
-  opacity:.92;
+  width:clamp(200px,27vw,380px);aspect-ratio:1;border-radius:50%;
+  background:linear-gradient(180deg,#fff7d6 0%,var(--vi-gold) 26%,var(--vi-coral) 56%,var(--vi-pink) 100%);
+  /* fatias + desvanecer radial: o disco perde a borda dura de "bola" */
+  -webkit-mask-image:var(--vi-sun-mask),radial-gradient(closest-side,#000 52%,transparent 100%);
+          mask-image:var(--vi-sun-mask),radial-gradient(closest-side,#000 52%,transparent 100%);
+  -webkit-mask-composite:source-in;mask-composite:intersect;
+  filter:drop-shadow(0 0 90px rgba(255,138,61,.55));
+  opacity:.6;mix-blend-mode:screen;
+  animation:vi-sun-pulse 9s ease-in-out infinite alternate;
 }
+@keyframes vi-sun-pulse{
+  from{opacity:.5;filter:drop-shadow(0 0 70px rgba(255,138,61,.4))}
+  to{opacity:.68;filter:drop-shadow(0 0 110px rgba(255,138,61,.62))}
+}
+
+/* --- brasa quente na linha do horizonte --- */
+.vi-hero-horizon{
+  position:absolute;left:0;right:0;bottom:0;height:56%;
+  background:
+    radial-gradient(70% 100% at 50% 100%, rgba(255,138,61,.30), transparent 70%),
+    radial-gradient(120% 100% at 50% 118%, rgba(255,45,124,.34), transparent 68%);
+  mix-blend-mode:screen;
+}
+
+/* --- palmeiras: um SVG inteiro por árvore -------------------------------
+ * width em clamp + height:auto + preserveAspectRatio "meet" no SVG =
+ * a viewBox cabe SEMPRE inteira. Nada de folha decepada em tela larga.   */
+.vi-hero-palms{position:absolute;left:0;right:0;bottom:0;top:0}
+.vi-palm{
+  position:absolute;bottom:0;height:auto;display:block;
+  color:#07030f;
+  transform-origin:50% 100%;
+  filter:drop-shadow(0 -6px 40px rgba(255,45,124,.22));
+  animation:vi-palm-sway var(--vi-sway,12s) ease-in-out infinite alternate;
+  animation-delay:var(--vi-sway-delay,0s);
+}
+@keyframes vi-palm-sway{
+  from{transform:rotate(-1deg) translateY(0)}
+  to{transform:rotate(1.2deg) translateY(-4px)}
+}
+.vi-palm--l1{left:0;width:clamp(160px,20vw,360px)}
+.vi-palm--l2{left:clamp(84px,13vw,220px);width:clamp(100px,11.5vw,200px);opacity:.88}
+.vi-palm--r1{right:0;width:clamp(175px,22vw,400px)}
+.vi-palm--r2{right:clamp(96px,14.5vw,250px);width:clamp(105px,12.5vw,215px);opacity:.82}
+/* as menores ficam um pouco atrás, mais apagadas pelo ar quente */
+.vi-palm--l2,.vi-palm--r2{filter:blur(.4px) drop-shadow(0 0 30px rgba(123,47,247,.25))}
+
+/* --- acabamento VHS --- */
+.vi-hero-scanlines{
+  position:absolute;inset:0;opacity:.45;mix-blend-mode:overlay;
+  background:repeating-linear-gradient(180deg,
+    rgba(255,255,255,.05) 0 1px, rgba(0,0,0,0) 1px 3px);
+}
+.vi-hero-scene .vi-grain{opacity:.14}
+.vi-hero-vignette{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(78% 64% at 50% 42%, transparent 42%, rgba(6,2,18,.5) 80%, rgba(6,2,18,.82) 100%),
+    linear-gradient(180deg, transparent 72%, rgba(11,13,42,.85) 94%, #0b0d2a 100%);
+}
+
+/* --- conteúdo --- */
 .vi-hero-inner{
   position:relative;z-index:2;
   display:grid;justify-items:center;align-content:center;text-align:center;
-  padding:clamp(110px,16vh,170px) 18px clamp(56px,9vh,96px);
+  padding:clamp(78px,10vh,118px) 18px clamp(40px,5.6vh,66px);
 }
-.vi-hero-eyebrow{margin-bottom:clamp(16px,3vh,28px)}
-.vi-hero-title{
-  margin:0;font-family:"Anton",sans-serif;font-weight:400;text-transform:uppercase;
-  font-size:clamp(52px,11vw,158px);line-height:.9;letter-spacing:.01em;text-wrap:balance;
+/* .vi-badge é achatado pelo theme-glass.css (carregado depois), então os
+ * selos do herói precisam de um seletor mais específico para vencer. */
+.vi-hero .vi-hero-eyebrow{
+  margin-bottom:clamp(14px,2.6vh,26px);color:#ffe6bf;
+  background:
+    linear-gradient(rgba(9,3,24,.95),rgba(9,3,24,.95)) padding-box,
+    var(--vi-grad-sunset) border-box;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  text-shadow:0 2px 10px rgba(0,0,0,.6);
 }
+.vi-hero-title{margin:0;line-height:.86;text-wrap:balance}
+.vi-hero-title-line{
+  display:block;
+  font-family:"Anton",sans-serif;font-weight:400;text-transform:uppercase;
+  font-size:clamp(46px,9.8vw,152px);line-height:.88;letter-spacing:.012em;
+  background-size:100% 260%;background-position:0 12%;
+  filter:
+    drop-shadow(0 2px 0 rgba(255,255,255,.22))
+    drop-shadow(0 20px 46px rgba(255,45,124,.45))
+    drop-shadow(0 0 90px rgba(255,138,61,.28));
+  animation:vi-chrome-shine 11s ease-in-out infinite alternate;
+}
+@keyframes vi-chrome-shine{from{background-position:0 6%}to{background-position:0 92%}}
 .vi-hero-subtitle{
-  margin:14px 0 0;font-size:clamp(18px,2.6vw,30px);line-height:1.3;
-  color:#ffe4d2;text-wrap:balance;
+  margin:14px 0 0;font-size:clamp(17px,2.4vw,30px);line-height:1.3;
+  color:#ffe8d8;text-shadow:0 4px 24px rgba(8,2,20,.75);text-wrap:balance;
 }
 .vi-hero-seal{
-  display:grid;justify-items:center;gap:16px;
-  margin:clamp(26px,4.5vh,42px) 0 0;
+  display:grid;justify-items:center;gap:clamp(10px,1.6vh,17px);
+  margin:clamp(18px,3vh,32px) 0 0;
 }
-.vi-hero-release-note{
-  font-family:"Space Mono",ui-monospace,monospace;font-size:11px;
-  letter-spacing:.2em;text-transform:uppercase;color:#ffb9d3;
-  max-width:64ch;line-height:1.9;
+.vi-hero .vi-hero-seal-badge{
+  background:var(--vi-grad-sunset);color:var(--vi-ink);border-color:transparent;
+  box-shadow:0 10px 34px -10px rgba(255,45,124,.8);
+}
+
+/* contagem regressiva em ladrilhos de vidro */
+.vi-hero-seal .vi-countdown{gap:clamp(6px,1.2vw,14px);align-items:stretch}
+.vi-hero-seal .vi-countdown-cell{
+  min-width:clamp(66px,10vw,132px);
+  padding:clamp(8px,1.2vh,14px) clamp(8px,1.2vw,16px) clamp(7px,1vh,11px);
+  border-radius:18px;
+  border:1px solid rgba(255,45,124,.26);
+  background:linear-gradient(180deg,rgba(34,10,64,.62),rgba(11,4,30,.5));
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  box-shadow:0 24px 50px -30px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.14);
+}
+/* os ladrilhos já separam os números — o ':' gigante só poluía */
+.vi-hero-seal .vi-countdown-sep{display:none}
+
+/* chips de lançamento (plataformas, pré-venda, pré-load) */
+.vi-hero-chips{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:8px;
+  margin:2px 0 0;padding:0;list-style:none;max-width:720px;
+}
+.vi-hero-chip{
+  font-family:"Space Mono",ui-monospace,monospace;font-size:10.5px;
+  letter-spacing:.2em;text-transform:uppercase;color:#ffdce9;
+  padding:7px 13px;border-radius:999px;
+  border:1px solid rgba(255,255,255,.16);background:rgba(16,5,36,.52);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
 }
 .vi-hero-actions{
   display:flex;flex-wrap:wrap;justify-content:center;gap:14px;
-  margin-top:clamp(22px,4vh,36px);
+  margin-top:clamp(20px,3.6vh,34px);
 }
 /* atalhos: pílulas pequenas em fileira (herda a base .dossier-quick-tabs) */
-.vi-hero-quick{justify-content:center;gap:9px;margin-top:clamp(26px,4.5vh,44px);max-width:880px}
+.vi-hero-quick{justify-content:center;gap:7px;margin-top:clamp(16px,2.6vh,28px);max-width:1180px}
 .vi-hero-quick a{
-  padding:8px 14px;font-size:11px;letter-spacing:.08em;
-  background:rgba(22,7,46,.72);border-color:rgba(255,45,124,.26);
+  padding:7px 12px;font-size:10.5px;letter-spacing:.08em;
+  background:rgba(16,5,36,.62);border-color:rgba(255,45,124,.26);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
 }
 .vi-hero-quick a svg{width:13px;height:13px;flex:0 0 auto}
+/* crédito discreto no rodapé da cena, fora do fluxo (não empurra o herói) */
+.vi-hero-credit{
+  position:absolute;left:0;right:0;bottom:12px;
+  margin:0;padding:0 18px;text-align:center;pointer-events:none;
+  font-family:"Space Mono",ui-monospace,monospace;font-size:9.5px;
+  letter-spacing:.16em;text-transform:uppercase;color:rgba(255,214,232,.5);
+}
 .vi-hero .vi-ticker{position:relative;z-index:2}
 
 /* ---- 14.2 PERSONAGENS (#vi-characters) ------------------------------------
@@ -1519,6 +1676,14 @@ svg.vi-palms{display:block;background:none;width:100%;height:clamp(120px,22vw,21
 }
 @media (max-width:680px){
   .vi-hero-inner{padding-top:clamp(96px,15vh,130px)}
+  /* em tela estreita só as duas palmeiras das pontas, menores, para não
+     brigarem com o texto — continuam inteiras, nunca cortadas */
+  .vi-palm--l2,.vi-palm--r2{display:none}
+  .vi-palm--l1{width:clamp(120px,36vw,220px)}
+  .vi-palm--r1{width:clamp(130px,38vw,240px)}
+  .vi-hero-sun{width:clamp(180px,52vw,300px);top:clamp(76px,13vh,120px)}
+  .vi-hero-seal .vi-countdown-cell{min-width:66px;border-radius:14px}
+  .vi-hero-chip{font-size:9.5px;letter-spacing:.16em;padding:6px 10px}
   .vi-hero-quick{gap:7px}
   .vi-hero-quick a{padding:7px 11px;font-size:10.5px}
   .vi-countdown-cell strong{font-size:clamp(44px,15vw,84px)}
@@ -1534,6 +1699,12 @@ svg.vi-palms{display:block;background:none;width:100%;height:clamp(120px,22vw,21
 /* ---- 14.6 prefers-reduced-motion ------------------------------------------ */
 @media (prefers-reduced-motion: reduce){
   .vi-char-rings{animation:none}
+  .vi-palm{animation:none;transform:none}
+  .vi-hero-sun{animation:none}
+  .vi-hero-title-line{animation:none}
+  .vi-hero-stars{animation:none}
+  .vi-hero-shot{transition:none;transform:none}
+  .vi-hero-shot.is-on{transform:none}
   .vi-gallery .vi-polaroid,
   .vi-gallery .vi-polaroid:nth-child(even),
   .vi-gallery .vi-polaroid:hover{transform:none;transition:none}
