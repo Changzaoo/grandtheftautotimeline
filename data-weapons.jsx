@@ -81,7 +81,7 @@ const weaponDossierData = [
       "Não há sistema de habilidade, modificação ou inventário profundo."
     ],
     precisionNotes: ["Não há categoria pública separada robusta para London 1961; o dossiê usa a base London/GTA e marca a leitura como compartilhada."],
-    fallbackGroups: [{ label: "Lista completa", items: ["Fist", "Pistol", "Machine Gun", "Rocket Launcher", "Flamethrower", "Car Bomb"] }],
+    fallbackGroups: [{ label: "Lista completa", items: [{ name: "Fist" }, { name: "Pistol" }, { name: "Machine Gun" }, { name: "Rocket Launcher" }, { name: "Flamethrower" }, { name: "Car Bomb" }] }],
     tags: ["2D Universe", "London", "expansão", "fonte compartilhada"]
   },
   {

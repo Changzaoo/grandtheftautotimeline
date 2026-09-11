@@ -1946,14 +1946,18 @@ const dzItemAliases = {
   "pißwasser dominator": ["Pisswasser Dominator", "Dominator"]
 };
 const dzSearchTerms = (rawName) => {
-  const base = String(rawName || "").replace(/\s*\(.*?\)\s*/g, " ").trim();
   const terms = [];
-  base.split(/\s*\/\s*/).filter(Boolean).forEach((part) => {
-    terms.push(part);
-    if (/[a-z]s$/i.test(part) && !/ss$/i.test(part)) terms.push(part.replace(/s$/i, ""));
-    (dzItemAliases[normalizeText(part)] || []).forEach((alias) => terms.push(alias));
+  /* O nome pode chegar já traduzido pelo i18n ("Pistol" → "Pistola"); os
+   * arquivos do wiki usam o original, então ele vem primeiro na busca. */
+  [...new Set([ptText(rawName), rawName].map((value) => String(value || "")))].forEach((raw) => {
+    const base = raw.replace(/\s*\(.*?\)\s*/g, " ").trim();
+    base.split(/\s*\/\s*/).filter(Boolean).forEach((part) => {
+      terms.push(part);
+      if (/[a-z]s$/i.test(part) && !/ss$/i.test(part)) terms.push(part.replace(/s$/i, ""));
+      (dzItemAliases[normalizeText(part)] || []).forEach((alias) => terms.push(alias));
+    });
+    (dzItemAliases[normalizeText(base)] || []).forEach((alias) => terms.push(alias));
   });
-  (dzItemAliases[normalizeText(base)] || []).forEach((alias) => terms.push(alias));
   return [...new Set(terms)].filter((term) => normalizeText(term).replace(/[^a-z0-9]/g, "").length >= 2);
 };
 

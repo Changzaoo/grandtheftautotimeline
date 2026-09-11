@@ -1,7 +1,8 @@
-/* ============ MISSÕES UMA A UMA — gameplay sem comentários (id="mission-videos") ============
- * Todas as missões de cada jogo, separadas por jogo e na ordem da campanha, cada
- * uma com o passo a passo em vídeo SEM COMENTÁRIOS tocando no próprio site
- * (player do YouTube incorporado via youtube-nocookie — a pessoa não sai daqui).
+/* ============ MISSÕES POR JOGO — dossiê + gameplay sem comentários (id="missions") ============
+ * Uma seção só para as missões: abas por jogo; para cada jogo, o resumo do
+ * dossiê de missões (com o modal completo a um clique) e todas as missões na
+ * ordem da campanha, cada uma com o passo a passo SEM COMENTÁRIOS tocando no
+ * próprio site (player do YouTube incorporado via youtube-nocookie).
  * A lista é gerada por scripts/build-missions.js (GTA Wiki + playlists do GTA
  * Series Videos e canais equivalentes) em live/missions.json e só é baixada
  * quando a seção se aproxima da tela ou alguém pede pelo modal de missões
@@ -20,10 +21,11 @@ const mvDuration = (secs) => {
 };
 const mvThumb = (mission) => (mission && mission.video ? `https://i.ytimg.com/vi/${mission.video.id}/mqdefault.jpg` : (mission && mission.image) || "");
 const mvMeta = (mission) => [mission.who, mission.area, mission.label].filter(Boolean).join(" · ");
-const mvCoverOf = (gameId) => {
+const mvGameMedia = (gameId) => {
   const game = typeof gamesData !== "undefined" ? gamesData.find((entry) => entry.id === gameId) : null;
-  return (game && game.media && game.media.src) || "";
+  return (game && game.media) || null;
 };
+const mvDossierFor = (gameId) => (window.missionDossierData || []).find((entry) => entry.id === gameId || entry.gameId === gameId) || null;
 
 const MvPartLabel = ({ part }) => {
   if (part === "story") return <>História</>;
@@ -58,7 +60,32 @@ const useMissionVideoCatalog = (ref) => {
   return [state, load];
 };
 
-const MissionVideoPlayer = ({ game, mission, playing, onPlay, onPrev, onNext, position, count }) => {
+/* Resumo do dossiê de missões do jogo escolhido, com o modal completo a um clique. */
+const MissionGameBrief = ({ gameId, onOpenDossier }) => {
+  const dossier = mvDossierFor(gameId);
+  if (!dossier) return null;
+  const media = dossier.media || mvGameMedia(gameId);
+  return (
+    <div className="card mv-brief">
+      <Corners />
+      <div className="mv-brief-text">
+        <div className="mv-kicker">{[dossier.universe, dossier.storyYear, dossier.city].filter(Boolean).join(" · ")}</div>
+        <p className="mv-brief-sum">{dossier.summary}</p>
+        <DossierChips items={dossier.highlights} limit={6} />
+      </div>
+      <div className="mv-brief-side">
+        {dossier.totalLabel && <span className="mv-brief-total">{dossier.totalLabel}</span>}
+        {onOpenDossier && (
+          <button type="button" className="vi-btn" onClick={() => onOpenDossier({ type: "mission", item: { ...dossier, media } })}>
+            Dossiê completo ›
+          </button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const MissionVideoPlayer = ({ game, mission, playing, onPrev, onNext, position, count }) => {
   if (!mission) {
     return (
       <div className="card mv-player mv-player--empty">
@@ -113,7 +140,7 @@ const MissionVideoPlayer = ({ game, mission, playing, onPlay, onPrev, onNext, po
   );
 };
 
-const MissionVideosSection = () => {
+const MissionVideosSection = ({ onOpenDossier }) => {
   const sectionRef = React.useRef(null);
   const stageRef = React.useRef(null);
   const listRef = React.useRef(null);
@@ -125,7 +152,12 @@ const MissionVideosSection = () => {
   const [playing, setPlaying] = React.useState(false);
 
   const games = data && Array.isArray(data.games) ? data.games.filter((g) => g && Array.isArray(g.missions) && g.missions.length) : [];
-  const game = games.find((g) => g.id === gameId) || games[0] || null;
+  /* Dossiês sem lista de vídeos (Trilogy DE, GTA VI) também ganham aba, com o resumo e o modal. */
+  const extraTabs = (window.missionDossierData || [])
+    .filter((entry) => !games.some((g) => g.id === entry.id))
+    .map((entry) => ({ id: entry.id, name: entry.title, total: 0, missions: [], dossierOnly: true }));
+  const tabs = games.length ? [...games, ...extraTabs] : [];
+  const game = tabs.find((g) => g.id === gameId) || tabs[0] || null;
   const missions = game ? game.missions : [];
 
   const pickGame = React.useCallback((id) => {
@@ -142,7 +174,7 @@ const MissionVideosSection = () => {
       load();
       if (id) pickGame(id);
       window.setTimeout(() => {
-        const el = document.getElementById("mission-videos");
+        const el = document.getElementById("missions");
         if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 90);
     };
@@ -189,19 +221,19 @@ const MissionVideosSection = () => {
   const withVideo = games.reduce((sum, g) => sum + (g.withVideo || 0), 0);
 
   return (
-    <section id="mission-videos" ref={sectionRef} className="dossier-section dossier-shell mv-section">
+    <section id="missions" ref={sectionRef} className="dossier-section dossier-shell mission-section mv-section">
       <div className="wrap">
         <DossierSectionHead
-          eyebrow="Gameplay sem comentários"
-          title="Todas as missões, uma por uma"
+          eyebrow="Operações · gameplay sem comentários"
+          title="Missões por jogo"
           accent="var(--money)"
-          right={data ? `${total} missões · ${withVideo} vídeos · ${games.length} jogos` : "Passo a passo em vídeo, jogo por jogo"}
+          right={data ? `${total} missões · ${withVideo} vídeos · ${games.length} jogos` : "Todas as missões, uma por uma"}
         />
 
         <div className="card mv-intro">
           <Corners />
           <p>
-            Escolha o jogo e assista a cada missão na ordem da campanha, com o vídeo tocando aqui mesmo. São gravações de passo a passo sem narração, principalmente do canal GTA Series Videos, com a descrição de cada missão ao lado. Missões paralelas, contatos e assaltos ficam em abas próprias. GTA VI entra aqui quando o jogo for lançado.
+            Escolha o jogo: o resumo mostra como as missões funcionam naquele título (com o dossiê completo a um clique) e, logo abaixo, cada missão na ordem da campanha com o vídeo tocando aqui mesmo. São gravações de passo a passo sem narração, principalmente do canal GTA Series Videos. Missões paralelas, contatos e assaltos ficam em abas próprias.
           </p>
         </div>
 
@@ -221,85 +253,94 @@ const MissionVideosSection = () => {
         {status === "ok" && game && (
           <>
             <div className="mv-games" role="tablist" aria-label="Escolha o jogo">
-              {games.map((g) => {
-                const cover = mvCoverOf(g.id);
+              {tabs.map((g) => {
+                const media = mvGameMedia(g.id);
                 const on = g.id === game.id;
                 return (
                   <button key={g.id} type="button" role="tab" aria-selected={on} className={`mv-game ${on ? "on" : ""}`} onClick={() => pickGame(g.id)}>
-                    <span className="mv-game-cover">{cover ? <img src={cover} alt="" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /> : null}</span>
+                    <span className="mv-game-cover">{media && media.src ? <img src={media.src} alt="" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /> : null}</span>
                     <span className="mv-game-text">
                       <strong>{g.name}</strong>
-                      <small>{g.total} missões</small>
+                      {g.dossierOnly ? <small>só dossiê</small> : <small>{g.total} missões</small>}
                     </span>
                   </button>
                 );
               })}
             </div>
 
-            <div className="mv-layout">
-              <div className="mv-stage" ref={stageRef}>
-                <MissionVideoPlayer
-                  game={game}
-                  mission={selected}
-                  playing={playing}
-                  onPlay={() => setPlaying(true)}
-                  onPrev={() => step(-1)}
-                  onNext={() => step(1)}
-                  position={list.length ? index + 1 : 0}
-                  count={list.length}
-                />
-              </div>
+            <MissionGameBrief gameId={game.id} onOpenDossier={onOpenDossier} />
 
-              <div className="mv-browser">
-                <div className="mv-toolbar">
-                  {parts.length > 1 && (
-                    <div className="mv-parts" role="tablist" aria-label="Tipo de missão">
-                      <button type="button" role="tab" aria-selected={part === "all"} className={part === "all" ? "on" : ""} onClick={() => { setPart("all"); setSelKey(""); }}>
-                        Todas <b>{missions.length}</b>
-                      </button>
-                      {parts.map((p) => (
-                        <button key={p} type="button" role="tab" aria-selected={part === p} className={part === p ? "on" : ""} onClick={() => { setPart(p); setSelKey(""); }}>
-                          <MvPartLabel part={p} /> <b>{missions.filter((m) => m.part === p).length}</b>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                  <label className="mv-search">
-                    <span className="sr-only">Buscar missão</span>
-                    <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filtrar por missão, contato ou lugar…" />
-                  </label>
+            {game.dossierOnly ? (
+              <p className="mv-empty">
+                {game.id === "gta-vi"
+                  ? "GTA VI ainda não foi lançado: as missões entram aqui, com vídeo, quando o jogo sair."
+                  : "Esta edição não tem lista própria de vídeos: as missões são as dos jogos originais, nas abas ao lado."}
+              </p>
+            ) : (
+              <div className="mv-layout">
+                <div className="mv-stage" ref={stageRef}>
+                  <MissionVideoPlayer
+                    game={game}
+                    mission={selected}
+                    playing={playing}
+                    onPrev={() => step(-1)}
+                    onNext={() => step(1)}
+                    position={list.length ? index + 1 : 0}
+                    count={list.length}
+                  />
                 </div>
 
-                {list.length ? (
-                  <ol className="mv-list" ref={listRef}>
-                    {list.map((m) => {
-                      const on = selected && mvKey(m) === mvKey(selected);
-                      const thumb = mvThumb(m);
-                      const meta = mvMeta(m);
-                      return (
-                        <li key={mvKey(m)}>
-                          <button type="button" className={`mv-row ${on ? "on" : ""} ${m.video ? "" : "no-video"}`} onClick={() => choose(m)} aria-current={on ? "true" : undefined}>
-                            <span className="mv-row-thumb">
-                              {thumb ? <img src={thumb} alt="" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /> : <span className="mv-row-icon" aria-hidden="true">▶</span>}
-                              {m.video && m.video.secs ? <em>{mvDuration(m.video.secs)}</em> : null}
-                            </span>
-                            <span className="mv-row-text">
-                              <span className="mv-row-n">
-                                {part === "all" && m.part !== "story" ? <><MvPartLabel part={m.part} /> · </> : null}#{m.n}
-                              </span>
-                              <strong>{m.name}</strong>
-                              {meta && <small>{meta}</small>}
-                            </span>
+                <div className="mv-browser">
+                  <div className="mv-toolbar">
+                    {parts.length > 1 && (
+                      <div className="mv-parts" role="tablist" aria-label="Tipo de missão">
+                        <button type="button" role="tab" aria-selected={part === "all"} className={part === "all" ? "on" : ""} onClick={() => { setPart("all"); setSelKey(""); }}>
+                          Todas <b>{missions.length}</b>
+                        </button>
+                        {parts.map((p) => (
+                          <button key={p} type="button" role="tab" aria-selected={part === p} className={part === p ? "on" : ""} onClick={() => { setPart(p); setSelKey(""); }}>
+                            <MvPartLabel part={p} /> <b>{missions.filter((m) => m.part === p).length}</b>
                           </button>
-                        </li>
-                      );
-                    })}
-                  </ol>
-                ) : (
-                  <p className="mv-empty">Nenhuma missão com esse filtro.</p>
-                )}
+                        ))}
+                      </div>
+                    )}
+                    <label className="mv-search">
+                      <span className="sr-only">Buscar missão</span>
+                      <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filtrar por missão, contato ou lugar…" />
+                    </label>
+                  </div>
+
+                  {list.length ? (
+                    <ol className="mv-list" ref={listRef}>
+                      {list.map((m) => {
+                        const on = selected && mvKey(m) === mvKey(selected);
+                        const thumb = mvThumb(m);
+                        const meta = mvMeta(m);
+                        return (
+                          <li key={mvKey(m)}>
+                            <button type="button" className={`mv-row ${on ? "on" : ""} ${m.video ? "" : "no-video"}`} onClick={() => choose(m)} aria-current={on ? "true" : undefined}>
+                              <span className="mv-row-thumb">
+                                {thumb ? <img src={thumb} alt="" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /> : <span className="mv-row-icon" aria-hidden="true">▶</span>}
+                                {m.video && m.video.secs ? <em>{mvDuration(m.video.secs)}</em> : null}
+                              </span>
+                              <span className="mv-row-text">
+                                <span className="mv-row-n">
+                                  {part === "all" && m.part !== "story" ? <><MvPartLabel part={m.part} /> · </> : null}#{m.n}
+                                </span>
+                                <strong>{m.name}</strong>
+                                {meta && <small>{meta}</small>}
+                              </span>
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  ) : (
+                    <p className="mv-empty">Nenhuma missão com esse filtro.</p>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             <p className="mv-note">
               {data.note}{" "}

@@ -135,8 +135,7 @@ function App(){
       {VIHeroSec ? <VIHeroSec /> : <HeroSec />}
       <TimelineSec onOpenDossier={setDossier} />
       <GamesSec onOpenDossier={setDossier} />
-      <MissionsSec onOpenDossier={setDossier} />
-      {MissionVideosSec && <MissionVideosSec />}
+      {MissionVideosSec ? <MissionVideosSec onOpenDossier={setDossier} /> : <MissionsSec onOpenDossier={setDossier} />}
       <VehiclesSec onOpenDossier={setDossier} />
       <WeaponsSec onOpenDossier={setDossier} />
       <DevelopmentSec onOpenDossier={setDossier} />
