@@ -273,7 +273,7 @@ const GTA6Section = ()=>{
                 "Ambientação: Leonida (Flórida)",
                 "Vice City é cidade principal",
                 "Protagonistas: Lucia & Jason",
-                "Engine RAGE 2 com ray-tracing",
+                "Engine proprietária RAGE (sem ficha técnica oficial)",
                 "Trilha sonora original",
                 "Trailer oficial de 2h+ liberado"
               ].map((f,i)=>(
@@ -351,7 +351,7 @@ const GlossarySection = ()=>{
     {term:"Pontual", def:"Missão secundária realizada durante gameplay normal."},
     {term:"Cheats/Codes", def:"Códigos que modificam gameplay. Gta série sempre teve suporte a cheats."},
     {term:"Sandbox", def:"Engine de jogo que permite interações físicas realistas."},
-    {term:"RAGE", def:"Engine de jogo utilizada por Rockstar desde GTA IV. Atual: RAGE 2 com ray-tracing."},
+    {term:"RAGE", def:"Engine proprietária da Rockstar desde 2006 (Table Tennis); em GTA desde GTA IV (2008)."},
     {term:"Neon", def:"Estética visual com cores brilhantes, especialmente associada a Vice City."},
     {term:"Dupla Protagonista", def:"Dois personagens jogáveis principais. GTA V tem três, GTA VI tem dois."},
   ];

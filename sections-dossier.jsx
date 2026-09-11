@@ -202,6 +202,260 @@ const initialsOf = (value) => String(value || "")
   .join("")
   .toUpperCase();
 
+/* ---------------------------------------------------------------------------
+ * CARDS COMPACTOS (dz-*) + CRUZAMENTO DE FICHAS
+ * O card mostra só o essencial — capa curta, resumo de 2–3 linhas, fatos numa
+ * linha e chips — e o card INTEIRO abre o dossiê. O aprofundamento mora no
+ * modal, que cruza jogos, personagens, cidades, facções e tecnologia.
+ * ------------------------------------------------------------------------- */
+const dzOpenKeys = (fn) => (event) => {
+  if (event.key === "Enter" || event.key === " ") { event.preventDefault(); fn(); }
+};
+
+const dzHasValue = (value) => Array.isArray(value) ? value.filter(Boolean).length > 0 : Boolean(value);
+
+const DzFallback = ({ label, icon }) => (
+  <div className="dz-fallback">
+    {icon && <DossierIcon type={icon} />}
+    <strong>{initialsOf(label)}</strong>
+  </div>
+);
+
+const DzCard = ({ media, fallback, badge, kicker, title, summary, facts = [], chips = [], onOpen, variant = "stack", thumb = "", className = "", cta, id }) => {
+  const rows = facts.filter((row) => row && dzHasValue(row[1]));
+  const chipList = asList(chips).filter(Boolean).slice(0, 2);
+  const hasMedia = Boolean(media?.src);
+  return (
+    <article
+      id={id}
+      className={`card dz-card dz-card--${variant} ${className}`}
+      role={onOpen ? "button" : undefined}
+      tabIndex={onOpen ? 0 : undefined}
+      onClick={onOpen}
+      onKeyDown={onOpen ? dzOpenKeys(onOpen) : undefined}
+    >
+      <Corners />
+      {(hasMedia || fallback) && (
+        <div className={`dz-thumb ${hasMedia ? "has-official" : ""} ${thumb ? `dz-thumb--${thumb}` : ""}`}>
+          {hasMedia ? <OfficialMedia media={media} className="dz-media" /> : fallback}
+          {badge && <span className="dz-badge">{badge}</span>}
+        </div>
+      )}
+      <div className="dz-body">
+        {kicker && <div className="dz-kicker">{kicker}</div>}
+        <h3>{title}</h3>
+        {summary && <p className="dz-sum">{summary}</p>}
+        {rows.length > 0 && (
+          <dl className="dz-facts">
+            {rows.map(([label, value]) => (
+              <div key={label}><dt>{label}</dt><dd>{textOf(asList(value).filter(Boolean).slice(0, 4))}</dd></div>
+            ))}
+          </dl>
+        )}
+        <div className="dz-foot">
+          <div className="dz-chips">
+            {chipList.map((chip, index) => <span key={`${chip}-${index}`} className={`dz-chip ${tagTone(chip)}`}>{chip}</span>)}
+          </div>
+          {onOpen && <span className="dz-open">{cta || "Dossiê"} ›</span>}
+        </div>
+      </div>
+    </article>
+  );
+};
+
+/* Chaves de comparação. Os campos já podem estar traduzidos: comparamos
+ * sempre pelo texto de origem (ptText). */
+const dzGameKey = (value) => {
+  let key = titleKey(ptText(value));
+  key = key.replace(/^gta iv (the )?(lost and damned|ballad of gay tony)/, "$2");
+  key = key.replace(/^the /, "").replace(/^gta /, "");
+  if (key === "1" || key === "1997") return "gta";
+  return key;
+};
+const dzSameGame = (a, b) => {
+  const ka = dzGameKey(a);
+  return Boolean(ka) && ka === dzGameKey(b);
+};
+const dzNameKey = (value) => normalizeText(ptText(value)).replace(/['"]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+const dzUnique = (items) => {
+  const seen = new Set();
+  return items.filter((item) => item && !seen.has(item.id) && seen.add(item.id));
+};
+
+const dzFindCharacter = (name) => {
+  const key = dzNameKey(String(ptText(name) || "").split(":")[0]);
+  if (!key) return null;
+  const namesOf = (character) => [...String(ptText(character.name)).split("/"), ...asList(ptText(character.aliases))].map(dzNameKey).filter(Boolean);
+  const exact = charactersData.find((character) => namesOf(character).includes(key));
+  if (exact || key.includes(" ")) return exact || null;
+  const loose = charactersData.filter((character) => namesOf(character).some((n) => {
+    const parts = n.split(" ");
+    return parts.length > 1 && (parts[0] === key || parts[parts.length - 1] === key);
+  }));
+  return loose.length === 1 ? loose[0] : null;
+};
+const dzFactionByName = (name) => {
+  const key = dzNameKey(name);
+  if (!key) return null;
+  return factionsData.find((faction) => dzNameKey(faction.name) === key) ||
+    (key.length > 3 ? factionsData.find((faction) => {
+      const fk = dzNameKey(faction.name);
+      return fk.length > 3 && (fk.endsWith(" " + key) || key.endsWith(" " + fk));
+    }) : null) || null;
+};
+const dzCityByName = (name) => {
+  const key = dzNameKey(name);
+  return key ? citiesData.find((city) => dzNameKey(city.name) === key) || null : null;
+};
+const dzSplit = (value, pattern = /\s*[,/]\s*/) => String(ptText(value) || "").split(pattern).map((part) => part.trim()).filter(Boolean);
+
+const dzGamesByNames = (names) => dzUnique(asList(names).flatMap((name) => dzSplit(name, /\s*,\s*/)).map((name) => gamesData.find((game) => dzSameGame(game.title, name))));
+const dzCharactersForGame = (game) => charactersData.filter((character) => asList(character.games).some((name) => dzSameGame(name, game.title)));
+const dzFactionsForGame = (game) => factionsData.filter((faction) => dzSplit(faction.game, /\s*,\s*/).some((name) => dzSameGame(name, game.title)));
+const dzCitiesForGame = (game) => citiesData.filter((city) => asList(city.games).some((name) => dzSameGame(name, game.title)));
+const dzFactionsForCharacter = (character) => dzUnique(asList(character.affiliations).map(dzFactionByName));
+const dzCitiesForCharacter = (character) => dzUnique(dzSplit(character.city).map(dzCityByName));
+const dzRelatedCharacters = (character) => dzUnique(asList(character.relationships).map(dzFindCharacter)).filter((other) => other.id !== character.id);
+const dzCharactersForFaction = (faction) => dzUnique([
+  ...asList(faction.leaders).map(dzFindCharacter),
+  ...charactersData.filter((character) => asList(character.affiliations).some((name) => dzFactionByName(name)?.id === faction.id))
+]);
+const dzCitiesForFaction = (faction) => dzUnique(dzSplit(faction.city).map(dzCityByName));
+const dzCharactersForCity = (city) => dzUnique([
+  ...asList(city.characters).map(dzFindCharacter),
+  ...charactersData.filter((character) => dzSplit(character.city).some((name) => dzNameKey(name) === dzNameKey(city.name)))
+]);
+const dzFactionsForCity = (city) => dzUnique([
+  ...asList(city.factions).map(dzFactionByName),
+  ...factionsData.filter((faction) => dzSplit(faction.city).some((name) => dzNameKey(name) === dzNameKey(city.name)))
+]);
+const dzDossiersForGame = (list, game) => asList(list).filter((entry) => entry.gameId === game.id);
+const dzDeep = (key) => (key && typeof deepDossierData !== "undefined" ? deepDossierData[key] : null) || null;
+const dzGameById = (id) => gamesData.find((game) => game.id === id) || null;
+
+/* Fábricas de atalho (mini-cards clicáveis dentro do modal). */
+const dzLink = {
+  game: (game) => game && { key: `game-${game.id}`, title: game.title, sub: `${game.releaseYear} · ${game.universe}`, media: game.media, record: { type: "game", item: game } },
+  character: (character) => character && { key: `character-${character.id}`, title: character.name, sub: character.role, media: character.media, record: { type: "character", item: character } },
+  city: (city) => city && { key: `city-${city.id}`, title: city.name, sub: city.realWorldInspiration, media: city.media, record: { type: "city", item: city } },
+  faction: (faction) => faction && { key: `faction-${faction.id}`, title: faction.name, sub: faction.category, media: faction.media, record: { type: "faction", item: faction } },
+  development: (dev) => dev && { key: `dev-${dev.id}`, title: dev.title, sub: dev.period, media: dzGameById(dev.gameId)?.media, record: { type: "development", item: dev } },
+  universe: (universe) => universe && { key: `universe-${universe.id}`, title: universe.name, sub: universe.period, media: universe.media, record: { type: "universe", item: universe } },
+  deep: (deep) => deep && { key: `deep-${deep.id}`, title: deep.title, sub: deep.era, media: deep.media, record: { type: "deep", item: deep } },
+  mission: (entry) => entry && { key: `mission-${entry.id}`, title: entry.title, sub: entry.totalLabel, media: entry.media || dzGameById(entry.gameId)?.media, record: { type: "mission", item: { ...entry, media: entry.media || dzGameById(entry.gameId)?.media } } },
+  vehicle: (entry) => entry && { key: `vehicle-${entry.id}`, title: entry.title, sub: entry.totalLabel, media: entry.media || dzGameById(entry.gameId)?.media, record: { type: "vehicle", item: { ...entry, media: entry.media || dzGameById(entry.gameId)?.media } } },
+  weapon: (entry) => entry && { key: `weapon-${entry.id}`, title: entry.title, sub: entry.totalLabel, media: entry.media || dzGameById(entry.gameId)?.media, record: { type: "weapon", item: { ...entry, media: entry.media || dzGameById(entry.gameId)?.media } } }
+};
+
+const DzMiniGrid = ({ items, onOpen }) => (
+  <div className="dz-minis">
+    {items.map((entry) => (
+      <button type="button" key={entry.key} className="dz-mini" onClick={() => onOpen(entry.record)}>
+        <span className="dz-mini-thumb">
+          {entry.media?.src ? <img src={entry.media.src} alt="" loading="lazy" referrerPolicy="no-referrer" /> : <b>{initialsOf(entry.title)}</b>}
+        </span>
+        <span className="dz-mini-text">
+          <strong>{entry.title}</strong>
+          {entry.sub && <small>{textOf(entry.sub)}</small>}
+        </span>
+      </button>
+    ))}
+  </div>
+);
+
+const DzRelated = ({ label, items, onOpen }) => {
+  const list = asList(items).filter(Boolean);
+  if (!list.length || !onOpen) return null;
+  return (
+    <ModalField label={`${label} · ${list.length}`}>
+      <DzMiniGrid items={list} onOpen={onOpen} />
+    </ModalField>
+  );
+};
+
+/* Blocos do dossiê aprofundado (data-deep.jsx). */
+const DeepDossierBlocks = ({ deep, skipLead = false }) => {
+  if (!deep) return null;
+  return (
+    <>
+      {!skipLead && deep.lead && <div className="dz-lead">{deep.lead}</div>}
+      {asList(deep.stats).length > 0 && (
+        <div className="dz-stats">
+          {deep.stats.map((stat, index) => <div key={index}><strong>{stat.detail}</strong><span>{stat.label}</span></div>)}
+        </div>
+      )}
+      {asList(deep.sheet).length > 0 && (
+        <ModalField label="Ficha técnica">
+          <dl className="dz-sheet">
+            {deep.sheet.map((row, index) => <div key={index}><dt>{row.label}</dt><dd>{row.detail}</dd></div>)}
+          </dl>
+        </ModalField>
+      )}
+      {asList(deep.sections).map((section, index) => (
+        <ModalField key={index} label={section.title}>
+          {asList(section.details).map((paragraph, pIndex) => <p key={pIndex} className="dz-par">{paragraph}</p>)}
+        </ModalField>
+      ))}
+      {asList(deep.components).length > 0 && (
+        <ModalField label="Componentes e middleware">
+          <div className="dz-components">
+            {deep.components.map((part, index) => <div key={index}><strong>{part.name}</strong><span>{part.detail}</span></div>)}
+          </div>
+        </ModalField>
+      )}
+      {asList(deep.cast).length > 0 && (
+        <ModalField label="Elenco de voz e atuação">
+          <div className="dz-cast">
+            {deep.cast.map((member, index) => <div key={index}><span>{member.name}</span><strong>{member.actor}</strong></div>)}
+          </div>
+        </ModalField>
+      )}
+      {asList(deep.timeline).length > 0 && (
+        <ModalField label="Linha do tempo">
+          <ol className="dz-timeline">
+            {deep.timeline.map((step, index) => <li key={index}><b>{step.year}</b><div><strong>{step.title}</strong><span>{step.detail}</span></div></li>)}
+          </ol>
+        </ModalField>
+      )}
+      {asList(deep.titles).length > 0 && (
+        <ModalField label="Jogos nesta tecnologia">
+          <ol className="dz-timeline">
+            {deep.titles.map((entry, index) => <li key={index}><b>{entry.year}</b><div><strong>{entry.name}</strong><span>{entry.detail}</span></div></li>)}
+          </ol>
+        </ModalField>
+      )}
+      {asList(deep.trivia).length > 0 && <ModalField label="Curiosidades"><BulletList items={deep.trivia} /></ModalField>}
+      {asList(deep.uncertainty).length > 0 && <ModalField label="Oficial × não confirmado"><BulletList items={deep.uncertainty} /></ModalField>}
+      {asList(deep.sources).length > 0 && <ModalField label="Fontes verificadas"><SourceLinks items={deep.sources} /></ModalField>}
+    </>
+  );
+};
+
+/* Índice do modal: lista os rótulos dos campos renderizados e rola até eles.
+ * Relê depois de um instante porque listas da wiki chegam de forma assíncrona. */
+const DzModalToc = ({ rootRef, watch }) => {
+  const [entries, setEntries] = React.useState([]);
+  const fieldLabels = () => (rootRef.current ? [...rootRef.current.querySelectorAll(".dossier-modal-content .dossier-modal-field > span")] : []);
+  React.useEffect(() => {
+    const collect = () => setEntries(fieldLabels().map((node) => node.textContent.trim()).filter(Boolean));
+    collect();
+    const timer = window.setTimeout(collect, 500);
+    return () => window.clearTimeout(timer);
+  }, [watch]);
+  if (entries.length < 4) return null;
+  /* No celular o índice começa fechado: aberto, empurrava o conteúdo para baixo. */
+  const wide = typeof window.matchMedia === "function" && window.matchMedia("(min-width: 941px)").matches;
+  const jump = (index) => fieldLabels()[index]?.parentElement?.scrollIntoView({ behavior: "smooth", block: "start" });
+  return (
+    <details className="dz-toc" open={wide}>
+      <summary>Índice · {entries.length}</summary>
+      <nav aria-label="Índice do dossiê">
+        {entries.map((label, index) => <button type="button" key={`${label}-${index}`} onClick={() => jump(index)}>{label}</button>)}
+      </nav>
+    </details>
+  );
+};
+
 const findGameForTimeline = (item) => {
   const aliases = {
     "gta london 1961": "london-1961",
@@ -542,58 +796,37 @@ const TimelineDossierSection = ({ onOpenDossier }) => {
         </div>
 
         {mode === "chronology" ? (
-          <div className="dossier-chronology">
+          <div className="dz-grid dz-grid--timeline">
             {chronologyItems.map((item) => (
-              <article key={`${item.year}-${item.title}`} className="card dossier-timeline-card">
-                <Corners />
-                <div className="dossier-time-pin">
-                  <strong>{item.year}</strong>
-                  <span>{item.universe}</span>
-                </div>
-                <div className={`dossier-timeline-cover ${item.game?.media ? "has-official" : ""}`}>
-                  {item.game?.media && <OfficialMedia media={item.game.media} className="dossier-cover-media" />}
-                  <div className="dossier-cover-label">
-                    <span>{item.game?.releaseYear || item.year}</span>
-                    <strong>{(item.game?.title || item.title).replace("Grand Theft Auto", "GTA")}</strong>
-                    <small>{item.game?.city || item.city}</small>
-                  </div>
-                </div>
-                <div className="dossier-time-body">
-                  <div className="dossier-card-kicker">{item.city}</div>
-                  <h3>{item.title}</h3>
-                  <p>{item.summary}</p>
-                  <BulletList items={item.beats} />
-                  <DossierChips items={[item.protagonist, item.certainty]} limit={4} />
-                  <button className="btn" onClick={() => onOpenDossier({ type: "timeline", item })}>Abrir dossiê</button>
-                </div>
-              </article>
+              <DzCard
+                key={`${item.year}-${item.title}`}
+                variant="row"
+                media={item.game?.media}
+                fallback={<DzFallback label={item.title} />}
+                badge={item.year}
+                kicker={`${item.universe} · ${item.city}`}
+                title={item.title}
+                summary={item.summary}
+                facts={[["Protagonista", item.protagonist], ["Precisão", item.certainty]]}
+                onOpen={() => onOpenDossier({ type: "timeline", item })}
+              />
             ))}
           </div>
         ) : (
-          <div className="dossier-release-grid">
+          <div className="dz-grid">
             {releaseItems.map(({ year, title, game }) => (
-              <article key={`${year}-${title}`} className="card dossier-release-card">
-                <Corners />
-                <div className={`dossier-cover-mini ${game?.media ? "has-official" : ""}`}>
-                  {game?.media && <OfficialMedia media={game.media} className="dossier-cover-media" />}
-                  <div className="dossier-cover-label">
-                    <span>{year}</span>
-                    <strong>{title.replace("Grand Theft Auto", "GTA")}</strong>
-                  </div>
-                </div>
-                <div>
-                  <div className="dossier-card-kicker">Lançamento · {year}</div>
-                  <h3>{title}</h3>
-                  <MetaGrid rows={[
-                    ["História se passa em", game?.storyYear || "—"],
-                    ["Cidade", game?.city || "—"],
-                    ["Protagonista", game?.protagonist || "—"]
-                  ]} />
-                  <p>{game?.summary || "Coletado na linha oficial de lançamentos da franquia."}</p>
-                  {game && <DossierChips items={game.tags} limit={5} />}
-                  {game && <button className="btn" onClick={() => onOpenDossier({ type: "game", item: game })}>Ver jogo</button>}
-                </div>
-              </article>
+              <DzCard
+                key={`${year}-${title}`}
+                media={game?.media}
+                fallback={<DzFallback label={title} />}
+                badge={year}
+                kicker={game ? `${game.universe} · ${game.city}` : "Lançamento"}
+                title={title}
+                summary={game?.summary || "Coletado na linha oficial de lançamentos da franquia."}
+                facts={[["História", game?.storyYear], ["Protagonista", game?.protagonist]]}
+                chips={game?.tags}
+                onOpen={game ? () => onOpenDossier({ type: "game", item: game }) : undefined}
+              />
             ))}
           </div>
         )}
@@ -603,30 +836,17 @@ const TimelineDossierSection = ({ onOpenDossier }) => {
 };
 
 const GameDossierCard = ({ game, onOpen }) => (
-  <article className="card dossier-game-card">
-    <Corners />
-    <div className={`dossier-cover-art ${universeTone(game.universe)} ${game.media ? "has-official" : ""}`}>
-      {game.media ? <OfficialMedia media={game.media} className="dossier-cover-media" /> : <div className="dossier-cover-map" />}
-      <div className="dossier-cover-label">
-        <span>{game.releaseYear}</span>
-        <strong>{game.title}</strong>
-        <small>{game.city}</small>
-      </div>
-    </div>
-    <div className="dossier-card-body">
-      <div className="dossier-card-kicker">{game.universe} · história em {game.storyYear}</div>
-      <h3>{game.title}</h3>
-      <p>{game.summary}</p>
-      <MetaGrid rows={[
-        ["Protagonista", game.protagonist],
-        ["Antagonistas", game.antagonists],
-        ["Cidade", game.city],
-        ["Importância", game.importance]
-      ]} />
-      <DossierChips items={game.tags} limit={6} />
-      <button className="btn" onClick={() => onOpen({ type: "game", item: game })}>Abrir jogo</button>
-    </div>
-  </article>
+  <DzCard
+    media={game.media}
+    fallback={<DzFallback label={game.title} icon="file" />}
+    badge={game.releaseYear}
+    kicker={`${game.universe} · ${game.storyYear}`}
+    title={game.title}
+    summary={game.summary}
+    facts={[["Protagonista", game.protagonist], ["Cidade", game.city], ["Rivais", game.antagonists]]}
+    chips={game.tags}
+    onOpen={() => onOpen({ type: "game", item: game })}
+  />
 );
 
 const GamesDossierSection = ({ onOpenDossier }) => {
@@ -649,7 +869,7 @@ const GamesDossierSection = ({ onOpenDossier }) => {
           <label><span>Universo</span><select value={universe} onChange={(e) => setUniverse(e.target.value)}><option value="all">Todos</option>{universeData.map((u) => <option key={u.name} value={u.name}>{u.name}</option>)}</select></label>
           <label><span>Cidade</span><select value={city} onChange={(e) => setCity(e.target.value)}><option value="all">Todas</option>{cities.map((c) => <option key={c} value={c}>{c}</option>)}</select></label>
         </div>
-        <div className="dossier-games-grid">
+        <div className="dz-grid">
           {filtered.map((game) => <GameDossierCard key={game.id} game={game} onOpen={onOpenDossier} />)}
         </div>
       </div>
@@ -941,25 +1161,18 @@ const MissionDossierCard = ({ mission, onOpen }) => {
   const game = missionGameFor(mission);
   const media = mission.media || game?.media;
   return (
-    <article className="card dossier-mission-card">
-      <Corners />
-      <div className={`dossier-mission-media ${universeTone(mission.universe)} ${media ? "has-official" : ""}`}>
-        {media ? <OfficialMedia media={media} className="dossier-mission-official" /> : <div className="dossier-cover-map" />}
-        <div className="dossier-mission-badge"><DossierIcon type="database" /><span>{mission.totalLabel}</span></div>
-      </div>
-      <div className="dossier-card-body">
-        <div className="dossier-card-kicker">{mission.universe} · missões em {mission.storyYear}</div>
-        <h3>{mission.title}</h3>
-        <p>{mission.summary}</p>
-        <MetaGrid rows={[
-          ["Cidade", mission.city],
-          ["Cobertura", asList(mission.coverage).slice(0, 5)],
-          ["Destaques", asList(mission.highlights).slice(0, 5)]
-        ]} />
-        <DossierChips items={mission.tags} limit={6} />
-        <button className="btn" onClick={() => onOpen({ type: "mission", item: { ...mission, media } })}>Abrir missões</button>
-      </div>
-    </article>
+    <DzCard
+      media={media}
+      fallback={<DzFallback label={mission.title} icon="database" />}
+      badge={mission.totalLabel}
+      kicker={`${mission.universe} · ${mission.storyYear}`}
+      title={mission.title}
+      summary={mission.summary}
+      facts={[["Cidade", mission.city], ["Cobertura", mission.coverage], ["Destaques", mission.highlights]]}
+      chips={mission.tags}
+      cta="Missões"
+      onOpen={() => onOpen({ type: "mission", item: { ...mission, media } })}
+    />
   );
 };
 
@@ -1006,7 +1219,7 @@ const MissionsDossierSection = ({ onOpenDossier }) => {
           <label><span>Universo</span><select value={universe} onChange={(e) => setUniverse(e.target.value)}><option value="all">Todos</option>{universeData.map((u) => <option key={u.name}>{u.name}</option>)}</select></label>
           <label><span>Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}>{typeOptions.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
         </div>
-        <div className="dossier-mission-grid">
+        <div className="dz-grid">
           {filtered.map((mission) => <MissionDossierCard key={mission.id} mission={mission} onOpen={onOpenDossier} />)}
         </div>
       </div>
@@ -1558,25 +1771,18 @@ const VehicleDossierCard = ({ vehicle, onOpen }) => {
   const game = vehicleGameFor(vehicle);
   const media = vehicle.media || game?.media;
   return (
-    <article className="card dossier-vehicle-card">
-      <Corners />
-      <div className={`dossier-vehicle-media ${universeTone(vehicle.universe)} ${media ? "has-official" : ""}`}>
-        {media ? <OfficialMedia media={media} className="dossier-vehicle-official" /> : <div className="dossier-cover-map" />}
-        <div className="dossier-vehicle-badge"><DossierIcon type="car" /><span>{vehicle.totalLabel}</span></div>
-      </div>
-      <div className="dossier-card-body">
-        <div className="dossier-card-kicker">{vehicle.universe} · frota em {vehicle.storyYear}</div>
-        <h3>{vehicle.title}</h3>
-        <p>{vehicle.summary}</p>
-        <MetaGrid rows={[
-          ["Cidade", vehicle.city],
-          ["Cobertura", asList(vehicle.coverage).slice(0, 5)],
-          ["Ícones", asList(vehicle.highlights).slice(0, 5)]
-        ]} />
-        <DossierChips items={vehicle.tags} limit={6} />
-        <button className="btn" onClick={() => onOpen({ type: "vehicle", item: { ...vehicle, media } })}>Abrir frota</button>
-      </div>
-    </article>
+    <DzCard
+      media={media}
+      fallback={<DzFallback label={vehicle.title} icon="car" />}
+      badge={vehicle.totalLabel}
+      kicker={`${vehicle.universe} · ${vehicle.storyYear}`}
+      title={vehicle.title}
+      summary={vehicle.summary}
+      facts={[["Cidade", vehicle.city], ["Cobertura", vehicle.coverage], ["Ícones", vehicle.highlights]]}
+      chips={vehicle.tags}
+      cta="Frota"
+      onOpen={() => onOpen({ type: "vehicle", item: { ...vehicle, media } })}
+    />
   );
 };
 
@@ -1624,7 +1830,7 @@ const VehiclesDossierSection = ({ onOpenDossier }) => {
           <label><span>Universo</span><select value={universe} onChange={(e) => setUniverse(e.target.value)}><option value="all">Todos</option>{universeData.map((u) => <option key={u.name}>{u.name}</option>)}</select></label>
           <label><span>Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}>{typeOptions.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
         </div>
-        <div className="dossier-vehicle-grid">
+        <div className="dz-grid">
           {filtered.map((vehicle) => <VehicleDossierCard key={vehicle.id} vehicle={vehicle} onOpen={onOpenDossier} />)}
         </div>
       </div>
@@ -2142,25 +2348,18 @@ const WeaponDossierCard = ({ weapon, onOpen }) => {
   const game = weaponGameFor(weapon);
   const media = weapon.media || game?.media;
   return (
-    <article className="card dossier-weapon-card">
-      <Corners />
-      <div className={`dossier-weapon-media ${universeTone(weapon.universe)} ${media ? "has-official" : ""}`}>
-        {media ? <OfficialMedia media={media} className="dossier-weapon-official" /> : <div className="dossier-cover-map" />}
-        <div className="dossier-weapon-badge"><DossierIcon type="weapon" /><span>{weapon.totalLabel}</span></div>
-      </div>
-      <div className="dossier-card-body">
-        <div className="dossier-card-kicker">{weapon.universe} · arsenal em {weapon.storyYear}</div>
-        <h3>{weapon.title}</h3>
-        <p>{weapon.summary}</p>
-        <MetaGrid rows={[
-          ["Cidade", weapon.city],
-          ["Cobertura", asList(weapon.coverage).slice(0, 5)],
-          ["Destaques", asList(weapon.highlights).slice(0, 5)]
-        ]} />
-        <DossierChips items={weapon.tags} limit={6} />
-        <button className="btn" onClick={() => onOpen({ type: "weapon", item: { ...weapon, media } })}>Abrir arsenal</button>
-      </div>
-    </article>
+    <DzCard
+      media={media}
+      fallback={<DzFallback label={weapon.title} icon="weapon" />}
+      badge={weapon.totalLabel}
+      kicker={`${weapon.universe} · ${weapon.storyYear}`}
+      title={weapon.title}
+      summary={weapon.summary}
+      facts={[["Cidade", weapon.city], ["Cobertura", weapon.coverage], ["Destaques", weapon.highlights]]}
+      chips={weapon.tags}
+      cta="Arsenal"
+      onOpen={() => onOpen({ type: "weapon", item: { ...weapon, media } })}
+    />
   );
 };
 
@@ -2209,7 +2408,7 @@ const WeaponsDossierSection = ({ onOpenDossier }) => {
           <label><span>Universo</span><select value={universe} onChange={(e) => setUniverse(e.target.value)}><option value="all">Todos</option>{universeData.map((u) => <option key={u.name}>{u.name}</option>)}</select></label>
           <label><span>Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}>{typeOptions.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
         </div>
-        <div className="dossier-weapon-grid">
+        <div className="dz-grid">
           {filtered.map((weapon) => <WeaponDossierCard key={weapon.id} weapon={weapon} onOpen={onOpenDossier} />)}
         </div>
       </div>
@@ -2217,33 +2416,60 @@ const WeaponsDossierSection = ({ onOpenDossier }) => {
   );
 };
 
-const DevelopmentDossierSection = () => (
-  <section id="development" className="dossier-section dossier-shell">
-    <div className="wrap">
-      <DossierSectionHead tkey="section.development" eyebrow="Bastidores" title="Por trás do desenvolvimento" accent="var(--money)" right="história real separada da lore" />
-      <div className="dossier-dev-grid">
-        {developmentData.map((item) => (
-          <article key={item.id} className="card dossier-dev-card">
-            <Corners />
-            <div className="dossier-icon-box"><DossierIcon type="file" /></div>
-            <div>
-              <div className="dossier-card-kicker">{item.period}</div>
-              <h3>{item.title}</h3>
-              <p>{item.summary}</p>
-              <BulletList items={item.facts} />
-              <details className="dossier-details">
-                <summary>Notas de precisão</summary>
-                {Array.isArray(item.uncertainty) ? <BulletList items={item.uncertainty} /> : <p>{item.uncertainty}</p>}
-                <SourceLinks items={item.sources} />
-              </details>
+const DevelopmentDossierSection = ({ onOpenDossier }) => {
+  const engines = (typeof deepEngineKeys !== "undefined" ? deepEngineKeys : []).map(dzDeep).filter(Boolean);
+  return (
+    <section id="development" className="dossier-section dossier-shell">
+      <div className="wrap">
+        <DossierSectionHead tkey="section.development" eyebrow="Bastidores" title="Por trás do desenvolvimento" accent="var(--money)" right="história real separada da lore" />
+        {engines.length > 0 && (
+          <>
+            <div className="dz-subhead"><h3>Tecnologia da saga</h3><span>do motor da DMA à RAGE</span></div>
+            <div className="dz-grid dz-grid--wide">
+              {engines.map((engine) => (
+                <DzCard
+                  key={engine.id}
+                  media={engine.media}
+                  fallback={<DzFallback label={engine.title} icon="database" />}
+                  badge={engine.era}
+                  kicker={engine.subtitle}
+                  title={engine.title}
+                  summary={engine.lead}
+                  facts={asList(engine.stats).slice(0, 2).map((stat) => [stat.detail, stat.label])}
+                  cta="Dossiê técnico"
+                  onOpen={() => onOpenDossier?.({ type: "deep", item: engine })}
+                />
+              ))}
             </div>
-          </article>
-        ))}
+          </>
+        )}
+        <div className="dz-subhead"><h3>Produção jogo a jogo</h3><span>equipe, orçamento, elenco, vendas e controvérsias</span></div>
+        <div className="dz-grid dz-grid--wide">
+          {developmentData.map((item) => {
+            const game = dzGameById(item.gameId);
+            const lead = dzDeep(item.gameId)?.stats?.[0];
+            return (
+              <DzCard
+                key={item.id}
+                media={game?.media}
+                fallback={<DzFallback label={item.title} icon="file" />}
+                badge={item.period}
+                kicker={lead ? `${lead.detail} · ${lead.label}` : item.period}
+                title={item.title}
+                summary={item.summary}
+                facts={[["Marcos", item.facts]]}
+                chips={game?.tags}
+                cta="Produção completa"
+                onOpen={() => onOpenDossier?.({ type: "development", item })}
+              />
+            );
+          })}
+        </div>
+        <ConnectionsImpactSection compact />
       </div>
-      <ConnectionsImpactSection compact />
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 const characterFilterOptions = ["Todos", "Protagonistas", "Antagonistas", "Aliados", "Gangues", "Governo/Polícia", "Empresários", "Máfia", "GTA Online", "GTA VI"];
 
@@ -2278,36 +2504,21 @@ const CharactersDossierSection = ({ onOpenDossier }) => {
           <label><span>Filtro</span><select value={filter} onChange={(e) => setFilter(e.target.value)}>{characterFilterOptions.map((option) => <option key={option}>{option}</option>)}</select></label>
           <label><span>Universo</span><select value={universe} onChange={(e) => setUniverse(e.target.value)}><option value="all">Todos</option>{universeData.map((u) => <option key={u.name}>{u.name}</option>)}</select></label>
         </div>
-        <div className="dossier-character-grid">
+        <div className="dz-grid dz-grid--rows">
           {filtered.map((character) => (
-            <article key={character.id} className="card dossier-character-card" onClick={() => onOpenDossier({ type: "character", item: character })}>
-              <Corners />
-              <div className={`dossier-mugshot ${tagTone(character.role)} ${character.media ? "has-official" : "has-fallback"}`}>
-                {character.media ? (
-                  <OfficialMedia media={character.media} className="dossier-mugshot-media" />
-                ) : (
-                  <div className="dossier-mugshot-fallback">
-                    <DossierIcon type={character.tags.includes("governo") || character.tags.includes("polícia corrupta") ? "police" : "users"} />
-                    <strong>{initialsOf(character.name)}</strong>
-                    <small>{character.universe}</small>
-                  </div>
-                )}
-                {/* O carimbo com o id do registro ("vi-cat-lori-heder") ficava
-                    escrito por cima da foto. É dado interno, não conteúdo. */}
-              </div>
-              <div className="dossier-card-body">
-                <DossierChips items={[character.role, character.importance]} limit={2} />
-                <h3>{character.name}</h3>
-                <p>{character.biography}</p>
-                <MetaGrid rows={[
-                  ["Jogos", character.games],
-                  ["Cidade", character.city],
-                  ["Lealdades", character.affiliations],
-                  ["Conflitos", character.enemies]
-                ]} />
-                <DossierChips items={character.tags} limit={5} />
-              </div>
-            </article>
+            <DzCard
+              key={character.id}
+              variant="row"
+              thumb="portrait"
+              media={character.media}
+              fallback={<DzFallback label={character.name} icon={asList(character.tags).includes("governo") ? "police" : "users"} />}
+              kicker={`${character.role} · ${character.universe}`}
+              title={character.name}
+              summary={character.biography}
+              facts={[["Jogos", character.games], ["Lealdades", character.affiliations]]}
+              chips={[character.importance, ...asList(character.tags)]}
+              onOpen={() => onOpenDossier({ type: "character", item: character })}
+            />
           ))}
         </div>
       </div>
@@ -2426,24 +2637,20 @@ const CitiesDossierSection = ({ onOpenDossier }) => {
         <div className="dossier-filterbar single">
           <label><span>Busca em cidades</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Cidade, tema, personagem..." /></label>
         </div>
-        <div className="dossier-city-grid">
+        <div className="dz-grid">
           {filtered.map((city) => (
-            <article key={`${city.selectedUniverseId || "base"}-${city.id}`} className="card dossier-city-card" onClick={() => onOpenDossier({ type: "city", item: city })}>
-              <Corners />
-              <div className={`dossier-city-skyline ${city.media ? "has-official" : ""}`}>
-                {city.media ? (
-                  <OfficialMedia media={city.media} className="dossier-city-media" />
-                ) : (
-                  <Skyline palette={{ sky: "#101018", a: "#15151f", b: "#1d2230", c2: "#11131a", win: city.id === "vice-city" || city.id === "leonida" ? "#ff3d8a" : "#f5c518" }} />
-                )}
-              </div>
-              <div className="dossier-card-body">
-                <div className="dossier-card-kicker">{city.selectedUniverseLabel || "Todos os universos"} / {city.realWorldInspiration}</div>
-                <h3>{city.name}</h3>
-                <p>{city.description}</p>
-                <DossierChips items={city.themes} limit={5} />
-              </div>
-            </article>
+            <DzCard
+              key={`${city.selectedUniverseId || "base"}-${city.id}`}
+              media={city.media}
+              fallback={<DzFallback label={city.name} icon="city" />}
+              badge={city.selectedUniverseLabel}
+              kicker={city.realWorldInspiration}
+              title={city.name}
+              summary={city.description}
+              facts={[["Jogos", city.games], ["Facções", city.factions]]}
+              chips={city.themes}
+              onOpen={() => onOpenDossier({ type: "city", item: city })}
+            />
           ))}
         </div>
       </div>
@@ -2468,26 +2675,20 @@ const FactionsDossierSection = ({ onOpenDossier }) => {
           <label><span>Busca</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Leone, FIB, Lost MC, negócios..." /></label>
           <label><span>Tipo</span><select value={category} onChange={(e) => setCategory(e.target.value)}><option value="all">Todos</option>{categories.map((c) => <option key={c}>{c}</option>)}</select></label>
         </div>
-        <div className="dossier-faction-grid">
+        <div className="dz-grid">
           {filtered.map((faction) => (
-            <article key={faction.id} className="card dossier-faction-card">
-              <Corners />
-              <div className={`dossier-faction-visual ${faction.media ? "has-official" : ""}`}>
-                {faction.media && <OfficialMedia media={faction.media} className="dossier-faction-media" />}
-                <div className="dossier-faction-mark">{faction.name.split(/[ /]/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("")}</div>
-              </div>
-              <div className="dossier-card-kicker">{faction.category} · {faction.city}</div>
-              <h3>{faction.name}</h3>
-              <p>{faction.narrativeImportance}</p>
-              <MetaGrid rows={[
-                ["Líderes", faction.leaders],
-                ["Aliados", faction.allies],
-                ["Inimigos", faction.enemies],
-                ["Negócios", faction.businesses]
-              ]} />
-              <DossierChips items={faction.tags} limit={4} />
-              <button className="btn" onClick={() => onOpenDossier({ type: "faction", item: faction })}>Painel criminal</button>
-            </article>
+            <DzCard
+              key={faction.id}
+              media={faction.media}
+              fallback={<DzFallback label={faction.name} icon="users" />}
+              badge={faction.category}
+              kicker={faction.city}
+              title={faction.name}
+              summary={faction.narrativeImportance}
+              facts={[["Líderes", faction.leaders], ["Negócios", faction.businesses]]}
+              chips={faction.tags}
+              onOpen={() => onOpenDossier({ type: "faction", item: faction })}
+            />
           ))}
         </div>
       </div>
@@ -2495,26 +2696,24 @@ const FactionsDossierSection = ({ onOpenDossier }) => {
   );
 };
 
-const UniversesDossierSection = () => (
+const UniversesDossierSection = ({ onOpenDossier }) => (
   <section id="universes" className="dossier-section dossier-shell">
     <div className="wrap">
       <DossierSectionHead tkey="section.universes" eyebrow="Canon" title="Universos GTA" accent="var(--neon)" right="2D, 3D e HD não são a mesma continuidade" />
-      <div className="dossier-universe-grid">
+      <div className="dz-grid dz-grid--wide">
         {universeData.map((universe) => (
-          <article key={universe.id} className={`card dossier-universe-card ${universe.tone}`}>
-            <Corners />
-            {universe.media && <OfficialMedia media={universe.media} className="dossier-universe-media" />}
-            <div className="dossier-universe-top">
-              <span>{universe.period}</span>
-              <h3>{universe.name}</h3>
-              <p>{universe.summary}</p>
-            </div>
-            <div className="dossier-card-body">
-              <p>{universe.description}</p>
-              <DossierChips items={universe.games} limit={10} />
-              <BulletList items={universe.notes} />
-            </div>
-          </article>
+          <DzCard
+            key={universe.id}
+            media={universe.media}
+            fallback={<DzFallback label={universe.name} icon="map" />}
+            badge={universe.period}
+            kicker={`${asList(universe.games).length} jogos na continuidade`}
+            title={universe.name}
+            summary={universe.summary}
+            facts={[["Jogos", universe.games], ["Regra", universe.notes]]}
+            cta="Continuidade"
+            onOpen={() => onOpenDossier?.({ type: "universe", item: universe })}
+          />
         ))}
       </div>
       <div className="card dossier-note-card">
@@ -2526,7 +2725,7 @@ const UniversesDossierSection = () => (
   </section>
 );
 
-const RockstarPeopleGrid = () => (
+const RockstarPeopleGrid = ({ onOpenDossier }) => (
   <div className="dossier-rockstar-people">
     <DossierSectionHead
       tkey="section.rockstar-people" eyebrow="Arquivo de pessoas"
@@ -2534,37 +2733,23 @@ const RockstarPeopleGrid = () => (
       accent="var(--neon)"
       right={`${rockstarPeopleData.length} perfis com fotos reais e fontes`}
     />
-    <div className="dossier-people-grid">
+    <div className="dz-grid dz-grid--rows">
       {rockstarPeopleData.map((person) => (
-        <article id={`people-${person.id}`} key={person.id} className="card dossier-person-card">
-          <Corners />
-          <div className={`dossier-person-photo ${person.media ? "has-official" : ""}`}>
-            {person.media ? (
-              <OfficialMedia media={person.media} className="dossier-person-media" />
-            ) : (
-              <div className="dossier-person-fallback">
-                <strong>{initialsOf(person.name)}</strong>
-                <small>foto nao confirmada</small>
-              </div>
-            )}
-            <span>{person.era}</span>
-          </div>
-          <div className="dossier-card-body">
-            <div className="dossier-card-kicker">{person.role}</div>
-            <h3>{person.name}</h3>
-            <p>{person.summary}</p>
-            <div className="dossier-person-meta">
-              <span><strong>Base</strong>{person.city}</span>
-              <span><strong>Jogos</strong>{asList(person.games).slice(0, 4).join(" / ")}</span>
-            </div>
-            <details className="dossier-details">
-              <summary>Contribuicoes no dossie</summary>
-              <BulletList items={person.contributions} />
-            </details>
-            <DossierChips items={person.tags} limit={6} />
-            <SourceLinks items={person.sources} />
-          </div>
-        </article>
+        <DzCard
+          key={person.id}
+          id={`people-${person.id}`}
+          variant="row"
+          thumb="person"
+          media={person.media}
+          fallback={<DzFallback label={person.name} icon="users" />}
+          kicker={person.role}
+          title={person.name}
+          summary={person.summary}
+          facts={[["Era", person.era], ["Jogos", person.games]]}
+          chips={person.tags}
+          cta="Perfil"
+          onOpen={() => onOpenDossier?.({ type: "person", item: person })}
+        />
       ))}
     </div>
     <div className="card dossier-note-card dossier-people-note">
@@ -2577,28 +2762,25 @@ const RockstarPeopleGrid = () => (
   </div>
 );
 
-const RockstarDossierSection = () => (
+const RockstarDossierSection = ({ onOpenDossier }) => (
   <section id="rockstar" className="dossier-section dossier-shell alt">
     <div className="wrap">
       <DossierSectionHead tkey="section.rockstar" eyebrow="História real" title="Rockstar Games e Rockstar North" accent="var(--evidence)" right="da DMA Design à era HD" />
       <div className="dossier-rockstar-layout">
         <div className="dossier-rockstar-timeline">
           {rockstarHistoryData.map((item) => (
-            <article key={`${item.year}-${item.title}`} className="card dossier-rockstar-row">
-              <Corners />
-              <div className="dossier-rockstar-year">{item.year}</div>
-              {item.media && <OfficialMedia media={item.media} className="dossier-rockstar-media" />}
-              <div>
-                <div className="dossier-card-kicker">{item.type}</div>
-                <h3>{item.title}</h3>
-                <p>{item.summary}</p>
-                <details className="dossier-details">
-                  <summary>Contexto</summary>
-                  {asList(item.details).map((paragraph, index) => <p key={`${item.title}-context-${index}`}>{paragraph}</p>)}
-                  <SourceLinks items={item.sources} />
-                </details>
-              </div>
-            </article>
+            <DzCard
+              key={`${item.year}-${item.title}`}
+              variant="row"
+              media={item.media}
+              fallback={<DzFallback label={item.title} icon="star" />}
+              badge={item.year}
+              kicker={item.type}
+              title={item.title}
+              summary={item.summary}
+              cta="Contexto"
+              onOpen={() => onOpenDossier?.({ type: "rockstar", item })}
+            />
           ))}
         </div>
         <aside className="dossier-founder-panel">
@@ -2627,7 +2809,7 @@ const RockstarDossierSection = () => (
           </p>
         </aside>
       </div>
-      <RockstarPeopleGrid />
+      <RockstarPeopleGrid onOpenDossier={onOpenDossier} />
     </div>
   </section>
 );
@@ -2678,46 +2860,20 @@ const GTAOnlineDossierSection = ({ onOpenDossier }) => {
           <label><span>Ano</span><select value={year} onChange={(e) => setYear(e.target.value)}>{years.map((item) => <option key={item}>{item}</option>)}</select></label>
           <label><span>Tipo</span><select value={type} onChange={(e) => setType(e.target.value)}>{types.map((item) => <option key={item}>{item}</option>)}</select></label>
         </div>
-        <div className="dossier-online-dlc-grid">
+        <div className="dz-grid">
           {filteredDlc.length ? filteredDlc.map((item) => (
-            <article
+            <DzCard
               key={item.id}
-              className="card dossier-online-dlc-card"
-              role="button"
-              tabIndex={0}
-              onClick={() => openDlc(item)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  openDlc(item);
-                }
-              }}
-            >
-              <Corners />
-              {item.media && <OfficialMedia media={item.media} className="dossier-online-update-media" />}
-              <div className="dossier-card-kicker">{item.releaseDate} / {item.era}</div>
-              <h3>{item.title}</h3>
-              <p>{item.summary}</p>
-              <MetaGrid rows={[
-                ["Tipo", item.type],
-                ["Sistemas", asList(item.systems).slice(0, 3)],
-                ["Personagens", asList(item.characters).slice(0, 3)]
-              ]} />
-              <div className="dossier-online-dlc-brought">
-                {asList(item.brought).slice(0, 4).map((entry) => <span key={entry}>{entry}</span>)}
-              </div>
-              <DossierChips items={item.tags} limit={6} />
-              <button
-                className="btn"
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  openDlc(item);
-                }}
-              >
-                Abrir dossie
-              </button>
-            </article>
+              media={item.media}
+              fallback={<DzFallback label={item.title} icon="star" />}
+              badge={item.releaseDate}
+              kicker={`${item.type} · ${item.era}`}
+              title={item.title}
+              summary={item.summary}
+              facts={[["Trouxe", item.brought]]}
+              chips={item.tags}
+              onOpen={() => openDlc(item)}
+            />
           )) : (
             <article className="card dossier-online-empty">
               <Corners />
@@ -2733,15 +2889,16 @@ const GTAOnlineDossierSection = ({ onOpenDossier }) => {
             <p>Um resumo visual das grandes viradas de GTA Online, para entender como os updates mudaram a economia e o ritmo do jogo.</p>
           </div>
         </div>
-        <div className="dossier-online-timeline">
+        <div className="dz-grid">
           {onlineTimelineData.map((item) => (
-            <article key={`${item.year}-${item.title}`} className="card">
-              <Corners />
-              {item.media && <OfficialMedia media={item.media} className="dossier-online-update-media" />}
-              <span>{item.year}</span>
-              <h3>{item.title}</h3>
-              <p>{item.theme}</p>
-            </article>
+            <DzCard
+              key={`${item.year}-${item.title}`}
+              media={item.media}
+              fallback={<DzFallback label={item.title} icon="star" />}
+              badge={item.year}
+              title={item.title}
+              summary={item.theme}
+            />
           ))}
         </div>
       </div>
@@ -2792,29 +2949,18 @@ const GlossaryDossierSection = ({ onOpenDossier }) => {
         <div className="dossier-filterbar single">
           <label><span>Busca</span><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Canon, FIB, heist, Leonida..." /></label>
         </div>
-        <div className="dossier-glossary-grid">
+        <div className="dz-grid dz-grid--tiles">
           {filtered.map((item) => (
-            <article
+            <DzCard
               key={item.term}
-              className="card dossier-glossary-item"
-              role="button"
-              tabIndex={0}
-              onClick={() => onOpenDossier?.({ type: "glossary", item })}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  onOpenDossier?.({ type: "glossary", item });
-                }
-              }}
-            >
-              <Corners />
-              {item.media && <OfficialMedia media={item.media} className="dossier-glossary-media" />}
-              <div className="dossier-card-kicker">{item.category || "Termo do dossie"}</div>
-              <h3>{item.term}</h3>
-              <p>{item.definition}</p>
-              <DossierChips items={item.tags || item.relatedTerms} limit={4} />
-              <button className="btn" type="button" onClick={(e) => { e.stopPropagation(); onOpenDossier?.({ type: "glossary", item }); }}>Abrir termo</button>
-            </article>
+              variant="tile"
+              kicker={item.category || "Termo do dossiê"}
+              title={item.term}
+              summary={item.definition}
+              chips={item.tags || item.relatedTerms}
+              cta={item.deepKey ? "Dossiê técnico" : "Termo"}
+              onOpen={() => onOpenDossier?.({ type: "glossary", item })}
+            />
           ))}
         </div>
       </div>
@@ -3385,30 +3531,86 @@ const WeaponDossierModalContent = ({ item }) => {
   );
 };
 
-const DossierRecordModal = ({ record, onClose }) => {
-  if (!record?.item) return null;
-  const item = record.item;
+/* Engine de cada jogo (para ligar fichas de jogo ao dossiê técnico). */
+const dzEngineForGame = {
+  "gta-1": "race-n-chase-engine", "london-1969": "race-n-chase-engine", "london-1961": "race-n-chase-engine", "gta-2": "race-n-chase-engine",
+  "gta-iii": "renderware", "vice-city": "renderware", "san-andreas": "renderware",
+  "gta-iv": "rage", "lost-and-damned": "rage", "ballad-gay-tony": "rage", "gta-v": "rage", "gta-online": "rage", "gta-vi": "rage"
+};
+const dzEuphoriaGames = ["gta-iv", "lost-and-damned", "ballad-gay-tony", "gta-v", "gta-online"];
+const dzGamesForEngine = (engineId) => (engineId === "euphoria"
+  ? dzEuphoriaGames
+  : Object.keys(dzEngineForGame).filter((gameId) => dzEngineForGame[gameId] === engineId)
+).map(dzGameById).filter(Boolean);
+const dzEnginesForGame = (gameId) => [dzEngineForGame[gameId], dzEuphoriaGames.includes(gameId) ? "euphoria" : null].map(dzDeep).filter(Boolean);
+
+/* Menções em texto livre (história da Rockstar, perfis). */
+const dzGamesMentioned = (texts) => {
+  const hay = ` ${titleKey(ptText(asList(texts).join(" ")))} `;
+  return gamesData.filter((game) => {
+    const key = dzGameKey(game.title);
+    return [`gta ${key}`, key.length >= 8 ? key : null].filter(Boolean).some((probe) => hay.includes(` ${probe} `));
+  });
+};
+const dzPeopleMentioned = (texts) => {
+  const hay = ` ${dzNameKey(asList(texts).join(" "))} `;
+  return rockstarPeopleData.filter((person) => hay.includes(` ${dzNameKey(person.name)} `));
+};
+const dzPersonLink = (person) => person && { key: `person-${person.id}`, title: person.name, sub: person.role, media: person.media, record: { type: "person", item: person } };
+const dzRockstarLink = (entry) => entry && { key: `rockstar-${entry.year}-${entry.title}`, title: entry.title, sub: entry.year, media: entry.media, record: { type: "rockstar", item: entry } };
+const dzSplitPeople = (value) => String(ptText(value) || "").split(/\s*(?:,|\/|\+| e | and )\s*/).filter(Boolean);
+
+const DossierRecordModal = ({ record, onClose, onOpen }) => {
+  const shellRef = React.useRef(null);
+  const item = record?.item || null;
+  React.useEffect(() => {
+    if (shellRef.current) shellRef.current.scrollTop = 0;
+  }, [item]);
+  if (!item) return null;
+
+  const type = record.type;
+  const open = onOpen || null;
+  const labels = {
+    game: { label: "Jogo" },
+    character: { label: "Personagem" },
+    city: { label: "Cidade" },
+    faction: { label: "Facção" },
+    timeline: { label: "Cronologia" },
+    onlineDlc: { label: "Online DLC" },
+    mission: { label: "Missões" },
+    vehicle: { label: "Frota" },
+    weapon: { label: "Arsenal" },
+    glossary: { label: "Glossário" },
+    development: { label: "Produção" },
+    deep: { label: "Tecnologia" },
+    rockstar: { label: "Rockstar" },
+    person: { label: "Pessoa" },
+    universe: { label: "Universo" }
+  };
+  const devGame = type === "development" ? dzGameById(item.gameId) : null;
+  const timelineGame = type === "timeline" ? (item.game || findGameForTimeline(item)) : null;
+  const media = item.media || devGame?.media || timelineGame?.media || null;
   const title = item.title || item.name || item.term;
-  const subtitle = record.type === "game" ? `${item.universe} · ${item.city}` :
-    record.type === "character" ? `${item.role} · ${item.city}` :
-    record.type === "city" ? `${item.realWorldInspiration}` :
-    record.type === "faction" ? `${item.category} · ${item.city}` :
-    record.type === "onlineDlc" ? `${item.releaseDate} / ${item.type}` :
-    record.type === "mission" ? `${item.universe} · ${item.totalLabel}` :
-    record.type === "vehicle" ? `${item.universe} · ${item.totalLabel}` :
-    record.type === "weapon" ? `${item.universe} · ${item.totalLabel}` :
-    record.type === "glossary" ? `${item.category || "Glossario"} / termo de referencia` :
+  const subtitle =
+    type === "game" ? `${item.universe} · ${item.city}` :
+    type === "character" ? `${item.role} · ${item.city}` :
+    type === "city" ? `${item.realWorldInspiration}` :
+    type === "faction" ? `${item.category} · ${item.city}` :
+    type === "onlineDlc" ? `${item.releaseDate} / ${item.type}` :
+    (type === "mission" || type === "vehicle" || type === "weapon") ? `${item.universe} · ${item.totalLabel}` :
+    type === "glossary" ? `${item.category || "Glossario"}` :
+    type === "development" ? `${item.period}` :
+    type === "deep" ? `${item.subtitle}` :
+    type === "rockstar" ? `${item.year} · ${item.type}` :
+    type === "person" ? `${item.role}` :
+    type === "universe" ? `${item.period}` :
+    type === "timeline" ? `${item.year} · ${item.universe} · ${item.city}` :
     item.universe || "Arquivo";
-  const recordLabel = record.type === "onlineDlc" ? "ONLINE DLC" :
-    record.type === "mission" ? "MISSÕES" :
-    record.type === "vehicle" ? "FROTA" :
-    record.type === "weapon" ? "ARSENAL" :
-    record.type === "glossary" ? "GLOSSARIO" :
-    record.type.toUpperCase();
+  const sideNote = item.releaseYear || item.year || item.period || item.era || item.category || "";
 
   return (
     <div className="dossier-modal-back dossier-shell" onClick={onClose}>
-      <article className="dossier-modal" onClick={(e) => e.stopPropagation()}>
+      <article className="dossier-modal" ref={shellRef} onClick={(e) => e.stopPropagation()}>
         <header>
           <div>
             <span>Dossiê completo</span>
@@ -3419,26 +3621,29 @@ const DossierRecordModal = ({ record, onClose }) => {
         </header>
         <div className="dossier-modal-grid">
           <aside className="dossier-modal-evidence">
-            {record.type === "city" ? (
+            {type === "city" ? (
               <CityImageCarousel city={item} className="modal" />
             ) : (
-              <div className={`dossier-cover-art ${universeTone(item.universe || item.category)} ${item.media ? "has-official" : ""}`}>
-                {item.media ? <OfficialMedia media={item.media} className="dossier-cover-media" /> : <div className="dossier-cover-map" />}
+              <div className={`dossier-cover-art ${universeTone(item.universe || item.category)} ${media ? "has-official" : ""}`}>
+                {media ? <OfficialMedia media={media} className={`dossier-cover-media ${type === "character" || type === "person" ? "dossier-mugshot-media" : ""}`} /> : <div className="dossier-cover-map" />}
                 <div className="dossier-cover-label">
-                  <strong>{recordLabel}</strong>
-                  <small>{item.id || item.year || item.term || "arquivo"}</small>
+                  <strong>{labels[type]?.label || type}</strong>
+                  {sideNote && <small>{textOf(sideNote)}</small>}
                 </div>
               </div>
             )}
-            <DossierChips items={item.tags || [item.universe, item.category, item.certainty].filter(Boolean)} limit={10} />
+            <DossierChips items={item.tags || [item.universe, item.category, item.certainty].filter(Boolean)} limit={8} />
+            <DzModalToc rootRef={shellRef} watch={item} />
           </aside>
 
           <section className="dossier-modal-content">
-            {record.type === "game" && (
+            {type === "game" && (
               <>
                 <MetaGrid rows={[
                   ["Lançamento", item.releaseYear],
                   ["Ano da história", item.storyYear],
+                  ["Universo", item.universe],
+                  ["Cidade", item.city],
                   ["Protagonista", item.protagonist],
                   ["Antagonistas", item.antagonists],
                   ["Personagens secundários", item.supportingCharacters],
@@ -3448,36 +3653,108 @@ const DossierRecordModal = ({ record, onClose }) => {
                 <ModalField label="História completa">{item.fullStory}</ModalField>
                 <ModalField label="Desenvolvimento">{item.developmentHistory}</ModalField>
                 <ModalField label="Importância">{item.importance}</ModalField>
+                <DeepDossierBlocks deep={dzDeep(item.id)} />
+                <DzRelated label="Personagens" items={dzCharactersForGame(item).map(dzLink.character)} onOpen={open} />
+                <DzRelated label="Facções e gangues" items={dzFactionsForGame(item).map(dzLink.faction)} onOpen={open} />
+                <DzRelated label="Cidades" items={dzCitiesForGame(item).map(dzLink.city)} onOpen={open} />
+                <DzRelated
+                  label="Missões, frota e arsenal"
+                  items={[
+                    ...dzDossiersForGame(window.missionDossierData, item).map(dzLink.mission),
+                    ...dzDossiersForGame(window.vehicleDossierData, item).map(dzLink.vehicle),
+                    ...dzDossiersForGame(window.weaponDossierData, item).map(dzLink.weapon)
+                  ]}
+                  onOpen={open}
+                />
+                <DzRelated
+                  label="Bastidores, tecnologia e jogos ligados"
+                  items={[
+                    dzLink.development(developmentData.find((dev) => dev.gameId === item.id)),
+                    ...dzEnginesForGame(item.id).map(dzLink.deep),
+                    dzLink.universe(universeData.find((universe) => universe.name === item.universe)),
+                    ...dzGamesByNames(item.relatedGames).map(dzLink.game)
+                  ]}
+                  onOpen={open}
+                />
                 <ModalField label="Temas"><DossierChips items={item.themes} limit={12} /></ModalField>
               </>
             )}
-            {record.type === "mission" && (
-              <MissionDossierModalContent item={item} />
+            {type === "development" && (
+              <>
+                <MetaGrid rows={[
+                  ["Período", item.period],
+                  ["Jogo", devGame?.title],
+                  ["Universo", devGame?.universe],
+                  ["Cidade", devGame?.city]
+                ]} />
+                <ModalField label="Resumo">{item.summary}</ModalField>
+                <ModalField label="Marcos"><BulletList items={item.facts} /></ModalField>
+                <DeepDossierBlocks deep={dzDeep(item.gameId)} />
+                <ModalField label="Notas de precisão">
+                  {Array.isArray(item.uncertainty) ? <BulletList items={item.uncertainty} /> : item.uncertainty}
+                </ModalField>
+                <DzRelated
+                  label="Abrir também"
+                  items={[dzLink.game(devGame), ...dzEnginesForGame(item.gameId).map(dzLink.deep)]}
+                  onOpen={open}
+                />
+                <ModalField label="Fontes do resumo"><SourceLinks items={item.sources} /></ModalField>
+              </>
             )}
-            {record.type === "vehicle" && (
-              <VehicleDossierModalContent item={item} />
+            {type === "deep" && (
+              <>
+                <DeepDossierBlocks deep={item} />
+                <DzRelated label="Jogos do dossiê nesta tecnologia" items={dzGamesForEngine(item.id).map(dzLink.game)} onOpen={open} />
+                <DzRelated
+                  label="Outras tecnologias da saga"
+                  items={(typeof deepEngineKeys !== "undefined" ? deepEngineKeys : []).filter((key) => key !== item.id).map(dzDeep).map(dzLink.deep)}
+                  onOpen={open}
+                />
+              </>
             )}
-            {record.type === "weapon" && (
-              <WeaponDossierModalContent item={item} />
+            {type === "mission" && (
+              <>
+                <MissionDossierModalContent item={item} />
+                <DzRelated label="Jogo" items={[dzLink.game(dzGameById(item.gameId))]} onOpen={open} />
+              </>
             )}
-            {record.type === "character" && (
+            {type === "vehicle" && (
+              <>
+                <VehicleDossierModalContent item={item} />
+                <DzRelated label="Jogo" items={[dzLink.game(dzGameById(item.gameId))]} onOpen={open} />
+              </>
+            )}
+            {type === "weapon" && (
+              <>
+                <WeaponDossierModalContent item={item} />
+                <DzRelated label="Jogo" items={[dzLink.game(dzGameById(item.gameId))]} onOpen={open} />
+              </>
+            )}
+            {type === "character" && (
               <>
                 <MetaGrid rows={[
                   ["Jogos", item.games],
                   ["Universo", item.universe],
                   ["Cidade", item.city],
                   ["Papel", item.role],
+                  ["Apelidos", item.aliases],
                   ["Lealdades", item.affiliations],
                   ["Conflitos", item.enemies],
-                  ["Destino", item.fate],
                   ["Importância", item.importance]
                 ]} />
+                {item.actor && <div className="dz-actor"><span>Voz / atuação</span><strong>{item.actor}</strong></div>}
                 <ModalField label="Biografia">{item.biography}</ModalField>
                 <ModalField label="Arco narrativo">{item.storyArc}</ModalField>
-                <ModalField label="Relações importantes"><BulletList items={item.relationships} /></ModalField>
+                {item.fate && <ModalField label="Destino">{item.fate}</ModalField>}
+                {asList(item.relationships).length > 0 && <ModalField label="Relações importantes"><BulletList items={item.relationships} /></ModalField>}
+                <DzRelated label="Personagens ligados" items={dzRelatedCharacters(item).map(dzLink.character)} onOpen={open} />
+                <DzRelated label="Jogos" items={dzGamesByNames(item.games).map(dzLink.game)} onOpen={open} />
+                <DzRelated label="Facções" items={dzFactionsForCharacter(item).map(dzLink.faction)} onOpen={open} />
+                <DzRelated label="Cidades" items={dzCitiesForCharacter(item).map(dzLink.city)} onOpen={open} />
+                {asList(item.tags).length > 0 && <ModalField label="Tags"><DossierChips items={item.tags} limit={12} /></ModalField>}
               </>
             )}
-            {record.type === "city" && (
+            {type === "city" && (
               <>
                 <MetaGrid rows={[
                   ["Inspiração real", item.realWorldInspiration],
@@ -3491,14 +3768,24 @@ const DossierRecordModal = ({ record, onClose }) => {
                 <ModalField label="Descrição">{item.description}</ModalField>
                 <ModalField label="Eventos importantes"><BulletList items={item.importantEvents} /></ModalField>
                 <ModalField label="Estética visual">{item.visualStyle}</ModalField>
+                <ModalField label="Distritos e áreas"><DossierChips items={item.districts} limit={30} /></ModalField>
+                <DzRelated label="Personagens" items={dzCharactersForCity(item).map(dzLink.character)} onOpen={open} />
+                <DzRelated label="Facções" items={dzFactionsForCity(item).map(dzLink.faction)} onOpen={open} />
+                <DzRelated label="Jogos" items={dzGamesByNames(item.games).map(dzLink.game)} onOpen={open} />
+                <DzRelated
+                  label="Universos"
+                  items={universeData.filter((universe) => asList(ptText(item.universeAppearances)).includes(universe.name)).map(dzLink.universe)}
+                  onOpen={open}
+                />
                 <ModalField label="Temas"><DossierChips items={item.themes} limit={12} /></ModalField>
               </>
             )}
-            {record.type === "faction" && (
+            {type === "faction" && (
               <>
                 <MetaGrid rows={[
                   ["Jogo", item.game],
                   ["Cidade", item.city],
+                  ["Tipo", item.category],
                   ["Líderes", item.leaders],
                   ["Aliados", item.allies],
                   ["Inimigos", item.enemies],
@@ -3506,9 +3793,20 @@ const DossierRecordModal = ({ record, onClose }) => {
                   ["Status/destino", item.status]
                 ]} />
                 <ModalField label="Importância narrativa">{item.narrativeImportance}</ModalField>
+                {item.status && <ModalField label="Situação">{item.status}</ModalField>}
+                <ModalField label="Negócios"><BulletList items={item.businesses} /></ModalField>
+                <DzRelated label="Membros e líderes no dossiê" items={dzCharactersForFaction(item).map(dzLink.character)} onOpen={open} />
+                <DzRelated
+                  label="Aliados e rivais no banco"
+                  items={dzUnique([...asList(item.allies), ...asList(item.enemies)].map(dzFactionByName)).filter((other) => other.id !== item.id).map(dzLink.faction)}
+                  onOpen={open}
+                />
+                <DzRelated label="Jogos" items={dzGamesByNames(item.game).map(dzLink.game)} onOpen={open} />
+                <DzRelated label="Cidades" items={dzCitiesForFaction(item).map(dzLink.city)} onOpen={open} />
+                {asList(item.tags).length > 0 && <ModalField label="Tags"><DossierChips items={item.tags} limit={12} /></ModalField>}
               </>
             )}
-            {record.type === "timeline" && (
+            {type === "timeline" && (
               <>
                 <MetaGrid rows={[
                   ["Ano", item.year],
@@ -3519,9 +3817,61 @@ const DossierRecordModal = ({ record, onClose }) => {
                 ]} />
                 <ModalField label="Resumo">{item.summary}</ModalField>
                 <ModalField label="Eventos"><BulletList items={item.beats} /></ModalField>
+                {timelineGame?.fullStory && <ModalField label="História do jogo">{timelineGame.fullStory}</ModalField>}
+                {timelineGame?.importance && <ModalField label="Por que importa na saga">{timelineGame.importance}</ModalField>}
+                <DzRelated label="Jogo" items={[dzLink.game(timelineGame)]} onOpen={open} />
+                <DzRelated label="Protagonistas" items={dzUnique(dzSplitPeople(item.protagonist).map(dzFindCharacter)).map(dzLink.character)} onOpen={open} />
+                <DzRelated label="Cidade" items={dzUnique(dzSplit(item.city).map(dzCityByName)).map(dzLink.city)} onOpen={open} />
               </>
             )}
-            {record.type === "onlineDlc" && (
+            {type === "rockstar" && (
+              <>
+                <MetaGrid rows={[["Ano", item.year], ["Tipo", item.type]]} />
+                <ModalField label="Resumo">{item.summary}</ModalField>
+                <ModalField label="Contexto completo">
+                  {asList(item.details).map((paragraph, index) => <p key={index} className="dz-par">{paragraph}</p>)}
+                </ModalField>
+                <DzRelated label="Pessoas citadas" items={dzPeopleMentioned([item.title, item.summary, ...asList(item.details)]).map(dzPersonLink)} onOpen={open} />
+                <DzRelated label="Jogos citados" items={dzGamesMentioned([item.title, item.summary, ...asList(item.details)]).map(dzLink.game)} onOpen={open} />
+                <ModalField label="Fontes"><SourceLinks items={item.sources} /></ModalField>
+              </>
+            )}
+            {type === "person" && (
+              <>
+                <MetaGrid rows={[["Função", item.role], ["Era", item.era], ["Base", item.city], ["Jogos", item.games]]} />
+                <ModalField label="Perfil">{item.summary}</ModalField>
+                <ModalField label="Contribuições"><BulletList items={item.contributions} /></ModalField>
+                <DzRelated label="Jogos da saga" items={dzUnique([...dzGamesByNames(item.games), ...dzGamesMentioned([item.summary, ...asList(item.contributions)])]).map(dzLink.game)} onOpen={open} />
+                <DzRelated
+                  label="Momentos da Rockstar"
+                  items={rockstarHistoryData.filter((entry) => dzPeopleMentioned([entry.summary, ...asList(entry.details)]).some((person) => person.id === item.id)).map(dzRockstarLink)}
+                  onOpen={open}
+                />
+                <ModalField label="Tags"><DossierChips items={item.tags} limit={12} /></ModalField>
+                <ModalField label="Fontes"><SourceLinks items={item.sources} /></ModalField>
+              </>
+            )}
+            {type === "universe" && (
+              <>
+                <MetaGrid rows={[["Período", item.period], ["Jogos", item.games]]} />
+                <ModalField label="Resumo">{item.summary}</ModalField>
+                <ModalField label="Descrição">{item.description}</ModalField>
+                <ModalField label="Regras de leitura"><BulletList items={item.notes} /></ModalField>
+                {(() => {
+                  const term = glossaryData.find((entry) => entry.term === item.name);
+                  return term ? (
+                    <>
+                      {term.expanded && <ModalField label="Contexto do glossário">{term.expanded}</ModalField>}
+                      {asList(term.precisionNotes).length > 0 && <ModalField label="Notas de precisão"><BulletList items={term.precisionNotes} /></ModalField>}
+                    </>
+                  ) : null;
+                })()}
+                <DzRelated label="Jogos" items={gamesData.filter((game) => game.universe === item.name).map(dzLink.game)} onOpen={open} />
+                <DzRelated label="Personagens" items={charactersData.filter((character) => character.universe === item.name).map(dzLink.character)} onOpen={open} />
+                <DzRelated label="Cidades" items={citiesData.filter((city) => asList(ptText(city.universeAppearances)).includes(item.name)).map(dzLink.city)} onOpen={open} />
+              </>
+            )}
+            {type === "onlineDlc" && (
               <>
                 <MetaGrid rows={[
                   ["Lancamento", item.releaseDate],
@@ -3543,12 +3893,23 @@ const DossierRecordModal = ({ record, onClose }) => {
                 <ModalField label="Leitura de gameplay">
                   {`Esta atualizacao se encaixa na fase "${item.era}" do Online e amplia a carreira criminal do jogador por meio de ${asList(item.systems).join(", ") || "novas atividades"}.`}
                 </ModalField>
+                <DzRelated
+                  label="Personagens no dossiê"
+                  items={dzUnique(asList(item.characters).map(dzFindCharacter)).map(dzLink.character)}
+                  onOpen={open}
+                />
+                <DzRelated label="Jogo base e tecnologia" items={[dzLink.game(dzGameById("gta-online")), dzLink.deep(dzDeep("rage"))]} onOpen={open} />
                 <ModalField label="Tags"><DossierChips items={item.tags} limit={12} /></ModalField>
                 <ModalField label="Fontes"><SourceLinks items={item.sources} /></ModalField>
               </>
             )}
-            {record.type === "glossary" && (
-              <GlossaryTermModalContent item={item} />
+            {type === "glossary" && (
+              <>
+                {item.deepKey && <DeepDossierBlocks deep={dzDeep(item.deepKey)} />}
+                <GlossaryTermModalContent item={item} />
+                <DzRelated label="Jogos citados" items={dzGamesByNames(asList(item.appearsIn || item.games)).map(dzLink.game)} onOpen={open} />
+                {item.deepKey && <DzRelated label="Jogos nesta tecnologia" items={dzGamesForEngine(item.deepKey).map(dzLink.game)} onOpen={open} />}
+              </>
             )}
           </section>
         </div>

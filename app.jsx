@@ -137,12 +137,12 @@ function App(){
       <MissionsSec onOpenDossier={setDossier} />
       <VehiclesSec onOpenDossier={setDossier} />
       <WeaponsSec onOpenDossier={setDossier} />
-      <DevelopmentSec />
+      <DevelopmentSec onOpenDossier={setDossier} />
       <CharactersSec onOpenDossier={setDossier} />
       <CitiesSec onOpenDossier={setDossier} />
       <FactionsSec onOpenDossier={setDossier} />
-      <UniversesSec />
-      <RockstarSec />
+      <UniversesSec onOpenDossier={setDossier} />
+      <RockstarSec onOpenDossier={setDossier} />
       <GTAOnlineSec onOpenDossier={setDossier} />
       {VICharsSec && <VICharsSec />}
       {VIPlacesSec && <VIPlacesSec />}
@@ -154,7 +154,7 @@ function App(){
       <GlossarySec onOpenDossier={setDossier} />
       <ConnectionsSec />
       <FooterSec />
-      <DossierRecordModal record={dossier} onClose={() => setDossier(null)} />
+      <DossierRecordModal record={dossier} onClose={() => setDossier(null)} onOpen={setDossier} />
     </React.Fragment>
   );
 }

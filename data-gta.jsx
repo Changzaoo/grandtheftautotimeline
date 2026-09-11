@@ -179,7 +179,7 @@ const GAMES_COMPLETE = [
     antagonistas: ["Catalina", "Asuka Kasen", "Donald Love", "Salvatore Leone"],
     summary: "A revolução: 3D tempo real, mundo aberto, narrativa cinemática. Define o padrão para mundos abertos modernos.",
     fullStory: "Você é Claude, um ladrão silencioso que é traído e deixado para morrer após um assalto de banco por Catalina (sua companheira) e Miguel. Você sobrevive misteriosamente. Em Liberty City, você passa a trabalhar para várias facções: Leone Family (máfia italiana), Yakuza (crime japonês), Yardies (gangue caribenha), Forelli Family e cartel colombiano. Você conhece 8-Ball (explosivista), Luigi Goterelli (gerente de discoteca), Joey Leone (mafioso), Toni Cipriani (soldado Leone), Maria Latore (prostituta com coração de ouro), Asuka Kasen (poderosa e enigmática). Você constrói poder, completa missões cada vez mais audaciosas e eventualmente enfrenta Catalina em um final sangrento.",
-    development: "A obra-prima que redefiniu a indústria. Desenvolvido por Rockstar North em PS2. Engine RAGE primitiva. Vozes de atores reais. Vinheta de cinema entre telas. Período de desenvolvimento intensivo.",
+    development: "A obra-prima que redefiniu a indústria. Desenvolvido por Rockstar North em PS2. Engine RenderWare (Criterion), a mesma de GTA III. Vozes de atores reais. Vinheta de cinema entre telas. Período de desenvolvimento intensivo.",
     importance: "Revolucionário. Criou o padrão de mundo aberto urbano que toda a indústria seguiu. Vendeu milhões, definiu PS2, marcou gerações.",
     themes: ["Crime urbano", "Traição", "Survival", "Ascensão do crime"],
     tags: ["3D Universe", "Clássico", "PS2", "Revolucionário", "Fundador"]
@@ -323,7 +323,7 @@ const GAMES_COMPLETE = [
     antagonistas: ["Devin Weston", "Steve Haines", "Dave Norton", "Merryweather"],
     summary: "Três protagonistas. Três perspectivas diferentes. Assaltos épicos. Fenômeno cultural e comercial.",
     fullStory: "Michael De Santa é um ex-ladrão que finge morte há 9 anos, vivendo como homem de negócios em Los Santos. Seu antigo colega Trevor Phillips descobre que ele está vivo e recria contato violentamente. Franklin Clinton é um criminoso de rua de Southside Los Santos que conhece Michael. Os três são forçados juntos por FBI agents Dave Norton e Steve Haines, que os chantageiam para cometer assaltos. Devin Weston (bilionário corrupto) também os manipula. No caminho: tráfico de drogas, roubo de laboratório de tecnologia, assaltos de banco, guerra com Merryweather Security (corporação militar privada), conflitos pessoais. O final oferece escolhas: dinheiro (Opção A), vindicta (Opção B) ou todas as ameaças eliminadas e amizade preservada (Opção C/Deathwish).",
-    development: "Desenvolvimento gigantesco: ~1000 pessoas, orçamento de $250 milhões (maior de qualquer videojogo naquela época). Los Santos é uma réplica de Los Angeles, densíssima. Engine RAGE avançada. Trilha sonora com artistas reais. Dublagem com celebridades (Shia LaBeouf inspirou Fernando, etc.).",
+    development: "Desenvolvimento gigantesco: ~1000 pessoas, orçamento de $250 milhões (maior de qualquer videojogo naquela época). Los Santos é uma réplica de Los Angeles, densíssima. Engine RAGE avançada. Trilha sonora com artistas reais. Elenco principal com Ned Luke (Michael), Shawn Fonteno (Franklin) e Steven Ogg (Trevor).",
     importance: "Maior lançamento de videojogo até então. Vendeu 150+ milhões de cópias. Definiu PS3/Xbox 360 tardio e PS4/Xbox One cedo. Moldou a indústria por uma década.",
     themes: ["Amizade", "Ambição", "Traição", "Redenção", "Riqueza", "Caos"],
     tags: ["HD Universe", "Três protagonistas", "Fenômeno", "Clássico", "Épico"]
@@ -355,7 +355,7 @@ const GAMES_COMPLETE = [
     antagonistas: "[Ainda desconhecidos]",
     summary: "Próximo grande lançamento. Dual protagonistas. Vice City moderna. Tema: redes sociais, influencers, caos digital.",
     fullStory: "[Maioria especulativa até lançamento]. Lucia Caminos é uma mulher criminosa. Jason Duval é homem. Parecem ser um casal criminoso. Ambientado em Leonida, estado baseado na Flórida moderna, com Vice City como cidade central. Tema parece ser crime contemporâneo: roubo de dados, fraudes de criptomoedas, influencers criminosos, golpes digitais, redes sociais como ferramenta de crime. Sátira do século XXI.",
-    development: "Anunciado oficialmente em dezembro de 2024 com trailer. Lançamento: 19 de novembro de 2026 (PS5 exclusivo inicialmente). Engine RAGE 2 com ray-tracing em tempo real. Seleção musical, dublagem e cinemática mantêm padrões de qualidade GTA V.",
+    development: "Trailer 1 revelado em dezembro de 2023. Lançamento: 19 de novembro de 2026 (PS5 e Xbox Series X|S). Engine proprietária RAGE; a Rockstar não publicou ficha técnica. Seleção musical, dublagem e cinemática mantêm padrões de qualidade GTA V.",
     importance: "Próximo capítulo. Expectativa global estratosférica.",
     themes: "[Especulado: redes sociais, modernidade, crime digital, casal criminoso]",
     tags: ["HD Universe", "Futuro", "Leonida", "Dual protagonistas", "Especulação"]

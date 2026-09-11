@@ -202,6 +202,7 @@ function i18nCollectData() {
   put("impactData", typeof impactData !== "undefined" ? impactData : null);
   put("glossaryData", typeof glossaryData !== "undefined" ? glossaryData : null);
   put("glossaryDetailData", typeof glossaryDetailData !== "undefined" ? glossaryDetailData : null);
+  put("deepDossierData", typeof deepDossierData !== "undefined" ? deepDossierData : null);
   put("missionDossierData", typeof missionDossierData !== "undefined" ? missionDossierData : null);
   put("vehicleDossierData", typeof vehicleDossierData !== "undefined" ? vehicleDossierData : null);
   put("weaponDossierData", typeof weaponDossierData !== "undefined" ? weaponDossierData : null);

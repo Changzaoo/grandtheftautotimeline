@@ -5,6 +5,7 @@ const SOURCES = [
   "data.jsx",
   "data-gta.jsx",
   "data-dossier.jsx",
+  "data-deep.jsx",
   "data-missions.jsx",
   "data-vehicles.jsx",
   "data-weapons.jsx",

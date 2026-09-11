@@ -39,10 +39,10 @@ const eggCategoryTone = (id) => ({
 
 const eggMonoStyle = {
   fontFamily: '"Space Mono", ui-monospace, monospace',
-  fontSize: 12,
-  lineHeight: 1.6,
+  fontSize: 10.5,
+  lineHeight: 1.5,
   display: "grid",
-  gap: 6
+  gap: 4
 };
 
 /* ---- Card individual (controla o próprio estado de spoiler) ---- */
@@ -56,22 +56,22 @@ const EggCard = ({ egg }) => {
   const hidden = !!egg.spoiler && !revealed;
 
   return (
-    <article className="card" style={{ position: "relative", padding: "18px 18px 20px", display: "flex", flexDirection: "column", gap: 10 }}>
+    <article className="card" style={{ position: "relative", padding: "12px 14px 14px", display: "flex", flexDirection: "column", gap: 7 }}>
       <Corners />
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-        <span className="vi-badge">
+      <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+        <span className="vi-badge" style={{ fontSize: 9, padding: "3px 9px" }}>
           {game ? __TT("egg", game.id, "short", game.short) : egg.gameId}
           {game && <b>{game.year}</b>}
         </span>
         <Tag tone={eggCategoryTone(egg.category)}>{eggCategoryLabel(egg.category)}</Tag>
         {egg.spoiler && <Tag tone="red">{__T("egg.ui.spoiler-tag", "Spoiler")}</Tag>}
       </div>
-      <h3 style={{ margin: 0, lineHeight: 1.25 }}>{title}</h3>
+      <h3 style={{ margin: 0, lineHeight: 1.1, fontSize: 18 }}>{title}</h3>
       <div
         aria-hidden={hidden || undefined}
         style={hidden ? { filter: "blur(10px)", userSelect: "none", pointerEvents: "none" } : undefined}
       >
-        <p style={{ margin: "0 0 10px" }}>{desc}</p>
+        <p style={{ margin: "0 0 8px", fontSize: 13, lineHeight: 1.5 }}>{desc}</p>
         <div style={eggMonoStyle}>
           <div>
             <span style={{ color: "var(--vi-gold, #ffd166)", letterSpacing: ".14em" }}>{__T("egg.ui.where", "ONDE:")}</span>{" "}
@@ -216,7 +216,7 @@ const EasterEggsSection = () => {
 
         {/* Grid de cards */}
         {shown.length ? (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: 18, marginTop: 18 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 12, marginTop: 14 }}>
             {shown.map((egg) => <EggCard key={egg.id} egg={egg} />)}
           </div>
         ) : (

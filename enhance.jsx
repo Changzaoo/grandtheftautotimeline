@@ -242,7 +242,7 @@
     if (!FINE || REDUCED) return;
     var SEL = ".dossier-game-card,.dossier-mission-card,.dossier-vehicle-card,.dossier-weapon-card," +
       ".dossier-character-card,.dossier-faction-card,.dossier-city-card,.dossier-universe-card," +
-      ".dossier-person-card,.dossier-online-dlc-card,.dossier-glossary-item,.dossier-hero-panel";
+      ".dossier-person-card,.dossier-online-dlc-card,.dossier-glossary-item,.dossier-hero-panel,.dz-card";
 
     function enhance(card) {
       if (card.__neoTilt) return;
