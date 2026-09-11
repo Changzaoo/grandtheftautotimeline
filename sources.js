@@ -23,6 +23,7 @@ const SOURCES = [
   "sections-expanded.jsx",
   "sections-rockstar.jsx",
   "sections-dossier.jsx",
+  "sections-missions.jsx",
   "sections-vi.jsx",
   "sections-vi-catalog.jsx",
   "sections-easter-eggs.jsx",

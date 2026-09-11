@@ -102,7 +102,7 @@ const VICatalogCard = ({ item }) => {
         style={image ? { "--media-src": `url("${image.replace(/"/g, "%22")}")` } : undefined}
       >
         {image
-          ? <img src={image} alt={item.title} loading="lazy" referrerPolicy="no-referrer" />
+          ? <img src={image} alt={item.title} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
           : <span className="vi-cat-initials vi-serif" aria-hidden="true">{item.title.slice(0, 2).toUpperCase()}</span>}
         <span className="vi-grain" />
       </button>

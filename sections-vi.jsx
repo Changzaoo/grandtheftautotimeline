@@ -177,7 +177,7 @@ const VIHeroBackdrop = () => {
           style={{ objectPosition: shot.pos }}
           loading={index === 0 ? "eager" : "lazy"}
           decoding="async"
-          referrerPolicy="no-referrer"
+          referrerPolicy="strict-origin-when-cross-origin"
           onError={(event) => { event.target.classList.add("is-broken"); }}
         />
       ))}
@@ -390,7 +390,7 @@ const VICharPanel = ({ character, index }) => {
           <DzLoop className="vi-char-photo vi-char-video" src={clip.video} poster={clip.poster} alt={character.name} />
         ) : photo ? (
           <img className="vi-char-photo" src={photo.src} alt={character.name}
-            loading="lazy" referrerPolicy="no-referrer" />
+            loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
         ) : (
           <React.Fragment>
             <span className="vi-char-art-ghost vi-serif">{character.name.split(" ")[0]}</span>
@@ -468,7 +468,7 @@ const VIPolaroid = ({ place, index }) => {
         {clip
           ? <DzLoop className="vi-polaroid-img" src={clip.video} poster={clip.poster} alt={place.name} />
           : photo
-            ? <img className="vi-polaroid-img" src={photo.src} alt={place.name} loading="lazy" referrerPolicy="no-referrer" />
+            ? <img className="vi-polaroid-img" src={photo.src} alt={place.name} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
             : <span className="vi-polaroid-horizon" />}
         <span className="vi-polaroid-mark vi-chrome-text">{place.name}</span>
         <span className="vi-grain" />
@@ -584,7 +584,7 @@ const VITrailerCard = ({ trailer }) => {
             }}
             alt={`${__T("vi.trailers.thumb-alt", "Miniatura oficial de")} ${title}`}
             loading="lazy"
-            referrerPolicy="no-referrer"
+            referrerPolicy="strict-origin-when-cross-origin"
           />
           <span className="vi-trailer-play" aria-hidden="true">▶</span>
         </button>

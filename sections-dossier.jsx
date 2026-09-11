@@ -190,7 +190,7 @@ const DzLightbox = () => {
             key={item.src}
             src={item.src}
             alt={item.alt}
-            referrerPolicy="no-referrer"
+            referrerPolicy="strict-origin-when-cross-origin"
             onError={(event) => { if (item.fallback && event.currentTarget.getAttribute("src") !== item.fallback) event.currentTarget.setAttribute("src", item.fallback); }}
           />
         )}
@@ -214,7 +214,7 @@ const DzGalleryStrip = ({ items, limit = 24 }) => {
     <div className="dz-gallery-strip">
       {list.slice(0, limit).map((media, index) => (
         <button type="button" key={`${media.video || media.src}-${index}`} onClick={() => window.dzOpenLightbox(list, index)} aria-label={`Abrir mídia ${index + 1} de ${list.length}`}>
-          <img src={media.poster || media.src} alt="" loading="lazy" referrerPolicy="no-referrer" />
+          <img src={media.poster || media.src} alt="" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
           {media.video && <span className="dz-gallery-play" aria-hidden="true">▶</span>}
         </button>
       ))}
@@ -251,7 +251,7 @@ const OfficialMedia = ({ media, className = "", zoom = false, gallery }) => {
     >
       {media.video
         ? <DzLoop src={media.video} poster={media.poster || media.src} alt={media.alt || caption} style={imageStyle} />
-        : <img src={media.src} alt={media.alt || caption} loading="lazy" referrerPolicy="no-referrer" style={imageStyle} />}
+        : <img src={media.src} alt={media.alt || caption} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" style={imageStyle} />}
       <figcaption>{caption}</figcaption>
       {zoom && <span className="official-media-zoom" aria-hidden="true">{media.video ? "▶" : "⤢"}</span>}
     </figure>
@@ -288,7 +288,7 @@ const CityImageCarousel = ({ city, className = "" }) => {
                 onClick={() => setIndex(thumbIndex)}
                 aria-label={`Abrir imagem ${thumbIndex + 1}`}
               >
-                <img src={media.src} alt={media.alt || mediaCaption(media)} loading="lazy" referrerPolicy="no-referrer" />
+                <img src={media.src} alt={media.alt || mediaCaption(media)} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
               </button>
             ))}
           </div>
@@ -497,7 +497,7 @@ const DzMiniGrid = ({ items, onOpen }) => (
     {items.map((entry) => (
       <button type="button" key={entry.key} className="dz-mini" onClick={() => onOpen(entry.record)}>
         <span className="dz-mini-thumb">
-          {entry.media?.src ? <img src={entry.media.src} alt="" loading="lazy" referrerPolicy="no-referrer" /> : <b>{initialsOf(entry.title)}</b>}
+          {entry.media?.src ? <img src={entry.media.src} alt="" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /> : <b>{initialsOf(entry.title)}</b>}
         </span>
         <span className="dz-mini-text">
           <strong>{entry.title}</strong>
@@ -3124,7 +3124,7 @@ const RockstarDossierSection = ({ onOpenDossier }) => (
               .filter((person) => asList(person.tags).includes("fundador"))
               .map((person) => (
                 <a key={person.id} href={`#people-${person.id}`} title={person.name}>
-                  <img src={person.media.src} alt={person.name} loading="lazy" referrerPolicy="no-referrer" />
+                  <img src={person.media.src} alt={person.name} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />
                   <span>{person.name.split(" ")[0]}</span>
                 </a>
               ))}
@@ -3465,7 +3465,7 @@ const DzModelGrid = ({ items, nameOf, keyOf, icon, groupLabel, prefix }) => {
           >
             <span className={`${prefix}-model-thumb`}>
               {media ? (
-                <img src={media.src} alt={media.alt || `Imagem de ${name}`} loading="lazy" referrerPolicy="no-referrer" onLoad={markSpriteOnLoad} />
+                <img src={media.src} alt={media.alt || `Imagem de ${name}`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" onLoad={markSpriteOnLoad} />
               ) : (
                 <span className={`${prefix}-model-placeholder`}><DossierIcon type={icon} /></span>
               )}
@@ -3546,10 +3546,8 @@ const VehicleDossierModalContent = ({ item }) => {
     setQuery("");
     setGroups(item.fallbackGroups || []);
     setError("");
-    if (!item.apiPage && !item.categoryTitle) {
-      setStatus("static");
-      return () => { alive = false; };
-    }
+    /* Sem página própria no wiki (ex.: London 1961) a lista vem de fallbackGroups,
+     * mas passa pelo mesmo pipeline de fotos — senão todos os cards ficavam sem imagem. */
     setStatus("loading");
     loadVehicleGroups(item)
       .then((loaded) => {
@@ -3712,7 +3710,7 @@ const MissionDetailPanel = ({ selected, mission }) => {
   );
 };
 
-const MissionDossierModalContent = ({ item }) => {
+const MissionDossierModalContent = ({ item, onClose }) => {
   const [groups, setGroups] = React.useState(item.fallbackGroups || []);
   const [query, setQuery] = React.useState("");
   const [selectedMission, setSelectedMission] = React.useState(null);
@@ -3765,6 +3763,18 @@ const MissionDossierModalContent = ({ item }) => {
         ["Arquivo carregado", item.apiPage || "dossiê estático"]
       ]} />
       <ModalField label="Resumo">{item.summary}</ModalField>
+      <div className="mv-modal-cta">
+        <button
+          type="button"
+          className="btn"
+          onClick={() => {
+            if (onClose) onClose();
+            window.dispatchEvent(new CustomEvent("mv:open", { detail: { gameId: item.gameId } }));
+          }}
+        >
+          ▶ Assistir às missões em vídeo, uma por uma
+        </button>
+      </div>
       <ModalField label="Como as missões funcionam"><BulletList items={item.systems} /></ModalField>
       <div className="dossier-modal-split">
         <ModalField label="Cobertura"><DossierChips items={item.coverage} limit={20} /></ModalField>
@@ -3808,10 +3818,8 @@ const WeaponDossierModalContent = ({ item }) => {
     setQuery("");
     setGroups(item.fallbackGroups || []);
     setError("");
-    if (!item.apiPage && !item.categoryTitle) {
-      setStatus("static");
-      return () => { alive = false; };
-    }
+    /* Sem página própria no wiki (ex.: London 1961) a lista vem de fallbackGroups,
+     * mas passa pelo mesmo pipeline de fotos — senão todos os cards ficavam sem imagem. */
     setStatus("loading");
     loadWeaponGroups(item)
       .then((loaded) => {
@@ -4051,7 +4059,7 @@ const DossierRecordModal = ({ record, onClose, onOpen }) => {
             )}
             {type === "mission" && (
               <>
-                <MissionDossierModalContent item={item} />
+                <MissionDossierModalContent item={item} onClose={onClose} />
                 <DzRelated label="Jogo" items={[dzLink.game(dzGameById(item.gameId))]} onOpen={open} />
               </>
             )}
