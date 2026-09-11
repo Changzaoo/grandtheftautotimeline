@@ -92,8 +92,138 @@ const DossierChips = ({ items, limit = 8 }) => (
 
 const mediaCaption = (media) => media?.caption || media?.credit || "Rockstar Games";
 
-const OfficialMedia = ({ media, className = "" }) => {
-  if (!media?.src) return null;
+const dzReducedMotion = () => typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const dzSaveData = () => Boolean(window.navigator && window.navigator.connection && window.navigator.connection.saveData);
+
+/* Miniclipe em loop: só baixa quando entra na tela, pausa ao sair e respeita
+ * "reduzir movimento" e economia de dados (aí fica parado no pôster). */
+const DzLoop = ({ src, poster, alt, className = "", style }) => {
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el || !src || dzReducedMotion() || dzSaveData() || typeof window.IntersectionObserver !== "function") return undefined;
+    const io = new window.IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (!el.getAttribute("src")) el.setAttribute("src", src);
+          const playing = el.play();
+          if (playing && playing.catch) playing.catch(() => {});
+        } else if (!el.paused) {
+          el.pause();
+        }
+      });
+    }, { rootMargin: "160px 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [src]);
+  return <video ref={ref} className={className} poster={poster} muted loop playsInline preload="none" aria-label={alt} style={style} />;
+};
+
+/* ---------------------------------------------------------------------------
+ * TELA CHEIA: clicar numa imagem ou miniclipe abre o visualizador aqui mesmo
+ * (setas, teclado, legenda e crédito) — nada de mandar o visitante para fora.
+ * ------------------------------------------------------------------------- */
+const dzFullSrc = (src = "") => {
+  const value = String(src);
+  if (/static\.wikia\.nocookie\.net/.test(value)) {
+    return value.replace(/\/revision\/latest(\/scale-to-width-down\/\d+)?/, "/revision/latest/scale-to-width-down/2560");
+  }
+  if (/[?&]imwidth=\d+/.test(value)) return value.replace(/imwidth=\d+/, "imwidth=2560");
+  return value;
+};
+
+const dzMediaEntry = (media) => {
+  if (!media || !(media.src || media.video)) return null;
+  return {
+    src: media.full || dzFullSrc(media.src || media.poster || ""),
+    fallback: media.src || media.poster || "",
+    video: media.videoHq || media.video || null,
+    poster: media.posterHq || media.poster || media.src || "",
+    alt: media.alt || media.caption || "",
+    caption: media.caption || "",
+    credit: media.credit || "",
+    fromGame: media.fromGame || ""
+  };
+};
+
+window.dzOpenLightbox = (items, index = 0) => {
+  const list = (Array.isArray(items) ? items : [items]).map(dzMediaEntry).filter(Boolean);
+  if (!list.length) return;
+  window.dispatchEvent(new CustomEvent("dz:lightbox", { detail: { items: list, index: Math.min(Math.max(0, index), list.length - 1) } }));
+};
+
+const DzLightbox = () => {
+  const [state, setState] = React.useState(null);
+  React.useEffect(() => {
+    const onOpen = (event) => setState({ items: event.detail.items, index: event.detail.index || 0 });
+    window.addEventListener("dz:lightbox", onOpen);
+    return () => window.removeEventListener("dz:lightbox", onOpen);
+  }, []);
+  React.useEffect(() => {
+    if (!state) return undefined;
+    const onKey = (event) => {
+      if (event.key === "Escape") { event.stopImmediatePropagation(); setState(null); }
+      if (event.key === "ArrowRight") setState((s) => s && { ...s, index: (s.index + 1) % s.items.length });
+      if (event.key === "ArrowLeft") setState((s) => s && { ...s, index: (s.index - 1 + s.items.length) % s.items.length });
+    };
+    window.addEventListener("keydown", onKey, true);
+    document.documentElement.classList.add("dz-lightbox-open");
+    return () => {
+      window.removeEventListener("keydown", onKey, true);
+      document.documentElement.classList.remove("dz-lightbox-open");
+    };
+  }, [state]);
+  if (!state) return null;
+  const item = state.items[state.index];
+  const many = state.items.length > 1;
+  const go = (delta) => (event) => {
+    event.stopPropagation();
+    setState((s) => ({ ...s, index: (s.index + delta + s.items.length) % s.items.length }));
+  };
+  return (
+    <div className="dz-lightbox" role="dialog" aria-modal="true" aria-label="Mídia em tela cheia" onClick={() => setState(null)}>
+      <figure onClick={(event) => event.stopPropagation()}>
+        {item.video ? (
+          <video key={item.video} src={item.video} poster={item.poster} autoPlay loop muted playsInline controls />
+        ) : (
+          <img
+            key={item.src}
+            src={item.src}
+            alt={item.alt}
+            referrerPolicy="no-referrer"
+            onError={(event) => { if (item.fallback && event.currentTarget.getAttribute("src") !== item.fallback) event.currentTarget.setAttribute("src", item.fallback); }}
+          />
+        )}
+        <figcaption>
+          <span>{item.caption}{item.fromGame ? ` · foto de ${item.fromGame}` : ""}</span>
+          {many && <b>{state.index + 1} / {state.items.length}</b>}
+          {item.credit && <small>{item.credit}</small>}
+        </figcaption>
+      </figure>
+      {many && <button type="button" className="dz-lightbox-nav prev" onClick={go(-1)} aria-label="Mídia anterior">‹</button>}
+      {many && <button type="button" className="dz-lightbox-nav next" onClick={go(1)} aria-label="Próxima mídia">›</button>}
+      <button type="button" className="dz-lightbox-close" onClick={() => setState(null)} aria-label="Fechar tela cheia">×</button>
+    </div>
+  );
+};
+
+const DzGalleryStrip = ({ items, limit = 24 }) => {
+  const list = (Array.isArray(items) ? items : []).filter((m) => m && (m.src || m.video));
+  if (list.length < 2) return null;
+  return (
+    <div className="dz-gallery-strip">
+      {list.slice(0, limit).map((media, index) => (
+        <button type="button" key={`${media.video || media.src}-${index}`} onClick={() => window.dzOpenLightbox(list, index)} aria-label={`Abrir mídia ${index + 1} de ${list.length}`}>
+          <img src={media.poster || media.src} alt="" loading="lazy" referrerPolicy="no-referrer" />
+          {media.video && <span className="dz-gallery-play" aria-hidden="true">▶</span>}
+        </button>
+      ))}
+    </div>
+  );
+};
+
+const OfficialMedia = ({ media, className = "", zoom = false, gallery }) => {
+  if (!media?.src && !media?.video) return null;
   const caption = mediaCaption(media);
   const imageStyle = {
     objectPosition: media.position || undefined,
@@ -102,13 +232,28 @@ const OfficialMedia = ({ media, className = "" }) => {
   /* --media-src alimenta o fundo desfocado (ver .dossier-mugshot-media::before):
    * assim a foto aparece inteira, sem corte, e o vazio ao redor vira um borrão
    * da própria imagem em vez de barra preta. */
-  const figureStyle = { "--media-src": `url("${String(media.src).replace(/"/g, "%22")}")` };
+  const figureStyle = media.src ? { "--media-src": `url("${String(media.src).replace(/"/g, "%22")}")` } : undefined;
+  const open = zoom ? (event) => {
+    if (event) { event.preventDefault(); event.stopPropagation(); }
+    const list = (Array.isArray(gallery) && gallery.length ? gallery : [media]).filter((m) => m && (m.src || m.video));
+    const index = list.findIndex((m) => m === media || (m.video && m.video === media.video) || (!m.video && m.src === media.src));
+    window.dzOpenLightbox(list, Math.max(0, index));
+  } : undefined;
   return (
-    <figure className={`official-media ${className}`} style={figureStyle}>
-      <img src={media.src} alt={media.alt || caption} loading="lazy" referrerPolicy="no-referrer" style={imageStyle} />
-      <figcaption>
-        {media.source ? <a href={media.source} target="_blank" rel="noreferrer">{caption}</a> : caption}
-      </figcaption>
+    <figure
+      className={`official-media ${media.video ? "has-video" : ""} ${zoom ? "is-zoomable" : ""} ${className}`}
+      style={figureStyle}
+      onClick={open}
+      role={zoom ? "button" : undefined}
+      tabIndex={zoom ? 0 : undefined}
+      aria-label={zoom ? `Ampliar em tela cheia: ${media.alt || caption}` : undefined}
+      onKeyDown={zoom ? (event) => { if (event.key === "Enter" || event.key === " ") open(event); } : undefined}
+    >
+      {media.video
+        ? <DzLoop src={media.video} poster={media.poster || media.src} alt={media.alt || caption} style={imageStyle} />
+        : <img src={media.src} alt={media.alt || caption} loading="lazy" referrerPolicy="no-referrer" style={imageStyle} />}
+      <figcaption>{caption}</figcaption>
+      {zoom && <span className="official-media-zoom" aria-hidden="true">{media.video ? "▶" : "⤢"}</span>}
     </figure>
   );
 };
@@ -126,7 +271,7 @@ const CityImageCarousel = ({ city, className = "" }) => {
 
   return (
     <div className={`dossier-city-carousel ${className}`}>
-      <OfficialMedia media={active} className="dossier-city-carousel-media" />
+      <OfficialMedia media={active} className="dossier-city-carousel-media" zoom gallery={mediaItems} />
       {mediaItems.length > 1 && (
         <>
           <div className="dossier-city-carousel-controls">
@@ -1491,8 +1636,9 @@ const vehicleImageNeedlesByGameId = {
   "liberty-city-stories": ["GTALCS"],
   "vice-city-stories": ["GTAVCS"],
   "gta-iv": ["GTAIV", "GTA4"],
-  "lost-and-damned": ["TLAD"],
-  "ballad-gay-tony": ["TBoGT", "TBOGT"],
+  /* Os episódios rodam na mesma Liberty City e usam a frota de GTA IV. */
+  "lost-and-damned": ["TLAD", "EFLC", "GTAIV", "GTA4"],
+  "ballad-gay-tony": ["TBoGT", "TBOGT", "EFLC", "GTAIV", "GTA4"],
   "chinatown-wars": ["GTACW"],
   "gta-v": ["GTAV"],
   "gta-online": ["GTAO", "GTAV"],
@@ -1522,8 +1668,15 @@ const vehicleFallbackMediaByGameAndName = {
 /* Imagens escolhidas à mão para os itens genéricos do dossiê de GTA VI
  * ("viaturas e perseguições policiais" etc.). São imagens DAQUELE item, não a
  * arte do jogo repetida — por isso continuam valendo. */
-const curatedVehicleMedia = (item, vehicle) =>
-  vehicleFallbackMediaByGameAndName[vehicle?.id]?.[normalizeText(vehicleItemName(item))] || null;
+/* Comparação tolerante: o nome do item traz "/" e acento ("trailers/screenshots",
+ * "aeroporto/céu") que a chave curada não tem. */
+const dzLooseKey = (value) => normalizeText(value).replace(/[^a-z0-9]+/g, " ").trim();
+const curatedVehicleMedia = (item, vehicle) => {
+  const table = vehicleFallbackMediaByGameAndName[vehicle?.id] || {};
+  const key = dzLooseKey(vehicleItemName(item));
+  const hit = Object.keys(table).find((candidate) => dzLooseKey(candidate) === key);
+  return hit ? table[hit] : null;
+};
 
 const vehicleUniversePageSuffix = (vehicle) => {
   if (vehicle?.universe?.includes("2D")) return "2D Universe";
@@ -1729,6 +1882,180 @@ const loadVehicleCategoryGroup = async (categoryTitle, vehicle) => {
   return [{ label: "Lista completa", items: [...items.values()].sort((a, b) => vehicleItemName(a).localeCompare(vehicleItemName(b), "pt-BR")) }];
 };
 
+/* ---------------------------------------------------------------------------
+ * COMPLETAR FOTOS DE FROTA E ARSENAL
+ * Depois das buscas por página/galeria/arquivo, o que ainda ficou sem foto
+ * passa por uma busca no espaço de arquivos do wiki. Primeiro valem os
+ * códigos do próprio jogo; se não houver, o jogo mais próximo da mesma era —
+ * e o card mostra "foto de GTA V", nunca finge que a imagem é do jogo aberto.
+ * ------------------------------------------------------------------------- */
+const dzNeighborCodes = {
+  "gta-1": ["GTA2", "GTAL"],
+  "london-1969": ["GTAL61", "GTAL", "GTA1"],
+  "london-1961": ["GTAL69", "GTAL", "GTA1"],
+  "gta-2": ["GTA1"],
+  "gta-iii": ["GTALCS", "GTAA", "GTAVC", "GTASA"],
+  "vice-city": ["GTAVCS", "GTAIII", "GTA3", "GTASA"],
+  "san-andreas": ["GTAVC", "GTAIII", "GTA3", "GTALCS"],
+  "gta-advance": ["GTAIII", "GTA3", "GTALCS"],
+  "liberty-city-stories": ["GTAIII", "GTA3", "GTAVCS", "GTASA"],
+  "vice-city-stories": ["GTAVC", "GTALCS", "GTASA"],
+  "gta-iv": ["TLAD", "TBoGT", "EFLC", "GTAV"],
+  "lost-and-damned": ["TBoGT", "GTAV"],
+  "ballad-gay-tony": ["TLAD", "GTAV"],
+  "chinatown-wars": ["GTAIV", "GTA4"],
+  "gta-v": ["GTAO", "GTAIV"],
+  "gta-online": ["GTAIV"],
+  "trilogy-definitive": ["GTALCS", "GTAVCS"],
+  "gta-vi": ["GTAV", "GTAO"]
+};
+const dzGameLabelByCode = {
+  GTA1: "GTA 1", GTA2: "GTA 2", GTAL: "GTA London", GTAL61: "London 1961", GTAL69: "London 1969",
+  GTA3: "GTA III", GTAIII: "GTA III", GTAVC: "Vice City", GTASA: "San Andreas", GTAA: "GTA Advance",
+  GTALCS: "Liberty City Stories", GTAVCS: "Vice City Stories", GTAIV: "GTA IV", GTA4: "GTA IV",
+  TLAD: "The Lost and Damned", TBoGT: "The Ballad of Gay Tony", TBOGT: "The Ballad of Gay Tony",
+  EFLC: "Episodes from Liberty City", GTACW: "Chinatown Wars", GTAV: "GTA V", GTAO: "GTA Online"
+};
+/* Linhas de tabela que não são item (títulos de lista, estatísticas, ataques). */
+const dzJunkItemName = (name = "") => /^(vehicles? in |vehicle stats|weapons? in |melee attack$|fire$|crates$)/i.test(String(name).trim());
+const dzDropJunkItems = (groups, nameOf) => asList(groups)
+  .map((group) => ({ ...group, items: asList(group.items).filter((item) => !dzJunkItemName(nameOf(item))) }))
+  .filter((group) => group.items.length);
+
+/* Mesmo objeto, nome diferente entre jogos ("Micro Submachine Gun" em GTA VI é
+ * a "Micro SMG" de GTA V). Só equivalências diretas do mesmo tipo de item. */
+const dzItemAliases = {
+  "micro submachine gun": ["Micro SMG"],
+  "compact submachine gun": ["Mini SMG"],
+  "molotov cocktails": ["Molotov Cocktail", "Molotov"],
+  "molotovs": ["Molotov Cocktail", "Molotov"],
+  "fire bottle": ["Molotov Cocktail", "Molotov"],
+  "smoke grenades": ["Smoke Grenade", "Tear Gas"],
+  "flashbangs": ["Flashbang", "Stun Grenade"],
+  "golf driver": ["Golf Club"],
+  "golf iron": ["Golf Club"],
+  "golf putter": ["Golf Club"],
+  "golf wedge": ["Golf Club"],
+  "golf balls": ["Golf Ball"],
+  "heavy machine gun": ["Combat MG"],
+  "hunter sniper": ["Heavy Sniper"],
+  "speargun": ["Harpoon Gun"],
+  "laser sighted sniper rifle": ["Laser Scope Sniper Rifle", "Sniper Rifle"],
+  "spaz 12": ["SPAS 12", "S.P.A.S. 12"],
+  "lad rover": ["Landroamer"],
+  "pißwasser dominator": ["Pisswasser Dominator", "Dominator"]
+};
+const dzSearchTerms = (rawName) => {
+  const base = String(rawName || "").replace(/\s*\(.*?\)\s*/g, " ").trim();
+  const terms = [];
+  base.split(/\s*\/\s*/).filter(Boolean).forEach((part) => {
+    terms.push(part);
+    if (/[a-z]s$/i.test(part) && !/ss$/i.test(part)) terms.push(part.replace(/s$/i, ""));
+    (dzItemAliases[normalizeText(part)] || []).forEach((alias) => terms.push(alias));
+  });
+  (dzItemAliases[normalizeText(base)] || []).forEach((alias) => terms.push(alias));
+  return [...new Set(terms)].filter((term) => normalizeText(term).replace(/[^a-z0-9]/g, "").length >= 2);
+};
+
+/* GTA VI: o catálogo automático (live/vi-catalog.json) já resolveu foto para
+ * quase toda arma e veículo — inclusive a foto anterior etiquetada. O dossiê
+ * reaproveita a mesma escolha, para as duas seções nunca discordarem. */
+const dzCatalogMediaForGame = async (groups, dossier, nameOf) => {
+  if (dossier?.id !== "gta-vi") return groups;
+  let catalog = null;
+  try { catalog = await fetch("live/vi-catalog.json", { cache: "no-cache" }).then((response) => (response.ok ? response.json() : null)); } catch (error) { return groups; }
+  if (!catalog || !Array.isArray(catalog.items)) return groups;
+  const byTitle = new Map(catalog.items.filter((entry) => entry.image).map((entry) => [dzLooseKey(entry.title), entry]));
+  return groups.map((group) => ({
+    ...group,
+    items: asList(group.items).map((item) => {
+      if (!item || (item.media && item.media.src)) return item;
+      const entry = byTitle.get(dzLooseKey(nameOf(item)));
+      if (!entry) return item;
+      return {
+        ...item,
+        media: {
+          src: entry.image,
+          alt: `Imagem de ${nameOf(item)}`,
+          caption: `GTA Wiki - ${entry.title}`,
+          credit: "Imagem via GTA Wiki / Fandom; direitos dos assets pertencem aos respectivos titulares.",
+          fit: "contain",
+          fromGame: entry.imageGame || ""
+        }
+      };
+    })
+  }));
+};
+
+/* Último recurso só para GTA VI (jogo ainda não lançado): item sem nenhuma foto
+ * pública recebe a arte oficial de paisagem de uma região de Leonida, marcada
+ * "imagem ilustrativa" — o mesmo critério do Catálogo VI. */
+const dzIllustrativeForGame = (groups, dossier, nameOf) => {
+  const store = window.VI_MEDIA;
+  if (dossier?.id !== "gta-vi" || !store || !store.galleries) return groups;
+  const pool = Object.values(store.galleries).flat().filter((media) => media && media.artwork && /-BG-GTAVI/.test(media.src || ""));
+  if (!pool.length) return groups;
+  const pick = (name) => {
+    let hash = 0;
+    for (const ch of String(name)) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+    return pool[hash % pool.length];
+  };
+  return groups.map((group) => ({
+    ...group,
+    items: asList(group.items).map((item) => {
+      if (!item || (item.media && item.media.src)) return item;
+      const art = pick(nameOf(item));
+      return { ...item, media: { ...art, alt: `Imagem ilustrativa para ${nameOf(item)}`, caption: `${nameOf(item)} — ${art.caption}`, illustrative: true } };
+    })
+  }));
+};
+
+const dzFillMissingMedia = async (groupsIn, dossier, { nameOf, loadFileMap, primaryCodes = [] }) => {
+  const groups = await dzCatalogMediaForGame(groupsIn, dossier, nameOf);
+  const missing = groups.flatMap((group) => asList(group.items)).filter((item) => item && !(item.media && item.media.src));
+  if (!missing.length) return groups;
+  const codeOrder = [...primaryCodes, ...(dzNeighborCodes[dossier?.id] || [])];
+  if (!codeOrder.length) return groups;
+  const picks = new Map();
+  const searchOne = async (term) => {
+    const stem = normalizeText(term).replace(/[^a-z0-9]/g, "");
+    const data = await fetch(vehicleApiUrl({ action: "query", list: "search", srnamespace: "6", srlimit: "40", srsearch: term })).then((response) => response.json());
+    let best = null;
+    asList(data?.query?.search).forEach((hit) => {
+      const title = hit.title || "";
+      const flat = normalizeText(title).replace(/[^a-z0-9]/g, "");
+      if (!flat.includes(stem)) return;
+      if (/logo|icon|blip|radar|map|badge|emblem|interior|inside|dashboard|rear|side|top|hud|stats|livery|advert|poster/.test(normalizeText(title))) return;
+      const rank = codeOrder.findIndex((code) => imageHasGameCode(title, code));
+      if (rank < 0) return;
+      const score = rank * 10 + (/front|frontquarter|ingame|render/i.test(title) ? 0 : 3);
+      if (!best || score < best.score) best = { title, score, code: codeOrder[rank], neighbor: rank >= primaryCodes.length };
+    });
+    return best;
+  };
+  for (let start = 0; start < missing.length; start += 6) {
+    await Promise.all(missing.slice(start, start + 6).map(async (item) => {
+      for (const term of dzSearchTerms(nameOf(item))) {
+        try {
+          const best = await searchOne(term);
+          if (best) { picks.set(item, best); return; }
+        } catch (error) { return; /* busca opcional: sem rede, o card fica com o ícone */ }
+      }
+    }));
+  }
+  if (!picks.size) return groups;
+  const fileMap = await loadFileMap([...picks.values()].map((pick) => pick.title));
+  return groups.map((group) => ({
+    ...group,
+    items: asList(group.items).map((item) => {
+      const pick = picks.get(item);
+      const media = pick && fileMap.get(normalizeText(pick.title));
+      if (!media) return item;
+      return { ...item, media: { ...media, alt: `Imagem de ${nameOf(item)}`, fromGame: pick.neighbor ? (dzGameLabelByCode[pick.code] || pick.code) : "" } };
+    })
+  }));
+};
+
 const loadVehicleGroups = async (vehicle) => {
   const cacheKey = `${vehicle.id}:${vehicle.apiPage || vehicle.categoryTitle || "fallback"}`;
   if (vehicleGroupCache.has(cacheKey)) return vehicleGroupCache.get(cacheKey);
@@ -1745,7 +2072,9 @@ const loadVehicleGroups = async (vehicle) => {
     groups = parseVehicleWikitext(data?.parse?.wikitext?.["*"] || "");
   }
   if (!groups.length && vehicle.fallbackGroups) groups = vehicle.fallbackGroups;
-  groups = await hydrateVehicleGroupMedia(groups, vehicle);
+  groups = await hydrateVehicleGroupMedia(dzDropJunkItems(groups, vehicleItemName), vehicle);
+  groups = await dzFillMissingMedia(groups, vehicle, { nameOf: vehicleItemName, loadFileMap: loadVehicleFileMediaMap, primaryCodes: vehicleImageNeedlesByGameId[vehicle?.id] || [] });
+  groups = dzIllustrativeForGame(groups, vehicle, vehicleItemName);
   vehicleGroupCache.set(cacheKey, groups);
   return groups;
 };
@@ -2011,8 +2340,9 @@ const weaponImageNeedlesByGameId = {
   "liberty-city-stories": ["GTALCS"],
   "vice-city-stories": ["GTAVCS"],
   "gta-iv": ["GTAIV", "GTA4"],
-  "lost-and-damned": ["TLAD"],
-  "ballad-gay-tony": ["TBoGT", "TBOGT"],
+  /* TLAD e TBoGT herdam o arsenal de GTA IV (com acréscimos próprios). */
+  "lost-and-damned": ["TLAD", "EFLC", "GTAIV", "GTA4"],
+  "ballad-gay-tony": ["TBoGT", "TBOGT", "EFLC", "GTAIV", "GTA4"],
   "chinatown-wars": ["GTACW"],
   "gta-v": ["GTAV"],
   "gta-online": ["GTAO", "GTAV"],
@@ -2321,7 +2651,9 @@ const loadWeaponGroups = async (weapon) => {
     groups = parseWeaponWikitext(data?.parse?.wikitext?.["*"] || "");
   }
   if (!groups.length && weapon.fallbackGroups) groups = weapon.fallbackGroups;
-  groups = await hydrateWeaponGroupMedia(groups, weapon);
+  groups = await hydrateWeaponGroupMedia(dzDropJunkItems(groups, weaponItemName), weapon);
+  groups = await dzFillMissingMedia(groups, weapon, { nameOf: weaponItemName, loadFileMap: loadWeaponFileMediaMap, primaryCodes: weaponImageNeedlesByGameId[weapon?.id] || [] });
+  groups = dzIllustrativeForGame(groups, weapon, weaponItemName);
   weaponGroupCache.set(cacheKey, groups);
   return groups;
 };
@@ -2786,7 +3118,7 @@ const RockstarDossierSection = ({ onOpenDossier }) => (
         <aside className="dossier-founder-panel">
           <div className="dossier-card-kicker">Fundadores da Rockstar Games</div>
           <h3>Sam Houser, Dan Houser, Terry Donovan, Jamie King e Gary Foreman</h3>
-          <OfficialMedia media={rockstarHistoryData.find((item) => item.title.includes("Rockstar North"))?.media} className="dossier-founder-media" />
+          <OfficialMedia media={rockstarHistoryData.find((item) => item.title.includes("Rockstar North"))?.media} className="dossier-founder-media" zoom />
           <div className="dossier-founder-faces">
             {rockstarPeopleData
               .filter((person) => asList(person.tags).includes("fundador"))
@@ -2839,7 +3171,7 @@ const GTAOnlineDossierSection = ({ onOpenDossier }) => {
             </p>
           </div>
           <div className="dossier-online-side">
-            <OfficialMedia media={onlineHero} className="dossier-online-hero-media" />
+            <OfficialMedia media={onlineHero} className="dossier-online-hero-media" zoom />
             <div className="dossier-online-metrics">
               <span><strong>2013</strong> estreia</span>
               <span><strong>10+ anos</strong> atualizações</span>
@@ -3108,6 +3440,46 @@ const GlossaryTermModalContent = ({ item }) => {
   );
 };
 
+/* Grade de modelos (frota/arsenal): o card é um botão que abre a foto em tela
+ * cheia, navegando pelo grupo inteiro — antes era link para o wiki. */
+const DzModelGrid = ({ items, nameOf, keyOf, icon, groupLabel, prefix }) => {
+  const withMedia = items.filter((entry) => entry && entry.media && entry.media.src);
+  return (
+    <div className={`${prefix}-name-grid`}>
+      {items.map((entry) => {
+        const name = nameOf(entry);
+        const media = entry && entry.media && entry.media.src ? entry.media : null;
+        const open = () => {
+          if (!media) return;
+          const gallery = withMedia.map((it) => ({ ...it.media, caption: `${nameOf(it)} — ${groupLabel}` }));
+          window.dzOpenLightbox(gallery, withMedia.indexOf(entry));
+        };
+        return (
+          <button
+            type="button"
+            className={`${prefix}-model-card ${media ? "has-media" : "no-media"}`}
+            key={`${groupLabel}-${keyOf(entry)}`}
+            onClick={open}
+            disabled={!media}
+            aria-label={media ? `Ampliar ${name}` : name}
+          >
+            <span className={`${prefix}-model-thumb`}>
+              {media ? (
+                <img src={media.src} alt={media.alt || `Imagem de ${name}`} loading="lazy" referrerPolicy="no-referrer" onLoad={markSpriteOnLoad} />
+              ) : (
+                <span className={`${prefix}-model-placeholder`}><DossierIcon type={icon} /></span>
+              )}
+            </span>
+            <strong>{name}</strong>
+            {media && media.illustrative && <em className="dz-from-game">imagem ilustrativa</em>}
+            {media && !media.illustrative && media.fromGame && <em className="dz-from-game">foto de {media.fromGame}</em>}
+          </button>
+        );
+      })}
+    </div>
+  );
+};
+
 const VehicleGroupsPanel = ({ groups, query }) => {
   const normalizedQuery = normalizeText(query);
   const visibleGroups = groups
@@ -3128,25 +3500,7 @@ const VehicleGroupsPanel = ({ groups, query }) => {
       {visibleGroups.map((group, index) => (
         <details key={group.label} className="dossier-vehicle-group" open={index < 3 || Boolean(query)}>
           <summary><span>{group.label}</span><strong>{group.items.length}</strong></summary>
-          <div className="dossier-vehicle-name-grid">
-            {group.items.map((vehicle) => {
-              const name = vehicleItemName(vehicle);
-              const media = vehicleItemMedia(vehicle);
-              const source = media?.source || vehicleWikiPageUrl(vehicleItemPageTitle(vehicle));
-              return (
-                <a className={`dossier-vehicle-model-card ${media ? "has-media" : ""}`} href={source} target="_blank" rel="noreferrer" key={`${group.label}-${vehicleItemKey(vehicle)}`}>
-                  <span className="dossier-vehicle-model-thumb">
-                    {media?.src ? (
-                      <img src={media.src} alt={media.alt || `Imagem de ${name}`} loading="lazy" referrerPolicy="no-referrer" onLoad={markSpriteOnLoad} />
-                    ) : (
-                      <span className="dossier-vehicle-model-placeholder"><DossierIcon type="car" /> imagem pendente</span>
-                    )}
-                  </span>
-                  <strong>{name}</strong>
-                </a>
-              );
-            })}
-          </div>
+          <DzModelGrid items={group.items} nameOf={vehicleItemName} keyOf={vehicleItemKey} icon="car" groupLabel={group.label} prefix="dossier-vehicle" />
         </details>
       ))}
     </div>
@@ -3173,25 +3527,7 @@ const WeaponGroupsPanel = ({ groups, query }) => {
       {visibleGroups.map((group, index) => (
         <details key={group.label} className="dossier-weapon-group" open={index < 3 || Boolean(query)}>
           <summary><span>{group.label}</span><strong>{group.items.length}</strong></summary>
-          <div className="dossier-weapon-name-grid">
-            {group.items.map((weapon) => {
-              const name = weaponItemName(weapon);
-              const media = weaponItemMedia(weapon);
-              const source = media?.source || weaponWikiPageUrl(weaponItemPageTitle(weapon));
-              return (
-                <a className={`dossier-weapon-model-card ${media ? "has-media" : ""}`} href={source} target="_blank" rel="noreferrer" key={`${group.label}-${weaponItemKey(weapon)}`}>
-                  <span className="dossier-weapon-model-thumb">
-                    {media?.src ? (
-                      <img src={media.src} alt={media.alt || `Imagem de ${name}`} loading="lazy" referrerPolicy="no-referrer" onLoad={markSpriteOnLoad} />
-                    ) : (
-                      <span className="dossier-weapon-model-placeholder"><DossierIcon type="weapon" /> imagem pendente</span>
-                    )}
-                  </span>
-                  <strong>{name}</strong>
-                </a>
-              );
-            })}
-          </div>
+          <DzModelGrid items={group.items} nameOf={weaponItemName} keyOf={weaponItemKey} icon="weapon" groupLabel={group.label} prefix="dossier-weapon" />
         </details>
       ))}
     </div>
@@ -3625,13 +3961,14 @@ const DossierRecordModal = ({ record, onClose, onOpen }) => {
               <CityImageCarousel city={item} className="modal" />
             ) : (
               <div className={`dossier-cover-art ${universeTone(item.universe || item.category)} ${media ? "has-official" : ""}`}>
-                {media ? <OfficialMedia media={media} className={`dossier-cover-media ${type === "character" || type === "person" ? "dossier-mugshot-media" : ""}`} /> : <div className="dossier-cover-map" />}
+                {media ? <OfficialMedia media={media} className={`dossier-cover-media ${type === "character" || type === "person" ? "dossier-mugshot-media" : ""}`} zoom gallery={asList(item.galleryMedia).length ? item.galleryMedia : [media]} /> : <div className="dossier-cover-map" />}
                 <div className="dossier-cover-label">
                   <strong>{labels[type]?.label || type}</strong>
                   {sideNote && <small>{textOf(sideNote)}</small>}
                 </div>
               </div>
             )}
+            {type !== "city" && <DzGalleryStrip items={item.galleryMedia} />}
             <DossierChips items={item.tags || [item.universe, item.category, item.certainty].filter(Boolean)} limit={8} />
             <DzModalToc rootRef={shellRef} watch={item} />
           </aside>
@@ -3937,5 +4274,8 @@ Object.assign(window, {
   GlossaryDossierSection,
   ConnectionsImpactSection,
   DossierFooter,
-  DossierRecordModal
+  DossierRecordModal,
+  DzLightbox,
+  DzLoop,
+  OfficialMedia
 });

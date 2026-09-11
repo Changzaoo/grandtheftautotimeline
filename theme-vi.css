@@ -2088,3 +2088,82 @@ ol.vi-song-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px
 @media (max-width:940px){
   .vi-soundtrack-cols{grid-template-columns:1fr}
 }
+
+/* ============================================================================
+ * 17. MÍDIA — miniclipes, tela cheia e galerias
+ * ========================================================================== */
+.official-media video{display:block;width:100%;height:100%;object-fit:cover}
+.official-media figcaption{pointer-events:none}
+.official-media.is-zoomable{cursor:zoom-in}
+.official-media-zoom{
+  position:absolute;right:8px;bottom:8px;z-index:3;width:32px;height:32px;display:grid;place-items:center;
+  border-radius:999px;border:1px solid rgba(255,209,102,.45);background:rgba(10,3,26,.74);
+  color:var(--vi-gold);font-size:14px;opacity:.85;pointer-events:none;transition:opacity .2s ease,transform .2s ease
+}
+.official-media.is-zoomable:hover .official-media-zoom{opacity:1;transform:scale(1.08)}
+.dossier-cover-art::after,.dossier-cover-art .dossier-cover-label{pointer-events:none}
+.dz-media video{transition:transform .5s ease}
+.dz-card:hover .dz-media video{transform:scale(1.04)}
+.dz-thumb--portrait .dz-media video{position:relative;z-index:1}
+
+.dz-lightbox{
+  position:fixed;inset:0;z-index:600;display:grid;place-items:center;padding:clamp(12px,3vw,44px);
+  background:rgba(6,2,16,.95);backdrop-filter:blur(8px);animation:dz-fade .18s ease
+}
+.dz-lightbox figure{margin:0;display:grid;gap:10px;justify-items:center;max-width:100%}
+.dz-lightbox img,.dz-lightbox video{
+  display:block;max-width:min(94vw,1800px);max-height:80vh;width:auto;height:auto;
+  border-radius:12px;background:#0b0a10;box-shadow:0 30px 90px rgba(0,0,0,.6)
+}
+.dz-lightbox figcaption{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;justify-content:center;max-width:min(94vw,1100px);text-align:center;color:#eadbeb;font-size:13.5px}
+.dz-lightbox figcaption b{font-family:"Space Mono",monospace;font-size:11px;color:var(--vi-gold)}
+.dz-lightbox figcaption small{flex-basis:100%;font-size:11px;color:#b894c0}
+.dz-lightbox-close,.dz-lightbox-nav{
+  position:fixed;z-index:2;display:grid;place-items:center;cursor:pointer;color:#fff;
+  border:1px solid rgba(255,45,124,.5);border-radius:999px;background:rgba(20,8,44,.84);transition:background .2s ease,color .2s ease
+}
+.dz-lightbox-close{top:16px;right:16px;width:46px;height:46px;font-size:28px;line-height:1}
+.dz-lightbox-nav{top:50%;transform:translateY(-50%);width:52px;height:52px;font-size:34px;line-height:1}
+.dz-lightbox-nav.prev{left:14px}
+.dz-lightbox-nav.next{right:14px}
+.dz-lightbox-close:hover,.dz-lightbox-nav:hover{background:var(--vi-pink);color:var(--vi-ink)}
+html.dz-lightbox-open{overflow:hidden}
+@keyframes dz-fade{from{opacity:0}to{opacity:1}}
+
+.dz-gallery-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin:10px 0 2px}
+.dz-gallery-strip button{position:relative;aspect-ratio:16/10;padding:0;overflow:hidden;cursor:zoom-in;border:1px solid rgba(255,255,255,.1);border-radius:6px;background:#0b0a10}
+.dz-gallery-strip button:hover{border-color:var(--vi-pink)}
+.dz-gallery-strip img{display:block;width:100%;height:100%;object-fit:cover}
+.dz-gallery-play{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:13px;background:rgba(10,3,26,.3);text-shadow:0 0 8px #000}
+
+button.dossier-vehicle-model-card,button.dossier-weapon-model-card{font:inherit;text-align:left;cursor:zoom-in}
+button.dossier-vehicle-model-card.no-media,button.dossier-weapon-model-card.no-media{cursor:default;opacity:.8}
+.dz-from-game{display:block;margin-top:2px;font-family:"Space Mono",monospace;font-size:8.5px;font-style:normal;text-transform:uppercase;letter-spacing:.04em;color:#d7b56d}
+
+.vi-char-art[role="button"],.vi-polaroid-photo[role="button"]{cursor:zoom-in}
+.vi-char-art .vi-char-video{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover}
+.vi-char-art.has-video .vi-char-rings{opacity:.35}
+.vi-polaroid-photo video.vi-polaroid-img{position:relative;display:block;width:100%;height:100%;object-fit:cover}
+.vi-media-count{
+  position:absolute;left:10px;bottom:10px;z-index:5;padding:5px 10px;border-radius:999px;
+  border:1px solid rgba(255,209,102,.45);background:rgba(10,3,26,.76);backdrop-filter:blur(6px);
+  color:var(--vi-gold);font-family:"Space Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;pointer-events:none
+}
+.vi-polaroid-photo .vi-media-count{left:auto;right:8px;top:8px;bottom:auto}
+.vi-edition-media{
+  position:relative;display:block;width:100%;aspect-ratio:16/9;padding:0;margin:0 0 4px;overflow:hidden;cursor:zoom-in;
+  border:1px solid rgba(255,209,102,.3);border-radius:10px;background:#0b0a10
+}
+.vi-edition-media video{display:block;width:100%;height:100%;object-fit:cover}
+button.vi-cat-media{width:100%;padding:0;border:0;font:inherit;color:inherit;cursor:zoom-in}
+button.vi-cat-media:disabled{cursor:default}
+
+@media (max-width:680px){
+  .dz-lightbox-nav{top:auto;bottom:18px;transform:none;width:46px;height:46px}
+  .dz-lightbox img,.dz-lightbox video{max-height:72vh}
+  .dz-gallery-strip{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion: reduce){
+  .dz-lightbox{animation:none}
+  .dz-card:hover .dz-media video{transform:none}
+}

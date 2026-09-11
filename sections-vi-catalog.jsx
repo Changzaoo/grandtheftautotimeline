@@ -3,9 +3,10 @@
  * (live/vi-catalog.json, regenerado automaticamente pela GitHub Action):
  * veículos, armas, personagens, gangues, cidades/locais (inclusive fora de
  * Leonida, como o estado de Gloriana), marcas, fauna e rádios.
- * Prioriza a arte de GTA VI; quando a ficha é de alguém/algo que volta de um
- * jogo antigo e ainda não tem arte nova, o card mostra a foto antiga com o
- * selo "FOTO DE <jogo>". Carro e arma nunca reaproveitam foto de outro jogo.
+ * Prioriza a arte de GTA VI; quando a ficha volta de um jogo antigo e ainda não
+ * tem arte nova, o card mostra a foto anterior com o selo "FOTO DE <jogo>".
+ * Sem foto pública nenhuma, entra uma screenshot oficial de Leonida com o selo
+ * "IMAGEM ILUSTRATIVA". Clicar na imagem abre a tela cheia do próprio site.
  */
 window.__T = window.__T || ((k, f) => (window.__t ? window.__t(k, f) : f));
 
@@ -49,34 +50,77 @@ const viCatMetaLine = (item) => {
   return parts.filter(Boolean).join(" · ");
 };
 
-const VICatalogCard = ({ item }) => (
-  <article className={`card vi-cat-card vi-cat-card--${item.group}${item.image ? "" : " vi-cat-card--noimg"}`}>
-    <Corners />
-    <a
-      className="vi-cat-media vi-vhs"
-      href={item.url} target="_blank" rel="noreferrer" aria-label={item.title}
-      /* --media-src vira o fundo desfocado das fichas que mostram a imagem
-       * inteira (retratos, logos, fauna): nada de rosto cortado. */
-      style={item.image ? { "--media-src": `url("${item.image.replace(/"/g, "%22")}")` } : undefined}
-    >
-      {item.image
-        ? <img src={item.image} alt={item.title} loading="lazy" referrerPolicy="no-referrer" />
-        : <span className="vi-cat-initials vi-serif" aria-hidden="true">{item.title.slice(0, 2).toUpperCase()}</span>}
-      <span className="vi-grain" />
-    </a>
-    <div className="vi-cat-body">
-      <div className="vi-cat-badges">
-        <span className="vi-badge">{viCatLabel(item.group)}</span>
-        {item.status === "mencionado" && <span className="vi-badge vi-badge--rumor">{__T("vi.cat.mentioned", "SÓ MENÇÃO")}</span>}
-        {item.imageGame && <span className="vi-badge" title={__T("vi.cat.legacy-photo-title", "A Rockstar ainda não divulgou arte desta ficha em GTA VI; a foto é do jogo indicado.")}>{__T("vi.cat.legacy-photo", "FOTO DE")} {item.imageGame}</span>}
-        {item.leak && <span className="vi-badge vi-badge--incident" title={__T("vi.cat.leak-title", "A página cita material vazado; detalhes podem mudar até o lançamento.")}>{__T("vi.cat.leak", "CITA VAZAMENTO")}</span>}
+/* Fichas sem nenhuma foto pública (NPC sem nome, local ainda sem imagem) ganham
+ * a arte oficial de paisagem de Leonida — da região certa quando a ficha diz
+ * qual é — sempre com o selo IMAGEM ILUSTRATIVA. Só as artes de fundo das
+ * regiões, sem pessoas: nunca um rosto ou uma cena qualquer no lugar do item. */
+const VI_CAT_REGION_HINTS = [
+  ["vice", "vice-city"], ["keys", "leonida-keys"], [" key", "leonida-keys"], ["grassriver", "grassrivers"],
+  ["gellhorn", "port-gellhorn"], ["ambrosia", "ambrosia"], ["kalaga", "kalaga"]
+];
+const VI_CAT_LANDSCAPES = ["vice-city", "leonida-keys", "grassrivers", "port-gellhorn", "ambrosia", "kalaga"];
+const viCatHash = (value) => {
+  let hash = 0;
+  for (const ch of String(value)) hash = (hash * 31 + ch.charCodeAt(0)) >>> 0;
+  return hash;
+};
+const viCatFallback = (item) => {
+  const store = window.VI_MEDIA;
+  if (!store || !store.galleries) return null;
+  const hay = " " + viCatNorm([item.title, item.sub, item.meta && item.meta.location, item.desc].filter(Boolean).join(" "));
+  const region = VI_CAT_REGION_HINTS.find(([needle]) => hay.includes(needle));
+  const keys = region ? [region[1]] : VI_CAT_LANDSCAPES;
+  const pool = keys.flatMap((key) => (store.galleries[key] || []).filter((media) => media && media.artwork && media.src));
+  return pool.length ? pool[viCatHash(item.title) % pool.length] : null;
+};
+
+const VICatalogCard = ({ item }) => {
+  const fallback = item.image ? null : viCatFallback(item);
+  const image = item.image || (fallback ? fallback.src : "");
+  const zoom = () => {
+    if (!image || !window.dzOpenLightbox) return;
+    window.dzOpenLightbox([fallback ? { ...fallback, caption: `${item.title} — ${fallback.caption}` } : {
+      src: item.image,
+      alt: item.title,
+      caption: item.title,
+      fromGame: item.imageGame || "",
+      credit: "Imagem via GTA Wiki / Fandom; direitos dos assets pertencem aos respectivos titulares."
+    }], 0);
+  };
+  return (
+    <article className={`card vi-cat-card vi-cat-card--${item.group}${image ? "" : " vi-cat-card--noimg"}${fallback ? " vi-cat-card--illustrative" : ""}`}>
+      <Corners />
+      {/* A foto abre em tela cheia aqui mesmo (antes o clique levava ao wiki). */}
+      <button
+        type="button"
+        className="vi-cat-media vi-vhs"
+        disabled={!image}
+        aria-label={image ? `${item.title} — ${__T("vi.cat.zoom", "ampliar imagem")}` : item.title}
+        onClick={zoom}
+        /* --media-src vira o fundo desfocado das fichas que mostram a imagem
+         * inteira (retratos, logos, fauna): nada de rosto cortado. */
+        style={image ? { "--media-src": `url("${image.replace(/"/g, "%22")}")` } : undefined}
+      >
+        {image
+          ? <img src={image} alt={item.title} loading="lazy" referrerPolicy="no-referrer" />
+          : <span className="vi-cat-initials vi-serif" aria-hidden="true">{item.title.slice(0, 2).toUpperCase()}</span>}
+        <span className="vi-grain" />
+      </button>
+      <div className="vi-cat-body">
+        <div className="vi-cat-badges">
+          <span className="vi-badge">{viCatLabel(item.group)}</span>
+          {item.status === "mencionado" && <span className="vi-badge vi-badge--rumor">{__T("vi.cat.mentioned", "SÓ MENÇÃO")}</span>}
+          {item.imageGame && <span className="vi-badge" title={__T("vi.cat.legacy-photo-title", "A Rockstar ainda não divulgou arte desta ficha em GTA VI; a foto é do jogo indicado.")}>{__T("vi.cat.legacy-photo", "FOTO DE")} {item.imageGame}</span>}
+          {fallback && <span className="vi-badge vi-badge--rumor" title={__T("vi.cat.illustrative-title", "Ainda não há foto pública desta ficha; a imagem é uma screenshot oficial de Leonida.")}>{__T("vi.cat.illustrative", "IMAGEM ILUSTRATIVA")}</span>}
+          {item.leak && <span className="vi-badge vi-badge--incident" title={__T("vi.cat.leak-title", "A página cita material vazado; detalhes podem mudar até o lançamento.")}>{__T("vi.cat.leak", "CITA VAZAMENTO")}</span>}
+        </div>
+        <h4><a href={item.url} target="_blank" rel="noreferrer">{item.title}</a></h4>
+        {viCatMetaLine(item) && <p className="vi-cat-meta">{viCatMetaLine(item)}</p>}
+        {item.desc && <p className="vi-cat-desc" lang="en">{item.desc}</p>}
       </div>
-      <h4><a href={item.url} target="_blank" rel="noreferrer">{item.title}</a></h4>
-      {viCatMetaLine(item) && <p className="vi-cat-meta">{viCatMetaLine(item)}</p>}
-      {item.desc && <p className="vi-cat-desc" lang="en">{item.desc}</p>}
-    </div>
-  </article>
-);
+    </article>
+  );
+};
 
 const VICatalogSection = () => {
   const { status, data } = useVICatalog();

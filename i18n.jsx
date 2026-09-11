@@ -248,6 +248,7 @@ function i18nCollectData() {
   put("refinedCityGalleryMediaById", typeof refinedCityGalleryMediaById !== "undefined" ? refinedCityGalleryMediaById : null);
   put("refinedCityUniverseGalleryMediaById", typeof refinedCityUniverseGalleryMediaById !== "undefined" ? refinedCityUniverseGalleryMediaById : null);
   put("VI_DATA", window.VI_DATA);
+  put("VI_MEDIA", window.VI_MEDIA);
   put("EASTER_EGGS_DATA", window.EASTER_EGGS_DATA);
   put("MYSTERIES_DATA", window.MYSTERIES_DATA);
   return reg;

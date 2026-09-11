@@ -155,6 +155,7 @@ function App(){
       <ConnectionsSec />
       <FooterSec />
       <DossierRecordModal record={dossier} onClose={() => setDossier(null)} onOpen={setDossier} />
+      <DzLightbox />
     </React.Fragment>
   );
 }

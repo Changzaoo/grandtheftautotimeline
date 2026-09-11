@@ -205,8 +205,11 @@ function imageScore(name, title, group) {
    * "Jack Howitzer Logo.png" perde para o retrato dele em GTA V. */
   return s >= (untagged ? 6 : 1) ? s : 0;
 }
-/* Nível 3: retrato de outro jogo, só para quem é a MESMA entidade entre jogos. */
-const CROSS_GAME_GROUPS = new Set(["characters", "gangs", "businesses", "radio", "animals"]);
+/* Nível 3: foto de outro jogo, sempre com a etiqueta imageGame ("FOTO DE GTA V")
+ * na tela. Vale para a MESMA entidade entre jogos e também para carro, arma e
+ * local que voltam de jogos anteriores: sem arte de GTA VI publicada, o card
+ * mostra o modelo anterior identificado em vez de um monograma vazio. */
+const CROSS_GAME_GROUPS = new Set(["characters", "gangs", "businesses", "radio", "animals", "vehicles", "weapons", "locations"]);
 function legacyScore(name, title, group) {
   const n = String(name).toLowerCase();
   if (WIKI_CHROME.test(n) || !/\.(png|jpe?g)$/.test(n)) return 0;
@@ -388,6 +391,65 @@ async function main() {
     it.image = it.imageFile ? (urls.get(it.imageFile) || "") : "";
     delete it.imageFile;
     if (!it.image || !it.imageGame) delete it.imageGame;
+  }
+
+  /* Busca no espaço de arquivos para quem ainda ficou sem foto: o nome do
+   * arquivo precisa conter o nome da ficha. Vale primeiro arte de GTA VI e
+   * depois o jogo anterior mais próximo (V, Online, IV) — sempre marcado em
+   * imageGame, para a tela avisar "FOTO DE GTA V". Arquivo sem código de jogo
+   * só entra para local e logotipo (marca, gangue, rádio). */
+  const GAME_RANK = { "GTA VI": 0, "GTA V": 1, "GTA Online": 2, "GTA IV": 3 };
+  /* Mesmo item, nome diferente entre jogos (a "Micro Submachine Gun" de VI é a
+   * "Micro SMG" de V). Só equivalências diretas do mesmo tipo de objeto. */
+  const SEARCH_ALIASES = {
+    "micro submachine gun": ["Micro SMG"], "compact submachine gun": ["Mini SMG"],
+    "molotov cocktails": ["Molotov Cocktail"], "fire bottle": ["Molotov Cocktail"],
+    "smoke grenades": ["Smoke Grenade", "Tear Gas"], "flashbangs": ["Flashbang", "Stun Grenade"],
+    "golf driver": ["Golf Club"], "golf iron": ["Golf Club"], "golf putter": ["Golf Club"], "golf wedge": ["Golf Club"],
+    "golf balls": ["Golf Ball"], "heavy machine gun": ["Combat MG"], "hunter sniper": ["Heavy Sniper"], "speargun": ["Harpoon Gun"]
+  };
+  const missing = items.filter((it) => !it.image && !/^Unnamed /i.test(it.title));
+  process.stdout.write(`Buscando arquivos para ${missing.length} fichas sem foto...\n`);
+  const found = new Map();
+  for (const c of chunk(missing, 5)) {
+    await Promise.all(c.map(async (it) => {
+      const name = it.title.replace(/\s*\(.*?\)\s*/g, " ").trim();
+      const logoGroup = LOGO_GROUPS.has(it.group);
+      const terms = [...new Set([name, name.replace(/s$/i, ""), ...(SEARCH_ALIASES[name.toLowerCase()] || [])])].filter((t) => norm(t).length >= 3);
+      for (const term of terms) {
+        const stem = norm(term);
+        let j;
+        try { j = await api({ action: "query", list: "search", srnamespace: 6, srlimit: 40, srsearch: term }); } catch (err) { return; }
+        let best = null;
+        for (const hit of (j.query && j.query.search) || []) {
+          const file = hit.title.replace(/^File:/i, "");
+          const n = file.toLowerCase();
+          if (WIKI_CHROME.test(n) || !/\.(png|jpe?g)$/.test(n)) continue;
+          if (norm(file).indexOf(stem) < 0) continue;
+          const junk = logoGroup ? /map|blip|radar|hud|comparison|beta|leak/ : /map|logo|icon|blip|radar|hud|badge|comparison|beta|leak|interior|dashboard/;
+          if (junk.test(n)) continue;
+          const game = gameOf(file);
+          const rank = game in GAME_RANK ? GAME_RANK[game] : (game ? 6 : 8);
+          if (rank === 8 && it.group !== "locations" && !logoGroup) continue;
+          const score = rank * 10 + (norm(file).indexOf(stem) === 0 ? 0 : 4) + (/front|portrait|screenshot|trailer|artwork|logo/.test(n) ? 0 : 2);
+          if (!best || score < best.score) best = { file, game, score };
+        }
+        if (best) { found.set(it, best); return; }
+      }
+    }));
+    await sleep(150);
+  }
+  if (found.size) {
+    const extra = await resolveFiles([...found.values()].map((b) => b.file));
+    let added = 0;
+    for (const [it, b] of found) {
+      const url = extra.get(b.file);
+      if (!url) continue;
+      it.image = url;
+      if (b.game && b.game !== "GTA VI") it.imageGame = b.game;
+      added++;
+    }
+    process.stdout.write(`  + ${added} fotos encontradas na busca de arquivos\n`);
   }
 
   const counts = {};

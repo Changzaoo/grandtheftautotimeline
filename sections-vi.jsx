@@ -341,10 +341,33 @@ const viMediaFor = (kind, name, id) => {
 };
 
 /* ============ 2. PERSONAGENS (id="vi-characters") ============ */
+/* Miniclipes e galerias oficiais (data-media.jsx -> window.VI_MEDIA). */
+const viSubjectMedia = (idOrName) => {
+  const store = window.VI_MEDIA;
+  const key = store && store.subjectKey ? store.subjectKey(idOrName) : null;
+  return key ? { clip: store.clips[key] || null, gallery: store.galleries[key] || [] } : { clip: null, gallery: [] };
+};
+const viOpenGallery = (gallery, fallback) => {
+  const list = gallery.length ? gallery : [fallback].filter(Boolean);
+  if (list.length && window.dzOpenLightbox) window.dzOpenLightbox(list, 0);
+};
+const viKeyActivate = (fn) => (event) => {
+  if (event.key === "Enter" || event.key === " ") { event.preventDefault(); fn(); }
+};
+const viEditionClip = (id) => {
+  const editions = (window.VI_MEDIA && window.VI_MEDIA.editions) || {};
+  if (id === "vi-ed-ultimate") return editions.ultimate || null;
+  if (id === "vi-ed-standard") return editions.standard || null;
+  return null;
+};
+
 const VICharPanel = ({ character, index }) => {
   const flip = index % 2 === 1;
   const palette = character.palette || { a: "#ff3d8a", b: "#3c1361" };
   const photo = character.media || viMediaFor("characters", character.name, character.id);
+  const { clip, gallery } = viSubjectMedia(character.id);
+  const hasVisual = Boolean(photo || clip);
+  const open = () => viOpenGallery(gallery, photo);
   return (
     <article
       className={`card vi-char-panel${flip ? " vi-char-panel--flip" : ""}`}
@@ -352,13 +375,20 @@ const VICharPanel = ({ character, index }) => {
     >
       <Corners />
       <div
-        className={`vi-char-art vi-vhs${photo ? " has-photo" : ""}`}
-        aria-hidden={photo ? undefined : "true"}
+        className={`vi-char-art vi-vhs${hasVisual ? " has-photo" : ""}${clip ? " has-video" : ""}`}
+        aria-hidden={hasVisual ? undefined : "true"}
+        role={hasVisual ? "button" : undefined}
+        tabIndex={hasVisual ? 0 : undefined}
+        aria-label={hasVisual ? `${character.name} — ${__T("vi.media.open", "abrir miniclipe e galeria em tela cheia")}` : undefined}
+        onClick={hasVisual ? open : undefined}
+        onKeyDown={hasVisual ? viKeyActivate(open) : undefined}
         style={{
           background: `linear-gradient(160deg, ${palette.a} 0%, ${palette.b} 72%, #0a0712 100%)`
         }}
       >
-        {photo ? (
+        {clip ? (
+          <DzLoop className="vi-char-photo vi-char-video" src={clip.video} poster={clip.poster} alt={character.name} />
+        ) : photo ? (
           <img className="vi-char-photo" src={photo.src} alt={character.name}
             loading="lazy" referrerPolicy="no-referrer" />
         ) : (
@@ -372,6 +402,9 @@ const VICharPanel = ({ character, index }) => {
           <circle cx="100" cy="100" r="92" fill="none" stroke="rgba(255,255,255,.14)" strokeWidth="1" />
         </svg>
         <span className="vi-grain" />
+        {gallery.length > 0 && (
+          <span className="vi-media-count" aria-hidden="true">▶ {gallery.length} {__T("vi.media.count", "mídias oficiais")}</span>
+        )}
       </div>
       <div className="vi-char-body">
         <span className="vi-badge vi-char-role">{__TT("vi", character.id, "role", character.role)}</span>
@@ -416,19 +449,32 @@ const VICharactersSection = () => {
 const VIPolaroid = ({ place, index }) => {
   const grad = place.grad || ["#ff9a3d", "#ff3d8a", "#5b2a86"];
   const photo = place.media || viMediaFor("locations", place.name, place.id);
+  const { clip, gallery } = viSubjectMedia(place.id);
+  const hasVisual = Boolean(photo || clip);
+  const open = () => viOpenGallery(gallery, photo);
   const rotation = `${(index % 2 === 0 ? -1 : 1) * (1 + (index % 3) * 0.6)}deg`;
   return (
     <figure className="vi-polaroid" role="listitem" style={{ "--vi-rot": rotation }}>
       <div
-        className={`vi-polaroid-photo vi-vhs${photo ? " has-photo" : ""}`}
-        aria-hidden={photo ? undefined : "true"}
+        className={`vi-polaroid-photo vi-vhs${hasVisual ? " has-photo" : ""}${clip ? " has-video" : ""}`}
+        aria-hidden={hasVisual ? undefined : "true"}
+        role={hasVisual ? "button" : undefined}
+        tabIndex={hasVisual ? 0 : undefined}
+        aria-label={hasVisual ? `${place.name} — ${__T("vi.media.open", "abrir miniclipe e galeria em tela cheia")}` : undefined}
+        onClick={hasVisual ? open : undefined}
+        onKeyDown={hasVisual ? viKeyActivate(open) : undefined}
         style={{ background: `linear-gradient(168deg, ${grad[0]} 0%, ${grad[1]} 55%, ${grad[2]} 100%)` }}
       >
-        {photo
-          ? <img className="vi-polaroid-img" src={photo.src} alt={place.name} loading="lazy" referrerPolicy="no-referrer" />
-          : <span className="vi-polaroid-horizon" />}
+        {clip
+          ? <DzLoop className="vi-polaroid-img" src={clip.video} poster={clip.poster} alt={place.name} />
+          : photo
+            ? <img className="vi-polaroid-img" src={photo.src} alt={place.name} loading="lazy" referrerPolicy="no-referrer" />
+            : <span className="vi-polaroid-horizon" />}
         <span className="vi-polaroid-mark vi-chrome-text">{place.name}</span>
         <span className="vi-grain" />
+        {gallery.length > 0 && (
+          <span className="vi-media-count" aria-hidden="true">▶ {gallery.length}</span>
+        )}
       </div>
       <figcaption className="vi-polaroid-caption">
         <strong className="vi-serif">{place.name}</strong>
@@ -642,6 +688,16 @@ const VIInfoSection = () => {
               className={`card vi-edition${edition.id === "vi-ed-ultimate" ? " vi-edition--ultimate" : ""}`}
             >
               <Corners />
+              {viEditionClip(edition.id) && (
+                <button
+                  type="button"
+                  className="vi-edition-media"
+                  onClick={() => window.dzOpenLightbox && window.dzOpenLightbox([viEditionClip(edition.id)], 0)}
+                  aria-label={__T("vi.media.edition", "Ver o miniclipe oficial da edição em tela cheia")}
+                >
+                  <DzLoop src={viEditionClip(edition.id).video} poster={viEditionClip(edition.id).poster} alt={__TT("vi", edition.id, "name", edition.name)} />
+                </button>
+              )}
               <div className="vi-edition-head">
                 <h4>{__TT("vi", edition.id, "name", edition.name)}</h4>
                 <span className="vi-badge vi-badge--price">{edition.price}</span>
