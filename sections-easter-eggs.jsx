@@ -103,7 +103,8 @@ const EasterEggsSection = () => {
   const [query, setQuery] = React.useState("");
   const [gameId, setGameId] = React.useState("all");
   const [category, setCategory] = React.useState("all");
-  const [visible, setVisible] = React.useState(EGG_PAGE_SIZE);
+  /* No pré-render (HTML para buscadores) a lista sai inteira. */
+  const [visible, setVisible] = React.useState(window.__PRERENDER ? 9999 : EGG_PAGE_SIZE);
 
   const filtered = React.useMemo(() => {
     const needle = eggNormalizeText(query);

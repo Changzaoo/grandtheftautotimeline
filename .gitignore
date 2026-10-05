@@ -1,5 +1,4 @@
 node_modules/
-package-lock.json
 
 # Ignore public build output
 public/dist/
@@ -12,9 +11,18 @@ public/vendor/
 !public/stats-dashboard.js
 !public/map-interactive.js
 !public/theme-toggle.js
-!public/index.html
 
 _smoke.js
+
+# Páginas geradas por scripts/prerender.js (o build da Vercel recria tudo)
+public/index.html
+public/404.html
+public/sitemap.xml
+public/robots.txt
+public/*/index.html
+public/*/*/index.html
+
+.accent-tmp/
 
 .vercel
 .env*

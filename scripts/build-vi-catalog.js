@@ -17,7 +17,7 @@ const fs = require("fs");
 const path = require("path");
 
 const API = "https://gta.fandom.com/api.php";
-const UA = "Mozilla/5.0 (compatible; GTA-Dossie-Catalog/1.0; +https://grandtheftautotimeline.vercel.app)";
+const UA = "Mozilla/5.0 (compatible; GTA-Dossie-Catalog/1.0; +https://gta.vnmax.org)";
 
 const GROUPS = [
   { key: "vehicles", label: "Veículos", cats: ["Category:Vehicles in GTA VI"] },

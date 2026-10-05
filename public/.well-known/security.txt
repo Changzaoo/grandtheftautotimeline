@@ -1,0 +1,6 @@
+# Dossiê GTA — contato para relatos de segurança
+Contact: https://github.com/Changzaoo/grandtheftautotimeline/security/advisories/new
+Contact: https://github.com/Changzaoo/grandtheftautotimeline/issues
+Expires: 2027-10-05T00:00:00.000Z
+Preferred-Languages: pt-BR, en
+Canonical: https://gta.vnmax.org/.well-known/security.txt

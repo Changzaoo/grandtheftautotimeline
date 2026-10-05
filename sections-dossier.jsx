@@ -277,7 +277,7 @@ const CityImageCarousel = ({ city, className = "" }) => {
           <div className="dossier-city-carousel-controls">
             <button type="button" onClick={() => move(-1)} aria-label="Imagem anterior">&lt;</button>
             <span>{activeIndex + 1} / {mediaItems.length}</span>
-            <button type="button" onClick={() => move(1)} aria-label="Proxima imagem">&gt;</button>
+            <button type="button" onClick={() => move(1)} aria-label="Próxima imagem">&gt;</button>
           </div>
           <div className="dossier-city-carousel-thumbs">
             {mediaItems.map((media, thumbIndex) => (
@@ -736,6 +736,11 @@ const useNavEdgeHints = (ref) => {
   }, [ref]);
 };
 
+/* href de menu: a página do tema (/games/, /en/games/ …) — um link de verdade
+ * para os buscadores. O clique continua rolando a página quando a seção está
+ * nela (onNavClick); só navega quando o destino mora em outra página. */
+const dossierSectionHref = (id) => (window.__seoHref ? window.__seoHref(id) : "#" + id);
+
 const DossierHUDNav = ({ active, onJump }) => {
   const [open, setOpen] = React.useState(false);
   const navItems = dossierNav();
@@ -797,19 +802,25 @@ const DossierHUDNav = ({ active, onJump }) => {
     onJump && onJump("overview");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  /* Logo: no dossiê completo volta ao topo; numa página de tema, leva a ele. */
+  const onBrandClick = (event) => {
+    if (!document.getElementById("overview")) return;
+    event.preventDefault();
+    jumpToTop();
+  };
 
   return (
     <>
       <header className="dossier-hud dossier-shell">
         <div className="dossier-hud-inner">
-          <a className="dossier-brand" href="#overview" onClick={() => onJump && onJump("overview")}>
+          <a className="dossier-brand" href={window.__seoHomeHref ? window.__seoHomeHref() : "#overview"} onClick={onBrandClick}>
             <img className="dossier-brand-logo" src="assets/dossier-logo.png" alt="Dossiê Criminal - Arquivo GTA" />
           </a>
           <nav ref={navRef} className={open ? "open" : ""} aria-label="Seções do arquivo">
             {navItems.map((n) => (
               <a
                 key={n.id}
-                href={`#${n.id}`}
+                href={dossierSectionHref(n.id)}
                 className={active === n.id ? "active" : ""}
                 aria-current={active === n.id ? "location" : undefined}
                 onClick={(event) => onNavClick(event, n.id)}
@@ -826,7 +837,7 @@ const DossierHUDNav = ({ active, onJump }) => {
         {navItems.map((n) => (
           <a
             key={`bottom-${n.id}`}
-            href={`#${n.id}`}
+            href={dossierSectionHref(n.id)}
             className={active === n.id ? "active" : ""}
             onClick={(event) => onNavClick(event, n.id)}
           >
@@ -3092,7 +3103,7 @@ const RockstarPeopleGrid = ({ onOpenDossier }) => (
       <Corners />
       <strong>Nota editorial:</strong>
       <span>
-        Steve Hammond, Russell Kay, Keith Hamilton e Scott Johnston continuam citados no contexto historico da DMA quando relevantes. Nao forcei cards individuais para eles porque nao encontrei uma foto publica confiavel e diretamente rastreavel para usar como retrato.
+        Steve Hammond, Russell Kay, Keith Hamilton e Scott Johnston continuam citados no contexto histórico da DMA quando relevantes. Eles não têm card individual porque não há foto pública confiável e rastreável para usar como retrato.
       </span>
     </div>
   </div>
@@ -3156,7 +3167,7 @@ const GTAOnlineDossierSection = ({ onOpenDossier }) => {
   const [type, setType] = React.useState("Todos");
   const onlineHero = window.officialMediaData?.gtaOnlineHero || gamesData.find((game) => game.id === "gta-online")?.media;
   const years = React.useMemo(() => ["Todos", ...Array.from(new Set(onlineDlcData.map((item) => item.year))).sort()], []);
-  const types = React.useMemo(() => ["Todos", ...Array.from(new Set(onlineDlcData.map((item) => item.type))).sort()], []);
+  const types = React.useMemo(() => ["Todos", ...Array.from(new Set(onlineDlcData.map((item) => item.type))).sort((a, b) => String(a).localeCompare(String(b), "pt-BR"))], []);
   const filteredDlc = onlineDlcData.filter((item) => (
     searchRecord(item, query) &&
     (year === "Todos" || item.year === year) &&
@@ -3561,7 +3572,7 @@ const VehicleDossierModalContent = ({ item }) => {
       })
       .catch((err) => {
         if (!alive) return;
-        setError(err?.message || "Nao foi possivel carregar a lista completa agora.");
+        setError(err?.message || "Não foi possível carregar a lista completa agora.");
         setGroups(item.fallbackGroups || []);
         setStatus("error");
       });
@@ -3674,7 +3685,7 @@ const MissionDetailPanel = ({ selected, mission }) => {
       })
       .catch((err) => {
         if (!alive) return;
-        setError(err?.message || "Nao foi possivel carregar o arquivo da missao agora.");
+        setError(err?.message || "Não foi possível carregar o arquivo da missão agora.");
         setStatus("error");
       });
     return () => { alive = false; };
@@ -3749,7 +3760,7 @@ const MissionDossierModalContent = ({ item, onClose }) => {
       })
       .catch((err) => {
         if (!alive) return;
-        setError(err?.message || "Nao foi possivel carregar a lista completa agora.");
+        setError(err?.message || "Não foi possível carregar a lista completa agora.");
         setGroups(item.fallbackGroups || []);
         setStatus("error");
       });
@@ -3833,7 +3844,7 @@ const WeaponDossierModalContent = ({ item }) => {
       })
       .catch((err) => {
         if (!alive) return;
-        setError(err?.message || "Nao foi possivel carregar a lista completa agora.");
+        setError(err?.message || "Não foi possível carregar a lista completa agora.");
         setGroups(item.fallbackGroups || []);
         setStatus("error");
       });
@@ -4223,24 +4234,24 @@ const DossierRecordModal = ({ record, onClose, onOpen }) => {
             {type === "onlineDlc" && (
               <>
                 <MetaGrid rows={[
-                  ["Lancamento", item.releaseDate],
+                  ["Lançamento", item.releaseDate],
                   ["Ano", item.year],
                   ["Fase", item.era],
                   ["Tipo", item.type],
                   ["Sistemas", item.systems],
                   ["Modos", item.modes],
-                  ["Veiculos", item.vehicles],
+                  ["Veículos", item.vehicles],
                   ["Personagens", item.characters]
                 ]} />
                 <ModalField label="Resumo">{item.summary}</ModalField>
                 <ModalField label="O que trouxe"><BulletList items={item.brought} /></ModalField>
-                <ModalField label="Sistemas e propriedades"><BulletList items={asList(item.systems).length ? item.systems : ["sem sistema persistente especifico; foco em conteudo, evento ou ajuste de plataforma"]} /></ModalField>
-                <ModalField label="Veiculos e equipamentos"><BulletList items={asList(item.vehicles).length ? item.vehicles : ["sem veiculo central; update focado em modo, evento, ferramenta ou atividade"]} /></ModalField>
-                <ModalField label="Modos e atividades"><BulletList items={asList(item.modes).length ? item.modes : ["sem modo destacado alem das atividades associadas ao update"]} /></ModalField>
-                <ModalField label="Personagens e contatos"><BulletList items={asList(item.characters).length ? item.characters : ["jogador online e contatos de sessao"]} /></ModalField>
+                <ModalField label="Sistemas e propriedades"><BulletList items={asList(item.systems).length ? item.systems : ["sem sistema persistente específico; foco em conteúdo, evento ou ajuste de plataforma"]} /></ModalField>
+                <ModalField label="Veículos e equipamentos"><BulletList items={asList(item.vehicles).length ? item.vehicles : ["sem veículo central; update focado em modo, evento, ferramenta ou atividade"]} /></ModalField>
+                <ModalField label="Modos e atividades"><BulletList items={asList(item.modes).length ? item.modes : ["sem modo destacado além das atividades associadas ao update"]} /></ModalField>
+                <ModalField label="Personagens e contatos"><BulletList items={asList(item.characters).length ? item.characters : ["jogador online e contatos de sessão"]} /></ModalField>
                 <ModalField label="Impacto em GTA Online">{item.impact}</ModalField>
                 <ModalField label="Leitura de gameplay">
-                  {`Esta atualizacao se encaixa na fase "${item.era}" do Online e amplia a carreira criminal do jogador por meio de ${asList(item.systems).join(", ") || "novas atividades"}.`}
+                  {`Esta atualização se encaixa na fase "${item.era}" do Online e amplia a carreira criminal do jogador por meio de ${asList(item.systems).join(", ") || "novas atividades"}.`}
                 </ModalField>
                 <DzRelated
                   label="Personagens no dossiê"

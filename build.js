@@ -184,4 +184,15 @@ process.stdout.write("Copying Three.js build...\n");
 copyThree();
 process.stdout.write("Transpiling JSX...\n");
 buildBundle();
-process.stdout.write("Done.\n");
+/* Por último: HTML pré-renderizado por rota e idioma, sitemap, robots, 404
+ * (scripts/prerender.js). --no-prerender pula a etapa (builds intermediários
+ * do fluxo de tradução, que só precisam do bundle). */
+if (process.argv.includes("--no-prerender")) {
+  process.stdout.write("Done (sem pré-render).\n");
+} else {
+  process.stdout.write("Pre-rendering pages...\n");
+  require("./scripts/prerender.js").run().then(
+    () => process.stdout.write("Done.\n"),
+    (err) => { process.stderr.write(String((err && err.stack) || err) + "\n"); process.exit(1); }
+  );
+}

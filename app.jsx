@@ -72,9 +72,52 @@ function useScrollReveal(version){
   }, [version]);
 }
 
+/* Seções novas (códigos e rádios), também tolerantes a ausência. */
+const CheatsSec = typeof CheatsSection !== "undefined" ? M(CheatsSection) : null;
+const RadiosSec = typeof RadiosSection !== "undefined" ? M(RadiosSection) : null;
+
+/* Cabeçalho das páginas de tema (/games/, /en/easter-eggs/ …): o <h1> e a
+ * descrição próprios da página, mais a trilha de volta ao dossiê completo. */
+const RouteHead = ({ route }) => {
+  const homeHref = window.__seoHomeHref ? window.__seoHomeHref() : "#overview";
+  return (
+    <header className="route-head dossier-shell">
+      <div className="wrap">
+        <nav className="route-crumbs" aria-label="Breadcrumb">
+          <a href={homeHref}>Dossiê GTA</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{route.label}</span>
+        </nav>
+        <h1>{route.heading}</h1>
+        <p>{route.description}</p>
+        <a className="vi-btn vi-btn--ghost vi-btn--sm" href={homeHref}>Ver o dossiê completo</a>
+      </div>
+    </header>
+  );
+};
+
+/* Rodapé das páginas de tema: links para todos os outros temas. */
+const RouteIndex = ({ current }) => (
+  <nav className="route-index dossier-shell" aria-label="Mais do dossiê">
+    <div className="wrap">
+      <h2>Mais do dossiê</h2>
+      <ul>
+        {(window.SEO_ROUTES || []).filter((r) => r.id !== current.id).map((r) => (
+          <li key={r.id}><a href={window.__seoPath(window.__lang, r.slug)}>{r.label}</a></li>
+        ))}
+      </ul>
+    </div>
+  </nav>
+);
+
 function App(){
   const [dossier, setDossier] = React.useState(null);
-  const [active, setActive] = React.useState("overview");
+  /* Rota atual (data-seo.jsx): no dossiê completo `only` é null e tudo é
+   * renderizado; numa página de tema, só as seções daquela rota. */
+  const route = (window.__ROUTE && window.__ROUTE.route) || null;
+  const only = route && route.sections;
+  const show = (id) => !only || only.indexOf(id) !== -1;
+  const [active, setActive] = React.useState(only ? only[0] : "overview");
   /* i18n: quando o idioma muda, `version` muda e a árvore inteira remonta
    * (key no Fragment abaixo), reavaliando todos os fallbacks __t/__tt. */
   const i18n = typeof useI18n !== "undefined" ? useI18n() : { version: 0 };
@@ -88,7 +131,8 @@ function App(){
   // e o menu acompanha exatamente onde o usuário está. Só <App> + nav
   // re-renderizam; as seções memoizadas não são tocadas.
   React.useEffect(() => {
-    const ids = (window.dossierNavData || NAV).map((n) => n.id);
+    const ids = (window.dossierNavData || NAV).map((n) => n.id).filter((id) => document.getElementById(id));
+    if (!ids.length) return;
     let raf = 0;
     const compute = () => {
       raf = 0;
@@ -115,11 +159,36 @@ function App(){
   }, [version]);
 
   React.useEffect(() => {
-    const id = decodeURIComponent(window.location.hash.replace("#", ""));
+    let id = "";
+    try { id = decodeURIComponent(window.location.hash.replace("#", "")); } catch (e) { /* hash malformado */ }
     if (!id) return;
     window.setTimeout(() => {
       document.getElementById(id)?.scrollIntoView({ block: "start" });
     }, 350);
+  }, []);
+
+  /* Âncoras "#id" fora do menu (botões do herói, atalhos). As páginas têm
+   * <base href="/">, então sozinho um href="#games" sairia de /en/ para a raiz.
+   * Aqui: se o alvo está na página, rola; se não, vai para a página do tema. */
+  React.useEffect(() => {
+    const onClick = (event) => {
+      if (event.defaultPrevented || event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = event.target && event.target.closest ? event.target.closest("a[href]") : null;
+      const href = link ? link.getAttribute("href") : "";
+      if (!href || href.charAt(0) !== "#" || href.length < 2) return;
+      let id = href.slice(1);
+      try { id = decodeURIComponent(id); } catch (e) { /* usa como veio */ }
+      const target = document.getElementById(id);
+      event.preventDefault();
+      if (target) {
+        target.scrollIntoView({ block: "start" });
+        try { window.history.replaceState(null, "", window.location.pathname + window.location.search + "#" + id); } catch (e) { /* file:// */ }
+      } else if (window.__seoHref) {
+        window.location.assign(window.__seoHref(id));
+      }
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
   }, []);
 
   // Close modal on Escape
@@ -132,28 +201,34 @@ function App(){
   return (
     <React.Fragment key={version}>
       <DossierHUDNav active={active} onJump={setActive} />
-      {VIHeroSec ? <VIHeroSec /> : <HeroSec />}
-      <TimelineSec onOpenDossier={setDossier} />
-      <GamesSec onOpenDossier={setDossier} />
-      {MissionVideosSec ? <MissionVideosSec onOpenDossier={setDossier} /> : <MissionsSec onOpenDossier={setDossier} />}
-      <VehiclesSec onOpenDossier={setDossier} />
-      <WeaponsSec onOpenDossier={setDossier} />
-      <DevelopmentSec onOpenDossier={setDossier} />
-      <CharactersSec onOpenDossier={setDossier} />
-      <CitiesSec onOpenDossier={setDossier} />
-      <FactionsSec onOpenDossier={setDossier} />
-      <UniversesSec onOpenDossier={setDossier} />
-      <RockstarSec onOpenDossier={setDossier} />
-      <GTAOnlineSec onOpenDossier={setDossier} />
-      {VICharsSec && <VICharsSec />}
-      {VIPlacesSec && <VIPlacesSec />}
-      {VIInfoSec ? <VIInfoSec /> : <GTA6Sec />}
-      {VIMechSec && <VIMechSec />}
-      {VICatSec && <VICatSec />}
-      {EggsSec && <EggsSec />}
-      {MystSec && <MystSec />}
-      <GlossarySec onOpenDossier={setDossier} />
-      <ConnectionsSec />
+      <main id="conteudo">
+        {only && <RouteHead route={route} />}
+        {show("overview") && (VIHeroSec ? <VIHeroSec /> : <HeroSec />)}
+        {show("timeline") && <TimelineSec onOpenDossier={setDossier} />}
+        {show("games") && <GamesSec onOpenDossier={setDossier} />}
+        {show("missions") && (MissionVideosSec ? <MissionVideosSec onOpenDossier={setDossier} /> : <MissionsSec onOpenDossier={setDossier} />)}
+        {show("vehicles") && <VehiclesSec onOpenDossier={setDossier} />}
+        {show("weapons") && <WeaponsSec onOpenDossier={setDossier} />}
+        {show("development") && <DevelopmentSec onOpenDossier={setDossier} />}
+        {show("characters") && <CharactersSec onOpenDossier={setDossier} />}
+        {show("cities") && <CitiesSec onOpenDossier={setDossier} />}
+        {show("gangs") && <FactionsSec onOpenDossier={setDossier} />}
+        {show("universes") && <UniversesSec onOpenDossier={setDossier} />}
+        {show("rockstar") && <RockstarSec onOpenDossier={setDossier} />}
+        {show("gtaonline") && <GTAOnlineSec onOpenDossier={setDossier} />}
+        {show("vi-characters") && VICharsSec && <VICharsSec />}
+        {show("vi-places") && VIPlacesSec && <VIPlacesSec />}
+        {show("gta6") && (VIInfoSec ? <VIInfoSec /> : <GTA6Sec />)}
+        {show("vi-mechanics") && VIMechSec && <VIMechSec />}
+        {show("vi-catalog") && VICatSec && <VICatSec />}
+        {show("cheats") && CheatsSec && <CheatsSec />}
+        {show("radios") && RadiosSec && <RadiosSec />}
+        {show("eastereggs") && EggsSec && <EggsSec />}
+        {show("mysteries") && MystSec && <MystSec />}
+        {show("glossary") && <GlossarySec onOpenDossier={setDossier} />}
+        {!only && <ConnectionsSec />}
+        {only && <RouteIndex current={route} />}
+      </main>
       <FooterSec />
       <DossierRecordModal record={dossier} onClose={() => setDossier(null)} onOpen={setDossier} />
       <DzLightbox />
@@ -161,4 +236,6 @@ function App(){
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+/* scripts/prerender.js monta a App por conta própria (uma vez por rota). */
+window.__AppRoot = App;
+if (!window.__PRERENDER) ReactDOM.createRoot(document.getElementById("root")).render(<App />);

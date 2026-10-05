@@ -435,7 +435,7 @@ const weaponMediaById = {
   "gta-online": gtaWikiWeaponImage("Up-n-Atomizer", "https://static.wikia.nocookie.net/gtawiki/images/0/08/UpnAtomizer-GTAO-RGSC.png/revision/latest?cb=20190110134620", "Up-n-Atomizer em GTA Online"),
   "trilogy-definitive": gtaWikiWeaponImage("Chainsaw", "https://static.wikia.nocookie.net/gtawiki/images/2/2c/Chainsaw-GTAVCDE-HUDicon.png/revision/latest?cb=20211117164057", "Chainsaw em Vice City - The Definitive Edition"),
   "gta-vi": gtaWikiWeaponImage("Weapons in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/1/17/Pistol-GTAVI-Trailer1Artwork.jpg/revision/latest?cb=20250816021143", "Pistol vista em material de GTA VI", {
-    alt: "Arma vista em material promocional de GTA VI; arsenal completo ainda nao confirmado",
+    alt: "Arma vista em material promocional de GTA VI; arsenal completo ainda não confirmado",
     caption: "GTA Wiki - GTA VI, arma vista em trailer"
   })
 };

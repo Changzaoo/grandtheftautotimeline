@@ -15,6 +15,9 @@ const SOURCES = [
   "data-vi-bridge-generated.js",
   "data-vi-bridge.jsx",
   "data-media.jsx",
+  "data-cheats.jsx",
+  "data-radios.jsx",
+  "data-seo.jsx",
   "i18n.jsx",
   "sections-1.jsx",
   "sections-2.jsx",
@@ -28,6 +31,7 @@ const SOURCES = [
   "sections-vi-catalog.jsx",
   "sections-easter-eggs.jsx",
   "sections-mysteries.jsx",
+  "sections-extras.jsx",
   "app.jsx",
   "enhance.jsx"
 ];

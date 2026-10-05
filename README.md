@@ -116,3 +116,15 @@ A base curada de GTA VI (lançamento, edições, Extended Look, **mecânicas** c
 ### Imagens por jogo
 
 `sections-dossier.jsx` só aceita, para cada ficha, arquivos do GTA Wiki cujo código de jogo no nome (`-GTAV-`, `-GTAVC-`, `-GTAVI-`, `-TLAD-`…) bata com o jogo da ficha (`imageHasGameCode`, ancorado — `GTAV` não casa `GTAVC`). Miniaturas de página vindas de outro jogo são descartadas (`imageBelongsToOtherGame`) e caem no "contexto visual" da ficha, nunca numa foto de outro título.
+
+## SEO, rotas e pré-render (out/2026)
+
+Endereço canônico: **https://gta.vnmax.org** (`SEO_SITE.origin` em `data-seo.jsx` — é o único lugar a trocar se o domínio mudar).
+
+- `data-seo.jsx` é a fonte única das rotas: o dossiê completo (`/`) e uma página por tema (`/games/`, `/cheats/`, `/gta-6/`, `/easter-eggs/` …), cada uma com `title`, `heading` e `description` próprios. pt-BR mora na raiz; os outros 12 idiomas em `/<código em minúsculas>/` (`/en/games/`, `/zh-cn/`).
+- `scripts/prerender.js` roda no fim de `npm run build`: monta a App num jsdom e grava o HTML já renderizado de cada rota × idioma (260 páginas), com canonical, hreflang, Open Graph/Twitter, JSON-LD (WebSite, BreadcrumbList, VideoGame, FAQPage, ItemList), além de `sitemap.xml`, `robots.txt` e `404.html`. Esses arquivos são gerados (estão no `.gitignore`); a Vercel recria tudo a cada deploy.
+- As páginas usam `<base href="/">`: para conferir localmente use `npm run serve` (abre `public/` em http://localhost:4173), não o `index.html` direto do disco.
+- Os links do menu apontam para a página do tema (rastreável); o clique continua rolando a página quando a seção está nela.
+- `node build.js --no-prerender` gera só o bundle (usado nos passos intermediários de tradução).
+
+Seções novas: **Códigos** (`data-cheats.jsx`) e **Rádios** (`data-radios.jsx`), renderizadas por `sections-extras.jsx`.

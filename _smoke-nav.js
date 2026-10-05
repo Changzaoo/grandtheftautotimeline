@@ -68,7 +68,10 @@ const check = (cond, msg) => { if (cond) console.log("ok:", msg); else { console
   check(links.length > 5, `itens no menu (${links.length})`);
 
   /* As seções existem? */
-  const target = links[3] && links[3].getAttribute("href").slice(1);
+  /* O href do menu é a página do tema (/missions/); a seção vem da rota. */
+  const href3 = links[3] ? links[3].getAttribute("href") : "";
+  check(href3.charAt(0) === "/", `menu aponta para a página do tema (${href3})`);
+  const target = href3 && window.__seoParse(href3).route.sections[0];
   check(!!document.getElementById(target), `seção alvo existe (#${target})`);
 
   /* 1. clique simples deve rolar */

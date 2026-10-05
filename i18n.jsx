@@ -251,6 +251,9 @@ function i18nCollectData() {
   put("VI_MEDIA", window.VI_MEDIA);
   put("EASTER_EGGS_DATA", window.EASTER_EGGS_DATA);
   put("MYSTERIES_DATA", window.MYSTERIES_DATA);
+  put("CHEATS_DATA", window.CHEATS_DATA);
+  put("RADIOS_DATA", window.RADIOS_DATA);
+  put("SEO_ROUTES", window.SEO_ROUTES);
   return reg;
 }
 
@@ -430,23 +433,25 @@ window.__setLang = function (code) {
   });
 };
 
-/* ---------- 3. Estado inicial (NÃO detecta navigator.language) ---------- */
+/* ---------- 3. Estado inicial (NÃO detecta navigator.language) ----------
+ * Prioridade: idioma da URL (/en/…, páginas pré-renderizadas) > idioma salvo >
+ * pt-BR. Nas páginas pré-renderizadas os catálogos já vêm por <script> antes
+ * do bundle, então __setLang aplica na hora e a App monta já traduzida — sem
+ * piscar em português. */
 (function i18nBoot() {
   let stored = null;
   try { stored = window.localStorage.getItem(i18nStorageKey); } catch (err) { /* ignora */ }
-  window.__lang = i18nIsValid(stored) ? stored : i18nDefaultLang;
+  const routeLang = window.__ROUTE && window.__ROUTE.lang;
+  window.__lang = i18nIsValid(routeLang) ? routeLang : (i18nIsValid(stored) ? stored : i18nDefaultLang);
   window.__i18nVersion = window.__i18nVersion || 0;
-  if (window.__lang === i18nDefaultLang) {
+  /* Idioma salvo numa URL sem prefixo: o endereço passa a refleti-lo. */
+  if (!routeLang && window.__lang !== i18nDefaultLang && window.__seoSyncUrl) window.__seoSyncUrl(window.__lang);
+  if (window.__lang === i18nDefaultLang || i18nCatalogReady(window.__lang)) {
     document.documentElement.lang = window.__lang;
-    window.__setLang(window.__lang); /* busca i18n/pt-BR.content.js (JSON ao vivo) */
-  } else if (i18nCatalogReady(window.__lang)) {
-    document.documentElement.lang = window.__lang;
-  } else {
-    /* Idioma salvo depende de catálogo externo: injeta já; quando o arquivo
-     * carregar, i18nApply dispara "i18n:changed" e o app remonta traduzido.
-     * Enquanto isso a página exibe os fallbacks pt-BR. */
-    window.__setLang(window.__lang);
   }
+  /* Catálogo ausente: __setLang injeta os scripts; quando carregarem, i18nApply
+   * dispara "i18n:changed" e o app remonta traduzido (até lá, fallbacks pt-BR). */
+  window.__setLang(window.__lang);
 })();
 
 /* ---------- 7. Hook React ---------- */
@@ -538,7 +543,7 @@ function VILanguagePicker({ compact, up }) {
                 aria-disabled={!ready}
                 disabled={!ready}
                 className={"vi-lang-item" + (item.code === lang ? " active" : "") + (ready ? "" : " vi-lang-item--soon")}
-                onClick={() => { if (!ready) return; setLang(item.code); setOpen(false); }}
+                onClick={() => { if (!ready) return; setLang(item.code); window.__seoSyncUrl && window.__seoSyncUrl(item.code); setOpen(false); }}
               >
                 {item.name} <small>{item.code}</small>
                 {!ready && <em className="vi-lang-soon">{window.__T("ui.lang.soon", "em breve")}</em>}

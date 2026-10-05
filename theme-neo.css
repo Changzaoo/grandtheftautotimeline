@@ -76,12 +76,12 @@ body::after{
   font-family:"Anton",sans-serif;font-size:13px;letter-spacing:.42em;text-transform:uppercase;
   color:var(--neo-gold);opacity:.85;margin-bottom:18px
 }
-#neo-boot h1{
+#neo-boot h1,#neo-boot .neo-boot-title{margin:0;
   font-family:"Big Shoulders Display",sans-serif;font-weight:900;line-height:.84;margin:0;
   font-size:clamp(46px,11vw,86px);letter-spacing:-.02em;text-transform:uppercase;color:#fff;
   text-shadow:0 0 30px rgba(255,46,136,.5);
 }
-#neo-boot h1 em{font-style:normal;background:linear-gradient(90deg,var(--neo-cyan),var(--neo-pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+#neo-boot h1 em,#neo-boot .neo-boot-title em{font-style:normal;background:linear-gradient(90deg,var(--neo-cyan),var(--neo-pink));-webkit-background-clip:text;background-clip:text;color:transparent}
 #neo-boot .neo-boot-bar{position:relative;height:6px;margin:26px auto 12px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}
 #neo-boot .neo-boot-bar i{position:absolute;inset:0;width:0;border-radius:99px;background:linear-gradient(90deg,var(--neo-cyan),var(--neo-pink),var(--neo-gold));box-shadow:0 0 18px rgba(255,46,136,.6);animation:neo-load 1.7s cubic-bezier(.6,.05,.3,1) forwards}
 @keyframes neo-load{0%{width:4%}45%{width:62%}100%{width:100%}}

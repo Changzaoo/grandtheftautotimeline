@@ -7,6 +7,9 @@
 (function () {
   "use strict";
 
+  /* Pré-render (scripts/prerender.js): só o HTML da árvore React interessa. */
+  if (window.__PRERENDER) return;
+
   var REDUCED = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var FINE = window.matchMedia && window.matchMedia("(pointer:fine)").matches;
 
@@ -34,7 +37,6 @@
    * 1) BOOT SCREEN — quick "loading the city" flash, then fades out.
    * ==================================================================== */
   (function bootScreen() {
-    if (document.getElementById("neo-boot")) return;
     var tips = [
       "Sintonizando as rádios da cidade…",
       "Procurando nível seis de procurado…",
@@ -42,18 +44,31 @@
       "Carregando Liberty · Vice · San Andreas · Leonida…",
       "Dica: digite cheats clássicos em qualquer lugar do site."
     ];
-    var boot = el("div");
-    boot.id = "neo-boot";
-    boot.innerHTML =
-      '<div class="neo-boot-inner">' +
-      '<div class="neo-boot-badge">Arquivo Confidencial · Carregando</div>' +
-      '<h1>GRAND THEFT <em>ARCHIVE</em></h1>' +
-      '<div class="neo-boot-bar"><i></i></div>' +
-      '<div class="neo-boot-tip">' + tips[Math.floor(Math.random() * tips.length)] + "</div>" +
-      "</div>";
-    (document.body || document.documentElement).appendChild(boot);
-    var done = function () { boot.classList.add("hide"); setTimeout(function () { boot.remove(); }, 700); };
-    window.addEventListener("load", function () { setTimeout(done, REDUCED ? 250 : 1500); });
+    /* As páginas pré-renderizadas já trazem #neo-boot no HTML (primeira
+     * pintura imediata, sem o conteúdo piscar antes da abertura); aqui só
+     * agendamos a saída. Sem pré-render, a tela é criada na hora. */
+    var boot = document.getElementById("neo-boot");
+    if (!boot) {
+      boot = el("div");
+      boot.id = "neo-boot";
+      boot.innerHTML =
+        '<div class="neo-boot-inner">' +
+        '<div class="neo-boot-badge">Arquivo Confidencial · Carregando</div>' +
+        '<div class="neo-boot-title">GRAND THEFT <em>ARCHIVE</em></div>' +
+        '<div class="neo-boot-bar"><i></i></div>' +
+        '<div class="neo-boot-tip"></div>' +
+        "</div>";
+      (document.body || document.documentElement).appendChild(boot);
+    }
+    var tip = boot.querySelector(".neo-boot-tip");
+    if (tip) tip.textContent = tips[Math.floor(Math.random() * tips.length)];
+    var gone = false;
+    var done = function () {
+      if (gone) return; gone = true;
+      boot.classList.add("hide"); setTimeout(function () { boot.remove(); }, 700);
+    };
+    if (document.readyState === "complete") setTimeout(done, REDUCED ? 150 : 700);
+    else window.addEventListener("load", function () { setTimeout(done, REDUCED ? 250 : 1500); });
     // safety: never get stuck
     setTimeout(done, 4200);
   })();
@@ -61,9 +76,20 @@
   /* ======================================================================
    * 2) THREE.JS SYNTHWAVE HERO — neon city skyline + scrolling grid + sun.
    * ==================================================================== */
+  /* Three.js (~600 KB) só é baixado se o herói 3D existir na página — o herói
+   * atual (VIHero) não usa, então na prática o arquivo nem sai do servidor. */
+  function loadThree(cb) {
+    if (window.THREE) return cb();
+    var s = document.createElement("script");
+    s.src = "vendor/three.min.js" + (window.__BUILD_VERSION ? "?v=" + window.__BUILD_VERSION : "");
+    s.onload = function () { if (window.THREE) cb(); };
+    document.head.appendChild(s);
+  }
   function initHero3D() {
-    if (!window.THREE) return;
-    whenEl(".dossier-hero", function (hero) {
+    whenEl(".dossier-hero", function (hero) { loadThree(function () { buildHero3D(hero); }); });
+  }
+  function buildHero3D(hero) {
+    {
       if (hero.querySelector("#hero3d")) return;
       var THREE = window.THREE;
       var canvas = document.createElement("canvas");
@@ -232,7 +258,7 @@
           });
         }
       };
-    });
+    }
   }
 
   /* ======================================================================

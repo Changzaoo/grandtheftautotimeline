@@ -451,7 +451,7 @@ const vehicleMediaById = {
   "gta-online": gtaWikiVehicleImage("Oppressor Mk II", "https://static.wikia.nocookie.net/gtawiki/images/8/85/OppressorMkII-GTAO-front.png/revision/latest?cb=20180725181109", "Oppressor Mk II em GTA Online"),
   "trilogy-definitive": gtaWikiVehicleImage("Sabre", "https://static.wikia.nocookie.net/gtawiki/images/0/0b/Sabre-GTASAde-front.png/revision/latest?cb=20211204202725", "Sabre em San Andreas - The Definitive Edition"),
   "gta-vi": gtaWikiVehicleImage("Vehicles in GTA VI", "https://static.wikia.nocookie.net/gtawiki/images/5/57/AmbrosiaRacewayPark-GTAVI-ExtendedLook.png/revision/latest?cb=20260829190137", "Ambrosia Raceway Park no Extended Look de GTA VI", {
-    alt: "Corrida em Ambrosia Raceway Park, cena do Extended Look de GTA VI (27/08/2026); lista completa de veiculos ainda nao confirmada",
+    alt: "Corrida em Ambrosia Raceway Park, cena do Extended Look de GTA VI (27/08/2026); lista completa de veículos ainda não confirmada",
     caption: "GTA Wiki - GTA VI, Extended Look (27/08/2026)",
     fit: "cover"
   })

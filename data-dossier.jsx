@@ -17,9 +17,11 @@ const dossierNavData = [
   { id: "gta6", label: "GTA VI", k: "14" },
   { id: "vi-mechanics", label: "Mecânicas VI", k: "15" },
   { id: "vi-catalog", label: "Catálogo VI", k: "16" },
-  { id: "eastereggs", label: "Easter Eggs", k: "17" },
-  { id: "mysteries", label: "Mistérios", k: "18" },
-  { id: "glossary", label: "Glossário", k: "19" }
+  { id: "cheats", label: "Códigos", k: "17" },
+  { id: "radios", label: "Rádios", k: "18" },
+  { id: "eastereggs", label: "Easter Eggs", k: "19" },
+  { id: "mysteries", label: "Mistérios", k: "20" },
+  { id: "glossary", label: "Glossário", k: "21" }
 ];
 window.dossierNavData = dossierNavData;
 
@@ -37,52 +39,52 @@ const dossierSourcesData = [
   {
     label: "Rockstar Newswire - GTA Online Money Fronts",
     url: "https://www.rockstargames.com/newswire/article/51322o2k393kka/gta-online-money-fronts-now-available",
-    note: "Atualizacao de GTA Online usada na linha do tempo viva."
+    note: "Atualização de GTA Online usada na linha do tempo viva."
   },
   {
     label: "Rockstar Newswire - Oscar Guzman Flies Again",
     url: "https://www.rockstargames.com/newswire/article/179kk473a8a18k/gta-online-oscar-guzman-flies-again-now-available",
-    note: "Atualizacao de 2025 com McKenzie Field Hangar e trafico aereo."
+    note: "Atualização de 2025 com McKenzie Field Hangar e tráfico aéreo."
   },
   {
     label: "Rockstar Newswire - A Safehouse in the Hills",
     url: "https://www.rockstargames.com/newswire/article/51358a55o2o11o/gta-online-a-safehouse-in-the-hills-coming-december-10",
-    note: "Anuncio oficial da atualizacao de safehouse de GTA Online."
+    note: "Anúncio oficial da atualização de safehouse de GTA Online."
   },
   {
-    label: "Rockstar North / Rockstar Games - historico publico",
+    label: "Rockstar North / Rockstar Games - histórico público",
     url: "https://en.wikipedia.org/wiki/Rockstar_North",
-    note: "Estrutura historica de DMA Design, Rockstar North e principais jogos."
+    note: "Estrutura histórica de DMA Design, Rockstar North e principais jogos."
   },
   {
     label: "Grand Theft Auto series - releases and chronology",
     url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto",
-    note: "Lista de lancamentos e organizacao dos universos narrativos."
+    note: "Lista de lançamentos e organização dos universos narrativos."
   },
   {
     label: "Grand Theft Wiki - Race'n'Chase",
     url: "https://www.grandtheftwiki.com/Race%27n%27Chase",
-    note: "Documento, escopo e transformacao do prototipo que antecedeu GTA 1."
+    note: "Documento, escopo e transformação do protótipo que antecedeu GTA 1."
   },
   {
-    label: "GTA Wiki / Fandom - paginas de jogos e lore",
+    label: "GTA Wiki / Fandom - páginas de jogos e lore",
     url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_Wiki",
-    note: "Apoio para detalhes de personagens, locais, faccoes, motores e cronologia secundaria."
+    note: "Apoio para detalhes de personagens, locais, facções, motores e cronologia secundária."
   },
   {
     label: "GTA Wiki - Updates in GTA Online",
     url: "https://gta.fandom.com/wiki/Updates_in_GTA_Online",
-    note: "Lista-base de DLCs e atualizacoes de conteudo de GTA Online."
+    note: "Lista-base de DLCs e atualizações de conteúdo de GTA Online."
   },
   {
     label: "ESRB - caso Hot Coffee",
     url: "https://www.esrb.org/blog/esrb-concludes-investigation-into-grand-theft-auto-san-andreas-revokes-m-mature-rating/",
-    note: "Registro oficial da reclassificacao de GTA San Andreas em 2005."
+    note: "Registro oficial da reclassificação de GTA San Andreas em 2005."
   },
   {
     label: "FTC - acordo Take-Two/Rockstar sobre San Andreas",
     url: "https://www.ftc.gov/news-events/news/press-releases/2006/06/makers-grand-theft-auto-san-andreas-settle-ftc-charges",
-    note: "Contexto publico sobre disclosure, patch e relancamento apos Hot Coffee."
+    note: "Contexto público sobre disclosure, patch e relançamento após Hot Coffee."
   }
 ];
 
@@ -93,13 +95,13 @@ const universeData = [
     period: "1997-1999",
     tone: "neutral",
     games: ["Grand Theft Auto", "GTA: London 1969", "GTA: London 1961", "Grand Theft Auto 2"],
-    summary: "A fase top-down da serie: mais arcade, mais anarquica e menos dependente de continuidade narrativa profunda.",
+    summary: "A fase top-down da série: mais arcade, mais anárquica e menos dependente de continuidade narrativa profunda.",
     description:
-      "O 2D Universe funciona como laboratorio de linguagem. GTA ainda era uma combinacao de corrida, caos urbano, humor seco e missoes criminosas vistas de cima. Liberty City, Vice City e San Andreas ja aparecem como nomes, mas ainda nao possuem a densidade cultural que ganhariam depois. GTA 2 e tratado como caso a parte, com Anywhere City e uma data interna deliberadamente nebulosa.",
+      "O 2D Universe funciona como laboratório de linguagem. GTA ainda era uma combinação de corrida, caos urbano, humor seco e missões criminosas vistas de cima. Liberty City, Vice City e San Andreas já aparecem como nomes, mas ainda não possuem a densidade cultural que ganhariam depois. GTA 2 é tratado como caso à parte, com Anywhere City e uma data interna deliberadamente nebulosa.",
     notes: [
-      "Personagens sao avatares ou figuras pouco desenvolvidas.",
-      "A prioridade e liberdade, pontuacao e escalada criminal.",
-      "London 1969 e London 1961 sao raras incursoes fora dos Estados Unidos."
+      "Personagens são avatares ou figuras pouco desenvolvidas.",
+      "A prioridade é liberdade, pontuação e escalada criminal.",
+      "London 1969 e London 1961 são raras incursões fora dos Estados Unidos."
     ]
   },
   {
@@ -115,13 +117,13 @@ const universeData = [
       "Grand Theft Auto: Liberty City Stories",
       "Grand Theft Auto: Vice City Stories"
     ],
-    summary: "A continuidade classica: cidades, mafias, radios, personagens recorrentes e satira urbana em 3D.",
+    summary: "A continuidade clássica: cidades, máfias, rádios, personagens recorrentes e sátira urbana em 3D.",
     description:
-      "GTA III cria a gramatica moderna da franquia. Vice City e San Andreas ampliam tom, escala e identidade cultural. Os prequels de PSP e GTA Advance costuram eventos anteriores, mostrando que a Rockstar passou a tratar GTA como um universo criminal interligado.",
+      "GTA III cria a gramática moderna da franquia. Vice City e San Andreas ampliam tom, escala e identidade cultural. Os prequels de PSP e GTA Advance costuram eventos anteriores, mostrando que a Rockstar passou a tratar GTA como um universo criminal interligado.",
     notes: [
       "Claude, Tommy, CJ, Toni, Vic e Mike pertencem a esta continuidade.",
-      "Liberty City, Vice City e San Andreas se tornam lugares reconheciveis, com geografia, faccoes e memoria.",
-      "Referencias cruzadas existem, mas a era HD reinicia a continuidade principal."
+      "Liberty City, Vice City e San Andreas se tornam lugares reconhecíveis, com geografia, facções e memória.",
+      "Referências cruzadas existem, mas a era HD reinicia a continuidade principal."
     ]
   },
   {
@@ -137,12 +139,12 @@ const universeData = [
       "Grand Theft Auto Online",
       "Grand Theft Auto VI"
     ],
-    summary: "A continuidade moderna: mundos mais densos, satira contemporanea, realismo fisico e GTA Online como plataforma viva.",
+    summary: "A continuidade moderna: mundos mais densos, sátira contemporânea, realismo físico e GTA Online como plataforma viva.",
     description:
-      "A era HD comeca com GTA IV e Liberty City reinterpretada. A Rockstar separa esta continuidade da era 3D, embora mantenha ecos, nomes de marcas e piadas internas. GTA V expande a escala com tres protagonistas e GTA Online transforma Los Santos em servico persistente. GTA VI leva esse universo para Leonida e Vice City moderna.",
+      "A era HD começa com GTA IV e Liberty City reinterpretada. A Rockstar separa esta continuidade da era 3D, embora mantenha ecos, nomes de marcas e piadas internas. GTA V expande a escala com três protagonistas e GTA Online transforma Los Santos em serviço persistente. GTA VI leva esse universo para Leonida e Vice City moderna.",
     notes: [
-      "Personagens de universos anteriores podem ser referenciados como easter eggs, nao necessariamente coexistem.",
-      "A satira mira capitalismo, midia, policia, agencias federais, celebridade, tecnologia e redes sociais.",
+      "Personagens de universos anteriores podem ser referenciados como easter eggs, não necessariamente coexistem.",
+      "A sátira mira capitalismo, mídia, polícia, agências federais, celebridade, tecnologia e redes sociais.",
       "GTA Online evolui a cronologia de Los Santos depois de 2013."
     ]
   }
@@ -152,18 +154,18 @@ const rockstarHistoryData = [
   {
     year: "1987/1988",
     title: "DMA Design nasce em Dundee",
-    type: "Estudio",
+    type: "Estúdio",
     summary:
-      "David Jones forma a DMA Design em Dundee, Escocia. Algumas fontes usam 1987 para a atividade inicial e 1988 para a fundacao formal; por isso o dossie registra as duas datas.",
+      "David Jones forma a DMA Design em Dundee, Escócia. Algumas fontes usam 1987 para a atividade inicial e 1988 para a fundação formal; por isso o dossiê registra as duas datas.",
     details: [
-      "A DMA Design nasce em Dundee, na Escocia, muito antes de existir Rockstar North. David Jones organiza o estudio em torno de uma cultura de programadores jovens, computadores domesticos, experimentacao tecnica e jogos com forte identidade propria.",
-      "O primeiro grande salto vem com Lemmings, publicado pela Psygnosis em 1991. O jogo transforma a DMA em nome respeitado no mercado europeu e prova que o estudio sabia criar sistemas simples, legiveis e caoticos o bastante para gerar historias emergentes.",
-      "Esse DNA importa para GTA: antes de pensar em cinema criminal, a DMA ja pensava em simulacao, regras, reacao em cadeia e pequenos personagens presos em sistemas maiores que eles. A diferenca e que, anos depois, os lemmings dariam lugar a carros, pedestres, policia e ruas.",
-      "Mike Dailly, Russell Kay, Steve Hammond e outros nomes aparecem ligados ao nucleo historico da DMA. O dossie evita tratar uma franquia desse tamanho como obra de uma unica pessoa: GTA nasce de uma equipe, de uma tecnologia e de um momento muito especifico da industria britanica."
+      "A DMA Design nasce em Dundee, na Escócia, muito antes de existir Rockstar North. David Jones organiza o estúdio em torno de uma cultura de programadores jovens, computadores domésticos, experimentação técnica e jogos com forte identidade própria.",
+      "O primeiro grande salto vem com Lemmings, publicado pela Psygnosis em 1991. O jogo transforma a DMA em nome respeitado no mercado europeu e prova que o estúdio sabia criar sistemas simples, legíveis e caóticos o bastante para gerar histórias emergentes.",
+      "Esse DNA importa para GTA: antes de pensar em cinema criminal, a DMA já pensava em simulação, regras, reação em cadeia e pequenos personagens presos em sistemas maiores que eles. A diferença é que, anos depois, os lemmings dariam lugar a carros, pedestres, polícia e ruas.",
+      "Mike Dailly, Russell Kay, Steve Hammond e outros nomes aparecem ligados ao núcleo histórico da DMA. O dossiê evita tratar uma franquia desse tamanho como obra de uma única pessoa: GTA nasce de uma equipe, de uma tecnologia e de um momento muito específico da indústria britânica."
     ],
     sources: [
-      { label: "Rockstar North - historico", url: "https://en.wikipedia.org/wiki/Rockstar_North" },
-      { label: "DMA Design - historico", url: "https://en.wikipedia.org/wiki/DMA_Design" }
+      { label: "Rockstar North - histórico", url: "https://en.wikipedia.org/wiki/Rockstar_North" },
+      { label: "DMA Design - histórico", url: "https://en.wikipedia.org/wiki/DMA_Design" }
     ]
   },
   {
@@ -171,12 +173,12 @@ const rockstarHistoryData = [
     title: "Race'n'Chase vira Grand Theft Auto",
     type: "Origem de GTA",
     summary:
-      "O conceito de perseguicoes e crimes urbanos evolui para Grand Theft Auto, criado na DMA Design por David Jones e Mike Dailly com a equipe do estudio.",
+      "O conceito de perseguições e crimes urbanos evolui para Grand Theft Auto, criado na DMA Design por David Jones e Mike Dailly com a equipe do estúdio.",
     details: [
-      "Race'n'Chase e o elo entre a DMA experimental e GTA. O projeto partia de uma ideia de corridas, perseguicoes, ladroes e policia em cidades vistas de cima. Era menos 'drama criminal' e mais brinquedo sistemico: carros, ruas, colisoes e regras de perseguicao.",
-      "Durante o desenvolvimento, a equipe percebeu que o comportamento caotico da policia, a liberdade de roubar veiculos e a possibilidade de quebrar a ordem da cidade eram mais interessantes do que cumprir uma corrida tradicional. A diversao estava no desvio.",
-      "A transformacao em Grand Theft Auto tambem aproxima a DMA da BMG Interactive, onde Sam Houser ajudaria a defender o potencial cultural e comercial da ideia. A provocacao publica, a linguagem de crime urbano e o tom de jornal sensacionalista comecam a se consolidar nesse periodo.",
-      "E importante separar fato e lenda: ha relatos diferentes sobre bugs de policia, prototipos e decisoes de design. O ponto seguro e que a franquia nasce quando uma estrutura de corrida vira uma fantasia de liberdade criminal em cidade aberta."
+      "Race'n'Chase é o elo entre a DMA experimental e GTA. O projeto partia de uma ideia de corridas, perseguições, ladrões e polícia em cidades vistas de cima. Era menos 'drama criminal' e mais brinquedo sistêmico: carros, ruas, colisões e regras de perseguição.",
+      "Durante o desenvolvimento, a equipe percebeu que o comportamento caótico da polícia, a liberdade de roubar veículos e a possibilidade de quebrar a ordem da cidade eram mais interessantes do que cumprir uma corrida tradicional. A diversão estava no desvio.",
+      "A transformação em Grand Theft Auto também aproxima a DMA da BMG Interactive, onde Sam Houser ajudaria a defender o potencial cultural e comercial da ideia. A provocação pública, a linguagem de crime urbano e o tom de jornal sensacionalista começam a se consolidar nesse período.",
+      "É importante separar fato e lenda: há relatos diferentes sobre bugs de polícia, protótipos e decisões de design. O ponto seguro é que a franquia nasce quando uma estrutura de corrida vira uma fantasia de liberdade criminal em cidade aberta."
     ],
     sources: [
       { label: "Grand Theft Wiki - Race'n'Chase", url: "https://www.grandtheftwiki.com/Race%27n%27Chase" },
@@ -186,48 +188,48 @@ const rockstarHistoryData = [
   {
     year: "1997",
     title: "Grand Theft Auto estreia",
-    type: "Lancamento",
+    type: "Lançamento",
     summary:
-      "GTA nasce antes de existir Rockstar North. O primeiro jogo e publicado no periodo BMG Interactive/DMA Design.",
+      "GTA nasce antes de existir Rockstar North. O primeiro jogo é publicado no período BMG Interactive/DMA Design.",
     details: [
-      "Grand Theft Auto chega em 1997 como jogo de perspectiva top-down, missao criminosa e liberdade urbana. Ele nao tem a densidade narrativa dos titulos posteriores, mas ja apresenta a gramatica essencial: roubar carros, aceitar trabalhos ilegais, fugir da policia e transformar cidade em tabuleiro.",
-      "Liberty City, Vice City e San Andreas ja aparecem como nomes, mas ainda em versoes abstratas. Elas funcionam mais como zonas de jogabilidade e identidade visual do que como cidades-personagem com memoria, bairros e continuidade profunda.",
-      "A radio, os crimes, o humor acido e a busca deliberada por controversia ajudam o jogo a se destacar. Parte do impacto vem da sensacao de que o jogador podia quebrar regras urbanas de um jeito que poucos jogos comerciais permitiam naquela epoca.",
-      "O primeiro GTA tambem mostra uma diferenca importante para o dossie: ele pertence a fase DMA/BMG. A marca Rockstar ainda nao existia como conhecemos, e Rockstar North ainda nao era o nome do estudio."
+      "Grand Theft Auto chega em 1997 como jogo de perspectiva top-down, missão criminosa e liberdade urbana. Ele não tem a densidade narrativa dos títulos posteriores, mas já apresenta a gramática essencial: roubar carros, aceitar trabalhos ilegais, fugir da polícia e transformar cidade em tabuleiro.",
+      "Liberty City, Vice City e San Andreas já aparecem como nomes, mas ainda em versões abstratas. Elas funcionam mais como zonas de jogabilidade e identidade visual do que como cidades-personagem com memória, bairros e continuidade profunda.",
+      "A rádio, os crimes, o humor ácido e a busca deliberada por controvérsia ajudam o jogo a se destacar. Parte do impacto vem da sensação de que o jogador podia quebrar regras urbanas de um jeito que poucos jogos comerciais permitiam naquela época.",
+      "O primeiro GTA também mostra uma diferença importante para o dossiê: ele pertence à fase DMA/BMG. A marca Rockstar ainda não existia como conhecemos, e Rockstar North ainda não era o nome do estúdio."
     ],
     sources: [
       { label: "GTA Wiki - Grand Theft Auto 1997", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_(1997_game)" },
-      { label: "Grand Theft Auto - serie", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto" }
+      { label: "Grand Theft Auto - série", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto" }
     ]
   },
   {
     year: "1998",
     title: "Take-Two, BMG Interactive e Rockstar Games",
-    type: "Negocio",
+    type: "Negócio",
     summary:
-      "A Take-Two adquire ativos da BMG Interactive. Em dezembro de 1998, Rockstar Games e fundada por Sam Houser, Dan Houser, Terry Donovan, Jamie King e Gary Foreman.",
+      "A Take-Two adquire ativos da BMG Interactive. Em dezembro de 1998, Rockstar Games é fundada por Sam Houser, Dan Houser, Terry Donovan, Jamie King e Gary Foreman.",
     details: [
       "A virada empresarial acontece quando a Take-Two compra ativos da BMG Interactive. GTA deixa de ser apenas um jogo estranho da DMA publicado pela BMG e passa a estar dentro de uma estrutura que queria transformar marcas autorais em eventos culturais.",
-      "Rockstar Games e fundada em 1998 por Sam Houser, Dan Houser, Terry Donovan, Jamie King e Gary Foreman. A proposta nao era soar como uma publicadora neutra: era construir um selo com atitude, musica, cinema, design urbano e provocacao calculada.",
-      "Sam Houser e Dan Houser se tornam figuras centrais da identidade editorial: dialogo afiado, radios satiricas, referencias a cinema criminal, obsessao por trilha sonora e mundos que parecem comentar a cultura popular enquanto o jogador atravessa a cidade.",
-      "A Rockstar nao cria GTA do zero, mas reposiciona GTA. O jogo deixa de ser apenas um produto de nicho caotico e vira uma franquia com branding, marketing, controle de tom e ambicao de ser reconhecida fora do publico tradicional de videogames."
+      "Rockstar Games é fundada em 1998 por Sam Houser, Dan Houser, Terry Donovan, Jamie King e Gary Foreman. A proposta não era soar como uma publicadora neutra: era construir um selo com atitude, música, cinema, design urbano e provocação calculada.",
+      "Sam Houser e Dan Houser se tornam figuras centrais da identidade editorial: diálogo afiado, rádios satíricas, referências a cinema criminal, obsessão por trilha sonora e mundos que parecem comentar a cultura popular enquanto o jogador atravessa a cidade.",
+      "A Rockstar não cria GTA do zero, mas reposiciona GTA. O jogo deixa de ser apenas um produto de nicho caótico e vira uma franquia com branding, marketing, controle de tom e ambição de ser reconhecida fora do público tradicional de videogames."
     ],
     sources: [
-      { label: "Rockstar Games - historico", url: "https://en.wikipedia.org/wiki/Rockstar_Games" },
+      { label: "Rockstar Games - histórico", url: "https://en.wikipedia.org/wiki/Rockstar_Games" },
       { label: "Take-Two Interactive", url: "https://en.wikipedia.org/wiki/Take-Two_Interactive" }
     ]
   },
   {
     year: "1999-2002",
     title: "DMA Design se torna Rockstar North",
-    type: "Estudio",
+    type: "Estúdio",
     summary:
-      "A antiga DMA passa por reestruturacoes e se torna Rockstar North, principal estudio de desenvolvimento da franquia GTA.",
+      "A antiga DMA passa por reestruturações e se torna Rockstar North, principal estúdio de desenvolvimento da franquia GTA.",
     details: [
-      "Depois do sucesso inicial de GTA, a DMA atravessa uma fase de mudancas corporativas. O estudio passa por aquisicoes e reestruturacoes ate ficar sob a orbita da Take-Two/Rockstar, consolidando sua funcao como o nucleo tecnico da franquia.",
-      "A transicao nao e apenas troca de placa na porta. Ela marca a passagem de um estudio escoces independente para uma operacao alinhada a uma editora global, com ambicoes maiores, marketing mais agressivo e exigencia tecnica muito mais alta.",
-      "A equipe precisava resolver uma pergunta enorme: como transformar o caos top-down de GTA em uma cidade 3D onde dirigir, atirar, caminhar, ouvir radio e seguir historia acontecessem no mesmo espaco sem parecerem sistemas separados?",
-      "Rockstar North surge como o nome associado a essa resposta. A antiga DMA se torna, na pratica, o laboratorio principal de GTA: um estudio capaz de combinar engenharia de mundo aberto, design de missoes, cultura urbana e satira."
+      "Depois do sucesso inicial de GTA, a DMA atravessa uma fase de mudanças corporativas. O estúdio passa por aquisições e reestruturações até ficar sob a órbita da Take-Two/Rockstar, consolidando sua função como o núcleo técnico da franquia.",
+      "A transição não é apenas troca de placa na porta. Ela marca a passagem de um estúdio escocês independente para uma operação alinhada a uma editora global, com ambições maiores, marketing mais agressivo e exigência técnica muito mais alta.",
+      "A equipe precisava resolver uma pergunta enorme: como transformar o caos top-down de GTA em uma cidade 3D onde dirigir, atirar, caminhar, ouvir rádio e seguir história acontecessem no mesmo espaço sem parecerem sistemas separados?",
+      "Rockstar North surge como o nome associado a essa resposta. A antiga DMA se torna, na prática, o laboratório principal de GTA: um estúdio capaz de combinar engenharia de mundo aberto, design de missões, cultura urbana e sátira."
     ],
     sources: [
       { label: "Rockstar North", url: "https://en.wikipedia.org/wiki/Rockstar_North" },
@@ -237,14 +239,14 @@ const rockstarHistoryData = [
   {
     year: "2001",
     title: "GTA III redefine o mundo aberto",
-    type: "Virada tecnica",
+    type: "Virada técnica",
     summary:
-      "A camera em terceira pessoa, a cidade 3D, as radios e as missoes cinematograficas criam um modelo que influencia toda a industria.",
+      "A câmera em terceira pessoa, a cidade 3D, as rádios e as missões cinematográficas criam um modelo que influencia toda a indústria.",
     details: [
-      "GTA III e a virada que transforma uma ideia forte em linguagem dominante. Liberty City deixa de ser um mapa visto de cima e vira uma cidade tridimensional, com ruas, pontes, ilhas, pedestres, trafego, radio, faccoes e missao cinematografica.",
-      "O jogo nao foi o primeiro mundo aberto da historia, mas foi o ponto em que muitos sistemas passaram a parecer uma mesma fantasia urbana: dirigir, caminhar, atirar, aceitar trabalhos, fugir da policia e simplesmente se perder pela cidade.",
-      "A producao tambem atravessa um momento historico delicado. Depois dos ataques de 11 de setembro de 2001, o lancamento e ajustado e parte do conteudo e revisada para evitar referencias sensiveis. Esse contexto ajuda a explicar por que GTA III parece agressivo e, ao mesmo tempo, cuidadosamente reposicionado.",
-      "O resultado redefiniu expectativa de mercado. A partir de GTA III, varias editoras passaram a procurar seu proprio 'GTA-like'. Para a Rockstar, o jogo prova que a franquia podia ser mais que controversia: podia ser arquitetura de mundo aberto."
+      "GTA III é a virada que transforma uma ideia forte em linguagem dominante. Liberty City deixa de ser um mapa visto de cima e vira uma cidade tridimensional, com ruas, pontes, ilhas, pedestres, tráfego, rádio, facções e missão cinematográfica.",
+      "O jogo não foi o primeiro mundo aberto da história, mas foi o ponto em que muitos sistemas passaram a parecer uma mesma fantasia urbana: dirigir, caminhar, atirar, aceitar trabalhos, fugir da polícia e simplesmente se perder pela cidade.",
+      "A produção também atravessa um momento histórico delicado. Depois dos ataques de 11 de setembro de 2001, o lançamento é ajustado e parte do conteúdo é revisada para evitar referências sensíveis. Esse contexto ajuda a explicar por que GTA III parece agressivo e, ao mesmo tempo, cuidadosamente reposicionado.",
+      "O resultado redefiniu expectativa de mercado. A partir de GTA III, várias editoras passaram a procurar seu próprio 'GTA-like'. Para a Rockstar, o jogo prova que a franquia podia ser mais que controvérsia: podia ser arquitetura de mundo aberto."
     ],
     sources: [
       { label: "GTA III - desenvolvimento", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto_III" },
@@ -258,15 +260,15 @@ const rockstarHistoryData = [
     summary:
       "Vice City, San Andreas, Liberty City Stories e Vice City Stories consolidam uma continuidade criminal cheia de personagens recorrentes.",
     details: [
-      "Depois de GTA III, a Rockstar entende que cidade nao era so mapa: era tom. Vice City usa Miami ficcional, neon, drogas, praia, radio licenciada e cinema criminal dos anos 80 para criar uma identidade quase musical.",
-      "Tommy Vercetti muda a relacao do jogador com a historia. Depois de Claude, um protagonista praticamente silencioso, Vice City coloca voz, ambicao e personalidade no centro do crime. A campanha passa a parecer ascensao de um chefe, nao apenas uma sucessao de trabalhos.",
-      "San Andreas leva a formula ao limite da era PlayStation 2: tres cidades, campo, deserto, Las Venturas, avioes, academias, territorio, customizacao, habilidades e uma narrativa de familia, gangues e corrupcao policial nos anos 1990.",
-      "Liberty City Stories e Vice City Stories fecham lacunas de continuidade, especialmente em PSP, mostrando que a Rockstar passou a tratar GTA como uma rede de personagens, mafias e cidades com passado. Esse periodo cristaliza o chamado 3D Universe.",
-      "Tambem e a fase em que o debate publico sobre GTA cresce muito. A serie vira fenomeno comercial e alvo recorrente de discussoes sobre violencia, classificacao indicativa, satira e representacao."
+      "Depois de GTA III, a Rockstar entende que cidade não era só mapa: era tom. Vice City usa Miami ficcional, neon, drogas, praia, rádio licenciada e cinema criminal dos anos 80 para criar uma identidade quase musical.",
+      "Tommy Vercetti muda a relação do jogador com a história. Depois de Claude, um protagonista praticamente silencioso, Vice City coloca voz, ambição e personalidade no centro do crime. A campanha passa a parecer ascensão de um chefe, não apenas uma sucessão de trabalhos.",
+      "San Andreas leva a fórmula ao limite da era PlayStation 2: três cidades, campo, deserto, Las Venturas, aviões, academias, território, customização, habilidades e uma narrativa de família, gangues e corrupção policial nos anos 1990.",
+      "Liberty City Stories e Vice City Stories fecham lacunas de continuidade, especialmente em PSP, mostrando que a Rockstar passou a tratar GTA como uma rede de personagens, máfias e cidades com passado. Esse período cristaliza o chamado 3D Universe.",
+      "Também é a fase em que o debate público sobre GTA cresce muito. A série vira fenômeno comercial e alvo recorrente de discussões sobre violência, classificação indicativa, sátira e representação."
     ],
     sources: [
-      { label: "Vice City - historico", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto:_Vice_City" },
-      { label: "San Andreas - historico", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto:_San_Andreas" },
+      { label: "Vice City - histórico", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto:_Vice_City" },
+      { label: "San Andreas - histórico", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto:_San_Andreas" },
       { label: "GTA Wiki - 3D Universe", url: "https://gta.fandom.com/wiki/3D_Universe" }
     ]
   },
@@ -277,11 +279,11 @@ const rockstarHistoryData = [
     summary:
       "GTA IV inaugura a fase HD com RAGE, Euphoria e uma Liberty City mais realista, densa e sombria.",
     details: [
-      "GTA IV reinicia a continuidade principal no HD Universe. A Rockstar mantem marcas, radios, humor e ecos culturais, mas separa a nova fase da linha narrativa da era 3D.",
-      "A troca tecnica e decisiva: RAGE e Euphoria dao peso fisico, animacao procedural e uma Liberty City mais densa. O jogo passa a buscar uma cidade menos caricata e mais observada, com pontes, bairros, celular, internet interna e vida urbana mais crua.",
-      "Niko Bellic leva GTA para um tom mais dramatico: imigração, trauma de guerra, vinganca, divida, familia e desencanto com o sonho americano. A satira ainda existe, mas convive com melancolia e violencia menos cartunesca.",
-      "The Lost and Damned e The Ballad of Gay Tony expandem a mesma cidade por outras classes sociais e subculturas: motoclube em decadencia, vida noturna, diamantes, mafia, celebridade e excesso. Juntos, os episodios mostram a ambicao da Rockstar de contar uma cidade por angulos paralelos.",
-      "GTA IV tambem confirma que a franquia poderia sobreviver a um reboot de tom. O publico ainda reconhecia GTA, mas agora com fisica, realismo e uma escrita mais sombria."
+      "GTA IV reinicia a continuidade principal no HD Universe. A Rockstar mantém marcas, rádios, humor e ecos culturais, mas separa a nova fase da linha narrativa da era 3D.",
+      "A troca técnica é decisiva: RAGE e Euphoria dão peso físico, animação procedural e uma Liberty City mais densa. O jogo passa a buscar uma cidade menos caricata e mais observada, com pontes, bairros, celular, internet interna e vida urbana mais crua.",
+      "Niko Bellic leva GTA para um tom mais dramático: imigração, trauma de guerra, vingança, dívida, família e desencanto com o sonho americano. A sátira ainda existe, mas convive com melancolia e violência menos cartunesca.",
+      "The Lost and Damned e The Ballad of Gay Tony expandem a mesma cidade por outras classes sociais e subculturas: motoclube em decadência, vida noturna, diamantes, máfia, celebridade e excesso. Juntos, os episódios mostram a ambição da Rockstar de contar uma cidade por ângulos paralelos.",
+      "GTA IV também confirma que a franquia poderia sobreviver a um reboot de tom. O público ainda reconhecia GTA, mas agora com física, realismo e uma escrita mais sombria."
     ],
     sources: [
       { label: "GTA IV - desenvolvimento", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto_IV" },
@@ -291,15 +293,15 @@ const rockstarHistoryData = [
   {
     year: "2013",
     title: "GTA V e GTA Online",
-    type: "Fenomeno",
+    type: "Fenômeno",
     summary:
-      "GTA V combina tres protagonistas, assaltos e uma Los Santos gigantesca; GTA Online cresce de modo multiplayer para plataforma viva.",
+      "GTA V combina três protagonistas, assaltos e uma Los Santos gigantesca; GTA Online cresce de modo multiplayer para plataforma viva.",
     details: [
-      "GTA V e a sintese comercial e tecnica da Rockstar moderna. Los Santos retorna como espelho de Los Angeles, mas agora cercada por Blaine County, midia digital, celebridade, desigualdade, paranoia estatal e economia de espetaculo.",
-      "A escolha de tres protagonistas muda o ritmo da campanha. Michael representa o passado criminal domesticado, Franklin a tentativa de mobilidade social e Trevor o caos que a propria serie sempre prometeu. O sistema permite alternar classe, tom e geografia dentro de uma mesma historia.",
-      "Os assaltos viram estrutura central, com planejamento, equipe, preparacao e execucao. A campanha usa FIB, IAA, Merryweather, Devin Weston, gangues e cartéis para mostrar uma Los Santos onde crime privado e poder institucional se confundem.",
-      "GTA Online, lancado em 2013, comeca turbulento, mas cresce para algo maior que modo multiplayer. Heists, CEOs, motoclubes, bunkers, nightclubs, cassino, Cayo Perico, agencias e atualizacoes de economia transformam Los Santos em plataforma persistente.",
-      "Esse ciclo muda a historia da Rockstar: GTA V continua vendendo por multiplas geracoes de console, GTA Online sustenta uma comunidade gigantesca e a expectativa por GTA VI passa a existir sob a sombra de um jogo que se recusou a sair de cena."
+      "GTA V é a síntese comercial e técnica da Rockstar moderna. Los Santos retorna como espelho de Los Angeles, mas agora cercada por Blaine County, mídia digital, celebridade, desigualdade, paranoia estatal e economia de espetáculo.",
+      "A escolha de três protagonistas muda o ritmo da campanha. Michael representa o passado criminal domesticado, Franklin a tentativa de mobilidade social e Trevor o caos que a própria série sempre prometeu. O sistema permite alternar classe, tom e geografia dentro de uma mesma história.",
+      "Os assaltos viram estrutura central, com planejamento, equipe, preparação e execução. A campanha usa FIB, IAA, Merryweather, Devin Weston, gangues e cartéis para mostrar uma Los Santos onde crime privado e poder institucional se confundem.",
+      "GTA Online, lançado em 2013, começa turbulento, mas cresce para algo maior que modo multiplayer. Heists, CEOs, motoclubes, bunkers, nightclubs, cassino, Cayo Perico, agências e atualizações de economia transformam Los Santos em plataforma persistente.",
+      "Esse ciclo muda a história da Rockstar: GTA V continua vendendo por múltiplas gerações de console, GTA Online sustenta uma comunidade gigantesca e a expectativa por GTA VI passa a existir sob a sombra de um jogo que se recusou a sair de cena."
     ],
     sources: [
       { label: "GTA V - desenvolvimento", url: "https://en.wikipedia.org/wiki/Development_of_Grand_Theft_Auto_V" },
@@ -310,15 +312,15 @@ const rockstarHistoryData = [
   {
     year: "2026",
     title: "GTA VI leva a era HD para Leonida",
-    type: "Proximo capitulo",
+    type: "Próximo capítulo",
     summary:
-      "GTA VI esta oficialmente marcado para 19 de novembro de 2026, ambientado em Leonida/Vice City, com Lucia Caminos e Jason Duval.",
+      "GTA VI está oficialmente marcado para 19 de novembro de 2026, ambientado em Leonida/Vice City, com Lucia Caminos e Jason Duval.",
     details: [
-      "GTA VI chega depois do periodo mais longo entre jogos principais da franquia. O intervalo e explicado por uma combinacao de escala tecnica, longevidade de GTA Online, mudancas internas na Rockstar e a expectativa criada por GTA V.",
-      "O que e confirmado pela Rockstar: GTA VI esta marcado para 19 de novembro de 2026, anunciado para PlayStation 5 e Xbox Series X|S, ambientado no estado de Leonida e com Vice City como centro mais reconhecivel.",
-      "Lucia Caminos e Jason Duval formam a dupla central divulgada oficialmente. A pagina da Rockstar descreve Lucia saindo da Penitenciaria de Leonida e Jason envolvido com traficantes locais nas Keys, ate um servico aparentemente simples dar errado.",
-      "O material oficial sugere crime moderno, redes sociais, cultura viral, praias, pantanos, policia, vida noturna e uma versao contemporanea da satira da Florida. Ainda assim, antagonistas, mapa completo, estrutura de missoes, PC e futuro de GTA Online seguem nao confirmados.",
-      "Historicamente, GTA VI representa uma prova dupla: continuar a linhagem single-player cinematografica da Rockstar e, ao mesmo tempo, responder a uma decada em que GTA Online redefiniu o que a franquia significa para milhoes de jogadores."
+      "GTA VI chega depois do período mais longo entre jogos principais da franquia. O intervalo é explicado por uma combinação de escala técnica, longevidade de GTA Online, mudanças internas na Rockstar e a expectativa criada por GTA V.",
+      "O que é confirmado pela Rockstar: GTA VI está marcado para 19 de novembro de 2026, anunciado para PlayStation 5 e Xbox Series X|S, ambientado no estado de Leonida e com Vice City como centro mais reconhecível.",
+      "Lucia Caminos e Jason Duval formam a dupla central divulgada oficialmente. A página da Rockstar descreve Lucia saindo da Penitenciária de Leonida e Jason envolvido com traficantes locais nas Keys, até um serviço aparentemente simples dar errado.",
+      "O material oficial sugere crime moderno, redes sociais, cultura viral, praias, pântanos, polícia, vida noturna e uma versão contemporânea da sátira da Flórida. Ainda assim, antagonistas, mapa completo, estrutura de missões, PC e futuro de GTA Online seguem não confirmados.",
+      "Historicamente, GTA VI representa uma prova dupla: continuar a linhagem single-player cinematográfica da Rockstar e, ao mesmo tempo, responder a uma década em que GTA Online redefiniu o que a franquia significa para milhões de jogadores."
     ],
     sources: [
       { label: "Rockstar - GTA VI", url: "https://www.rockstargames.com/VI" },
@@ -334,15 +336,15 @@ const timelineChronologicalData = [
     title: "GTA: London 1961",
     city: "London",
     universe: "2D Universe",
-    protagonist: "Avatares selecionaveis",
+    protagonist: "Avatares selecionáveis",
     summary:
-      "Expansao gratuita para PC que volta a Londres no inicio da decada. E uma das poucas passagens da franquia fora do eixo americano.",
+      "Expansão gratuita para PC que volta a Londres no início da década. É uma das poucas passagens da franquia fora do eixo americano.",
     beats: [
       "Crime urbano em Londres estilizada.",
-      "Tom mais arcade e menos canonico.",
-      "Curiosidade historica por anteceder London 1969 dentro da cronologia."
+      "Tom mais arcade e menos canônico.",
+      "Curiosidade histórica por anteceder London 1969 dentro da cronologia."
     ],
-    certainty: "Confirmado como expansao da era 2D; continuidade profunda e limitada."
+    certainty: "Confirmado como expansão da era 2D; continuidade profunda é limitada."
   },
   {
     year: "1969",
@@ -350,13 +352,13 @@ const timelineChronologicalData = [
     title: "GTA: London 1969",
     city: "London",
     universe: "2D Universe",
-    protagonist: "Avatares selecionaveis",
+    protagonist: "Avatares selecionáveis",
     summary:
-      "A franquia testa crime britanico, cultura pop dos anos 60, carros de epoca e linguagem de gangster londrino.",
+      "A franquia testa crime britânico, cultura pop dos anos 60, carros de época e linguagem de gangster londrino.",
     beats: [
-      "Ambientacao britanica com estetica Swinging Sixties.",
-      "Expansao de GTA 1.",
-      "Rara excecao internacional na serie."
+      "Ambientação britânica com estética Swinging Sixties.",
+      "Expansão de GTA 1.",
+      "Rara exceção internacional na série."
     ],
     certainty: "Confirmado."
   },
@@ -368,11 +370,11 @@ const timelineChronologicalData = [
     universe: "3D Universe",
     protagonist: "Victor 'Vic' Vance",
     summary:
-      "Vic Vance, militar tentando sustentar a familia, e puxado para trafico, corrupcao e disputa com Jerry Martinez e a familia Mendez.",
+      "Vic Vance, militar tentando sustentar a família, é puxado para tráfico, corrupção e disputa com Jerry Martinez e a família Mendez.",
     beats: [
-      "Mostra Vice City antes da ascensao de Tommy Vercetti.",
-      "Lance Vance entra como parceiro ambicioso e instavel.",
-      "O imperio dos Vance cresce, mas a tragica morte de Vic em 1986 ja paira sobre a historia."
+      "Mostra Vice City antes da ascensão de Tommy Vercetti.",
+      "Lance Vance entra como parceiro ambicioso e instável.",
+      "O império dos Vance cresce, mas a trágica morte de Vic em 1986 já paira sobre a história."
     ],
     certainty: "Confirmado."
   },
@@ -384,11 +386,11 @@ const timelineChronologicalData = [
     universe: "3D Universe",
     protagonist: "Tommy Vercetti",
     summary:
-      "Depois de 15 anos preso, Tommy e enviado por Sonny Forelli a Vice City. A negociacao de drogas e emboscada, ele perde dinheiro e produto, derruba Ricardo Diaz e monta seu proprio imperio.",
+      "Depois de 15 anos preso, Tommy é enviado por Sonny Forelli a Vice City. A negociação de drogas é emboscada, ele perde dinheiro e produto, derruba Ricardo Diaz e monta seu próprio império.",
     beats: [
       "Ken Rosenberg, Lance Vance, Colonel Cortez, Avery Carrington e Kent Paul abrem portas no submundo.",
-      "Tommy toma a mansao de Diaz e compra negocios pela cidade.",
-      "Lance trai Tommy; Sonny vai a Vice City cobrar a divida; Tommy vence e vira chefe local."
+      "Tommy toma a mansão de Diaz e compra negócios pela cidade.",
+      "Lance trai Tommy; Sonny vai a Vice City cobrar a dívida; Tommy vence e vira chefe local."
     ],
     certainty: "Confirmado."
   },
@@ -400,7 +402,7 @@ const timelineChronologicalData = [
     universe: "3D Universe",
     protagonist: "Carl 'CJ' Johnson",
     summary:
-      "CJ volta a Los Santos apos a morte da mae. Grove Street esta quebrada, C.R.A.S.H. o manipula e a traicao de Big Smoke e Ryder expande a guerra para todo o estado.",
+      "CJ volta a Los Santos após a morte da mãe. Grove Street está quebrada, C.R.A.S.H. o manipula e a traição de Big Smoke e Ryder expande a guerra para todo o estado.",
     beats: [
       "CJ reconstruiu poder em Los Santos, zona rural, San Fierro, deserto e Las Venturas.",
       "Woozie, Cesar, The Truth e Mike Toreno ampliam sua rede.",
@@ -414,12 +416,12 @@ const timelineChronologicalData = [
     title: "Grand Theft Auto",
     city: "Liberty City, San Andreas, Vice City",
     universe: "2D Universe",
-    protagonist: "Avatares selecionaveis",
+    protagonist: "Avatares selecionáveis",
     summary:
-      "A primeira versao da formula: subir no submundo criminal completando missoes para chefes e causando caos em tres cidades.",
+      "A primeira versão da fórmula: subir no submundo criminal completando missões para chefes e causando caos em três cidades.",
     beats: [
       "Narrativa leve e fragmentada.",
-      "Cidades ainda nao equivalem as versoes 3D/HD.",
+      "Cidades ainda não equivalem às versões 3D/HD.",
       "Base conceitual da franquia."
     ],
     certainty: "Confirmado."
@@ -436,7 +438,7 @@ const timelineChronologicalData = [
     beats: [
       "Prequel direto de GTA III.",
       "Mostra Salvatore antes de sua queda.",
-      "A violencia politica e mafiosa redesenha Liberty City."
+      "A violência política e mafiosa redesenha Liberty City."
     ],
     certainty: "Confirmado."
   },
@@ -448,13 +450,13 @@ const timelineChronologicalData = [
     universe: "3D Universe",
     protagonist: "Mike",
     summary:
-      "Mike busca vingar o parceiro Vinnie em Liberty City. A trama funciona como prequel portatil de GTA III.",
+      "Mike busca vingar o parceiro Vinnie em Liberty City. A trama funciona como prequel portátil de GTA III.",
     beats: [
-      "Historia de traicao e fuga.",
-      "Conecta-se ao clima criminal da Liberty City pre-GTA III.",
+      "História de traição e fuga.",
+      "Conecta-se ao clima criminal da Liberty City pré-GTA III.",
       "Algumas cronologias populares posicionam o jogo perto de 1998; aqui fica como c. 2000 por ser anterior a GTA III."
     ],
-    certainty: "A data interna e tratada como aproximada."
+    certainty: "A data interna é tratada como aproximada."
   },
   {
     year: "data incerta",
@@ -464,13 +466,13 @@ const timelineChronologicalData = [
     universe: "2D Universe",
     protagonist: "Claude Speed",
     summary:
-      "Anywhere City mistura retrofuturismo, gangues caricatas e um calendario deliberadamente ambiguo.",
+      "Anywhere City mistura retrofuturismo, gangues caricatas e um calendário deliberadamente ambíguo.",
     beats: [
       "Zaibatsu, Loonies, Yakuza, Scientists, Rednecks, Russian Mafia e Krishna disputam distritos.",
-      "O tom e mais experimental que canonico.",
-      "A data interna e frequentemente debatida; o dossie marca como nao confirmada."
+      "O tom é mais experimental que canônico.",
+      "A data interna é frequentemente debatida; o dossiê marca como não confirmada."
     ],
-    certainty: "Nao confirmado."
+    certainty: "Não confirmado."
   },
   {
     year: "2001",
@@ -480,11 +482,11 @@ const timelineChronologicalData = [
     universe: "3D Universe",
     protagonist: "Claude",
     summary:
-      "Catalina trai Claude durante um assalto. Ele sobrevive, escapa com 8-Ball e atravessa Leone, Yakuza, Yardies e Cartel Colombiano ate confronta-la.",
+      "Catalina trai Claude durante um assalto. Ele sobrevive, escapa com 8-Ball e atravessa Leone, Yakuza, Yardies e Cartel Colombiano até confrontá-la.",
     beats: [
       "Luigi, Joey, Toni, Salvatore, Maria, Asuka, Kenji, Ray e Donald Love estruturam a escalada.",
       "Miguel e Catalina movem o Cartel.",
-      "O final fecha a vinganca contra Catalina."
+      "O final fecha a vingança contra Catalina."
     ],
     certainty: "Confirmado."
   },
@@ -496,11 +498,11 @@ const timelineChronologicalData = [
     universe: "HD Universe",
     protagonist: "Niko Bellic",
     summary:
-      "Niko chega a Liberty City atras do sonho americano, mas encontra dividas de Roman, mafias, traumas de guerra e uma cidade movida por corrupcao.",
+      "Niko chega a Liberty City atrás do sonho americano, mas encontra dívidas de Roman, máfias, traumas de guerra e uma cidade movida por corrupção.",
     beats: [
-      "Dimitri Rascalov e Mikhail Faustin puxam a tragedia russa.",
+      "Dimitri Rascalov e Mikhail Faustin puxam a tragédia russa.",
       "Little Jacob, Brucie, Packie, Kate, Mallorie, Phil Bell e Jimmy Pegorino moldam escolhas e perdas.",
-      "Temas centrais: imigracao, vinganca, capitalismo e desilusao."
+      "Temas centrais: imigração, vingança, capitalismo e desilusão."
     ],
     certainty: "Confirmado."
   },
@@ -512,10 +514,10 @@ const timelineChronologicalData = [
     universe: "HD Universe",
     protagonist: "Johnny Klebitz",
     summary:
-      "Johnny tenta manter o The Lost MC de pe enquanto Billy Grey leva o motoclube a autodestruicao.",
+      "Johnny tenta manter o The Lost MC de pé enquanto Billy Grey leva o motoclube à autodestruição.",
     beats: [
-      "O foco muda para lealdade, vicio, rivalidade e decadencia.",
-      "Mostra eventos de GTA IV por outro angulo.",
+      "O foco muda para lealdade, vício, rivalidade e decadência.",
+      "Mostra eventos de GTA IV por outro ângulo.",
       "A queda de Johnny ganha eco amargo em GTA V."
     ],
     certainty: "Confirmado."
@@ -528,7 +530,7 @@ const timelineChronologicalData = [
     universe: "HD Universe",
     protagonist: "Luis Fernando Lopez",
     summary:
-      "Luis protege Tony Prince em meio a clubes, celebridades, diamantes, mafias e crime de alto nivel.",
+      "Luis protege Tony Prince em meio a clubes, celebridades, diamantes, máfias e crime de alto nível.",
     beats: [
       "Contrasta luxo e excesso com o noir de GTA IV.",
       "Cruza eventos dos diamantes vistos por Niko e Johnny.",
@@ -544,11 +546,11 @@ const timelineChronologicalData = [
     universe: "HD Universe",
     protagonist: "Huang Lee",
     summary:
-      "Huang chega para entregar a espada Yu Jian ao tio Kenny, e acaba roubado, traido e mergulhado em disputas das Triads.",
+      "Huang chega para entregar a espada Yu Jian ao tio Kenny, e acaba roubado, traído e mergulhado em disputas das Triads.",
     beats: [
-      "Mistura honra familiar, trafico de drogas e traicao.",
-      "Usa Liberty City da era HD em formato portatil.",
-      "Hsin Jaoming, Kenny Lee e Wade Heston compoem a rede de suspeitos."
+      "Mistura honra familiar, tráfico de drogas e traição.",
+      "Usa Liberty City da era HD em formato portátil.",
+      "Hsin Jaoming, Kenny Lee e Wade Heston compõem a rede de suspeitos."
     ],
     certainty: "Confirmado."
   },
@@ -560,29 +562,29 @@ const timelineChronologicalData = [
     universe: "HD Universe",
     protagonist: "Michael, Franklin e Trevor",
     summary:
-      "O prologo em North Yankton volta para assombrar Michael e Trevor. Em Los Santos, Franklin cruza com Michael e os tres sao puxados para assaltos, FIB, IAA, Merryweather e Devin Weston.",
+      "O prólogo em North Yankton volta para assombrar Michael e Trevor. Em Los Santos, Franklin cruza com Michael e os três são puxados para assaltos, FIB, IAA, Merryweather e Devin Weston.",
     beats: [
-      "Michael vive sob nova identidade depois de fingir a propria morte.",
+      "Michael vive sob nova identidade depois de fingir a própria morte.",
       "Trevor descobre a verdade e reabre feridas antigas.",
-      "A Opcao C/Deathwish, em que os tres sobrevivem, e a leitura canonica mais aceita por referencias posteriores."
+      "A Opção C/Deathwish, em que os três sobrevivem, é a leitura canônica mais aceita por referências posteriores."
     ],
-    certainty: "Confirmado; final canonico tratado como interpretacao forte."
+    certainty: "Confirmado; final canônico tratado como interpretação forte."
   },
   {
     year: "2013 em diante",
     sortYear: 2013.1,
     title: "Grand Theft Auto Online",
-    city: "Los Santos, Blaine County e expansoes",
+    city: "Los Santos, Blaine County e expansões",
     universe: "HD Universe",
     protagonist: "Personagem criado pelo jogador",
     summary:
-      "Los Santos vira plataforma viva: assaltos, empresas, motoclubes, bunkers, nightclubs, cassino, Cayo Perico, agencias, guerras de drogas, mercenarios e lavagem de dinheiro.",
+      "Los Santos vira plataforma viva: assaltos, empresas, motoclubes, bunkers, nightclubs, cassino, Cayo Perico, agências, guerras de drogas, mercenários e lavagem de dinheiro.",
     beats: [
-      "GTA Online deixa de ser apenas multiplayer e vira cronologia continua.",
+      "GTA Online deixa de ser apenas multiplayer e vira cronologia contínua.",
       "Personagens de GTA V reaparecem em novas fases.",
       "A economia criminal do jogador passa a ser a espinha dorsal."
     ],
-    certainty: "Confirmado como plataforma continua; detalhes de canon variam por atualizacao."
+    certainty: "Confirmado como plataforma contínua; detalhes de canon variam por atualização."
   },
   {
     year: "2026",
@@ -592,13 +594,13 @@ const timelineChronologicalData = [
     universe: "HD Universe",
     protagonist: "Lucia Caminos e Jason Duval",
     summary:
-      "Lucia e Jason entram numa conspiracao criminosa que se espalha por Leonida depois de um servico aparentemente simples dar errado.",
+      "Lucia e Jason entram numa conspiração criminosa que se espalha por Leonida depois de um serviço aparentemente simples dar errado.",
     beats: [
-      "Vice City retorna em versao moderna.",
-      "Leonida e inspirada na Florida.",
-      "Crime moderno, midia social, cultura viral e casal criminoso sao temas provaveis; detalhes de historia alem do material oficial ainda sao nao confirmados."
+      "Vice City retorna em versão moderna.",
+      "Leonida é inspirada na Flórida.",
+      "Crime moderno, mídia social, cultura viral e casal criminoso são temas prováveis; detalhes de história além do material oficial ainda são não confirmados."
     ],
-    certainty: "Data, protagonistas e ambientacao confirmados; trama ampla ainda sob segredo oficial."
+    certainty: "Data, protagonistas e ambientação confirmados; trama ampla ainda sob segredo oficial."
   }
 ];
 
@@ -631,19 +633,19 @@ const gamesData = [
     storyYear: "1997 / continuidade leve",
     universe: "2D Universe",
     city: "Liberty City, San Andreas, Vice City",
-    protagonist: "Avatares selecionaveis",
-    antagonists: ["Chefes criminosos rivais", "Policia local"],
+    protagonist: "Avatares selecionáveis",
+    antagonists: ["Chefes criminosos rivais", "Polícia local"],
     supportingCharacters: ["Samuel Deever", "Bubby", "Uncle Fu", "Brother Marcus"],
     summary:
-      "O primeiro GTA apresenta crime urbano em tres cidades com perspectiva top-down, liberdade caotica e missoes para chefes do submundo.",
+      "O primeiro GTA apresenta crime urbano em três cidades com perspectiva top-down, liberdade caótica e missões para chefes do submundo.",
     fullStory:
-      "A narrativa e fragmentada: o jogador assume um criminoso sem biografia fixa e sobe no submundo aceitando trabalhos, roubando carros e acumulando dinheiro. O foco esta na sensacao de cidade aberta, no risco de perseguidas policiais e na possibilidade de quebrar regras do jogo a favor do jogador.",
+      "A narrativa é fragmentada: o jogador assume um criminoso sem biografia fixa e sobe no submundo aceitando trabalhos, roubando carros e acumulando dinheiro. O foco está na sensação de cidade aberta, no risco de perseguições policiais e na possibilidade de quebrar regras do jogo a favor do jogador.",
     developmentHistory:
-      "Desenvolvido pela DMA Design, nasceu de ideias ligadas a Race'n'Chase. David Jones e Mike Dailly sao os nomes centrais da criacao inicial. O projeto encontrou sua identidade quando a perseguicao, o roubo de carros e a liberdade sistemica ficaram mais interessantes que uma corrida convencional.",
+      "Desenvolvido pela DMA Design, nasceu de ideias ligadas a Race'n'Chase. David Jones e Mike Dailly são os nomes centrais da criação inicial. O projeto encontrou sua identidade quando a perseguição, o roubo de carros e a liberdade sistêmica ficaram mais interessantes que uma corrida convencional.",
     importance:
-      "Estabeleceu o DNA da serie: carros, policia, radio, humor acido, crime e cidades satiricas.",
+      "Estabeleceu o DNA da série: carros, polícia, rádio, humor ácido, crime e cidades satíricas.",
     themes: ["crime urbano", "liberdade", "arcade", "caos"],
-    factions: ["chefes locais", "policia"],
+    factions: ["chefes locais", "polícia"],
     relatedGames: ["GTA: London 1969", "GTA: London 1961", "Grand Theft Auto 2"],
     tags: ["2D Universe", "Top-down", "Origem", "Sandbox"]
   },
@@ -654,21 +656,21 @@ const gamesData = [
     storyYear: 1969,
     universe: "2D Universe",
     city: "London",
-    protagonist: "Avatares selecionaveis",
-    antagonists: ["Crime londrino", "Policia"],
+    protagonist: "Avatares selecionáveis",
+    antagonists: ["Crime londrino", "Polícia"],
     supportingCharacters: ["Harold Cartwright", "Jack Parkinson", "Sid Vacant"],
     summary:
-      "Expansao de GTA 1 ambientada na Londres dos anos 60, com carros, linguagem e atmosfera britanica.",
+      "Expansão de GTA 1 ambientada na Londres dos anos 60, com carros, linguagem e atmosfera britânica.",
     fullStory:
-      "A campanha funciona como variação de GTA 1 em ambiente londrino: o jogador trabalha para figuras do submundo local, sobe em reputacao e atravessa uma cidade estilizada por cultura pop, crime e ironia britanica.",
+      "A campanha funciona como variação de GTA 1 em ambiente londrino: o jogador trabalha para figuras do submundo local, sobe em reputação e atravessa uma cidade estilizada por cultura pop, crime e ironia britânica.",
     developmentHistory:
-      "Criada como mission pack/expansao, mostrou que GTA podia mudar de pais e periodo historico sem abandonar a formula de caos urbano.",
+      "Criada como mission pack/expansão, mostrou que GTA podia mudar de país e período histórico sem abandonar a fórmula de caos urbano.",
     importance:
-      "E uma das poucas vezes em que GTA saiu da satira de cidades americanas.",
-    themes: ["anos 60", "crime britanico", "expansao"],
+      "É uma das poucas vezes em que GTA saiu da sátira de cidades americanas.",
+    themes: ["anos 60", "crime britânico", "expansão"],
     factions: ["gangues londrinas"],
     relatedGames: ["Grand Theft Auto", "GTA: London 1961"],
-    tags: ["2D Universe", "Expansao", "Prequel", "London"]
+    tags: ["2D Universe", "Expansão", "Prequel", "London"]
   },
   {
     id: "london-1961",
@@ -677,41 +679,41 @@ const gamesData = [
     storyYear: 1961,
     universe: "2D Universe",
     city: "London",
-    protagonist: "Avatares selecionaveis",
-    antagonists: ["Gangues locais", "Policia"],
-    supportingCharacters: ["Elenco de chefes da expansao"],
+    protagonist: "Avatares selecionáveis",
+    antagonists: ["Gangues locais", "Polícia"],
+    supportingCharacters: ["Elenco de chefes da expansão"],
     summary:
-      "Expansao adicional para PC, anterior a London 1969 dentro da cronologia.",
+      "Expansão adicional para PC, anterior a London 1969 dentro da cronologia.",
     fullStory:
-      "London 1961 amplia a ideia de crime de epoca com missoes e ambientacao ainda mais retro. A historia permanece leve, mais interessada em estilo e objetivos do que em arco dramatico.",
+      "London 1961 amplia a ideia de crime de época com missões e ambientação ainda mais retrô. A história permanece leve, mais interessada em estilo e objetivos do que em arco dramático.",
     developmentHistory:
-      "Distribuida como complemento para London 1969 no PC, reforcando a fase experimental do primeiro GTA.",
+      "Distribuída como complemento para London 1969 no PC, reforçando a fase experimental do primeiro GTA.",
     importance:
-      "Curiosidade historica importante para a cronologia interna e para a raridade de GTA fora dos EUA.",
+      "Curiosidade histórica importante para a cronologia interna e para a raridade de GTA fora dos EUA.",
     themes: ["anos 60", "Londres", "arcade"],
     factions: ["gangues londrinas"],
     relatedGames: ["Grand Theft Auto", "GTA: London 1969"],
-    tags: ["2D Universe", "Expansao", "Prequel", "Spin-off"]
+    tags: ["2D Universe", "Expansão", "Prequel", "Spin-off"]
   },
   {
     id: "gta-2",
     title: "Grand Theft Auto 2",
     releaseYear: 1999,
-    storyYear: "Nao confirmado / retrofuturista",
+    storyYear: "Não confirmado / retrofuturista",
     universe: "2D Universe",
     city: "Anywhere City",
     protagonist: "Claude Speed",
     antagonists: ["Zaibatsu", "Loonies", "Yakuza", "Scientists", "Rednecks", "Russian Mafia", "Krishna"],
     supportingCharacters: ["Chefes de gangues por distrito"],
     summary:
-      "GTA 2 troca cidades reconheciveis por Anywhere City, um experimento retrofuturista com reputacao entre gangues.",
+      "GTA 2 troca cidades reconhecíveis por Anywhere City, um experimento retrofuturista com reputação entre gangues.",
     fullStory:
-      "Claude Speed trabalha para faccoes rivais em distritos da cidade. Cada contrato aumenta dinheiro e reputacao, mas piora relacoes com inimigos. A historia e menos linear e mais uma matriz de lealdades temporarias, traicoes e controle territorial.",
+      "Claude Speed trabalha para facções rivais em distritos da cidade. Cada contrato aumenta dinheiro e reputação, mas piora relações com inimigos. A história é menos linear e mais uma matriz de lealdades temporárias, traições e controle territorial.",
     developmentHistory:
       "A DMA/Rockstar testou sistemas de gangues mais distintos, visual futurista e comportamento urbano mais responsivo, ainda em top-down.",
     importance:
-      "Funciona como ponte experimental: mantem a estrutura 2D, mas antecipa a importancia de faccoes com identidade propria.",
-    themes: ["retrofuturo", "gangues", "corporacoes", "reputacao"],
+      "Funciona como ponte experimental: mantém a estrutura 2D, mas antecipa a importância de facções com identidade própria.",
+    themes: ["retrofuturo", "gangues", "corporações", "reputação"],
     factions: ["Zaibatsu", "Loonies", "Yakuza", "Scientists", "Rednecks", "Russian Mafia", "Krishna"],
     relatedGames: ["Grand Theft Auto"],
     tags: ["2D Universe", "Experimental", "Spin-off"]
@@ -727,14 +729,14 @@ const gamesData = [
     antagonists: ["Catalina", "Salvatore Leone", "Colombian Cartel"],
     supportingCharacters: ["8-Ball", "Luigi Goterelli", "Joey Leone", "Toni Cipriani", "Maria Latore", "Asuka Kasen", "Kenji Kasen", "Ray Machowski", "Donald Love", "Miguel"],
     summary:
-      "Claude e traido por Catalina, escapa da prisao e atravessa as faccoes de Liberty City em busca de sobrevivencia e vinganca.",
+      "Claude é traído por Catalina, escapa da prisão e atravessa as facções de Liberty City em busca de sobrevivência e vingança.",
     fullStory:
-      "Apos um assalto, Catalina atira em Claude e foge com Miguel. Claude sobrevive, escapa com 8-Ball e passa a trabalhar para a Leone Family. Quando Salvatore tenta elimina-lo, Maria o ajuda a se aproximar da Yakuza. O conflito se espalha por Yardies, Cartel Colombiano, politicos e empresarios ate Claude confrontar Catalina no final.",
+      "Após um assalto, Catalina atira em Claude e foge com Miguel. Claude sobrevive, escapa com 8-Ball e passa a trabalhar para a Leone Family. Quando Salvatore tenta eliminá-lo, Maria o ajuda a se aproximar da Yakuza. O conflito se espalha por Yardies, Cartel Colombiano, políticos e empresários até Claude confrontar Catalina no final.",
     developmentHistory:
-      "GTA III foi a virada para 3D em tempo real. A cidade, as radios, os pedestres, a policia, os veiculos e as missoes passaram a operar num espaco tridimensional coeso.",
+      "GTA III foi a virada para 3D em tempo real. A cidade, as rádios, os pedestres, a polícia, os veículos e as missões passaram a operar num espaço tridimensional coeso.",
     importance:
-      "Redefiniu o genero de mundo aberto urbano e virou referencia estrutural para jogos de acao em terceira pessoa.",
-    themes: ["traicao", "vinganca", "mafia", "cidade aberta"],
+      "Redefiniu o gênero de mundo aberto urbano e virou referência estrutural para jogos de ação em terceira pessoa.",
+    themes: ["traição", "vingança", "máfia", "cidade aberta"],
     factions: ["Leone Family", "Yakuza", "Yardies", "Colombian Cartel", "Diablos"],
     relatedGames: ["Liberty City Stories", "Grand Theft Auto Advance"],
     tags: ["3D Universe", "Marco", "Liberty City"]
@@ -750,17 +752,17 @@ const gamesData = [
     antagonists: ["Sonny Forelli", "Ricardo Diaz", "Lance Vance"],
     supportingCharacters: ["Ken Rosenberg", "Colonel Cortez", "Avery Carrington", "Kent Paul", "Mercedes Cortez", "Umberto Robina", "Phil Cassidy"],
     summary:
-      "Tommy perde dinheiro e drogas numa emboscada, derruba Ricardo Diaz e construi um imperio proprio em Vice City.",
+      "Tommy perde dinheiro e drogas numa emboscada, derruba Ricardo Diaz e construí um império próprio em Vice City.",
     fullStory:
-      "Recem-saido da prisao depois de 15 anos, Tommy e enviado por Sonny Forelli para uma negociacao em Vice City. A operacao da errado. Tommy precisa recuperar a mercadoria, entender quem o traiu e sobreviver ao jogo de cartois, mafiosos e empresarios. Ele toma a mansao de Diaz, compra negocios, consolida poder e, no final, mata Lance e Sonny.",
+      "Recém-saído da prisão depois de 15 anos, Tommy é enviado por Sonny Forelli para uma negociação em Vice City. A operação dá errado. Tommy precisa recuperar a mercadoria, entender quem o traiu e sobreviver ao jogo de cartois, mafiosos e empresários. Ele toma a mansão de Diaz, compra negócios, consolida poder e, no final, mata Lance e Sonny.",
     developmentHistory:
-      "Desenvolvido rapidamente depois de GTA III, Vice City ampliou voz, radio, personalidade de protagonista e atmosfera. A inspiracao em cinema criminal dos anos 80 e cultura de Miami moldou o tom.",
+      "Desenvolvido rapidamente depois de GTA III, Vice City ampliou voz, rádio, personalidade de protagonista e atmosfera. A inspiração em cinema criminal dos anos 80 e cultura de Miami moldou o tom.",
     importance:
-      "Transformou ambientacao em assinatura. Vice City e lembrado tanto por historia quanto por musica, neon, figurino e humor.",
-    themes: ["anos 80", "neon", "drogas", "imperio criminal"],
+      "Transformou ambientação em assinatura. Vice City é lembrado tanto por história quanto por música, neon, figurino e humor.",
+    themes: ["anos 80", "neon", "drogas", "império criminal"],
     factions: ["Forelli Family", "Diaz Organization", "Vance Crime Family", "Cubans", "Haitians"],
     relatedGames: ["Vice City Stories", "GTA VI"],
-    tags: ["3D Universe", "Prequel relacionado", "Vice City", "Classico"]
+    tags: ["3D Universe", "Prequel relacionado", "Vice City", "Clássico"]
   },
   {
     id: "san-andreas",
@@ -773,17 +775,17 @@ const gamesData = [
     antagonists: ["Frank Tenpenny", "Big Smoke", "Ryder", "Eddie Pulaski"],
     supportingCharacters: ["Sweet Johnson", "Kendl Johnson", "Cesar Vialpando", "Woozie", "Mike Toreno", "The Truth", "Madd Dogg", "Zero", "OG Loc", "Catalina"],
     summary:
-      "CJ retorna a Los Santos, descobre traicoes e reconquista poder cruzando Los Santos, San Fierro, deserto e Las Venturas.",
+      "CJ retorna a Los Santos, descobre traições e reconquista poder cruzando Los Santos, San Fierro, deserto e Las Venturas.",
     fullStory:
-      "A morte de Beverly Johnson traz CJ de volta. Grove Street esta fraca, Sweet desconfia do irmao e C.R.A.S.H. usa CJ como instrumento. A traicao de Big Smoke e Ryder revela ligacoes com drogas e corrupcao. CJ e exilado, construiu negocios, aliados e habilidades em todo o estado, retorna a Los Santos e fecha a historia contra Big Smoke e Tenpenny.",
+      "A morte de Beverly Johnson traz CJ de volta. Grove Street está fraca, Sweet desconfia do irmão e C.R.A.S.H. usa CJ como instrumento. A traição de Big Smoke e Ryder revela ligações com drogas e corrupção. CJ é exilado, construiu negócios, aliados e habilidades em todo o estado, retorna a Los Santos e fecha a história contra Big Smoke e Tenpenny.",
     developmentHistory:
-      "San Andreas expande tudo: mapa com tres cidades, campo, deserto, academias, gordura, musculatura, roupas, habilidades, territorio, avioes e RPG leve.",
+      "San Andreas expande tudo: mapa com três cidades, campo, deserto, academias, gordura, musculatura, roupas, habilidades, território, aviões e RPG leve.",
     importance:
-      "E o apice de ambicao da era 3D e um dos jogos mais influentes da geracao PS2.",
-    themes: ["familia", "gangues", "corrupcao policial", "territorio", "redencao"],
+      "É o ápice de ambição da era 3D e um dos jogos mais influentes da geração PS2.",
+    themes: ["família", "gangues", "corrupção policial", "território", "redenção"],
     factions: ["Grove Street Families", "Ballas", "Los Santos Vagos", "Varrios Los Aztecas", "San Fierro Rifa", "Da Nang Boys", "C.R.A.S.H."],
     relatedGames: ["GTA V", "GTA Online"],
-    tags: ["3D Universe", "Estado", "Gangues", "Classico"]
+    tags: ["3D Universe", "Estado", "Gangues", "Clássico"]
   },
   {
     id: "gta-advance",
@@ -796,17 +798,17 @@ const gamesData = [
     antagonists: ["Vinnie", "Cisco", "King Courtney"],
     supportingCharacters: ["8-Ball", "Misty", "Asuka Kasen"],
     summary:
-      "Mike tenta sair da vida criminal com Vinnie, mas uma explosao e uma traicao o jogam numa vinganca em Liberty City.",
+      "Mike tenta sair da vida criminal com Vinnie, mas uma explosão e uma traição o jogam numa vingança em Liberty City.",
     fullStory:
-      "Mike e Vinnie planejam abandonar Liberty City com dinheiro, mas Vinnie aparentemente morre numa explosao. Mike busca responsaveis e trabalha para figuras locais, ate descobrir que a historia era uma manipulacao. O final reforca o tema de fuga impossivel da cidade.",
+      "Mike e Vinnie planejam abandonar Liberty City com dinheiro, mas Vinnie aparentemente morre numa explosão. Mike busca responsáveis e trabalha para figuras locais, até descobrir que a história era uma manipulação. O final reforça o tema de fuga impossível da cidade.",
     developmentHistory:
       "Desenvolvido para Game Boy Advance, adapta Liberty City a uma leitura top-down conectada ao universo 3D.",
     importance:
-      "Curioso por unir portatil, camera classica e continuidade de GTA III.",
-    themes: ["vinganca", "traicao", "prequel"],
+      "Curioso por unir portátil, câmera clássica e continuidade de GTA III.",
+    themes: ["vingança", "traição", "prequel"],
     factions: ["Yakuza", "Yardies", "Uptown Yardies", "cartel local"],
     relatedGames: ["GTA III"],
-    tags: ["3D Universe", "Prequel", "Spin-off", "Portatil"]
+    tags: ["3D Universe", "Prequel", "Spin-off", "Portátil"]
   },
   {
     id: "liberty-city-stories",
@@ -819,14 +821,14 @@ const gamesData = [
     antagonists: ["Sindacco Family", "Forelli Family", "Sicilian Mafia"],
     supportingCharacters: ["Salvatore Leone", "Maria Latore", "Donald Love", "Ma Cipriani", "Vincenzo Cilli"],
     summary:
-      "Toni volta a Liberty City e ajuda Salvatore Leone a vencer guerras de mafia, politica e territorio.",
+      "Toni volta a Liberty City e ajuda Salvatore Leone a vencer guerras de máfia, política e território.",
     fullStory:
-      "Depois de um periodo fora, Toni retorna e tenta recuperar posicao na familia Leone. Ele lida com ordens humilhantes, rivais italianos, interesses politicos de Donald Love e disputas que preparam o tabuleiro de GTA III.",
+      "Depois de um período fora, Toni retorna e tenta recuperar posição na família Leone. Ele lida com ordens humilhantes, rivais italianos, interesses políticos de Donald Love e disputas que preparam o tabuleiro de GTA III.",
     developmentHistory:
-      "Originalmente criado para PSP, reutiliza Liberty City com nova epoca, novas missoes e refinamentos tecnicos.",
+      "Originalmente criado para PSP, reutiliza Liberty City com nova época, novas missões e refinamentos técnicos.",
     importance:
       "Aprofunda a mitologia da Leone Family e mostra Liberty antes de Claude.",
-    themes: ["mafia", "lealdade", "politica", "prequel"],
+    themes: ["máfia", "lealdade", "política", "prequel"],
     factions: ["Leone Family", "Sindacco Family", "Forelli Family", "Sicilian Mafia"],
     relatedGames: ["GTA III"],
     tags: ["3D Universe", "Prequel", "Liberty City"]
@@ -842,14 +844,14 @@ const gamesData = [
     antagonists: ["Jerry Martinez", "Armando Mendez", "Diego Mendez"],
     supportingCharacters: ["Lance Vance", "Louise Cassidy-Williams", "Phil Cassidy", "Ricardo Diaz", "Umberto Robina"],
     summary:
-      "Vic Vance e expulso do exercito e empurrado para uma guerra criminal que antecede os eventos de Vice City.",
+      "Vic Vance é expulso do exército e empurrado para uma guerra criminal que antecede os eventos de Vice City.",
     fullStory:
-      "Vic tenta proteger sua familia, mas Jerry Martinez o usa em esquemas ilegais. Ao lado de Lance, ele monta negocios em Vice City, enfrenta a familia Mendez e cruza com figuras que reaparecem em 1986. A tragedia e que o destino de Vic no inicio de Vice City ja e conhecido.",
+      "Vic tenta proteger sua família, mas Jerry Martinez o usa em esquemas ilegais. Ao lado de Lance, ele monta negócios em Vice City, enfrenta a família Mendez e cruza com figuras que reaparecem em 1986. A tragédia é que o destino de Vic no início de Vice City já é conhecido.",
     developmentHistory:
-      "Segundo grande prequel portatil da era 3D, expande sistema de negocios e territorio em Vice City.",
+      "Segundo grande prequel portátil da era 3D, expande sistema de negócios e território em Vice City.",
     importance:
-      "Da contexto ao passado dos Vance e a paisagem criminal anterior a Tommy.",
-    themes: ["familia", "corrupcao militar", "drogas", "prequel"],
+      "Dá contexto ao passado dos Vance e à paisagem criminal anterior a Tommy.",
+    themes: ["família", "corrupção militar", "drogas", "prequel"],
     factions: ["Vance Crime Family", "Mendez Cartel", "Diaz Organization"],
     relatedGames: ["Vice City"],
     tags: ["3D Universe", "Prequel", "Vice City"]
@@ -865,14 +867,14 @@ const gamesData = [
     antagonists: ["Dimitri Rascalov", "Mikhail Faustin", "Ray Bulgarin", "Jimmy Pegorino"],
     supportingCharacters: ["Roman Bellic", "Little Jacob", "Brucie Kibbutz", "Mallorie Bardas", "Packie McReary", "Kate McReary", "Phil Bell", "United Liberty Paper contact"],
     summary:
-      "Niko chega aos EUA procurando futuro e vinganca, mas encontra dividas, mentiras, mafias e o colapso moral do sonho americano.",
+      "Niko chega aos EUA procurando futuro e vingança, mas encontra dívidas, mentiras, máfias e o colapso moral do sonho americano.",
     fullStory:
-      "Roman vende uma fantasia de sucesso; Niko encontra um taxi, agiotas e violencia. Trabalhos para gangues jamaicanas, mafias russas, familias irlandesas, italianos e agentes federais levam Niko ate homens ligados a seu trauma de guerra. O jogo culmina em escolhas que cobram preco pessoal, seja por vinganca ou acordo.",
+      "Roman vende uma fantasia de sucesso; Niko encontra um táxi, agiotas e violência. Trabalhos para gangues jamaicanas, máfias russas, famílias irlandesas, italianos e agentes federais levam Niko até homens ligados a seu trauma de guerra. O jogo culmina em escolhas que cobram preço pessoal, seja por vingança ou acordo.",
     developmentHistory:
-      "Primeira GTA da era HD, usando RAGE e animacao Euphoria. A Rockstar reposicionou o tom para drama criminal realista.",
+      "Primeira GTA da era HD, usando RAGE e animação Euphoria. A Rockstar reposicionou o tom para drama criminal realista.",
     importance:
-      "Mostrou que GTA podia ser mais dramatico, denso e politicamente amargo sem perder satira.",
-    themes: ["imigracao", "trauma", "capitalismo", "vinganca"],
+      "Mostrou que GTA podia ser mais dramático, denso e politicamente amargo sem perder sátira.",
+    themes: ["imigração", "trauma", "capitalismo", "vingança"],
     factions: ["Russian Mafia", "McReary Family", "Pegorino Family", "LCPD", "agentes federais"],
     relatedGames: ["The Lost and Damned", "The Ballad of Gay Tony", "Chinatown Wars"],
     tags: ["HD Universe", "Liberty City", "Realismo"]
@@ -888,17 +890,17 @@ const gamesData = [
     antagonists: ["Billy Grey", "Ray Boccino", "Angels of Death"],
     supportingCharacters: ["Ashley Butler", "Jim Fitzgerald", "Brian Jeremy", "Terry Thorpe", "Clay Simons"],
     summary:
-      "A historia de Johnny no The Lost MC mostra um motoclube ruindo por vicio, orgulho e traicao interna.",
+      "A história de Johnny no The Lost MC mostra um motoclube ruindo por vício, orgulho e traição interna.",
     fullStory:
-      "Johnny tenta administrar The Lost com algum pragmatismo enquanto Billy Grey retorna e reinicia guerras. O clube se divide, negocios com drogas e diamantes cruzam a historia de GTA IV e a lealdade de Johnny e esmagada por uma cultura de autodestruicao.",
+      "Johnny tenta administrar The Lost com algum pragmatismo enquanto Billy Grey retorna e reinicia guerras. O clube se divide, negócios com drogas e diamantes cruzam a história de GTA IV e a lealdade de Johnny é esmagada por uma cultura de autodestruição.",
     developmentHistory:
-      "Primeiro episodio de GTA IV, criado para mostrar a mesma cidade por outra classe social e criminal.",
+      "Primeiro episódio de GTA IV, criado para mostrar a mesma cidade por outra classe social e criminal.",
     importance:
-      "Aprofunda a tecnica narrativa de perspectivas cruzadas na era HD.",
-    themes: ["motoclube", "lealdade", "decadencia", "vicio"],
+      "Aprofunda a técnica narrativa de perspectivas cruzadas na era HD.",
+    themes: ["motoclube", "lealdade", "decadência", "vício"],
     factions: ["The Lost MC", "Angels of Death", "Pegorino Family"],
     relatedGames: ["GTA IV", "The Ballad of Gay Tony", "GTA V"],
-    tags: ["HD Universe", "Expansao", "Motoclube"]
+    tags: ["HD Universe", "Expansão", "Motoclube"]
   },
   {
     id: "chinatown-wars",
@@ -911,17 +913,17 @@ const gamesData = [
     antagonists: ["Wu 'Kenny' Lee", "Rival Triads"],
     supportingCharacters: ["Hsin Jaoming", "Wade Heston", "Zhou Ming", "Chan Jaoming"],
     summary:
-      "Huang Lee chega com a espada Yu Jian, e uma traicao familiar o coloca numa guerra por honra e poder entre Triads.",
+      "Huang Lee chega com a espada Yu Jian, e uma traição familiar o coloca numa guerra por honra e poder entre Triads.",
     fullStory:
-      "Apos o assassinato do pai, Huang deve entregar a espada ancestral ao tio Kenny. Ele e atacado, dado como morto e mergulha em investigacoes, trafico e jogos de lealdade. A revelacao final transforma a busca por honra em acerto de contas familiar.",
+      "Após o assassinato do pai, Huang deve entregar a espada ancestral ao tio Kenny. Ele é atacado, dado como morto e mergulha em investigações, tráfico e jogos de lealdade. A revelação final transforma a busca por honra em acerto de contas familiar.",
     developmentHistory:
-      "Criado para Nintendo DS e depois levado a outras plataformas, adapta Liberty City HD a uma estetica top-down moderna.",
+      "Criado para Nintendo DS e depois levado a outras plataformas, adapta Liberty City HD a uma estética top-down moderna.",
     importance:
-      "Mantem a era HD ativa fora dos consoles de mesa e explora Triads com foco proprio.",
-    themes: ["honra", "familia", "drogas", "traicao"],
+      "Mantém a era HD ativa fora dos consoles de mesa e explora Triads com foco próprio.",
+    themes: ["honra", "família", "drogas", "traição"],
     factions: ["Triads", "LCPD", "FIB"],
     relatedGames: ["GTA IV"],
-    tags: ["HD Universe", "Spin-off", "Portatil"]
+    tags: ["HD Universe", "Spin-off", "Portátil"]
   },
   {
     id: "ballad-gay-tony",
@@ -934,17 +936,17 @@ const gamesData = [
     antagonists: ["Ray Bulgarin", "Rocco Pelosi", "Mori Kibbutz"],
     supportingCharacters: ["Tony Prince", "Yusuf Amir", "Armando Torres", "Henrique Bardas", "Gay Tony's club network"],
     summary:
-      "Luis tenta salvar Tony Prince e seus clubes enquanto diamantes, celebridades, mafias e bilionarios puxam Liberty para o excesso.",
+      "Luis tenta salvar Tony Prince e seus clubes enquanto diamantes, celebridades, máfias e bilionários puxam Liberty para o excesso.",
     fullStory:
-      "Luis divide lealdade entre amigos de bairro e a vida noturna de Tony. Dividas, chantagens e negocios com diamantes levam a confrontos com Bulgarin e outros predadores. O episodio contrasta glamour e perigo, encerrando a trilogia de perspectivas de GTA IV.",
+      "Luis divide lealdade entre amigos de bairro e a vida noturna de Tony. Dívidas, chantagens e negócios com diamantes levam a confrontos com Bulgarin e outros predadores. O episódio contrasta glamour e perigo, encerrando a trilogia de perspectivas de GTA IV.",
     developmentHistory:
-      "Segundo episodio de GTA IV, deliberadamente mais colorido, explosivo e luxuoso que o jogo base.",
+      "Segundo episódio de GTA IV, deliberadamente mais colorido, explosivo e luxuoso que o jogo base.",
     importance:
-      "Completa o mosaico de Liberty City e mostra como a mesma conspiracao de diamantes afeta varios protagonistas.",
+      "Completa o mosaico de Liberty City e mostra como a mesma conspiração de diamantes afeta vários protagonistas.",
     themes: ["vida noturna", "luxo", "lealdade", "diamantes"],
     factions: ["clubes de Tony", "Russian Mafia", "Ancelotti connections"],
     relatedGames: ["GTA IV", "The Lost and Damned"],
-    tags: ["HD Universe", "Expansao", "Vida noturna"]
+    tags: ["HD Universe", "Expansão", "Vida noturna"]
   },
   {
     id: "gta-v",
@@ -957,17 +959,17 @@ const gamesData = [
     antagonists: ["Devin Weston", "Steve Haines", "Wei Cheng", "Stretch", "Merryweather"],
     supportingCharacters: ["Lester Crest", "Lamar Davis", "Amanda De Santa", "Jimmy De Santa", "Tracey De Santa", "Dave Norton", "Martin Madrazo", "Ron Jakowski", "Wade Hebert"],
     summary:
-      "Tres criminosos se unem em assaltos enquanto FIB, IAA, Merryweather, empresarios e gangues locais tentam usa-los ou elimina-los.",
+      "Três criminosos se unem em assaltos enquanto FIB, IAA, Merryweather, empresários e gangues locais tentam usá-los ou eliminá-los.",
     fullStory:
-      "Em 2004, um assalto em North Yankton separa Michael, Trevor e Brad. Em 2013, Michael vive protegido em Los Santos, Franklin tenta sair do crime de rua e Trevor descobre que Michael esta vivo. Lester estrutura assaltos, o FIB chantageia o trio, Devin Weston explora Franklin e antigos inimigos voltam. A Opcao C e a conclusao mais aceita: os tres sobrevivem e eliminam ameaças centrais.",
+      "Em 2004, um assalto em North Yankton separa Michael, Trevor e Brad. Em 2013, Michael vive protegido em Los Santos, Franklin tenta sair do crime de rua e Trevor descobre que Michael está vivo. Lester estrutura assaltos, o FIB chantageia o trio, Devin Weston explora Franklin e antigos inimigos voltam. A Opção C é a conclusão mais aceita: os três sobrevivem e eliminam ameaças centrais.",
     developmentHistory:
-      "GTA V traz tres protagonistas jogaveis, mapa amplo, assaltos planejados e uma Los Santos satirica da cultura de celebridade, tecnologia e desigualdade.",
+      "GTA V traz três protagonistas jogáveis, mapa amplo, assaltos planejados e uma Los Santos satírica da cultura de celebridade, tecnologia e desigualdade.",
     importance:
-      "Fenomeno comercial duradouro e base para GTA Online.",
-    themes: ["assaltos", "familia", "midia", "capitalismo", "amizade toxica"],
+      "Fenômeno comercial duradouro e base para GTA Online.",
+    themes: ["assaltos", "família", "mídia", "capitalismo", "amizade tóxica"],
     factions: ["FIB", "IAA", "Merryweather", "Families", "Ballas", "Vagos", "Madrazo Cartel"],
     relatedGames: ["GTA Online"],
-    tags: ["HD Universe", "Tres protagonistas", "Los Santos"]
+    tags: ["HD Universe", "Três protagonistas", "Los Santos"]
   },
   {
     id: "gta-online",
@@ -975,19 +977,19 @@ const gamesData = [
     releaseYear: 2013,
     storyYear: "2013 em diante",
     universe: "HD Universe",
-    city: "Los Santos, Blaine County, Cayo Perico e instancias",
+    city: "Los Santos, Blaine County, Cayo Perico e instâncias",
     protagonist: "Personagem criado pelo jogador",
     antagonists: ["Merryweather", "FIB", "IAA", "El Rubio", "Duggans", "criminosos rivais"],
     supportingCharacters: ["Lamar Davis", "Lester Crest", "Agent 14", "Tony Prince", "Franklin Clinton", "Dr. Dre", "Dax", "Martin Madrazo", "Imani"],
     summary:
-      "GTA Online transforma Los Santos em uma carreira criminal persistente com assaltos, empresas e atualizacoes narrativas.",
+      "GTA Online transforma Los Santos em uma carreira criminal persistente com assaltos, empresas e atualizações narrativas.",
     fullStory:
-      "O jogador chega como criminoso desconhecido e passa de trabalhos de rua a CEO, presidente de motoclube, dono de bunker, operador de cassino, infiltrado em Cayo Perico, socio de agencia, produtor de nightclubs e figura de lavagem de dinheiro. A historia e menos linear e mais uma acumulacao de status, contatos e infraestrutura criminal.",
+      "O jogador chega como criminoso desconhecido e passa de trabalhos de rua a CEO, presidente de motoclube, dono de bunker, operador de cassino, infiltrado em Cayo Perico, sócio de agência, produtor de nightclubs e figura de lavagem de dinheiro. A história é menos linear e mais uma acumulação de status, contatos e infraestrutura criminal.",
     developmentHistory:
-      "Lançado semanas apos GTA V, cresceu por atualizacoes regulares e virou plataforma de longa duracao.",
+      "Lançado semanas após GTA V, cresceu por atualizações regulares e virou plataforma de longa duração.",
     importance:
-      "Mudou a economia da franquia e manteve GTA V culturalmente ativo por mais de uma decada.",
-    themes: ["plataforma viva", "assaltos", "negocios", "economia criminal"],
+      "Mudou a economia da franquia e manteve GTA V culturalmente ativo por mais de uma década.",
+    themes: ["plataforma viva", "assaltos", "negócios", "economia criminal"],
     factions: ["organizações de jogadores", "MCs", "CEOs", "Agencies", "Nightclubs", "Bunkers", "Arcades", "Auto Shops"],
     relatedGames: ["GTA V"],
     tags: ["HD Universe", "Online", "Plataforma viva"]
@@ -1003,17 +1005,17 @@ const gamesData = [
     antagonists: ["Catalina", "Sonny Forelli", "Tenpenny", "Big Smoke"],
     supportingCharacters: ["Elencos de GTA III, Vice City e San Andreas"],
     summary:
-      "Coletanea remasterizada dos tres pilares da era 3D.",
+      "Coletânea remasterizada dos três pilares da era 3D.",
     fullStory:
-      "Nao e uma historia nova, mas uma nova edicao de GTA III, Vice City e San Andreas. Serve como porta de entrada moderna para a continuidade 3D e suas tres narrativas centrais.",
+      "Não é uma história nova, mas uma nova edição de GTA III, Vice City e San Andreas. Serve como porta de entrada moderna para a continuidade 3D e suas três narrativas centrais.",
     developmentHistory:
-      "Lancada como remasterizacao. Recebeu criticas no lancamento por problemas tecnicos e visuais, com correcoes posteriores.",
+      "Lançada como remasterização. Recebeu críticas no lançamento por problemas técnicos e visuais, com correções posteriores.",
     importance:
-      "Mantem a trilogia classica acessivel, embora tambem seja lembrada por controversias de preservacao e qualidade.",
-    themes: ["preservacao", "remaster", "era 3D"],
+      "Mantém a trilogia clássica acessível, embora também seja lembrada por controvérsias de preservação e qualidade.",
+    themes: ["preservação", "remaster", "era 3D"],
     factions: ["Leone Family", "Forelli Family", "Grove Street Families", "C.R.A.S.H."],
     relatedGames: ["GTA III", "Vice City", "San Andreas"],
-    tags: ["3D Universe", "Remaster", "Coletanea"]
+    tags: ["3D Universe", "Remaster", "Coletânea"]
   },
   {
     id: "gta-vi",
@@ -1023,20 +1025,20 @@ const gamesData = [
     universe: "HD Universe",
     city: "Leonida, Vice City",
     protagonist: "Lucia Caminos e Jason Duval",
-    antagonists: ["Nao confirmado"],
+    antagonists: ["Não confirmado"],
     supportingCharacters: ["Cal Hampton", "Boobie Ike", "Dre'Quan Priest", "Real Dimez", "Raul Bautista", "Brian Heder", "Lori Heder"],
     summary:
-      "Lucia e Jason dependem um do outro depois que um servico da errado e os joga numa conspiracao em Leonida.",
+      "Lucia e Jason dependem um do outro depois que um serviço dá errado e os joga numa conspiração em Leonida.",
     fullStory:
       "Jason e Lucia, um casal no estilo Bonnie & Clyde, veem um assalto a banco dar errado e caem numa conspiração que atravessa o estado de Leonida — do neon de Vice City aos Keys, pântanos de Grassrivers e usinas de Ambrosia. O Extended Look (27/08/2026) mostrou a abertura com um carregamento ligado a Boobie Ike, a rotina do casal no refúgio, assaltos com escolhas de risco e a polícia montando o perfil dos dois. Antagonistas e capítulos seguem sob sigilo.",
     developmentHistory:
       "Confirmado em fevereiro de 2022, revelado com o Trailer 1 em dezembro de 2023, adiado duas vezes e mostrado em 26 minutos de gameplay em 27 de agosto de 2026 (estreia na Netflix). Sem microtransações no single-player e sem IA generativa, segundo o Rockstar North. Lançamento em 19 de novembro de 2026 para PlayStation 5 e Xbox Series X|S, com pré-load em 12 de novembro.",
     importance:
-      "Proximo capitulo principal da serie e retorno de Vice City em escala moderna.",
-    themes: ["Leonida", "Vice City moderna", "casal criminoso", "redes sociais", "sátira contemporanea"],
+      "Próximo capítulo principal da série e retorno de Vice City em escala moderna.",
+    themes: ["Leonida", "Vice City moderna", "casal criminoso", "redes sociais", "sátira contemporânea"],
     factions: ["Final Chapter MC (moto clube de Ambrosia)", "PTT Youngin$", "Only Raw Records", "polícia de Leonida"],
     relatedGames: ["GTA Vice City", "Vice City Stories", "GTA Online"],
-    tags: ["HD Universe", "GTA VI", "Fatos confirmados", "Extended Look", "Nao lancado"]
+    tags: ["HD Universe", "GTA VI", "Fatos confirmados", "Extended Look", "Não lançado"]
   }
 ];
 
@@ -1050,14 +1052,14 @@ const charactersData = [
     city: "Liberty City",
     role: "Protagonista",
     category: "Protagonistas",
-    biography: "Criminoso lacônico traido por Catalina durante um assalto em Liberty City. Sua falta de fala o transforma em figura quase fantasma dentro da cidade.",
-    storyArc: "Sobrevive a traicao, trabalha para varias faccoes e fecha sua vinganca contra Catalina.",
-    relationships: ["Catalina: ex-parceira e traidora", "8-Ball: aliado inicial", "Maria Latore: conexao com a Yakuza", "Asuka Kasen: patrona temporaria"],
+    biography: "Criminoso lacônico traído por Catalina durante um assalto em Liberty City. Sua falta de fala o transforma em figura quase fantasma dentro da cidade.",
+    storyArc: "Sobrevive à traição, trabalha para várias facções e fecha sua vingança contra Catalina.",
+    relationships: ["Catalina: ex-parceira e traidora", "8-Ball: aliado inicial", "Maria Latore: conexão com a Yakuza", "Asuka Kasen: patrona temporária"],
     affiliations: ["Leone Family", "Yakuza", "Yardies", "trabalhos independentes"],
     enemies: ["Catalina", "Colombian Cartel", "Salvatore Leone"],
-    fate: "Vivo ao final de GTA III; paradeiro posterior nao confirmado.",
+    fate: "Vivo ao final de GTA III; paradeiro posterior não confirmado.",
     importance: "Principal",
-    tags: ["protagonista", "vinganca", "silencioso"]
+    tags: ["protagonista", "vingança", "silencioso"]
   },
   {
     id: "tommy-vercetti",
@@ -1068,14 +1070,14 @@ const charactersData = [
     city: "Vice City",
     role: "Protagonista",
     category: "Protagonistas",
-    biography: "Ex-soldado da Forelli Family que passa 15 anos preso e volta como emissario de Sonny Forelli em Vice City.",
-    storyArc: "Transforma uma emboscada em oportunidade: derruba Diaz, compra negocios e vira chefe independente.",
+    biography: "Ex-soldado da Forelli Family que passa 15 anos preso e volta como emissário de Sonny Forelli em Vice City.",
+    storyArc: "Transforma uma emboscada em oportunidade: derruba Diaz, compra negócios e vira chefe independente.",
     relationships: ["Sonny Forelli: antigo chefe e inimigo final", "Ken Rosenberg: advogado e aliado", "Lance Vance: aliado que se torna traidor", "Ricardo Diaz: alvo de golpe"],
-    affiliations: ["Forelli Family", "Vercetti Estate", "negocios de Vice City"],
+    affiliations: ["Forelli Family", "Vercetti Estate", "negócios de Vice City"],
     enemies: ["Sonny Forelli", "Ricardo Diaz", "Lance Vance"],
     fate: "Vivo e dominante em Vice City ao final do jogo.",
     importance: "Principal",
-    tags: ["protagonista", "mafia", "imperio", "Vice City"]
+    tags: ["protagonista", "máfia", "império", "Vice City"]
   },
   {
     id: "cj",
@@ -1086,14 +1088,14 @@ const charactersData = [
     city: "Los Santos",
     role: "Protagonista",
     category: "Protagonistas",
-    biography: "Membro da Grove Street Families que volta de Liberty City apos a morte da mae.",
-    storyArc: "Sai de suspeito e filho ausente para lideranca capaz de recuperar a Grove e vencer Tenpenny.",
-    relationships: ["Sweet Johnson: irmao e lider da Grove", "Kendl Johnson: irma", "Cesar Vialpando: aliado e cunhado", "Big Smoke e Ryder: amigos traidores"],
+    biography: "Membro da Grove Street Families que volta de Liberty City após a morte da mãe.",
+    storyArc: "Sai de suspeito e filho ausente para liderança capaz de recuperar a Grove e vencer Tenpenny.",
+    relationships: ["Sweet Johnson: irmão e líder da Grove", "Kendl Johnson: irmã", "Cesar Vialpando: aliado e cunhado", "Big Smoke e Ryder: amigos traidores"],
     affiliations: ["Grove Street Families", "Cesar's garage", "Four Dragons Casino"],
     enemies: ["Frank Tenpenny", "Big Smoke", "Ryder", "Ballas"],
     fate: "Vivo ao final de San Andreas.",
     importance: "Principal",
-    tags: ["protagonista", "gangue", "familia", "redencao"]
+    tags: ["protagonista", "gangue", "família", "redenção"]
   },
   {
     id: "mike",
@@ -1104,14 +1106,14 @@ const charactersData = [
     city: "Liberty City",
     role: "Protagonista",
     category: "Protagonistas",
-    biography: "Parceiro de Vinnie que tenta fugir da cidade antes de ser preso numa trama de traicao.",
-    storyArc: "Busca vinganca pela morte aparente de Vinnie e descobre que foi manipulado.",
-    relationships: ["Vinnie: parceiro e traidor", "8-Ball: contato", "Cisco: aliado/rival em negocios"],
+    biography: "Parceiro de Vinnie que tenta fugir da cidade antes de ser preso numa trama de traição.",
+    storyArc: "Busca vingança pela morte aparente de Vinnie e descobre que foi manipulado.",
+    relationships: ["Vinnie: parceiro e traidor", "8-Ball: contato", "Cisco: aliado/rival em negócios"],
     affiliations: ["trabalhos independentes", "contatos locais"],
     enemies: ["Vinnie", "criminosos rivais"],
     fate: "Sobrevive e deixa Liberty City com destino incerto.",
     importance: "Principal",
-    tags: ["protagonista", "prequel", "vinganca"]
+    tags: ["protagonista", "prequel", "vingança"]
   },
   {
     id: "toni-cipriani",
@@ -1122,14 +1124,14 @@ const charactersData = [
     city: "Liberty City",
     role: "Protagonista / mafioso",
     category: "Protagonistas",
-    biography: "Soldado da Leone Family, leal a Salvatore e constantemente diminuido pela propria mae.",
+    biography: "Soldado da Leone Family, leal a Salvatore e constantemente diminuído pela própria mãe.",
     storyArc: "Em LCS sobe na hierarquia e ajuda os Leone a vencer rivais; em GTA III aparece como capo estabelecido.",
-    relationships: ["Salvatore Leone: chefe", "Ma Cipriani: mae critica", "Claude: executor temporario"],
+    relationships: ["Salvatore Leone: chefe", "Ma Cipriani: mãe crítica", "Claude: executor temporário"],
     affiliations: ["Leone Family"],
     enemies: ["Sindacco Family", "Forelli Family", "Yakuza"],
-    fate: "Vivo em GTA III; futuro posterior nao confirmado.",
+    fate: "Vivo em GTA III; futuro posterior não confirmado.",
     importance: "Principal",
-    tags: ["protagonista", "mafia", "Leone"]
+    tags: ["protagonista", "máfia", "Leone"]
   },
   {
     id: "vic-vance",
@@ -1140,14 +1142,14 @@ const charactersData = [
     city: "Vice City",
     role: "Protagonista",
     category: "Protagonistas",
-    biography: "Militar expulso por manipulacao de Jerry Martinez, tentando sustentar a familia e proteger o irmao doente.",
-    storyArc: "Constroi um imperio com Lance, enfrenta os Mendez e fica marcado pela tragedia que abre Vice City.",
-    relationships: ["Lance Vance: irmao e parceiro", "Jerry Martinez: corruptor", "Louise Cassidy-Williams: relacao tragica"],
-    affiliations: ["Vance Crime Family", "exercito dos EUA"],
+    biography: "Militar expulso por manipulação de Jerry Martinez, tentando sustentar a família e proteger o irmão doente.",
+    storyArc: "Constrói um império com Lance, enfrenta os Mendez e fica marcado pela tragédia que abre Vice City.",
+    relationships: ["Lance Vance: irmão e parceiro", "Jerry Martinez: corruptor", "Louise Cassidy-Williams: relação trágica"],
+    affiliations: ["Vance Crime Family", "exército dos EUA"],
     enemies: ["Jerry Martinez", "Armando Mendez", "Diego Mendez"],
     fate: "Morto na emboscada inicial de Vice City em 1986.",
     importance: "Principal",
-    tags: ["protagonista", "familia", "Vice City", "prequel"]
+    tags: ["protagonista", "família", "Vice City", "prequel"]
   },
   {
     id: "niko-bellic",
@@ -1158,14 +1160,14 @@ const charactersData = [
     city: "Liberty City",
     role: "Protagonista",
     category: "Protagonistas",
-    biography: "Veterano de guerra do Leste Europeu que chega a Liberty City atras de Roman, dinheiro e respostas sobre uma traicao do passado.",
-    storyArc: "Descobre que o sonho americano e propaganda, e que vinganca nao resolve o trauma.",
-    relationships: ["Roman Bellic: primo", "Little Jacob: aliado leal", "Packie McReary: parceiro", "Kate McReary: possivel par romantico", "Dimitri Rascalov: traidor"],
+    biography: "Veterano de guerra do Leste Europeu que chega a Liberty City atrás de Roman, dinheiro e respostas sobre uma traição do passado.",
+    storyArc: "Descobre que o sonho americano é propaganda, e que vingança não resolve o trauma.",
+    relationships: ["Roman Bellic: primo", "Little Jacob: aliado leal", "Packie McReary: parceiro", "Kate McReary: possível par romântico", "Dimitri Rascalov: traidor"],
     affiliations: ["trabalhos independentes", "McReary Family", "Pegorino Family"],
     enemies: ["Dimitri Rascalov", "Ray Bulgarin", "Darko Brevic", "Jimmy Pegorino"],
     fate: "Sobrevive; perdas variam conforme escolha final.",
     importance: "Principal",
-    tags: ["protagonista", "imigracao", "trauma", "noir"]
+    tags: ["protagonista", "imigração", "trauma", "noir"]
   },
   {
     id: "johnny-klebitz",
@@ -1177,13 +1179,13 @@ const charactersData = [
     role: "Protagonista",
     category: "Protagonistas",
     biography: "Vice-presidente do The Lost MC, mais estrategista que Billy Grey, mas preso a lealdades destrutivas.",
-    storyArc: "Tenta salvar o clube em Liberty City; em GTA V aparece destruido por vicio e dependencia emocional.",
-    relationships: ["Billy Grey: lider e rival", "Ashley Butler: relacao toxica", "Jim Fitzgerald: aliado", "Trevor Philips: algoz em GTA V"],
+    storyArc: "Tenta salvar o clube em Liberty City; em GTA V aparece destruído por vício e dependência emocional.",
+    relationships: ["Billy Grey: líder e rival", "Ashley Butler: relação tóxica", "Jim Fitzgerald: aliado", "Trevor Philips: algoz em GTA V"],
     affiliations: ["The Lost MC"],
     enemies: ["Billy Grey", "Angels of Death", "Trevor Philips"],
     fate: "Morto por Trevor em GTA V.",
     importance: "Principal",
-    tags: ["protagonista", "motoclube", "tragico"]
+    tags: ["protagonista", "motoclube", "trágico"]
   },
   {
     id: "luis-lopez",
@@ -1194,12 +1196,12 @@ const charactersData = [
     city: "Liberty City",
     role: "Protagonista",
     category: "Protagonistas",
-    biography: "Seguranca, socio e solucionador de problemas de Tony Prince, dividido entre bairro, negocios e vida noturna.",
-    storyArc: "Protege Tony, lida com dividas e sobrevive ao caos dos diamantes.",
-    relationships: ["Tony Prince: chefe e amigo", "Yusuf Amir: aliado extravagante", "Mori Kibbutz: pressao", "Ray Bulgarin: inimigo"],
+    biography: "Segurança, sócio e solucionador de problemas de Tony Prince, dividido entre bairro, negócios e vida noturna.",
+    storyArc: "Protege Tony, lida com dívidas e sobrevive ao caos dos diamantes.",
+    relationships: ["Tony Prince: chefe e amigo", "Yusuf Amir: aliado extravagante", "Mori Kibbutz: pressão", "Ray Bulgarin: inimigo"],
     affiliations: ["Maisonette 9", "Hercules", "rede de Tony Prince"],
     enemies: ["Ray Bulgarin", "Rocco Pelosi", "Mori Kibbutz"],
-    fate: "Vivo ao final do episodio.",
+    fate: "Vivo ao final do episódio.",
     importance: "Principal",
     tags: ["protagonista", "vida noturna", "aliado"]
   },
@@ -1212,10 +1214,10 @@ const charactersData = [
     city: "Liberty City",
     role: "Protagonista",
     category: "Protagonistas",
-    biography: "Filho de lider das Triads que chega a Liberty City para entregar a espada Yu Jian apos a morte do pai.",
-    storyArc: "Perde a espada, e deixado para morrer, investiga traicoes e confronta o proprio tio.",
-    relationships: ["Wu Kenny Lee: tio e traidor", "Hsin Jaoming: lider Triad", "Wade Heston: policial aliado"],
-    affiliations: ["Triads", "familia Lee"],
+    biography: "Filho de líder das Triads que chega a Liberty City para entregar a espada Yu Jian após a morte do pai.",
+    storyArc: "Perde a espada, é deixado para morrer, investiga traições e confronta o próprio tio.",
+    relationships: ["Wu Kenny Lee: tio e traidor", "Hsin Jaoming: líder Triad", "Wade Heston: policial aliado"],
+    affiliations: ["Triads", "família Lee"],
     enemies: ["Kenny Lee", "rivalidades Triad"],
     fate: "Vivo; reconhecido depois da queda de Kenny.",
     importance: "Principal",
@@ -1230,14 +1232,14 @@ const charactersData = [
     city: "Los Santos",
     role: "Protagonista",
     category: "Protagonistas",
-    biography: "Ex-assaltante que fingiu a propria morte em acordo com Dave Norton e vive em Los Santos sob protecao.",
-    storyArc: "O tedio suburbano vira crise quando Franklin entra em sua vida e Trevor descobre a mentira de North Yankton.",
-    relationships: ["Trevor Philips: ex-parceiro e ferida aberta", "Franklin Clinton: protegido", "Amanda, Jimmy e Tracey: familia", "Dave Norton: contato do FIB"],
+    biography: "Ex-assaltante que fingiu a própria morte em acordo com Dave Norton e vive em Los Santos sob proteção.",
+    storyArc: "O tédio suburbano vira crise quando Franklin entra em sua vida e Trevor descobre a mentira de North Yankton.",
+    relationships: ["Trevor Philips: ex-parceiro e ferida aberta", "Franklin Clinton: protegido", "Amanda, Jimmy e Tracey: família", "Dave Norton: contato do FIB"],
     affiliations: ["equipe de assaltos", "acordo informal com FIB"],
     enemies: ["Devin Weston", "Steve Haines", "Wei Cheng"],
-    fate: "Vivo na Opcao C, leitura canonica mais aceita.",
+    fate: "Vivo na Opção C, leitura canônica mais aceita.",
     importance: "Principal",
-    tags: ["protagonista", "assaltante", "familia"]
+    tags: ["protagonista", "assaltante", "família"]
   },
   {
     id: "franklin-clinton",
@@ -1249,13 +1251,13 @@ const charactersData = [
     role: "Protagonista",
     category: "Protagonistas",
     biography: "Criminoso de rua de South Los Santos que quer sair de pequenos golpes e construir algo maior.",
-    storyArc: "Aprende com Michael e Lester, enfrenta pressao de Lamar, Stretch e Devin, e depois aparece como empresario na agencia F. Clinton and Partner.",
-    relationships: ["Michael De Santa: mentor", "Lamar Davis: amigo", "Tanisha Jackson: relacao antiga", "Lester Crest: contato"],
+    storyArc: "Aprende com Michael e Lester, enfrenta pressão de Lamar, Stretch e Devin, e depois aparece como empresário na agência F. Clinton and Partner.",
+    relationships: ["Michael De Santa: mentor", "Lamar Davis: amigo", "Tanisha Jackson: relação antiga", "Lester Crest: contato"],
     affiliations: ["Families", "equipe de assaltos", "F. Clinton and Partner"],
     enemies: ["Stretch", "Devin Weston", "Ballas"],
     fate: "Vivo e bem-sucedido em GTA Online.",
     importance: "Principal",
-    tags: ["protagonista", "gangue", "online", "empresario"]
+    tags: ["protagonista", "gangue", "online", "empresário"]
   },
   {
     id: "trevor-philips",
@@ -1266,12 +1268,12 @@ const charactersData = [
     city: "Blaine County",
     role: "Protagonista",
     category: "Protagonistas",
-    biography: "Ex-piloto e criminoso imprevisivel, fundador da Trevor Philips Enterprises, marcado pela traicao percebida de Michael.",
+    biography: "Ex-piloto e criminoso imprevisível, fundador da Trevor Philips Enterprises, marcado pela traição percebida de Michael.",
     storyArc: "Sai do isolamento violento em Blaine County para reencontrar Michael e encarar a verdade sobre North Yankton.",
-    relationships: ["Michael De Santa: ex-parceiro", "Ron Jakowski: aliado", "Wade Hebert: seguidor", "Johnny Klebitz: vitima"],
+    relationships: ["Michael De Santa: ex-parceiro", "Ron Jakowski: aliado", "Wade Hebert: seguidor", "Johnny Klebitz: vítima"],
     affiliations: ["Trevor Philips Enterprises", "equipe de assaltos"],
     enemies: ["Lost MC", "Merryweather", "Wei Cheng", "Devin Weston"],
-    fate: "Vivo na Opcao C; morto em finais alternativos.",
+    fate: "Vivo na Opção C; morto em finais alternativos.",
     importance: "Principal",
     tags: ["protagonista", "caos", "Blaine County"]
   },
@@ -1284,14 +1286,14 @@ const charactersData = [
     city: "Leonida",
     role: "Protagonista",
     category: "GTA VI",
-    biography: "Protagonista de GTA VI. Material oficial indica passado ligado ao Leonida Penitentiary e desejo de conquistar a boa vida sonhada por sua mae desde Liberty City.",
-    storyArc: "Nao confirmado. A sinopse oficial a coloca ao lado de Jason depois que um servico da errado.",
-    relationships: ["Jason Duval: parceiro central", "familia: mencionada no material oficial"],
-    affiliations: ["Nao confirmado"],
-    enemies: ["Nao confirmado"],
-    fate: "Nao confirmado; jogo ainda nao lancado.",
+    biography: "Protagonista de GTA VI. Material oficial indica passado ligado ao Leonida Penitentiary e desejo de conquistar a boa vida sonhada por sua mãe desde Liberty City.",
+    storyArc: "Não confirmado. A sinopse oficial a coloca ao lado de Jason depois que um serviço dá errado.",
+    relationships: ["Jason Duval: parceiro central", "família: mencionada no material oficial"],
+    affiliations: ["Não confirmado"],
+    enemies: ["Não confirmado"],
+    fate: "Não confirmado; jogo ainda não lançado.",
     importance: "Principal",
-    tags: ["protagonista", "GTA VI", "Leonida", "nao confirmado"]
+    tags: ["protagonista", "GTA VI", "Leonida", "não confirmado"]
   },
   {
     id: "jason-duval",
@@ -1302,14 +1304,14 @@ const charactersData = [
     city: "Leonida",
     role: "Protagonista",
     category: "GTA VI",
-    biography: "Protagonista de GTA VI. O material oficial o apresenta como parceiro de Lucia numa historia de risco, crime e dependencia mutua.",
-    storyArc: "Nao confirmado alem da premissa oficial do golpe que da errado e da conspiracao em Leonida.",
+    biography: "Protagonista de GTA VI. O material oficial o apresenta como parceiro de Lucia numa história de risco, crime e dependência mútua.",
+    storyArc: "Não confirmado além da premissa oficial do golpe que dá errado e da conspiração em Leonida.",
     relationships: ["Lucia Caminos: parceira central"],
-    affiliations: ["Nao confirmado"],
-    enemies: ["Nao confirmado"],
-    fate: "Nao confirmado; jogo ainda nao lancado.",
+    affiliations: ["Não confirmado"],
+    enemies: ["Não confirmado"],
+    fate: "Não confirmado; jogo ainda não lançado.",
     importance: "Principal",
-    tags: ["protagonista", "GTA VI", "Leonida", "nao confirmado"]
+    tags: ["protagonista", "GTA VI", "Leonida", "não confirmado"]
   },
   {
     id: "online-protagonist",
@@ -1318,14 +1320,14 @@ const charactersData = [
     games: ["Grand Theft Auto Online"],
     universe: "HD Universe",
     city: "Los Santos",
-    role: "Protagonista customizavel",
+    role: "Protagonista customizável",
     category: "GTA Online",
-    biography: "Criminoso criado pelo jogador que chega a Los Santos e sobe de trabalhos pequenos para imperio criminal multiempresarial.",
+    biography: "Criminoso criado pelo jogador que chega a Los Santos e sobe de trabalhos pequenos para império criminal multiempresarial.",
     storyArc: "Evolui de novato para dono de apartamento, CEO, presidente de MC, operador de bunker, dono de nightclub, infiltrado em Cayo Perico e agente de contratos VIP.",
     relationships: ["Lamar Davis: contato inicial", "Lester Crest: mentor de assaltos", "Franklin Clinton: parceiro em The Contract", "Tony Prince: nightlife"],
-    affiliations: ["Organizacao de jogador", "MC", "Agency", "Nightclub", "Arcade", "Bunker"],
+    affiliations: ["Organização de jogador", "MC", "Agency", "Nightclub", "Arcade", "Bunker"],
     enemies: ["jogadores rivais", "Merryweather", "El Rubio", "Duggans"],
-    fate: "Persistente e aberto, conforme atualizacoes.",
+    fate: "Persistente e aberto, conforme atualizações.",
     importance: "Principal",
     tags: ["protagonista", "online", "CEO", "MC"]
   },
@@ -1338,14 +1340,14 @@ const charactersData = [
     city: "Liberty City",
     role: "Aliado",
     category: "Aliados",
-    biography: "Primo de Niko, dono de taxi e vendedor compulsivo do sonho americano.",
-    storyArc: "Suas mentiras levam Niko a Liberty, mas sua lealdade emocional sustenta a historia.",
+    biography: "Primo de Niko, dono de táxi e vendedor compulsivo do sonho americano.",
+    storyArc: "Suas mentiras levam Niko a Liberty, mas sua lealdade emocional sustenta a história.",
     relationships: ["Niko Bellic: primo", "Mallorie Bardas: parceira", "Vlad Glebov: agiota abusivo"],
     affiliations: ["Roman's Taxi"],
     enemies: ["agiotas", "Vlad Glebov", "Dimitri Rascalov"],
     fate: "Pode morrer no final Deal; vive no final Revenge.",
     importance: "Alto",
-    tags: ["aliado", "familia", "imigracao"]
+    tags: ["aliado", "família", "imigração"]
   },
   {
     id: "little-jacob",
@@ -1356,8 +1358,8 @@ const charactersData = [
     city: "Liberty City",
     role: "Aliado",
     category: "Aliados",
-    biography: "Armeiro jamaicano e um dos aliados mais confiaveis de Niko.",
-    storyArc: "Ajuda Niko em operacoes decisivas e permanece leal quando quase todos os demais falham.",
+    biography: "Armeiro jamaicano e um dos aliados mais confiáveis de Niko.",
+    storyArc: "Ajuda Niko em operações decisivas e permanece leal quando quase todos os demais falham.",
     relationships: ["Niko Bellic: aliado", "Real Badman: parceiro"],
     affiliations: ["Yardies / comunidade jamaicana"],
     enemies: ["gangues rivais"],
@@ -1372,16 +1374,16 @@ const charactersData = [
     games: ["Grand Theft Auto IV", "Grand Theft Auto Online"],
     universe: "HD Universe",
     city: "Liberty City / Los Santos",
-    role: "Aliado comico",
+    role: "Aliado cômico",
     category: "Aliados",
-    biography: "Empresario de carros, fitness e ego inflado, envolvido em corridas e negocios duvidosos.",
-    storyArc: "Serve como satira de masculinidade performatica e cultura de autoajuda agressiva.",
-    relationships: ["Niko Bellic: contato", "Mori Kibbutz: irmao"],
+    biography: "Empresário de carros, fitness e ego inflado, envolvido em corridas e negócios duvidosos.",
+    storyArc: "Serve como sátira de masculinidade performática e cultura de autoajuda agressiva.",
+    relationships: ["Niko Bellic: contato", "Mori Kibbutz: irmão"],
     affiliations: ["Brucie's Executive Lifestyle Autos"],
     enemies: ["rivais pessoais"],
     fate: "Vivo; reaparece em GTA Online.",
     importance: "Medio",
-    tags: ["aliado", "empresario", "satira"]
+    tags: ["aliado", "empresário", "sátira"]
   },
   {
     id: "packie-mcreary",
@@ -1392,14 +1394,14 @@ const charactersData = [
     city: "Liberty City / Los Santos",
     role: "Aliado",
     category: "Aliados",
-    biography: "Membro da familia McReary, assaltante experiente e ponte de Niko com o crime irlandes.",
+    biography: "Membro da família McReary, assaltante experiente e ponte de Niko com o crime irlandês.",
     storyArc: "Participa de assaltos importantes em IV e pode ser recrutado para golpes em V/Online.",
-    relationships: ["Kate McReary: irma", "Niko Bellic: parceiro", "Derrick e Gerry: irmaos"],
+    relationships: ["Kate McReary: irmã", "Niko Bellic: parceiro", "Derrick e Gerry: irmãos"],
     affiliations: ["McReary Family"],
-    enemies: ["mafias rivais", "policia"],
+    enemies: ["máfias rivais", "polícia"],
     fate: "Vivo se recrutado em GTA V/Online.",
     importance: "Alto",
-    tags: ["aliado", "mafia", "assalto"]
+    tags: ["aliado", "máfia", "assalto"]
   },
   {
     id: "kate-mcreary",
@@ -1408,16 +1410,16 @@ const charactersData = [
     games: ["Grand Theft Auto IV"],
     universe: "HD Universe",
     city: "Liberty City",
-    role: "Aliada / interesse romantico",
+    role: "Aliada / interesse romântico",
     category: "Aliados",
-    biography: "Irma de Packie, tenta manter distancia moral da criminalidade da familia.",
+    biography: "Irmã de Packie, tenta manter distância moral da criminalidade da família.",
     storyArc: "Representa a chance de Niko escolher uma vida menos corrompida.",
-    relationships: ["Niko Bellic: possivel romance", "Packie McReary: irmao"],
+    relationships: ["Niko Bellic: possível romance", "Packie McReary: irmão"],
     affiliations: ["McReary Family"],
-    enemies: ["violencia do submundo"],
+    enemies: ["violência do submundo"],
     fate: "Pode morrer no final Revenge; vive no final Deal.",
     importance: "Medio",
-    tags: ["aliado", "familia", "drama"]
+    tags: ["aliado", "família", "drama"]
   },
   {
     id: "mallorie-bardas",
@@ -1429,13 +1431,13 @@ const charactersData = [
     role: "Aliada",
     category: "Aliados",
     biography: "Parceira de Roman, trabalha para manter alguma estabilidade em meio ao caos.",
-    storyArc: "E uma das poucas figuras civis que mostram o custo emocional das escolhas de Niko e Roman.",
-    relationships: ["Roman Bellic: parceiro", "Niko Bellic: familia ampliada", "Vlad Glebov: abusador"],
+    storyArc: "É uma das poucas figuras civis que mostram o custo emocional das escolhas de Niko e Roman.",
+    relationships: ["Roman Bellic: parceiro", "Niko Bellic: família ampliada", "Vlad Glebov: abusador"],
     affiliations: ["Roman's Taxi"],
     enemies: ["Vlad Glebov"],
     fate: "Viva; destino afetado pelas escolhas finais de GTA IV.",
     importance: "Medio",
-    tags: ["aliado", "familia"]
+    tags: ["aliado", "família"]
   },
   {
     id: "lester-crest",
@@ -1446,7 +1448,7 @@ const charactersData = [
     city: "Los Santos",
     role: "Planejador de assaltos",
     category: "Aliados",
-    biography: "Hacker e estrategista paranoico, velho contato de Michael e peca-chave dos assaltos.",
+    biography: "Hacker e estrategista paranoico, velho contato de Michael e peça-chave dos assaltos.",
     storyArc: "Volta da aposentadoria informal para arquitetar golpes cada vez maiores, depois vira operador central de Online.",
     relationships: ["Michael: antigo parceiro", "Franklin e Trevor: equipe", "Georgina Cheng: aliada em Online"],
     affiliations: ["equipe de assaltos", "Arcade operations"],
@@ -1464,8 +1466,8 @@ const charactersData = [
     city: "Los Santos",
     role: "Aliado / amigo de rua",
     category: "Aliados",
-    biography: "Melhor amigo de Franklin, impulsivo, engraçado e preso a uma visao romantizada de gangue.",
-    storyArc: "Sua lealdade e imprudencia puxam Franklin de volta para conflitos de rua.",
+    biography: "Melhor amigo de Franklin, impulsivo, engraçado e preso a uma visão romantizada de gangue.",
+    storyArc: "Sua lealdade e imprudência puxam Franklin de volta para conflitos de rua.",
     relationships: ["Franklin Clinton: amigo", "Stretch: rivalidade", "Families: rede local"],
     affiliations: ["Families", "LD Organics"],
     enemies: ["Ballas", "Stretch"],
@@ -1480,16 +1482,16 @@ const charactersData = [
     games: ["Grand Theft Auto V"],
     universe: "HD Universe",
     city: "Los Santos",
-    role: "Familia",
+    role: "Família",
     category: "Aliados",
-    biography: "Esposa de Michael, ex-stripper, presa num casamento de dinheiro, traicao e ressentimento.",
-    storyArc: "Expõe o vazio suburbano de Michael e a familia como campo de batalha emocional.",
+    biography: "Esposa de Michael, ex-stripper, presa num casamento de dinheiro, traição e ressentimento.",
+    storyArc: "Expõe o vazio suburbano de Michael e a família como campo de batalha emocional.",
     relationships: ["Michael: marido", "Jimmy e Tracey: filhos"],
-    affiliations: ["familia De Santa"],
+    affiliations: ["família De Santa"],
     enemies: ["crise familiar"],
     fate: "Viva.",
-    importance: "Medio",
-    tags: ["familia", "aliado"]
+    importance: "Médio",
+    tags: ["família", "aliado"]
   },
   {
     id: "jimmy-de-santa",
@@ -1498,16 +1500,16 @@ const charactersData = [
     games: ["Grand Theft Auto V"],
     universe: "HD Universe",
     city: "Los Santos",
-    role: "Familia",
+    role: "Família",
     category: "Aliados",
-    biography: "Filho de Michael, satira de gamer mimado e juventude sem rumo.",
-    storyArc: "Sua relacao com Michael revela fracasso paterno, dependencia e tentativa tardia de reconciliacao.",
-    relationships: ["Michael: pai", "Amanda: mae", "Tracey: irma"],
-    affiliations: ["familia De Santa"],
+    biography: "Filho de Michael, sátira de gamer mimado e juventude sem rumo.",
+    storyArc: "Sua relação com Michael revela fracasso paterno, dependência e tentativa tardia de reconciliação.",
+    relationships: ["Michael: pai", "Amanda: mãe", "Tracey: irmã"],
+    affiliations: ["família De Santa"],
     enemies: ["auto-sabotagem"],
     fate: "Vivo.",
-    importance: "Medio",
-    tags: ["familia", "satira"]
+    importance: "Médio",
+    tags: ["família", "sátira"]
   },
   {
     id: "tracey-de-santa",
@@ -1516,16 +1518,16 @@ const charactersData = [
     games: ["Grand Theft Auto V"],
     universe: "HD Universe",
     city: "Los Santos",
-    role: "Familia",
+    role: "Família",
     category: "Aliados",
     biography: "Filha de Michael, obcecada por fama e reality shows.",
-    storyArc: "Mostra a satira da cultura de celebridade e a incapacidade de Michael lidar com a propria familia.",
-    relationships: ["Michael: pai", "Amanda: mae", "Jimmy: irmao"],
-    affiliations: ["familia De Santa"],
-    enemies: ["industria exploradora de celebridade"],
+    storyArc: "Mostra a sátira da cultura de celebridade e a incapacidade de Michael lidar com a própria família.",
+    relationships: ["Michael: pai", "Amanda: mãe", "Jimmy: irmão"],
+    affiliations: ["família De Santa"],
+    enemies: ["indústria exploradora de celebridade"],
     fate: "Viva.",
-    importance: "Medio",
-    tags: ["familia", "celebridade"]
+    importance: "Médio",
+    tags: ["família", "celebridade"]
   },
   {
     id: "dave-norton",
@@ -1536,14 +1538,14 @@ const charactersData = [
     city: "Los Santos / North Yankton",
     role: "Agente federal",
     category: "Governo/Polícia",
-    biography: "Agente do FIB ligado ao acordo que permitiu Michael fingir a propria morte.",
-    storyArc: "Tenta equilibrar autopreservacao, carreira e a bomba-relógio chamada Michael.",
-    relationships: ["Michael: protegido e problema", "Steve Haines: superior toxico"],
+    biography: "Agente do FIB ligado ao acordo que permitiu Michael fingir a própria morte.",
+    storyArc: "Tenta equilibrar autopreservação, carreira e a bomba-relógio chamada Michael.",
+    relationships: ["Michael: protegido e problema", "Steve Haines: superior tóxico"],
     affiliations: ["FIB"],
-    enemies: ["IAA", "criminosos que ameacam o acordo"],
-    fate: "Vivo na Opcao C.",
+    enemies: ["IAA", "criminosos que ameaçam o acordo"],
+    fate: "Vivo na Opção C.",
     importance: "Alto",
-    tags: ["governo", "FIB", "policia corrupta"]
+    tags: ["governo", "FIB", "polícia corrupta"]
   },
   {
     id: "steve-haines",
@@ -1554,14 +1556,14 @@ const charactersData = [
     city: "Los Santos",
     role: "Antagonista federal",
     category: "Governo/Polícia",
-    biography: "Agente do FIB e apresentador de TV, usa Michael, Franklin e Trevor como ativos descartaveis.",
-    storyArc: "Sua ambicao e guerra institucional contra a IAA levam o trio a missoes sujas.",
+    biography: "Agente do FIB e apresentador de TV, usa Michael, Franklin e Trevor como ativos descartáveis.",
+    storyArc: "Sua ambição e guerra institucional contra a IAA levam o trio a missões sujas.",
     relationships: ["Dave Norton: subordinado", "Michael/Trevor/Franklin: chantagem"],
     affiliations: ["FIB"],
     enemies: ["IAA", "protagonistas"],
-    fate: "Morto na Opcao C.",
+    fate: "Morto na Opção C.",
     importance: "Alto",
-    tags: ["antagonista", "governo", "FIB", "policia corrupta"]
+    tags: ["antagonista", "governo", "FIB", "polícia corrupta"]
   },
   {
     id: "devin-weston",
@@ -1570,16 +1572,16 @@ const charactersData = [
     games: ["Grand Theft Auto V"],
     universe: "HD Universe",
     city: "Los Santos",
-    role: "Antagonista empresario",
+    role: "Antagonista empresário",
     category: "Empresários",
-    biography: "Bilionario, investidor e predador corporativo que explora Franklin e tenta eliminar o trio.",
-    storyArc: "Personifica poder economico sem consequencia ate virar alvo da Opcao C.",
-    relationships: ["Molly Schultz: assessora", "Merryweather: interesses", "Franklin: empregado descartavel"],
+    biography: "Bilionário, investidor e predador corporativo que explora Franklin e tenta eliminar o trio.",
+    storyArc: "Personifica poder econômico sem consequência até virar alvo da Opção C.",
+    relationships: ["Molly Schultz: assessora", "Merryweather: interesses", "Franklin: empregado descartável"],
     affiliations: ["Weston holdings", "Merryweather connections"],
     enemies: ["Michael", "Franklin", "Trevor"],
-    fate: "Morto na Opcao C.",
+    fate: "Morto na Opção C.",
     importance: "Alto",
-    tags: ["antagonista", "empresario", "capitalismo"]
+    tags: ["antagonista", "empresário", "capitalismo"]
   },
   {
     id: "martin-madrazo",
@@ -1590,8 +1592,8 @@ const charactersData = [
     city: "Los Santos",
     role: "Chefe de cartel",
     category: "Máfia",
-    biography: "Capo mexicano em Los Santos, poderoso, temperamental e cercado por negocios violentos.",
-    storyArc: "Entra em conflito com Michael, depois vira contato recorrente de negocios em Online.",
+    biography: "Capo mexicano em Los Santos, poderoso, temperamental e cercado por negócios violentos.",
+    storyArc: "Entra em conflito com Michael, depois vira contato recorrente de negócios em Online.",
     relationships: ["Patricia Madrazo: esposa", "Miguel Madrazo: filho", "Michael/Trevor: conflito"],
     affiliations: ["Madrazo Cartel"],
     enemies: ["rivais de cartel", "protagonistas quando contrariados"],
@@ -1608,13 +1610,13 @@ const charactersData = [
     city: "Blaine County",
     role: "Aliado",
     category: "Aliados",
-    biography: "Paranoico, teorico da conspiracao e braço logistico de Trevor.",
-    storyArc: "Ajuda Trevor em armas, aviacao e negocios, reaparecendo em Online.",
+    biography: "Paranoico, teórico da conspiração e braço logístico de Trevor.",
+    storyArc: "Ajuda Trevor em armas, aviação e negócios, reaparecendo em Online.",
     relationships: ["Trevor Philips: chefe/amigo", "Wade: associado"],
     affiliations: ["Trevor Philips Enterprises", "smuggling operations"],
-    enemies: ["Lost MC", "rivais de trafico"],
+    enemies: ["Lost MC", "rivais de tráfico"],
     fate: "Vivo.",
-    importance: "Medio",
+    importance: "Médio",
     tags: ["aliado", "Blaine County", "online"]
   },
   {
@@ -1626,9 +1628,9 @@ const charactersData = [
     city: "Blaine County / Los Santos",
     role: "Aliado",
     category: "Aliados",
-    biography: "Seguidor ingênuo de Trevor, usado como apoio e alivio sombrio.",
-    storyArc: "Acompanha Trevor ate Los Santos sem entender totalmente a violencia ao redor.",
-    relationships: ["Trevor Philips: lider", "Floyd Hebert: primo"],
+    biography: "Seguidor ingênuo de Trevor, usado como apoio e alívio sombrio.",
+    storyArc: "Acompanha Trevor até Los Santos sem entender totalmente a violência ao redor.",
+    relationships: ["Trevor Philips: líder", "Floyd Hebert: primo"],
     affiliations: ["Trevor Philips Enterprises"],
     enemies: ["quem Trevor aponta"],
     fate: "Vivo.",
@@ -1648,10 +1650,10 @@ const charactersData = [
     storyArc: "De advogado de porta de cadeia a mediador entre criminosos maiores que ele.",
     relationships: ["Tommy Vercetti: cliente", "Kent Paul: amigo", "CJ: aliado em Las Venturas"],
     affiliations: ["Vercetti Organization", "Caligula's Casino"],
-    enemies: ["pressao mafiosa"],
-    fate: "Vivo em San Andreas; futuro posterior nao confirmado.",
+    enemies: ["pressão mafiosa"],
+    fate: "Vivo em San Andreas; futuro posterior não confirmado.",
     importance: "Alto",
-    tags: ["aliado", "advogado", "mafia"]
+    tags: ["aliado", "advogado", "máfia"]
   },
   {
     id: "lance-vance",
@@ -1662,9 +1664,9 @@ const charactersData = [
     city: "Vice City",
     role: "Aliado que vira antagonista",
     category: "Antagonistas",
-    biography: "Irmao de Vic, charmoso e ambicioso, incapaz de aceitar papel secundario.",
+    biography: "Irmão de Vic, charmoso e ambicioso, incapaz de aceitar papel secundário.",
     storyArc: "Ajuda Vic e Tommy, mas em 1986 trai Tommy por ressentimento e poder.",
-    relationships: ["Vic Vance: irmao", "Tommy Vercetti: aliado/inimigo", "Ricardo Diaz: alvo"],
+    relationships: ["Vic Vance: irmão", "Tommy Vercetti: aliado/inimigo", "Ricardo Diaz: alvo"],
     affiliations: ["Vance Crime Family", "Vercetti Organization"],
     enemies: ["Tommy Vercetti"],
     fate: "Morto por Tommy no final de Vice City.",
@@ -1681,7 +1683,7 @@ const charactersData = [
     role: "Antagonista",
     category: "Máfia",
     biography: "Chefe da Forelli Family que envia Tommy para Vice City e tenta manter controle sobre ele.",
-    storyArc: "Subestima Tommy e paga por tentar cobrar a divida pessoalmente.",
+    storyArc: "Subestima Tommy e paga por tentar cobrar a dívida pessoalmente.",
     relationships: ["Tommy Vercetti: ex-soldado", "Lance Vance: aliado final"],
     affiliations: ["Forelli Family"],
     enemies: ["Tommy Vercetti"],
@@ -1698,8 +1700,8 @@ const charactersData = [
     city: "Vice City",
     role: "Antagonista / chefe de drogas",
     category: "Máfia",
-    biography: "Traficante paranoico e rico, dono de mansao e influencia em Vice City.",
-    storyArc: "Parece aliado util ate Tommy e Lance tomarem seu imperio.",
+    biography: "Traficante paranoico e rico, dono de mansão e influência em Vice City.",
+    storyArc: "Parece aliado útil até Tommy e Lance tomarem seu império.",
     relationships: ["Tommy Vercetti: executor/assassino", "Lance Vance: rival", "Colonel Cortez: rede criminal"],
     affiliations: ["Diaz Organization"],
     enemies: ["Tommy Vercetti", "Lance Vance"],
@@ -1714,15 +1716,15 @@ const charactersData = [
     games: ["Grand Theft Auto: Vice City"],
     universe: "3D Universe",
     city: "Vice City",
-    role: "Aliado / intermediario",
+    role: "Aliado / intermediário",
     category: "Aliados",
-    biography: "Figura militar e traficante sofisticado, conectado a diplomacia, armas e informacoes.",
+    biography: "Figura militar e traficante sofisticado, conectado a diplomacia, armas e informações.",
     storyArc: "Ajuda Tommy a entender o submundo e deixa Vice City sob fogo inimigo.",
     relationships: ["Tommy Vercetti: aliado", "Mercedes Cortez: filha", "Ricardo Diaz: contato"],
     affiliations: ["redes militares e traficantes"],
-    enemies: ["forcas que o perseguem"],
+    enemies: ["forças que o perseguem"],
     fate: "Escapa de Vice City.",
-    importance: "Medio",
+    importance: "Médio",
     tags: ["aliado", "governo", "tráfico"]
   },
   {
@@ -1732,16 +1734,16 @@ const charactersData = [
     games: ["Grand Theft Auto: Vice City", "Grand Theft Auto: Liberty City Stories"],
     universe: "3D Universe",
     city: "Vice City / Liberty City",
-    role: "Empresario imobiliario",
+    role: "Empresário imobiliário",
     category: "Empresários",
-    biography: "Magnata imobiliario texano que transforma violencia em valorizacao de terreno.",
-    storyArc: "Ensina Tommy a usar caos urbano como ferramenta de negocio; em LCS seu destino e selado por disputas de poder.",
+    biography: "Magnata imobiliário texano que transforma violência em valorização de terreno.",
+    storyArc: "Ensina Tommy a usar caos urbano como ferramenta de negócio; em LCS seu destino é selado por disputas de poder.",
     relationships: ["Tommy Vercetti: contratado", "Donald Love: aprendiz/associado"],
-    affiliations: ["desenvolvimento imobiliario"],
-    enemies: ["rivais imobiliarios"],
+    affiliations: ["desenvolvimento imobiliário"],
+    enemies: ["rivais imobiliários"],
     fate: "Morto em Liberty City Stories.",
-    importance: "Medio",
-    tags: ["empresario", "corrupcao", "imobiliario"]
+    importance: "Médio",
+    tags: ["empresário", "corrupção", "imobiliário"]
   },
   {
     id: "kent-paul",
@@ -1752,14 +1754,14 @@ const charactersData = [
     city: "Vice City / San Andreas",
     role: "Contato musical e informante",
     category: "Aliados",
-    biography: "Britanico ligado a cena musical e fofocas do submundo.",
+    biography: "Britânico ligado à cena musical e fofocas do submundo.",
     storyArc: "Serve como ponte entre celebridade, drogas e crime, reaparecendo no arco de Las Venturas.",
     relationships: ["Tommy Vercetti: contato", "Ken Rosenberg: amigo", "Maccer: associado"],
-    affiliations: ["industria musical", "Caligula's orbit"],
+    affiliations: ["indústria musical", "Caligula's orbit"],
     enemies: ["mafiosos irritados"],
     fate: "Vivo.",
-    importance: "Medio",
-    tags: ["aliado", "música", "satira"]
+    importance: "Médio",
+    tags: ["aliado", "música", "sátira"]
   },
   {
     id: "salvatore-leone",
@@ -1770,8 +1772,8 @@ const charactersData = [
     city: "Liberty City",
     role: "Chefe mafioso",
     category: "Máfia",
-    biography: "Patriarca da Leone Family, paranoico, autoritario e central para a mafia de Liberty.",
-    storyArc: "Aparece poderoso em prequels, mas sua paranoia contra Claude leva a propria queda.",
+    biography: "Patriarca da Leone Family, paranoico, autoritário e central para a máfia de Liberty.",
+    storyArc: "Aparece poderoso em prequels, mas sua paranoia contra Claude leva à própria queda.",
     relationships: ["Maria Latore: esposa", "Joey Leone: filho", "Toni Cipriani: soldado", "Claude: executor e assassino"],
     affiliations: ["Leone Family"],
     enemies: ["Yakuza", "Sindacco", "Forelli", "Claude"],
@@ -1786,16 +1788,16 @@ const charactersData = [
     games: ["Grand Theft Auto III", "Grand Theft Auto: Liberty City Stories"],
     universe: "3D Universe",
     city: "Liberty City",
-    role: "Aliada ambigua",
+    role: "Aliada ambígua",
     category: "Aliados",
     biography: "Esposa de Salvatore, impulsiva e perigosa por sua capacidade de mover homens poderosos.",
     storyArc: "Ajuda Claude a escapar da Leone Family e se aproxima da Yakuza.",
-    relationships: ["Salvatore Leone: marido", "Claude: protegido/obsessao", "Asuka Kasen: contato"],
-    affiliations: ["Leone Family", "Yakuza por associacao"],
+    relationships: ["Salvatore Leone: marido", "Claude: protegido/obsessão", "Asuka Kasen: contato"],
+    affiliations: ["Leone Family", "Yakuza por associação"],
     enemies: ["Salvatore Leone"],
-    fate: "Sobrevive ao final de GTA III; a cena final e ambigua em tom, nao em confirmacao visual.",
+    fate: "Sobrevive ao final de GTA III; a cena final é ambígua em tom, não em confirmação visual.",
     importance: "Alto",
-    tags: ["aliado", "mafia", "ambigua"]
+    tags: ["aliado", "máfia", "ambígua"]
   },
   {
     id: "joey-leone",
@@ -1804,15 +1806,15 @@ const charactersData = [
     games: ["Grand Theft Auto III"],
     universe: "3D Universe",
     city: "Liberty City",
-    role: "Mafioso / mecanico",
+    role: "Mafioso / mecânico",
     category: "Máfia",
     biography: "Filho de Salvatore, opera garagem e tarefas para a Leone Family.",
-    storyArc: "Fornece missões a Claude e mostra a camada operacional da mafia.",
+    storyArc: "Fornece missões a Claude e mostra a camada operacional da máfia.",
     relationships: ["Salvatore Leone: pai", "Toni Cipriani: associado", "Claude: executor"],
     affiliations: ["Leone Family"],
     enemies: ["Triads", "rivais locais"],
-    fate: "Vivo; futuro posterior nao confirmado.",
-    importance: "Medio",
+    fate: "Vivo; futuro posterior não confirmado.",
+    importance: "Médio",
     tags: ["máfia", "Leone"]
   },
   {
@@ -1822,16 +1824,16 @@ const charactersData = [
     games: ["Grand Theft Auto III", "Grand Theft Auto: Liberty City Stories", "Grand Theft Auto: Vice City"],
     universe: "3D Universe",
     city: "Liberty City",
-    role: "Empresario e politico",
+    role: "Empresário e político",
     category: "Empresários",
-    biography: "Magnata, canibal implicito por humor sombrio e operador politico de interesses imobiliarios.",
+    biography: "Magnata, canibal implícito por humor sombrio e operador político de interesses imobiliários.",
     storyArc: "Usa conflitos criminosos para lucrar e desaparece misteriosamente em GTA III.",
     relationships: ["Avery Carrington: mentor", "Claude: executor", "Toni Cipriani: ferramenta"],
-    affiliations: ["Love Media", "interesses politicos"],
-    enemies: ["rivais imobiliarios"],
-    fate: "Desaparece em GTA III; destino nao confirmado.",
+    affiliations: ["Love Media", "interesses políticos"],
+    enemies: ["rivais imobiliários"],
+    fate: "Desaparece em GTA III; destino não confirmado.",
     importance: "Alto",
-    tags: ["empresario", "politica", "easter egg"]
+    tags: ["empresário", "política", "easter egg"]
   },
   {
     id: "catalina",
@@ -1842,9 +1844,9 @@ const charactersData = [
     city: "San Andreas / Liberty City",
     role: "Antagonista",
     category: "Antagonistas",
-    biography: "Criminosa volatil, parceira temporaria de CJ em San Andreas e traidora de Claude em GTA III.",
-    storyArc: "Sai de assaltante caotica na zona rural para lider do Cartel Colombiano em Liberty.",
-    relationships: ["Claude: ex-parceiro traido", "CJ: ex-namorado", "Miguel: parceiro em GTA III"],
+    biography: "Criminosa volátil, parceira temporária de CJ em San Andreas e traidora de Claude em GTA III.",
+    storyArc: "Sai de assaltante caótica na zona rural para líder do Cartel Colombiano em Liberty.",
+    relationships: ["Claude: ex-parceiro traído", "CJ: ex-namorado", "Miguel: parceiro em GTA III"],
     affiliations: ["Colombian Cartel", "assaltos independentes"],
     enemies: ["Claude", "CJ por ruptura pessoal"],
     fate: "Morta por Claude no final de GTA III.",
@@ -1860,13 +1862,13 @@ const charactersData = [
     city: "Liberty City",
     role: "Cartel",
     category: "Máfia",
-    biography: "Parceiro de Catalina no Cartel Colombiano, envolvido na traicao contra Claude.",
-    storyArc: "Torna-se peao torturado na guerra entre Catalina, Asuka e Claude.",
+    biography: "Parceiro de Catalina no Cartel Colombiano, envolvido na traição contra Claude.",
+    storyArc: "Torna-se peão torturado na guerra entre Catalina, Asuka e Claude.",
     relationships: ["Catalina: parceira", "Asuka Kasen: inimiga", "Claude: alvo"],
     affiliations: ["Colombian Cartel"],
     enemies: ["Claude", "Yakuza"],
     fate: "Morto durante os eventos finais de GTA III.",
-    importance: "Medio",
+    importance: "Médio",
     tags: ["cartel", "antagonista"]
   },
   {
@@ -1876,11 +1878,11 @@ const charactersData = [
     games: ["Grand Theft Auto III"],
     universe: "3D Universe",
     city: "Liberty City",
-    role: "Lider Yakuza",
+    role: "Líder Yakuza",
     category: "Máfia",
     biography: "Figura poderosa da Yakuza em Liberty City, fria, teatral e vingativa.",
     storyArc: "Ajuda Claude contra os Leone e o Cartel, mas a guerra a alcança.",
-    relationships: ["Kenji Kasen: irmao", "Maria Latore: aliada", "Claude: executor"],
+    relationships: ["Kenji Kasen: irmão", "Maria Latore: aliada", "Claude: executor"],
     affiliations: ["Yakuza"],
     enemies: ["Leone Family", "Colombian Cartel"],
     fate: "Morta por Catalina.",
@@ -1894,15 +1896,15 @@ const charactersData = [
     games: ["Grand Theft Auto III"],
     universe: "3D Universe",
     city: "Liberty City",
-    role: "Lider Yakuza",
+    role: "Líder Yakuza",
     category: "Máfia",
-    biography: "Irmao de Asuka e figura de comando da Yakuza.",
+    biography: "Irmão de Asuka e figura de comando da Yakuza.",
     storyArc: "Sua morte por Claude, disfarçada para incriminar o Cartel, amplia a guerra.",
-    relationships: ["Asuka Kasen: irma", "Claude: executor secreto"],
+    relationships: ["Asuka Kasen: irmã", "Claude: executor secreto"],
     affiliations: ["Yakuza"],
     enemies: ["Colombian Cartel", "Leone Family"],
-    fate: "Morto por Claude em missao de Donald Love.",
-    importance: "Medio",
+    fate: "Morto por Claude em missão de Donald Love.",
+    importance: "Médio",
     tags: ["máfia", "Yakuza"]
   },
   {
@@ -1914,13 +1916,13 @@ const charactersData = [
     city: "Liberty City",
     role: "Explosivista",
     category: "Aliados",
-    biography: "Especialista em explosivos que escapa com Claude no inicio de GTA III.",
-    storyArc: "Apoia a entrada de Claude no submundo e liga varios jogos de Liberty.",
+    biography: "Especialista em explosivos que escapa com Claude no início de GTA III.",
+    storyArc: "Apoia a entrada de Claude no submundo e liga vários jogos de Liberty.",
     relationships: ["Claude: aliado", "Mike: contato"],
     affiliations: ["rede de explosivos independente"],
-    enemies: ["policia", "rivais locais"],
-    fate: "Vivo; futuro nao confirmado.",
-    importance: "Medio",
+    enemies: ["polícia", "rivais locais"],
+    fate: "Vivo; futuro não confirmado.",
+    importance: "Médio",
     tags: ["aliado", "explosivos"]
   },
   {
@@ -1932,9 +1934,9 @@ const charactersData = [
     city: "Los Santos",
     role: "Antagonista",
     category: "Antagonistas",
-    biography: "Membro da Grove Street que se alia a Tenpenny, Ballas e trafico para buscar poder pessoal.",
-    storyArc: "Amigo comico vira simbolo da traicao que destruiu Grove Street.",
-    relationships: ["CJ: amigo traido", "Ryder: cúmplice", "Tenpenny: parceiro corrupto"],
+    biography: "Membro da Grove Street que se alia a Tenpenny, Ballas e tráfico para buscar poder pessoal.",
+    storyArc: "Amigo cômico vira símbolo da traição que destruiu Grove Street.",
+    relationships: ["CJ: amigo traído", "Ryder: cúmplice", "Tenpenny: parceiro corrupto"],
     affiliations: ["Grove Street Families", "Ballas por acordo", "C.R.A.S.H."],
     enemies: ["CJ", "Sweet", "Grove Street"],
     fate: "Morto por CJ.",
@@ -1950,8 +1952,8 @@ const charactersData = [
     city: "Los Santos",
     role: "Antagonista / ex-aliado",
     category: "Antagonistas",
-    biography: "Membro da Grove Street, agressivo e debochado, envolvido na traicao ao lado de Big Smoke.",
-    storyArc: "De amigo de infancia a alvo de CJ em San Fierro.",
+    biography: "Membro da Grove Street, agressivo e debochado, envolvido na traição ao lado de Big Smoke.",
+    storyArc: "De amigo de infância a alvo de CJ em San Fierro.",
     relationships: ["CJ: amigo/inimigo", "Big Smoke: cúmplice", "T-Bone Mendez: contato"],
     affiliations: ["Grove Street Families", "Loco Syndicate"],
     enemies: ["CJ", "Cesar Vialpando"],
@@ -1966,16 +1968,16 @@ const charactersData = [
     games: ["Grand Theft Auto: San Andreas"],
     universe: "3D Universe",
     city: "Los Santos",
-    role: "Aliado / lider de gangue",
+    role: "Aliado / líder de gangue",
     category: "Gangues",
-    biography: "Irmao de CJ e lider da Grove Street Families, rigidamente leal ao bairro.",
-    storyArc: "Desconfia de CJ, e preso, depois retorna para reconquistar Grove Street.",
-    relationships: ["CJ: irmao", "Kendl: irma", "Grove Street: familia de rua"],
+    biography: "Irmão de CJ e líder da Grove Street Families, rigidamente leal ao bairro.",
+    storyArc: "Desconfia de CJ, é preso, depois retorna para reconquistar Grove Street.",
+    relationships: ["CJ: irmão", "Kendl: irmã", "Grove Street: família de rua"],
     affiliations: ["Grove Street Families"],
     enemies: ["Ballas", "Tenpenny", "Big Smoke"],
     fate: "Vivo.",
     importance: "Alto",
-    tags: ["aliado", "gangue", "familia"]
+    tags: ["aliado", "gangue", "família"]
   },
   {
     id: "kendl-johnson",
@@ -1986,14 +1988,14 @@ const charactersData = [
     city: "Los Santos",
     role: "Aliada",
     category: "Aliados",
-    biography: "Irma de CJ e Sweet, mais pragmatica e independente que os irmaos.",
-    storyArc: "Seu relacionamento com Cesar ajuda a unir CJ a novas aliancas.",
-    relationships: ["CJ: irmao", "Sweet: irmao", "Cesar Vialpando: namorado"],
-    affiliations: ["familia Johnson"],
-    enemies: ["pressao das gangues"],
+    biography: "Irmã de CJ e Sweet, mais pragmática e independente que os irmãos.",
+    storyArc: "Seu relacionamento com Cesar ajuda a unir CJ a novas alianças.",
+    relationships: ["CJ: irmão", "Sweet: irmão", "Cesar Vialpando: namorado"],
+    affiliations: ["família Johnson"],
+    enemies: ["pressão das gangues"],
     fate: "Viva.",
-    importance: "Medio",
-    tags: ["aliado", "familia"]
+    importance: "Médio",
+    tags: ["aliado", "família"]
   },
   {
     id: "cesar-vialpando",
@@ -2004,8 +2006,8 @@ const charactersData = [
     city: "Los Santos / San Fierro",
     role: "Aliado",
     category: "Gangues",
-    biography: "Lider dos Varrios Los Aztecas e namorado de Kendl.",
-    storyArc: "Prova lealdade a CJ ao revelar a traicao de Smoke e Ryder.",
+    biography: "Líder dos Varrios Los Aztecas e namorado de Kendl.",
+    storyArc: "Prova lealdade a CJ ao revelar a traição de Smoke e Ryder.",
     relationships: ["CJ: aliado", "Kendl: namorada", "Woozie: rede posterior"],
     affiliations: ["Varrios Los Aztecas", "garage network"],
     enemies: ["Vagos", "Ballas", "Loco Syndicate"],
@@ -2020,11 +2022,11 @@ const charactersData = [
     games: ["Grand Theft Auto: San Andreas"],
     universe: "3D Universe",
     city: "San Fierro / Las Venturas",
-    role: "Aliado / lider Triad",
+    role: "Aliado / líder Triad",
     category: "Máfia",
-    biography: "Lider Triad respeitado, cego, estrategista e parceiro de CJ.",
+    biography: "Líder Triad respeitado, cego, estrategista e parceiro de CJ.",
     storyArc: "Ajuda CJ em San Fierro e Las Venturas, especialmente no Four Dragons Casino.",
-    relationships: ["CJ: parceiro", "Triads: lideranca"],
+    relationships: ["CJ: parceiro", "Triads: liderança"],
     affiliations: ["Mountain Cloud Boys", "Four Dragons Casino"],
     enemies: ["Da Nang Boys", "Sindacco interests"],
     fate: "Vivo.",
@@ -2040,14 +2042,14 @@ const charactersData = [
     city: "San Andreas",
     role: "Agente governamental",
     category: "Governo/Polícia",
-    biography: "Agente secreto ligado a operacoes clandestinas, apresentado como parte do Loco Syndicate.",
-    storyArc: "De possivel inimigo a manipulador que usa CJ em missoes de inteligencia e promete libertar Sweet.",
+    biography: "Agente secreto ligado a operações clandestinas, apresentado como parte do Loco Syndicate.",
+    storyArc: "De possível inimigo a manipulador que usa CJ em missões de inteligência e promete libertar Sweet.",
     relationships: ["CJ: ativo forçado", "Loco Syndicate: cobertura"],
-    affiliations: ["agencia governamental nao nomeada"],
-    enemies: ["ameacas a operacoes clandestinas"],
+    affiliations: ["agência governamental não nomeada"],
+    enemies: ["ameaças a operações clandestinas"],
     fate: "Vivo.",
     importance: "Alto",
-    tags: ["governo", "aliado", "conspiracao"]
+    tags: ["governo", "aliado", "conspiração"]
   },
   {
     id: "the-truth",
@@ -2058,13 +2060,13 @@ const charactersData = [
     city: "San Andreas",
     role: "Aliado excêntrico",
     category: "Aliados",
-    biography: "Hippie conspiracionista, ligado a cultivos, teorias e contatos improvaveis.",
+    biography: "Hippie conspiracionista, ligado a cultivos, teorias e contatos improváveis.",
     storyArc: "Ajuda CJ a sair do isolamento rural e o conecta a San Fierro.",
     relationships: ["CJ: aliado", "Kent Paul e Maccer: contatos"],
     affiliations: ["contracultura", "redes independentes"],
     enemies: ["governo como ideia recorrente"],
     fate: "Vivo.",
-    importance: "Medio",
+    importance: "Médio",
     tags: ["aliado", "contracultura"]
   },
   {
@@ -2077,11 +2079,11 @@ const charactersData = [
     role: "Antagonista policial",
     category: "Governo/Polícia",
     biography: "Policial corrupto da C.R.A.S.H., manipula CJ e alimenta o caos das gangues.",
-    storyArc: "Usa o sistema para lucrar e controlar narrativas ate a cidade explodir em revolta.",
+    storyArc: "Usa o sistema para lucrar e controlar narrativas até a cidade explodir em revolta.",
     relationships: ["Pulaski: cúmplice", "Hernandez: subordinado", "CJ: chantageado"],
     affiliations: ["C.R.A.S.H.", "LSPD"],
     enemies: ["CJ", "Grove Street"],
-    fate: "Morre apos perseguição final.",
+    fate: "Morre após perseguição final.",
     importance: "Alto",
     tags: ["antagonista", "polícia corrupta", "governo"]
   },
@@ -2095,12 +2097,12 @@ const charactersData = [
     role: "Policial corrupto",
     category: "Governo/Polícia",
     biography: "Parceiro brutal de Tenpenny na C.R.A.S.H.",
-    storyArc: "Executa a violencia direta da corrupcao policial ate ser confrontado por CJ.",
+    storyArc: "Executa a violência direta da corrupção policial até ser confrontado por CJ.",
     relationships: ["Tenpenny: parceiro", "Hernandez: colega intimidado"],
     affiliations: ["C.R.A.S.H.", "LSPD"],
     enemies: ["CJ", "Hernandez"],
     fate: "Morto por CJ.",
-    importance: "Medio",
+    importance: "Médio",
     tags: ["polícia corrupta", "antagonista"]
   },
   {
@@ -2113,13 +2115,13 @@ const charactersData = [
     role: "Policial",
     category: "Governo/Polícia",
     biography: "Membro mais jovem da C.R.A.S.H., pressionado entre cumplicidade e culpa.",
-    storyArc: "Tenta colaborar contra Tenpenny e Pulaski, mas e esmagado pelo proprio grupo.",
+    storyArc: "Tenta colaborar contra Tenpenny e Pulaski, mas é esmagado pelo próprio grupo.",
     relationships: ["Tenpenny e Pulaski: superiores corruptos"],
     affiliations: ["C.R.A.S.H.", "LSPD"],
     enemies: ["Tenpenny", "Pulaski"],
     fate: "Morto por Pulaski.",
-    importance: "Medio",
-    tags: ["polícia", "governo", "tragico"]
+    importance: "Médio",
+    tags: ["polícia", "governo", "trágico"]
   },
   {
     id: "madd-dogg",
@@ -2130,13 +2132,13 @@ const charactersData = [
     city: "Los Santos / Las Venturas",
     role: "Celebridade",
     category: "Aliados",
-    biography: "Rapper famoso cuja carreira e mansao sao afetadas por esquemas de CJ e OG Loc.",
-    storyArc: "Cai em alcoolismo e tentativa de suicidio, depois e ajudado por CJ a reconstruir carreira.",
+    biography: "Rapper famoso cuja carreira e mansão são afetadas por esquemas de CJ e OG Loc.",
+    storyArc: "Cai em alcoolismo e tentativa de suicídio, depois é ajudado por CJ a reconstruir carreira.",
     relationships: ["CJ: inicialmente prejudicial, depois aliado", "OG Loc: imitador/rival"],
-    affiliations: ["industria musical"],
+    affiliations: ["indústria musical"],
     enemies: ["OG Loc"],
     fate: "Vivo e reabilitado.",
-    importance: "Medio",
+    importance: "Médio",
     tags: ["aliado", "celebridade", "música"]
   },
   {
@@ -2146,11 +2148,11 @@ const charactersData = [
     games: ["Grand Theft Auto: San Andreas"],
     universe: "3D Universe",
     city: "San Fierro",
-    role: "Aliado tecnico",
+    role: "Aliado técnico",
     category: "Aliados",
-    biography: "Dono de loja de eletronicos e especialista em radio-controle, alvo da rivalidade com Berkley.",
-    storyArc: "Ajuda CJ com tecnologia, ainda que suas missoes sejam lembradas pela dificuldade.",
-    relationships: ["CJ: socio", "Berkley: rival"],
+    biography: "Dono de loja de eletrônicos e especialista em rádio-controle, alvo da rivalidade com Berkley.",
+    storyArc: "Ajuda CJ com tecnologia, ainda que suas missões sejam lembradas pela dificuldade.",
+    relationships: ["CJ: sócio", "Berkley: rival"],
     affiliations: ["Zero RC"],
     enemies: ["Berkley"],
     fate: "Vivo.",
@@ -2164,15 +2166,15 @@ const charactersData = [
     games: ["Grand Theft Auto: San Andreas"],
     universe: "3D Universe",
     city: "San Fierro",
-    role: "Antagonista / cafetao",
+    role: "Antagonista / cafetão",
     category: "Antagonistas",
     biography: "Dono do Pleasure Domes e membro do Loco Syndicate.",
     storyArc: "Serve como entrada de CJ no sindicato de drogas em San Fierro.",
-    relationships: ["T-Bone Mendez: parceiro", "Mike Toreno: socio oculto"],
+    relationships: ["T-Bone Mendez: parceiro", "Mike Toreno: sócio oculto"],
     affiliations: ["Loco Syndicate"],
     enemies: ["CJ", "Cesar"],
     fate: "Morto por CJ.",
-    importance: "Medio",
+    importance: "Médio",
     tags: ["antagonista", "crime organizado"]
   },
   {
@@ -2186,11 +2188,11 @@ const charactersData = [
     category: "Antagonistas",
     biography: "Membro violento do Loco Syndicate e contato de Ryder.",
     storyArc: "Cai quando CJ e Cesar desmantelam a rede de San Fierro.",
-    relationships: ["Ryder: associado", "Jizzy B: parceiro", "Mike Toreno: socio"],
+    relationships: ["Ryder: associado", "Jizzy B: parceiro", "Mike Toreno: sócio"],
     affiliations: ["San Fierro Rifa", "Loco Syndicate"],
     enemies: ["CJ", "Cesar"],
     fate: "Morto por CJ e Cesar.",
-    importance: "Medio",
+    importance: "Médio",
     tags: ["antagonista", "gangue", "Rifa"]
   },
   {
@@ -2200,16 +2202,16 @@ const charactersData = [
     games: ["Grand Theft Auto: San Andreas"],
     universe: "3D Universe",
     city: "Los Santos",
-    role: "Comico / falso gangster",
+    role: "Cômico / falso gangster",
     category: "Aliados",
-    biography: "Aspirante a rapper que tenta construir imagem criminosa sem ter substancia.",
-    storyArc: "Explora CJ para roubar a carreira de Madd Dogg, depois e exposto.",
-    relationships: ["CJ: antigo amigo", "Madd Dogg: vitima", "Big Smoke: apoiador"],
-    affiliations: ["Burger Shot", "industria musical fake"],
+    biography: "Aspirante a rapper que tenta construir imagem criminosa sem ter substância.",
+    storyArc: "Explora CJ para roubar a carreira de Madd Dogg, depois é exposto.",
+    relationships: ["CJ: antigo amigo", "Madd Dogg: vítima", "Big Smoke: apoiador"],
+    affiliations: ["Burger Shot", "indústria musical fake"],
     enemies: ["Madd Dogg"],
     fate: "Vivo, humilhado.",
-    importance: "Medio",
-    tags: ["satira", "música"]
+    importance: "Médio",
+    tags: ["sátira", "música"]
   },
   {
     id: "johnny-sindacco",
@@ -2222,11 +2224,11 @@ const charactersData = [
     category: "Máfia",
     biography: "Membro da Sindacco Family ligado a cassinos e disputas mafiosas.",
     storyArc: "Sofre com os golpes de CJ em Las Venturas e reaparece fragilizado na guerra de Liberty.",
-    relationships: ["Sindacco Family: familia", "CJ: inimigo"],
+    relationships: ["Sindacco Family: família", "CJ: inimigo"],
     affiliations: ["Sindacco Family"],
     enemies: ["Leone Family", "CJ"],
     fate: "Morto em Liberty City Stories.",
-    importance: "Medio",
+    importance: "Médio",
     tags: ["máfia", "Sindacco"]
   },
   {
@@ -2238,8 +2240,8 @@ const charactersData = [
     city: "Liberty City",
     role: "Antagonista",
     category: "Antagonistas",
-    biography: "Presidente do The Lost MC, carismatico e destrutivo.",
-    storyArc: "Retorna da reabilitacao e leva o clube a uma guerra que Johnny tenta impedir.",
+    biography: "Presidente do The Lost MC, carismático e destrutivo.",
+    storyArc: "Retorna da reabilitação e leva o clube a uma guerra que Johnny tenta impedir.",
     relationships: ["Johnny Klebitz: vice-presidente e rival", "Brian Jeremy: aliado"],
     affiliations: ["The Lost MC"],
     enemies: ["Johnny Klebitz", "Angels of Death"],
@@ -2254,16 +2256,16 @@ const charactersData = [
     games: ["Grand Theft Auto IV: The Lost and Damned", "Grand Theft Auto V"],
     universe: "HD Universe",
     city: "Liberty City / Blaine County",
-    role: "Aliada tragica",
+    role: "Aliada trágica",
     category: "Aliados",
-    biography: "Ex de Johnny, presa a vicio e dividas, constantemente puxando o motoclube para problemas.",
-    storyArc: "Sua dependencia e relacionamento com Johnny simbolizam a decadencia do The Lost.",
+    biography: "Ex de Johnny, presa a vício e dívidas, constantemente puxando o motoclube para problemas.",
+    storyArc: "Sua dependência e relacionamento com Johnny simbolizam a decadência do The Lost.",
     relationships: ["Johnny Klebitz: ex", "Trevor Philips: envolvimento destrutivo"],
-    affiliations: ["The Lost MC por associacao"],
-    enemies: ["vicio", "violencia ao redor"],
+    affiliations: ["The Lost MC por associação"],
+    enemies: ["vício", "violência ao redor"],
     fate: "Destino posterior indicado de forma sombria em GTA V/Online; varia por material.",
-    importance: "Medio",
-    tags: ["tragico", "motoclube"]
+    importance: "Médio",
+    tags: ["trágico", "motoclube"]
   },
   {
     id: "tony-prince",
@@ -2272,16 +2274,16 @@ const charactersData = [
     games: ["Grand Theft Auto IV: The Ballad of Gay Tony", "Grand Theft Auto Online"],
     universe: "HD Universe",
     city: "Liberty City / Los Santos",
-    role: "Empresario da noite",
+    role: "Empresário da noite",
     category: "Empresários",
     biography: "Dono de clubes, celebridade da noite e figura endividada que depende de Luis para sobreviver.",
     storyArc: "Quase perde tudo em Liberty; reaparece em Online ajudando o jogador com nightclubs.",
-    relationships: ["Luis Lopez: protetor", "Gracie Ancelotti: rede social", "jogador Online: socio"],
+    relationships: ["Luis Lopez: protetor", "Gracie Ancelotti: rede social", "jogador Online: sócio"],
     affiliations: ["Maisonette 9", "Hercules", "Nightclubs"],
     enemies: ["credores", "Bulgarin", "Rocco"],
     fate: "Vivo e ativo em GTA Online.",
     importance: "Alto",
-    tags: ["empresario", "online", "vida noturna"]
+    tags: ["empresário", "online", "vida noturna"]
   },
   {
     id: "yusuf-amir",
@@ -2290,16 +2292,16 @@ const charactersData = [
     games: ["Grand Theft Auto IV: The Ballad of Gay Tony", "Grand Theft Auto Online"],
     universe: "HD Universe",
     city: "Liberty City / Los Santos",
-    role: "Empresario aliado",
+    role: "Empresário aliado",
     category: "Empresários",
-    biography: "Bilionario imobiliario extravagante, fascinado por armas, helicópteros e excessos.",
-    storyArc: "Ajuda Luis com recursos absurdos e reaparece como contato em negocios automotivos de Online.",
+    biography: "Bilionário imobiliário extravagante, fascinado por armas, helicópteros e excessos.",
+    storyArc: "Ajuda Luis com recursos absurdos e reaparece como contato em negócios automotivos de Online.",
     relationships: ["Luis Lopez: aliado", "Amir family: riqueza", "jogador Online: contato"],
     affiliations: ["Amir interests"],
-    enemies: ["rivais de negocio"],
+    enemies: ["rivais de negócio"],
     fate: "Vivo.",
-    importance: "Medio",
-    tags: ["empresario", "aliado", "online"]
+    importance: "Médio",
+    tags: ["empresário", "aliado", "online"]
   },
   {
     id: "mori-kibbutz",
@@ -2310,14 +2312,14 @@ const charactersData = [
     city: "Liberty City",
     role: "Antagonista menor",
     category: "Empresários",
-    biography: "Irmao de Brucie, ainda mais agressivo e controlador.",
-    storyArc: "Pressiona Luis em tarefas humilhantes e satiriza competitividade toxica.",
-    relationships: ["Brucie Kibbutz: irmao", "Luis Lopez: alvo de exploracao"],
-    affiliations: ["negocios pessoais"],
+    biography: "Irmão de Brucie, ainda mais agressivo e controlador.",
+    storyArc: "Pressiona Luis em tarefas humilhantes e satiriza competitividade tóxica.",
+    relationships: ["Brucie Kibbutz: irmão", "Luis Lopez: alvo de exploração"],
+    affiliations: ["negócios pessoais"],
     enemies: ["Luis por conflito"],
     fate: "Vivo, derrotado simbolicamente.",
     importance: "Baixo",
-    tags: ["empresario", "satira"]
+    tags: ["empresário", "sátira"]
   },
   {
     id: "ray-bulgarin",
@@ -2329,7 +2331,7 @@ const charactersData = [
     role: "Antagonista",
     category: "Máfia",
     biography: "Criminoso russo ligado ao passado de Niko e aos conflitos de Luis.",
-    storyArc: "Funciona como ponte entre trafico internacional, dividas e vinganca.",
+    storyArc: "Funciona como ponte entre tráfico internacional, dívidas e vingança.",
     relationships: ["Niko Bellic: antigo inimigo", "Luis Lopez: alvo", "Timur: associado"],
     affiliations: ["Russian Mafia"],
     enemies: ["Niko Bellic", "Luis Lopez"],
@@ -2346,7 +2348,7 @@ const charactersData = [
     city: "Liberty City",
     role: "Antagonista",
     category: "Máfia",
-    biography: "Tio de Huang, ambicioso e disposto a trair familia por poder.",
+    biography: "Tio de Huang, ambicioso e disposto a trair família por poder.",
     storyArc: "Manipula a perda da Yu Jian e se revela traidor final.",
     relationships: ["Huang Lee: sobrinho", "Hsin Jaoming: superior"],
     affiliations: ["Triads"],
@@ -2362,15 +2364,15 @@ const charactersData = [
     games: ["Grand Theft Auto: Chinatown Wars"],
     universe: "HD Universe",
     city: "Liberty City",
-    role: "Lider Triad",
+    role: "Líder Triad",
     category: "Máfia",
-    biography: "Chefe das Triads em Liberty City, envelhecido, perigoso e preocupado com sucessao.",
-    storyArc: "Testa Huang e tenta descobrir quem trai a organizacao.",
-    relationships: ["Huang Lee: possivel sucessor", "Kenny Lee: subordinado traidor"],
+    biography: "Chefe das Triads em Liberty City, envelhecido, perigoso e preocupado com sucessão.",
+    storyArc: "Testa Huang e tenta descobrir quem trai a organização.",
+    relationships: ["Huang Lee: possível sucessor", "Kenny Lee: subordinado traidor"],
     affiliations: ["Triads"],
     enemies: ["ratos internos", "gangues rivais"],
-    fate: "Vivo ao final, com sucessao redefinida.",
-    importance: "Medio",
+    fate: "Vivo ao final, com sucessão redefinida.",
+    importance: "Médio",
     tags: ["máfia", "Triads"]
   },
   {
@@ -2382,13 +2384,13 @@ const charactersData = [
     city: "Liberty City",
     role: "Policial corrupto / aliado",
     category: "Governo/Polícia",
-    biography: "Detetive da LCPD com vicios, problemas disciplinares e utilidade investigativa.",
-    storyArc: "Ajuda Huang por interesse proprio e por necessidade de limpar sua situacao.",
-    relationships: ["Huang Lee: aliado pragmatico"],
+    biography: "Detetive da LCPD com vícios, problemas disciplinares e utilidade investigativa.",
+    storyArc: "Ajuda Huang por interesse próprio e por necessidade de limpar sua situação.",
+    relationships: ["Huang Lee: aliado pragmático"],
     affiliations: ["LCPD"],
-    enemies: ["corrupcao interna", "traficantes"],
+    enemies: ["corrupção interna", "traficantes"],
     fate: "Vivo.",
-    importance: "Medio",
+    importance: "Médio",
     tags: ["polícia corrupta", "aliado"]
   }
 ];
@@ -2401,13 +2403,13 @@ const citiesData = [
     universeAppearances: ["2D Universe", "3D Universe", "HD Universe"],
     games: ["GTA 1", "GTA III", "Liberty City Stories", "GTA IV", "Chinatown Wars", "GTA Advance"],
     description:
-      "A metropole de concreto da serie. Liberty concentra mafia, imigracao, corrupcao, ambicao imobiliaria, trauma e capitalismo urbano.",
+      "A metrópole de concreto da série. Liberty concentra máfia, imigração, corrupção, ambição imobiliária, trauma e capitalismo urbano.",
     districts: ["Portland", "Staunton Island", "Shoreside Vale", "Broker", "Dukes", "Bohan", "Algonquin", "Alderney"],
     factions: ["Leone Family", "Yakuza", "Colombian Cartel", "Yardies", "Russian Mafia", "Triads", "Pegorino Family", "LCPD"],
-    importantEvents: ["Traicao de Catalina", "queda de Salvatore Leone", "chegada de Niko Bellic", "guerra dos diamantes", "trama da Yu Jian"],
+    importantEvents: ["Traição de Catalina", "queda de Salvatore Leone", "chegada de Niko Bellic", "guerra dos diamantes", "trama da Yu Jian"],
     characters: ["Claude", "Toni Cipriani", "Niko Bellic", "Huang Lee", "Salvatore Leone", "Roman Bellic"],
-    visualStyle: "Concreto, chuva, pontes, metro, arranha-ceus, docas, bairros imigrantes e neon frio.",
-    themes: ["mafia", "imigracao", "corrupcao", "capitalismo", "decadencia"]
+    visualStyle: "Concreto, chuva, pontes, metrô, arranha-céus, docas, bairros imigrantes e neon frio.",
+    themes: ["máfia", "imigração", "corrupção", "capitalismo", "decadência"]
   },
   {
     id: "vice-city",
@@ -2416,18 +2418,18 @@ const citiesData = [
     universeAppearances: ["2D Universe", "3D Universe", "HD Universe"],
     games: ["GTA 1", "Vice City", "Vice City Stories", "GTA VI"],
     description:
-      "Cidade tropical da ambicao criminosa: praia, luxo, trafico, neon, cartois e vida noturna.",
+      "Cidade tropical da ambição criminosa: praia, luxo, tráfico, neon, cartéis e vida noturna.",
     districts: ["Ocean Beach", "Washington Beach", "Vice Point", "Downtown", "Little Haiti", "Little Havana", "Starfish Island", "Vice City moderna"],
-    factions: ["Forelli Family", "Diaz Organization", "Vance Crime Family", "Mendez Cartel", "Cubans", "Haitians", "grupos de GTA VI nao confirmados"],
-    importantEvents: ["ascensao de Tommy Vercetti", "queda de Ricardo Diaz", "tragedia de Vic Vance", "retorno em GTA VI"],
+    factions: ["Forelli Family", "Diaz Organization", "Vance Crime Family", "Mendez Cartel", "Cubans", "Haitians", "grupos de GTA VI não confirmados"],
+    importantEvents: ["ascensão de Tommy Vercetti", "queda de Ricardo Diaz", "tragédia de Vic Vance", "retorno em GTA VI"],
     characters: ["Tommy Vercetti", "Vic Vance", "Lance Vance", "Ken Rosenberg", "Lucia Caminos", "Jason Duval"],
-    visualStyle: "Palmeiras, art deco, rosa neon, azul piscina, carros esportivos, clubes, mansoes e calor umido.",
+    visualStyle: "Palmeiras, art deco, rosa neon, azul piscina, carros esportivos, clubes, mansões e calor úmido.",
     themes: ["neon", "drogas", "luxo", "praia", "cartéis", "vida noturna"]
   },
   {
     id: "san-andreas",
     name: "San Andreas",
-    realWorldInspiration: "California e Nevada; na era 2D, uma cidade inspirada em San Francisco",
+    realWorldInspiration: "Califórnia e Nevada; na era 2D, uma cidade inspirada em San Francisco",
     universeAppearances: ["2D Universe", "3D Universe", "HD Universe"],
     games: ["GTA 1", "GTA: San Andreas", "GTA V", "GTA Online"],
     description:
@@ -2437,7 +2439,7 @@ const citiesData = [
     importantEvents: ["morte de Beverly Johnson", "queda de Tenpenny", "assaltos de GTA V", "crescimento de GTA Online"],
     characters: ["CJ", "Sweet", "Cesar", "Woozie", "Michael", "Franklin", "Trevor"],
     visualStyle: "Costa ensolarada, bairros de gangue, colinas, deserto, cassinos, pontes e interior rural.",
-    themes: ["gangues", "familia", "territorio", "desigualdade", "entretenimento"]
+    themes: ["gangues", "família", "território", "desigualdade", "entretenimento"]
   },
   {
     id: "los-santos",
@@ -2446,13 +2448,13 @@ const citiesData = [
     universeAppearances: ["3D Universe", "HD Universe"],
     games: ["GTA: San Andreas", "GTA V", "GTA Online"],
     description:
-      "Cidade do sonho vendido: celebridades, midia, gangues, riqueza extrema, industria do entretenimento e desigualdade brutal.",
+      "Cidade do sonho vendido: celebridades, mídia, gangues, riqueza extrema, indústria do entretenimento e desigualdade brutal.",
     districts: ["Ganton", "Idlewood", "Vinewood", "Downtown", "Rockford Hills", "Vespucci", "Del Perro", "South Los Santos"],
     factions: ["Families", "Ballas", "Vagos", "Madrazo Cartel", "FIB", "IAA", "Merryweather", "organizações de jogadores"],
     importantEvents: ["reconquista de Grove Street", "assaltos de GTA V", "The Contract", "Doomsday Heist", "Diamond Casino"],
     characters: ["CJ", "Franklin", "Michael", "Trevor", "Lamar", "Lester"],
-    visualStyle: "Sol duro, outdoors, freeways, palmeiras, mansoes, estudios, grafite e sirenes.",
-    themes: ["celebridade", "midia", "gangues", "riqueza", "desigualdade"]
+    visualStyle: "Sol duro, outdoors, freeways, palmeiras, mansões, estúdios, grafite e sirenes.",
+    themes: ["celebridade", "mídia", "gangues", "riqueza", "desigualdade"]
   },
   {
     id: "san-fierro",
@@ -2467,7 +2469,7 @@ const citiesData = [
     importantEvents: ["desmonte do Loco Syndicate", "aliança com Woozie", "garagem de CJ"],
     characters: ["CJ", "Cesar", "Woozie", "Jizzy B", "T-Bone Mendez", "Zero"],
     visualStyle: "Neblina, ladeiras, pontes vermelhas, oficinas, Chinatown e docas.",
-    themes: ["contracultura", "tecnologia", "garagens", "crime asiatico"]
+    themes: ["contracultura", "tecnologia", "garagens", "crime asiático"]
   },
   {
     id: "las-venturas",
@@ -2476,28 +2478,28 @@ const citiesData = [
     universeAppearances: ["3D Universe"],
     games: ["GTA: San Andreas"],
     description:
-      "Cassinos, deserto e mafia. Las Venturas mostra a versao corporativa e espetacular do crime.",
+      "Cassinos, deserto e máfia. Las Venturas mostra a versão corporativa e espetacular do crime.",
     districts: ["The Strip", "Old Venturas Strip", "Caligula's Palace", "Four Dragons Casino", "Redsands", "Prickle Pine"],
     factions: ["Leone Family", "Sindacco Family", "Forelli Family", "Triads"],
     importantEvents: ["assalto ao Caligula's", "guerra de cassinos", "arco de Ken Rosenberg"],
     characters: ["CJ", "Woozie", "Ken Rosenberg", "Salvatore Leone", "Madd Dogg"],
     visualStyle: "Neon de cassino, placas gigantes, resorts, deserto e ruas largas.",
-    themes: ["cassinos", "apostas", "máfia", "corrupcao"]
+    themes: ["cassinos", "apostas", "máfia", "corrupção"]
   },
   {
     id: "blaine-county",
     name: "Blaine County",
-    realWorldInspiration: "Interior desertico do sul da California",
+    realWorldInspiration: "Interior desértico do sul da Califórnia",
     universeAppearances: ["HD Universe"],
     games: ["GTA V", "GTA Online"],
     description:
-      "Zona rural e desertica que contrasta com Los Santos: trailers, trafico, armas, seitas, conspiracoes e abandono economico.",
+      "Zona rural e desértica que contrasta com Los Santos: trailers, tráfico, armas, seitas, conspirações e abandono econômico.",
     districts: ["Sandy Shores", "Grapeseed", "Paleto Bay", "Mount Chiliad", "Alamo Sea", "Fort Zancudo"],
     factions: ["Trevor Philips Enterprises", "The Lost MC", "Altruist Cult", "Merryweather", "IAA/FIB operations"],
-    importantEvents: ["ascensao de Trevor", "guerra contra Lost MC", "assaltos e operacoes de Online"],
+    importantEvents: ["ascensão de Trevor", "guerra contra Lost MC", "assaltos e operações de Online"],
     characters: ["Trevor", "Ron", "Wade", "Johnny Klebitz"],
     visualStyle: "Poeira, postos de gasolina, hangares, trailers, montanhas, lago salgado e sirenes distantes.",
-    themes: ["trafico", "milicias", "pobreza", "contrabando", "caos rural"]
+    themes: ["tráfico", "milícias", "pobreza", "contrabando", "caos rural"]
   },
   {
     id: "north-yankton",
@@ -2506,28 +2508,28 @@ const citiesData = [
     universeAppearances: ["HD Universe"],
     games: ["GTA V"],
     description:
-      "Local do prologo de GTA V. Pequena, fria e lembrada como cena do crime original entre Michael, Trevor, Brad e Dave.",
-    districts: ["Ludendorff", "cemiterio", "banco local"],
-    factions: ["equipe de Michael", "FIB por meio de Dave Norton", "policia local"],
+      "Local do prólogo de GTA V. Pequena, fria e lembrada como cena do crime original entre Michael, Trevor, Brad e Dave.",
+    districts: ["Ludendorff", "cemitério", "banco local"],
+    factions: ["equipe de Michael", "FIB por meio de Dave Norton", "polícia local"],
     importantEvents: ["assalto de 2004", "morte/sepultamento de Brad", "retorno de Michael e Trevor"],
     characters: ["Michael", "Trevor", "Brad", "Dave Norton"],
-    visualStyle: "Neve, bancos pequenos, estradas vazias, silencio e trauma congelado.",
-    themes: ["passado", "traicao", "identidade falsa"]
+    visualStyle: "Neve, bancos pequenos, estradas vazias, silêncio e trauma congelado.",
+    themes: ["passado", "traição", "identidade falsa"]
   },
   {
     id: "anywhere-city",
     name: "Anywhere City",
-    realWorldInspiration: "Cidade retrofuturista composta, sem equivalente unico",
+    realWorldInspiration: "Cidade retrofuturista composta, sem equivalente único",
     universeAppearances: ["2D Universe"],
     games: ["GTA 2"],
     description:
-      "Ambiente distopico e estilizado de GTA 2, com zonas controladas por gangues de identidades exageradas.",
+      "Ambiente distópico e estilizado de GTA 2, com zonas controladas por gangues de identidades exageradas.",
     districts: ["Downtown District", "Residential District", "Industrial District"],
     factions: ["Zaibatsu", "Loonies", "Yakuza", "Scientists", "Rednecks", "Russian Mafia", "Krishna"],
-    importantEvents: ["guerras de reputacao de Claude Speed"],
+    importantEvents: ["guerras de reputação de Claude Speed"],
     characters: ["Claude Speed"],
-    visualStyle: "Retrofuturo, luzes frias, zonas industriais, humor absurdo e violencia arcade.",
-    themes: ["distopia", "gangues", "corporacoes", "experimento"]
+    visualStyle: "Retrofuturo, luzes frias, zonas industriais, humor absurdo e violência arcade.",
+    themes: ["distopia", "gangues", "corporações", "experimento"]
   },
   {
     id: "london",
@@ -2536,13 +2538,13 @@ const citiesData = [
     universeAppearances: ["2D Universe"],
     games: ["GTA: London 1969", "GTA: London 1961"],
     description:
-      "A rara cidade real da serie, usada em expansoes de epoca antes da franquia se fixar em analogos satiricos dos EUA.",
+      "A rara cidade real da série, usada em expansões de época antes da franquia se fixar em análogos satíricos dos EUA.",
     districts: ["zonas estilizadas de Londres"],
-    factions: ["gangues britanicas", "policia"],
-    importantEvents: ["incursao internacional da era 2D"],
-    characters: ["avatares selecionaveis"],
-    visualStyle: "Carros britanicos, humor londrino, anos 60 e sinalizacao de epoca.",
-    themes: ["crime britanico", "anos 60", "curiosidade historica"]
+    factions: ["gangues britânicas", "polícia"],
+    importantEvents: ["incursão internacional da era 2D"],
+    characters: ["avatares selecionáveis"],
+    visualStyle: "Carros britânicos, humor londrino, anos 60 e sinalização de época.",
+    themes: ["crime britânico", "anos 60", "curiosidade histórica"]
   },
   {
     id: "leonida",
@@ -2551,12 +2553,12 @@ const citiesData = [
     universeAppearances: ["HD Universe"],
     games: ["GTA VI"],
     description:
-      "Estado de GTA VI, incluindo Vice City moderna. O material oficial enfatiza sol, crime, conspiracao estadual e dependencia entre Lucia e Jason.",
-    districts: ["Vice City", "Leonida Keys", "areas de pantano", "praias", "estradas estaduais", "locais ainda nao confirmados"],
-    factions: ["nao confirmado", "policia local", "redes criminosas modernas"],
+      "Estado de GTA VI, incluindo Vice City moderna. O material oficial enfatiza sol, crime, conspiração estadual e dependência entre Lucia e Jason.",
+    districts: ["Vice City", "Leonida Keys", "áreas de pântano", "praias", "estradas estaduais", "locais ainda não confirmados"],
+    factions: ["não confirmado", "polícia local", "redes criminosas modernas"],
     importantEvents: ["trama de Lucia e Jason em 2026"],
     characters: ["Lucia Caminos", "Jason Duval", "Cal Hampton", "Boobie Ike", "Dre'Quan Priest"],
-    visualStyle: "Miami moderna, redes sociais, praias, pantanos, letreiros, rodovias e neon atualizado.",
+    visualStyle: "Miami moderna, redes sociais, praias, pântanos, letreiros, rodovias e neon atualizado.",
     themes: ["redes sociais", "crime moderno", "cultura viral", "sátira da Florida", "casal criminoso"]
   }
 ];
@@ -2569,12 +2571,12 @@ const factionsData = [
     game: "GTA III, Liberty City Stories, San Andreas",
     city: "Liberty City / Las Venturas",
     leaders: ["Salvatore Leone", "Toni Cipriani", "Joey Leone"],
-    allies: ["Luigi Goterelli", "alguns politicos locais"],
+    allies: ["Luigi Goterelli", "alguns políticos locais"],
     enemies: ["Forelli Family", "Sindacco Family", "Yakuza", "Claude"],
-    businesses: ["extorsao", "jogos ilegais", "proteção", "cassinos", "contratos"],
-    narrativeImportance: "Eixo da mafia da era 3D, conectando GTA III, LCS e San Andreas.",
-    status: "Enfraquecida apos a morte de Salvatore; destino posterior nao confirmado.",
-    tags: ["mafia", "3D Universe", "Liberty City"]
+    businesses: ["extorsão", "jogos ilegais", "proteção", "cassinos", "contratos"],
+    narrativeImportance: "Eixo da máfia da era 3D, conectando GTA III, LCS e San Andreas.",
+    status: "Enfraquecida após a morte de Salvatore; destino posterior não confirmado.",
+    tags: ["máfia", "3D Universe", "Liberty City"]
   },
   {
     id: "forelli-family",
@@ -2585,10 +2587,10 @@ const factionsData = [
     leaders: ["Sonny Forelli", "Franco Forelli"],
     allies: ["Lance Vance no final de Vice City"],
     enemies: ["Tommy Vercetti", "Leone Family", "Sindacco Family"],
-    businesses: ["trafico", "extorsao", "investimentos criminosos"],
-    narrativeImportance: "Gatilho da trama de Vice City e rival historica dos Leone.",
-    status: "Muito abalada apos a morte de Sonny.",
-    tags: ["mafia", "Vice City", "3D Universe"]
+    businesses: ["tráfico", "extorsão", "investimentos criminosos"],
+    narrativeImportance: "Gatilho da trama de Vice City e rival histórica dos Leone.",
+    status: "Muito abalada após a morte de Sonny.",
+    tags: ["máfia", "Vice City", "3D Universe"]
   },
   {
     id: "sindacco-family",
@@ -2599,10 +2601,10 @@ const factionsData = [
     leaders: ["Paulie Sindacco", "Johnny Sindacco"],
     allies: ["interesses em Caligula's"],
     enemies: ["Leone Family", "Forelli Family", "CJ"],
-    businesses: ["cassinos", "trafico", "mafia de cassino"],
-    narrativeImportance: "Liga Las Venturas a Liberty City e mostra disputas entre familias italianas.",
-    status: "Enfraquecida apos guerras da era 3D.",
-    tags: ["mafia", "cassino"]
+    businesses: ["cassinos", "tráfico", "máfia de cassino"],
+    narrativeImportance: "Liga Las Venturas a Liberty City e mostra disputas entre famílias italianas.",
+    status: "Enfraquecida após guerras da era 3D.",
+    tags: ["máfia", "cassino"]
   },
   {
     id: "yakuza",
@@ -2613,10 +2615,10 @@ const factionsData = [
     leaders: ["Asuka Kasen", "Kenji Kasen"],
     allies: ["Claude temporariamente"],
     enemies: ["Leone Family", "Colombian Cartel"],
-    businesses: ["trafico", "contratos", "proteção", "contrabando"],
+    businesses: ["tráfico", "contratos", "proteção", "contrabando"],
     narrativeImportance: "Facção que vira a guerra de GTA III contra Salvatore e Catalina.",
-    status: "Lideranca destruida em GTA III.",
-    tags: ["Yakuza", "mafia", "3D Universe"]
+    status: "Liderança destruída em GTA III.",
+    tags: ["Yakuza", "máfia", "3D Universe"]
   },
   {
     id: "colombian-cartel",
@@ -2627,8 +2629,8 @@ const factionsData = [
     leaders: ["Catalina", "Miguel"],
     allies: ["Big Smoke e Ryder por rede de drogas em San Andreas"],
     enemies: ["Claude", "Yakuza", "Grove Street Families"],
-    businesses: ["cocaina", "distribuicao", "armas"],
-    narrativeImportance: "Força por tras de Catalina e da crise das drogas em partes da era 3D.",
+    businesses: ["cocaína", "distribuição", "armas"],
+    narrativeImportance: "Força por trás de Catalina e da crise das drogas em partes da era 3D.",
     status: "Derrotado em GTA III.",
     tags: ["cartel", "drogas", "antagonista"]
   },
@@ -2669,10 +2671,10 @@ const factionsData = [
     leaders: ["Hsin Jaoming", "Wu Zi Mu", "Wu Kenny Lee"],
     allies: ["Huang Lee", "CJ", "Claude temporariamente"],
     enemies: ["Leone Family", "Da Nang Boys", "traidores internos"],
-    businesses: ["contrabando", "cassinos", "trafico", "proteção"],
+    businesses: ["contrabando", "cassinos", "tráfico", "proteção"],
     narrativeImportance: "Uma das redes mais recorrentes, indo de Chinatown Wars a San Andreas.",
-    status: "Ativa em multiplas continuidades.",
-    tags: ["Triads", "mafia", "crime organizado"]
+    status: "Ativa em múltiplas continuidades.",
+    tags: ["Triads", "máfia", "crime organizado"]
   },
   {
     id: "grove-street",
@@ -2683,10 +2685,10 @@ const factionsData = [
     leaders: ["Sweet Johnson", "CJ"],
     allies: ["Varrios Los Aztecas"],
     enemies: ["Ballas", "Los Santos Vagos", "C.R.A.S.H."],
-    businesses: ["territorio", "proteção", "reputacao de rua"],
+    businesses: ["território", "proteção", "reputação de rua"],
     narrativeImportance: "Centro emocional de San Andreas.",
-    status: "Reconquistada no final de San Andreas; situacao na era HD e outra continuidade.",
-    tags: ["gangue", "familia", "Los Santos"]
+    status: "Reconquistada no final de San Andreas; situação na era HD e outra continuidade.",
+    tags: ["gangue", "família", "Los Santos"]
   },
   {
     id: "ballas",
@@ -2694,11 +2696,11 @@ const factionsData = [
     category: "Gangue",
     game: "San Andreas, GTA V",
     city: "Los Santos",
-    leaders: ["lideres locais", "Big Smoke e Ryder como associados na era 3D"],
+    leaders: ["líderes locais", "Big Smoke e Ryder como associados na era 3D"],
     allies: ["C.R.A.S.H. indiretamente", "traficantes"],
     enemies: ["Grove Street Families", "Families"],
-    businesses: ["drogas", "territorio", "armas"],
-    narrativeImportance: "Rival historica da Grove/Families.",
+    businesses: ["drogas", "território", "armas"],
+    narrativeImportance: "Rival histórica da Grove/Families.",
     status: "Ativa em ambas as continuidades.",
     tags: ["gangue", "Los Santos"]
   },
@@ -2708,10 +2710,10 @@ const factionsData = [
     category: "Gangue",
     game: "San Andreas, GTA V, GTA Online",
     city: "Los Santos",
-    leaders: ["lideres locais"],
-    allies: ["cartéis e redes de trafico variam por jogo"],
+    leaders: ["líderes locais"],
+    allies: ["cartéis e redes de tráfico variam por jogo"],
     enemies: ["Grove Street Families", "Aztecas", "Families"],
-    businesses: ["drogas", "territorio", "contrabando"],
+    businesses: ["drogas", "território", "contrabando"],
     narrativeImportance: "Força latina recorrente no submundo de Los Santos.",
     status: "Ativa.",
     tags: ["gangue", "Los Santos", "online"]
@@ -2725,8 +2727,8 @@ const factionsData = [
     leaders: ["Cesar Vialpando"],
     allies: ["Grove Street Families"],
     enemies: ["Los Santos Vagos", "Ballas"],
-    businesses: ["territorio", "carros", "rua"],
-    narrativeImportance: "Aliança de Cesar que ajuda CJ a descobrir a traicao.",
+    businesses: ["território", "carros", "rua"],
+    narrativeImportance: "Aliança de Cesar que ajuda CJ a descobrir a traição.",
     status: "Ativa ao final de San Andreas.",
     tags: ["gangue", "aliado"]
   },
@@ -2739,9 +2741,9 @@ const factionsData = [
     leaders: ["T-Bone Mendez"],
     allies: ["Loco Syndicate"],
     enemies: ["CJ", "Cesar", "Triads"],
-    businesses: ["trafico", "controle local"],
+    businesses: ["tráfico", "controle local"],
     narrativeImportance: "Liga San Fierro ao cartel de drogas que abastece Los Santos.",
-    status: "Enfraquecida apos queda do Loco Syndicate.",
+    status: "Enfraquecida após queda do Loco Syndicate.",
     tags: ["gangue", "San Fierro"]
   },
   {
@@ -2751,11 +2753,11 @@ const factionsData = [
     game: "San Andreas",
     city: "San Fierro",
     leaders: ["The Snakehead"],
-    allies: ["rede propria"],
+    allies: ["rede própria"],
     enemies: ["Triads", "Woozie", "CJ"],
     businesses: ["contrabando humano", "drogas", "docas"],
     narrativeImportance: "Antagonistas do arco Triad em San Fierro.",
-    status: "Lideranca derrotada.",
+    status: "Liderança derrotada.",
     tags: ["gangue", "crime organizado"]
   },
   {
@@ -2764,11 +2766,11 @@ const factionsData = [
     category: "Motoclube",
     game: "The Lost and Damned, GTA V, GTA Online",
     city: "Liberty City / Blaine County / Los Santos",
-    leaders: ["Billy Grey", "Johnny Klebitz", "lideres locais"],
-    allies: ["Ashley Butler por associacao", "negocios de drogas"],
+    leaders: ["Billy Grey", "Johnny Klebitz", "líderes locais"],
+    allies: ["Ashley Butler por associação", "negócios de drogas"],
     enemies: ["Angels of Death", "Trevor Philips", "jogador Online"],
     businesses: ["metanfetamina", "armas", "roubo", "motoclube"],
-    narrativeImportance: "Mostra lealdade e autodestruicao em IV; vira alvo recorrente em V/Online.",
+    narrativeImportance: "Mostra lealdade e autodestruição em IV; vira alvo recorrente em V/Online.",
     status: "Fragmentado, mas persistente.",
     tags: ["motoclube", "online", "gangue"]
   },
@@ -2778,10 +2780,10 @@ const factionsData = [
     category: "Motoclube",
     game: "The Lost and Damned",
     city: "Liberty City",
-    leaders: ["lideres locais"],
+    leaders: ["líderes locais"],
     allies: ["rivais ocasionais dos Lost"],
     enemies: ["The Lost MC"],
-    businesses: ["motoclube", "drogas", "violencia de rua"],
+    businesses: ["motoclube", "drogas", "violência de rua"],
     narrativeImportance: "Principal rival externo do The Lost MC.",
     status: "Ativo durante os eventos de TLAD.",
     tags: ["motoclube", "rival"]
@@ -2795,9 +2797,9 @@ const factionsData = [
     leaders: ["Mikhail Faustin", "Dimitri Rascalov", "Ray Bulgarin"],
     allies: ["redes internacionais"],
     enemies: ["Niko Bellic", "Pegorino Family", "Luis Lopez"],
-    businesses: ["armas", "trafico humano", "drogas", "extorsao"],
-    narrativeImportance: "Nucleo da queda moral de Niko em Liberty.",
-    status: "Liderancas principais mortas.",
+    businesses: ["armas", "tráfico humano", "drogas", "extorsão"],
+    narrativeImportance: "Núcleo da queda moral de Niko em Liberty.",
+    status: "Lideranças principais mortas.",
     tags: ["máfia russa", "HD Universe"]
   },
   {
@@ -2808,10 +2810,10 @@ const factionsData = [
     city: "Alderney / Liberty City",
     leaders: ["Jimmy Pegorino"],
     allies: ["Phil Bell", "Ray Boccino"],
-    enemies: ["Niko Bellic", "Russian Mafia", "familias maiores"],
-    businesses: ["drogas", "contratos", "mafia italiana"],
-    narrativeImportance: "Mostra uma familia italiana decadente tentando reconhecimento.",
-    status: "Colapsada apos morte de Pegorino.",
+    enemies: ["Niko Bellic", "Russian Mafia", "famílias maiores"],
+    businesses: ["drogas", "contratos", "máfia italiana"],
+    narrativeImportance: "Mostra uma família italiana decadente tentando reconhecimento.",
+    status: "Colapsada após morte de Pegorino.",
     tags: ["máfia", "HD Universe"]
   },
   {
@@ -2820,13 +2822,13 @@ const factionsData = [
     category: "Família criminosa",
     game: "GTA IV, GTA V, Online",
     city: "Liberty City",
-    leaders: ["Gerry McReary", "Packie McReary em operacoes"],
+    leaders: ["Gerry McReary", "Packie McReary em operações"],
     allies: ["Niko Bellic"],
-    enemies: ["mafias rivais", "policia"],
+    enemies: ["máfias rivais", "polícia"],
     businesses: ["assaltos", "armas", "contratos"],
-    narrativeImportance: "Familia irlandesa que da a GTA IV seus assaltos mais memoraveis.",
+    narrativeImportance: "Família irlandesa que dá a GTA IV seus assaltos mais memoráveis.",
     status: "Fragmentada; Packie sobrevive em jogos posteriores.",
-    tags: ["familia criminosa", "assalto"]
+    tags: ["família criminosa", "assalto"]
   },
   {
     id: "five-families",
@@ -2834,12 +2836,12 @@ const factionsData = [
     category: "Máfia",
     game: "GTA IV, Episodes from Liberty City",
     city: "Liberty City",
-    leaders: ["Jon Gravelli", "Giovanni Ancelotti", "lideres de familias"],
-    allies: ["acordos temporarios"],
+    leaders: ["Jon Gravelli", "Giovanni Ancelotti", "líderes de famílias"],
+    allies: ["acordos temporários"],
     enemies: ["Pegorino Family", "gangues rivais"],
-    businesses: ["mafia italiana", "politica", "contratos", "drogas"],
-    narrativeImportance: "Contexto da Comissao mafiosa da era HD em Liberty.",
-    status: "Ativas, com poder variavel.",
+    businesses: ["máfia italiana", "política", "contratos", "drogas"],
+    narrativeImportance: "Contexto da Comissão mafiosa da era HD em Liberty.",
+    status: "Ativas, com poder variável.",
     tags: ["máfia", "HD Universe"]
   },
   {
@@ -2851,8 +2853,8 @@ const factionsData = [
     leaders: ["Martin Madrazo", "Miguel Madrazo"],
     allies: ["jogador Online em trabalhos", "contatos mexicanos"],
     enemies: ["rivais de cartel", "Michael/Trevor quando provocados", "El Rubio em Cayo Perico por conflito de interesses"],
-    businesses: ["trafico", "lavagem", "contratos"],
-    narrativeImportance: "Liga Los Santos a cartéis contemporaneos e a Cayo Perico.",
+    businesses: ["tráfico", "lavagem", "contratos"],
+    narrativeImportance: "Liga Los Santos a cartéis contemporâneos e a Cayo Perico.",
     status: "Ativo.",
     tags: ["cartel", "online", "GTA V"]
   },
@@ -2864,8 +2866,8 @@ const factionsData = [
     city: "Los Santos / global",
     leaders: ["Don Percival"],
     allies: ["clientes corporativos", "contratos governamentais"],
-    enemies: ["protagonistas", "jogador Online", "IAA em algumas operacoes"],
-    businesses: ["seguranca privada", "mercenarios", "armas", "operacoes militares"],
+    enemies: ["protagonistas", "jogador Online", "IAA em algumas operações"],
+    businesses: ["segurança privada", "mercenários", "armas", "operações militares"],
     narrativeImportance: "Sátira de empresa militar privada e antagonista recorrente da era HD.",
     status: "Ativa apesar de repetidas derrotas.",
     tags: ["empresa", "militar", "online"]
@@ -2879,8 +2881,8 @@ const factionsData = [
     leaders: ["Steve Haines", "Dave Norton", "agentes diversos"],
     allies: ["protagonistas quando chantageados"],
     enemies: ["IAA", "criminosos", "testemunhas inconvenientes"],
-    businesses: ["investigacao", "chantagem", "operacoes encobertas"],
-    narrativeImportance: "Parodia do FBI e um dos grandes motores de corrupcao institucional.",
+    businesses: ["investigação", "chantagem", "operações encobertas"],
+    narrativeImportance: "Paródia do FBI e um dos grandes motores de corrupção institucional.",
     status: "Ativo.",
     tags: ["governo", "polícia corrupta", "FIB"]
   },
@@ -2891,12 +2893,12 @@ const factionsData = [
     game: "GTA IV, GTA V, GTA Online",
     city: "Liberty City / Los Santos",
     leaders: ["agentes diversos"],
-    allies: ["jogador Online em operacoes especificas"],
+    allies: ["jogador Online em operações específicas"],
     enemies: ["FIB", "Merryweather", "terroristas e rivais"],
-    businesses: ["inteligencia", "operacoes clandestinas"],
-    narrativeImportance: "Parodia da CIA e rivalidade burocratica do FIB.",
+    businesses: ["inteligência", "operações clandestinas"],
+    narrativeImportance: "Paródia da CIA e rivalidade burocrática do FIB.",
     status: "Ativa.",
-    tags: ["governo", "inteligencia"]
+    tags: ["governo", "inteligência"]
   },
   {
     id: "noose",
@@ -2904,11 +2906,11 @@ const factionsData = [
     category: "Governo/Polícia",
     game: "GTA IV, GTA V, GTA Online",
     city: "Nacional",
-    leaders: ["comandos taticos"],
+    leaders: ["comandos táticos"],
     allies: ["LSPD", "LCPD", "FIB"],
     enemies: ["jogadores/protagonistas em wanted level alto"],
     businesses: ["resposta tática", "segurança nacional"],
-    narrativeImportance: "Escalada policial de alto nivel na era HD.",
+    narrativeImportance: "Escalada policial de alto nível na era HD.",
     status: "Ativa.",
     tags: ["polícia", "governo", "NOOSE"]
   },
@@ -2921,8 +2923,8 @@ const factionsData = [
     leaders: ["chefias locais"],
     allies: ["NOOSE", "FIB"],
     enemies: ["gangues", "protagonistas", "jogadores"],
-    businesses: ["policiamento", "perseguicoes", "corrupcao em casos especificos"],
-    narrativeImportance: "A presenca constante de repressao e satira policial em Los Santos.",
+    businesses: ["policiamento", "perseguições", "corrupção em casos específicos"],
+    narrativeImportance: "A presença constante de repressão e sátira policial em Los Santos.",
     status: "Ativa.",
     tags: ["polícia", "Los Santos"]
   },
@@ -2934,9 +2936,9 @@ const factionsData = [
     city: "Liberty City",
     leaders: ["comando local"],
     allies: ["NOOSE", "FIB"],
-    enemies: ["mafias", "gangues", "protagonistas"],
-    businesses: ["policiamento", "investigacao", "perseguicoes"],
-    narrativeImportance: "Instituicao policial que molda o ritmo criminal de Liberty.",
+    enemies: ["máfias", "gangues", "protagonistas"],
+    businesses: ["policiamento", "investigação", "perseguições"],
+    narrativeImportance: "Instituição policial que molda o ritmo criminal de Liberty.",
     status: "Ativa.",
     tags: ["polícia", "Liberty City"]
   },
@@ -2947,11 +2949,11 @@ const factionsData = [
     game: "San Andreas",
     city: "Los Santos",
     leaders: ["Frank Tenpenny", "Eddie Pulaski"],
-    allies: ["Big Smoke", "Ballas por conveniencia"],
+    allies: ["Big Smoke", "Ballas por conveniência"],
     enemies: ["CJ", "Grove Street", "Jimmy Hernandez quando vira risco"],
-    businesses: ["extorsao", "corrupcao", "manipulacao de gangues"],
-    narrativeImportance: "O rosto mais direto da corrupcao policial na era 3D.",
-    status: "Destruida apos queda de Tenpenny.",
+    businesses: ["extorsão", "corrupção", "manipulação de gangues"],
+    narrativeImportance: "O rosto mais direto da corrupção policial na era 3D.",
+    status: "Destruída após queda de Tenpenny.",
     tags: ["polícia corrupta", "C.R.A.S.H.", "antagonista"]
   },
   {
@@ -2963,10 +2965,10 @@ const factionsData = [
     leaders: ["Cris Formage"],
     allies: ["seguidores ricos"],
     enemies: ["ceticismo", "jogadores curiosos"],
-    businesses: ["culto", "doacoes", "lavagem satirica de crença"],
+    businesses: ["culto", "doações", "lavagem satírica de crença"],
     narrativeImportance: "Uma das sátiras religiosas/corporativas mais persistentes da Rockstar.",
     status: "Ativo.",
-    tags: ["culto", "easter egg", "satira"]
+    tags: ["culto", "easter egg", "sátira"]
   },
   {
     id: "zaibatsu",
@@ -2975,10 +2977,10 @@ const factionsData = [
     game: "GTA 2",
     city: "Anywhere City",
     leaders: ["chefes corporativos"],
-    allies: ["contratos temporarios"],
+    allies: ["contratos temporários"],
     enemies: ["Loonies", "Yakuza", "Rednecks e rivais"],
-    businesses: ["farmaceutica", "armas", "controle corporativo"],
-    narrativeImportance: "Principal simbolo de corporacao criminosa em GTA 2.",
+    businesses: ["farmacêutica", "armas", "controle corporativo"],
+    narrativeImportance: "Principal símbolo de corporação criminosa em GTA 2.",
     status: "Ativa em Anywhere City.",
     tags: ["2D Universe", "corporação"]
   },
@@ -2989,10 +2991,10 @@ const factionsData = [
     game: "GTA 2",
     city: "Anywhere City",
     leaders: ["Elmo"],
-    allies: ["temporarios"],
+    allies: ["temporários"],
     enemies: ["Zaibatsu", "gangues rivais"],
-    businesses: ["caos", "contratos", "violencia absurda"],
-    narrativeImportance: "Facção de tom anarquico e caricatural de GTA 2.",
+    businesses: ["caos", "contratos", "violência absurda"],
+    narrativeImportance: "Facção de tom anárquico e caricatural de GTA 2.",
     status: "Ativa em Anywhere City.",
     tags: ["2D Universe", "gangue"]
   },
@@ -3003,7 +3005,7 @@ const factionsData = [
     game: "GTA 2",
     city: "Anywhere City",
     leaders: ["Dr. LaBrat"],
-    allies: ["temporarios"],
+    allies: ["temporários"],
     enemies: ["Rednecks", "rivais de distrito"],
     businesses: ["experimentos", "tecnologia", "armas"],
     narrativeImportance: "Mostram o lado sci-fi estranho de GTA 2.",
@@ -3017,10 +3019,10 @@ const factionsData = [
     game: "GTA 2",
     city: "Anywhere City",
     leaders: ["Sunbeam"],
-    allies: ["temporarios"],
+    allies: ["temporários"],
     enemies: ["Russian Mafia", "rivais"],
     businesses: ["culto", "rua", "contratos"],
-    narrativeImportance: "Facção satirica de GTA 2.",
+    narrativeImportance: "Facção satírica de GTA 2.",
     status: "Ativa.",
     tags: ["2D Universe", "culto"]
   },
@@ -3031,9 +3033,9 @@ const factionsData = [
     game: "GTA 2",
     city: "Anywhere City",
     leaders: ["Billy Bob Bean"],
-    allies: ["temporarios"],
+    allies: ["temporários"],
     enemies: ["Scientists", "Zaibatsu"],
-    businesses: ["veiculos", "violencia rural", "contrabando"],
+    businesses: ["veículos", "violência rural", "contrabando"],
     narrativeImportance: "Parte do mosaico de gangues absurdas de GTA 2.",
     status: "Ativa.",
     tags: ["2D Universe", "gangue"]
@@ -3046,11 +3048,11 @@ const factionsData = [
     city: "Los Santos / Blaine County",
     leaders: ["jogadores"],
     allies: ["Lester", "Franklin", "Tony Prince", "Agent 14", "Dax", "Miguel Madrazo"],
-    enemies: ["jogadores rivais", "Merryweather", "policia", "cartéis"],
-    businesses: ["assaltos", "carga", "motoclubes", "armas", "nightclubs", "cassino", "agencia", "lavagem"],
-    narrativeImportance: "Transforma o jogador em instituidor de seu proprio império criminal.",
-    status: "Persistente e em expansao.",
-    tags: ["online", "CEO", "MC", "negocios"]
+    enemies: ["jogadores rivais", "Merryweather", "polícia", "cartéis"],
+    businesses: ["assaltos", "carga", "motoclubes", "armas", "nightclubs", "cassino", "agência", "lavagem"],
+    narrativeImportance: "Transforma o jogador em instituidor de seu próprio império criminal.",
+    status: "Persistente e em expansão.",
+    tags: ["online", "CEO", "MC", "negócios"]
   }
 ];
 
@@ -3060,13 +3062,13 @@ const developmentData = [
     title: "GTA 1",
     period: "DMA Design / 1997",
     summary:
-      "Nasce da mudanca de foco de Race'n'Chase para crime urbano livre. Top-down, radios, policia e caos viram a base da franquia.",
-    facts: ["Criado na DMA Design.", "Associado a David Jones e Mike Dailly.", "A liberdade sistemica foi mais importante que uma trama fechada."],
+      "Nasce da mudança de foco de Race'n'Chase para crime urbano livre. Top-down, rádios, polícia e caos viram a base da franquia.",
+    facts: ["Criado na DMA Design.", "Associado a David Jones e Mike Dailly.", "A liberdade sistêmica foi mais importante que uma trama fechada."],
     uncertainty: [
-      "Race'n'Chase era um projeto da DMA Design com foco original em corridas, perseguicoes policiais e multiplayer; o DNA de GTA surge quando a equipe percebe que liberdade, colisao e caos urbano eram mais fortes que uma corrida linear.",
-      "Documentos e relatos citam janelas internas de 1995-1996 e plataformas planejadas que mudaram bastante; trate essas datas como fase de prototipo, nao como lancamento publico.",
-      "David Jones e Mike Dailly sao centrais na origem, mas o primeiro GTA nasce como producao coletiva da DMA Design. A formula de 'dois criadores' simplifica uma equipe maior.",
-      "Liberty City, Vice City e San Andreas ja aparecem em 1997, mas ainda sem a geografia, continuidade e densidade narrativa que ganhariam nas eras 3D e HD."
+      "Race'n'Chase era um projeto da DMA Design com foco original em corridas, perseguições policiais e multiplayer; o DNA de GTA surge quando a equipe percebe que liberdade, colisão e caos urbano eram mais fortes que uma corrida linear.",
+      "Documentos e relatos citam janelas internas de 1995-1996 e plataformas planejadas que mudaram bastante; trate essas datas como fase de protótipo, não como lançamento público.",
+      "David Jones e Mike Dailly são centrais na origem, mas o primeiro GTA nasce como produção coletiva da DMA Design. A fórmula de 'dois criadores' simplifica uma equipe maior.",
+      "Liberty City, Vice City e San Andreas já aparecem em 1997, mas ainda sem a geografia, continuidade e densidade narrativa que ganhariam nas eras 3D e HD."
     ],
     sources: [
       { label: "Grand Theft Wiki - Race'n'Chase", url: "https://www.grandtheftwiki.com/Race%27n%27Chase" },
@@ -3078,14 +3080,14 @@ const developmentData = [
     title: "GTA III",
     period: "Virada 3D / 2001",
     summary:
-      "Transforma GTA em cidade 3D jogavel em terceira pessoa, com missoes dubladas, radio e sistemas urbanos sobrepostos.",
-    facts: ["Liberty City vira espaco tridimensional.", "Modelo influencia a industria inteira.", "A identidade moderna da franquia se consolida."],
+      "Transforma GTA em cidade 3D jogável em terceira pessoa, com missões dubladas, rádio e sistemas urbanos sobrepostos.",
+    facts: ["Liberty City vira espaço tridimensional.", "Modelo influencia a indústria inteira.", "A identidade moderna da franquia se consolida."],
     uncertainty: [
-      "GTA III e o primeiro GTA principal em 3D e a primeira Liberty City plenamente navegavel em terceira pessoa; a base tecnica usa RenderWare.",
-      "Nao inventou o mundo aberto. O marco foi combinar cidade 3D, veiculos, tiro, radio, dublagem, nivel de procurado e missoes cinematograficas em um sandbox urbano coeso.",
-      "Fontes historicas registram um nucleo de desenvolvimento pequeno para padroes atuais, com a DMA Design em Edimburgo trabalhando de perto com a Rockstar em Nova York.",
-      "Apos os ataques de 11 de setembro de 2001, Rockstar adiou o lancamento e revisou referencias sensiveis, incluindo viaturas, rota de aviao, dialogos/radio e capa norte-americana.",
-      "Darkel foi cortado antes do lancamento; ligacoes diretas com 11/9 aparecem em especulacao de fas e devem ser marcadas como nao confirmadas."
+      "GTA III é o primeiro GTA principal em 3D e a primeira Liberty City plenamente navegável em terceira pessoa; a base técnica usa RenderWare.",
+      "Não inventou o mundo aberto. O marco foi combinar cidade 3D, veículos, tiro, rádio, dublagem, nível de procurado e missões cinematográficas em um sandbox urbano coeso.",
+      "Fontes históricas registram um núcleo de desenvolvimento pequeno para padrões atuais, com a DMA Design em Edimburgo trabalhando de perto com a Rockstar em Nova York.",
+      "Após os ataques de 11 de setembro de 2001, Rockstar adiou o lançamento e revisou referências sensíveis, incluindo viaturas, rota de aviação, diálogos/rádio e capa norte-americana.",
+      "Darkel foi cortado antes do lançamento; ligações diretas com 11/9 aparecem em especulação de fãs e devem ser marcadas como não confirmadas."
     ],
     sources: [
       { label: "GTA III - desenvolvimento", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto_III" },
@@ -3097,14 +3099,14 @@ const developmentData = [
     title: "Vice City",
     period: "Atmosfera / 2002",
     summary:
-      "Desenvolvimento rapido apos GTA III. A ideia cresceu de expansao/mission pack para jogo completo com protagonista falante e identidade de anos 80.",
-    facts: ["Inspiracao forte em cinema criminal dos anos 80.", "Trilha sonora licenciada virou parte da experiencia.", "Tommy Vercetti cria um centro narrativo mais definido."],
+      "Desenvolvimento rápido após GTA III. A ideia cresceu de expansão/mission pack para jogo completo com protagonista falante e identidade de anos 80.",
+    facts: ["Inspiração forte em cinema criminal dos anos 80.", "Trilha sonora licenciada virou parte da experiência.", "Tommy Vercetti cria um centro narrativo mais definido."],
     uncertainty: [
       "Relatos de desenvolvimento indicam que a equipe discutiu um mission pack para GTA III antes do escopo crescer para um jogo completo.",
-      "O ciclo foi curto: producao plena no inicio de 2002 e lancamento no fim do mesmo ano. Por isso Vice City reaproveita a base tecnica de GTA III enquanto muda tom, cidade e protagonista.",
-      "A escolha de 1986 e de uma Miami ficcional permitiu satirizar uma epoca historica, em contraste com a Liberty City contemporanea de GTA III.",
-      "Tommy Vercetti, com voz e personalidade explicita, muda o centro narrativo depois do silencio de Claude.",
-      "Scarface, Miami Vice e o cinema policial dos anos 80 sao inspiracoes culturais amplas; nao equivalem a adaptacao direta cena a cena."
+      "O ciclo foi curto: produção plena no início de 2002 e lançamento no fim do mesmo ano. Por isso Vice City reaproveita a base técnica de GTA III enquanto muda tom, cidade e protagonista.",
+      "A escolha de 1986 e de uma Miami ficcional permitiu satirizar uma época histórica, em contraste com a Liberty City contemporânea de GTA III.",
+      "Tommy Vercetti, com voz e personalidade explícita, muda o centro narrativo depois do silêncio de Claude.",
+      "Scarface, Miami Vice e o cinema policial dos anos 80 são inspirações culturais amplas; não equivalem à adaptação direta cena a cena."
     ],
     sources: [
       { label: "Vice City - desenvolvimento", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto:_Vice_City" },
@@ -3114,16 +3116,16 @@ const developmentData = [
   {
     id: "dev-sa",
     title: "San Andreas",
-    period: "Escala maxima da era 3D / 2004",
+    period: "Escala máxima da era 3D / 2004",
     summary:
-      "Expande a formula com tres cidades, campo, deserto, customizacao, habilidades, territorio, academias e aviação.",
-    facts: ["Mapa muito maior que entradas anteriores.", "RPG leve e customizacao corporal.", "Temas de gangues, familia e corrupcao policial."],
+      "Expande a fórmula com três cidades, campo, deserto, customização, habilidades, território, academias e aviação.",
+    facts: ["Mapa muito maior que entradas anteriores.", "RPG leve e customização corporal.", "Temas de gangues, família e corrupção policial."],
     uncertainty: [
-      "San Andreas muda de sentido dentro da serie: na era 2D era uma cidade inspirada em San Francisco; em 2004 vira um estado com Los Santos, San Fierro, Las Venturas, interior e deserto.",
-      "Sistemas de corpo, habilidade, respeito, territorios e customizacao aproximam o jogo de um RPG leve, mas a estrutura central continua sendo acao-aventura em mundo aberto.",
-      "Gangues, rap, disturbios urbanos, corrupcao policial e crise social ecoam a Costa Oeste dos anos 1990; personagens e eventos seguem ficcionalizados.",
-      "Hot Coffee e fato documentado: conteudo inacessivel no disco foi reativado por mod, levou a reclassificacao AO pela ESRB e a patch/reedicao posterior.",
-      "A controversia pertence ao desenvolvimento, distribuicao e classificacao real do jogo; nao faz parte da cronologia da historia de CJ."
+      "San Andreas muda de sentido dentro da série: na era 2D era uma cidade inspirada em San Francisco; em 2004 vira um estado com Los Santos, San Fierro, Las Venturas, interior e deserto.",
+      "Sistemas de corpo, habilidade, respeito, territórios e customização aproximam o jogo de um RPG leve, mas a estrutura central continua sendo ação-aventura em mundo aberto.",
+      "Gangues, rap, distúrbios urbanos, corrupção policial e crise social ecoam a Costa Oeste dos anos 1990; personagens e eventos seguem ficcionalizados.",
+      "Hot Coffee é fato documentado: conteúdo inacessível no disco foi reativado por mod, levou à reclassificação AO pela ESRB e a patch/reedição posterior.",
+      "A controvérsia pertence ao desenvolvimento, distribuição e classificação real do jogo; não faz parte da cronologia da história de CJ."
     ],
     sources: [
       { label: "ESRB - Hot Coffee", url: "https://www.esrb.org/blog/esrb-concludes-investigation-into-grand-theft-auto-san-andreas-revokes-m-mature-rating/" },
@@ -3136,14 +3138,14 @@ const developmentData = [
     title: "GTA IV",
     period: "Era HD / 2008",
     summary:
-      "Entrada na era RAGE/HD, com Liberty City mais realista, fisica Euphoria e narrativa mais sombria.",
-    facts: ["Reboot de continuidade.", "Tom dramatico e noir.", "Foco em imigracao, trauma e capitalismo."],
+      "Entrada na era RAGE/HD, com Liberty City mais realista, física Euphoria e narrativa mais sombria.",
+    facts: ["Reboot de continuidade.", "Tom dramático e noir.", "Foco em imigração, trauma e capitalismo."],
     uncertainty: [
-      "GTA IV inaugura o HD Universe: marcas e ecos retornam, mas a continuidade principal nao e a mesma da era 3D.",
-      "A troca para RAGE com Euphoria/NaturalMotion altera fisica, animacao procedural, reacoes corporais e densidade urbana em relacao aos GTA de RenderWare.",
-      "O desenvolvimento passa a operar em escala global, com Rockstar North como nucleo e outros estudios Rockstar contribuindo em areas tecnicas, arte, audio e QA.",
-      "Niko e apresentado como veterano dos Balcas/Leste Europeu; a nacionalidade exata fica ambigua no jogo. 'Servio' e leitura comum de fas, nao confirmacao textual absoluta.",
-      "The Lost and Damned e The Ballad of Gay Tony cruzam eventos, personagens e a trama dos diamantes; a melhor leitura e de arcos paralelos na mesma Liberty City de 2008."
+      "GTA IV inaugura o HD Universe: marcas e ecos retornam, mas a continuidade principal não é a mesma da era 3D.",
+      "A troca para RAGE com Euphoria/NaturalMotion altera física, animação procedural, reações corporais e densidade urbana em relação aos GTA de RenderWare.",
+      "O desenvolvimento passa a operar em escala global, com Rockstar North como núcleo e outros estúdios Rockstar contribuindo em áreas técnicas, arte, áudio e QA.",
+      "Niko é apresentado como veterano dos Bálcãs/Leste Europeu; a nacionalidade exata fica ambígua no jogo. 'Sérvio' é leitura comum de fãs, não confirmação textual absoluta.",
+      "The Lost and Damned e The Ballad of Gay Tony cruzam eventos, personagens e a trama dos diamantes; a melhor leitura é de arcos paralelos na mesma Liberty City de 2008."
     ],
     sources: [
       { label: "GTA Wiki - GTA IV features", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_IV/Features" },
@@ -3153,16 +3155,16 @@ const developmentData = [
   {
     id: "dev-gtav",
     title: "GTA V",
-    period: "Fenomeno global / 2013",
+    period: "Fenômeno global / 2013",
     summary:
-      "Tres protagonistas jogaveis, assaltos planejados e Los Santos/Blaine County em escala massiva. GTA Online nasce do mesmo ecossistema.",
+      "Três protagonistas jogáveis, assaltos planejados e Los Santos/Blaine County em escala massiva. GTA Online nasce do mesmo ecossistema.",
     facts: ["Michael, Franklin e Trevor alternam perspectiva.", "Assaltos estruturam a campanha.", "GTA Online transformou o ciclo de vida do jogo."],
     uncertainty: [
-      "A estrutura de tres protagonistas foi objetivo de design arriscado; fontes indicam que ideias parecidas existiam antes, mas o hardware da era San Andreas nao sustentava esse modelo.",
-      "O foco em assaltos foi reforcado pela recepcao positiva de Three Leaf Clover em GTA IV e pela vontade de fazer planejamento criminal virar eixo de campanha.",
-      "A producao envolveu cerca de mil pessoas no ecossistema Rockstar, mas orcamento, marketing e receita aparecem em fontes publicas como estimativas ou recortes financeiros.",
-      "GTA Online lancou duas semanas depois de GTA V e virou plataforma persistente; sua cronologia conversa com a campanha, mas atualizacoes posteriores funcionam como continuidade viva e elastica.",
-      "A Opcao C/Deathwish e geralmente tratada como final canonico por GTA Online e referencias posteriores, mas o single-player ainda preserva finais alternativos como escolhas do jogador."
+      "A estrutura de três protagonistas foi objetivo de design arriscado; fontes indicam que ideias parecidas existiam antes, mas o hardware da era San Andreas não sustentava esse modelo.",
+      "O foco em assaltos foi reforçado pela recepção positiva de Three Leaf Clover em GTA IV e pela vontade de fazer planejamento criminal virar eixo de campanha.",
+      "A produção envolveu cerca de mil pessoas no ecossistema Rockstar, mas orçamento, marketing e receita aparecem em fontes públicas como estimativas ou recortes financeiros.",
+      "GTA Online lançou duas semanas depois de GTA V e virou plataforma persistente; sua cronologia conversa com a campanha, mas atualizações posteriores funcionam como continuidade viva e elástica.",
+      "A Opção C/Deathwish é geralmente tratada como final canônico por GTA Online e referências posteriores, mas o single-player ainda preserva finais alternativos como escolhas do jogador."
     ],
     sources: [
       { label: "GTA V - desenvolvimento", url: "https://en.wikipedia.org/wiki/Development_of_Grand_Theft_Auto_V" },
@@ -3173,16 +3175,16 @@ const developmentData = [
   {
     id: "dev-gtavi",
     title: "GTA VI",
-    period: "Proximo capitulo / 2026",
+    period: "Próximo capítulo / 2026",
     summary:
       "A Rockstar apresenta Leonida e Vice City moderna, com Lucia e Jason como dupla central. Data oficial atual: 19 de novembro de 2026.",
-    facts: ["Ambientado no estado de Leonida.", "Vice City retorna.", "Lucia e Jason sao protagonistas.", "PS5 e Xbox Series X|S confirmados."],
+    facts: ["Ambientado no estado de Leonida.", "Vice City retorna.", "Lucia e Jason são protagonistas.", "PS5 e Xbox Series X|S confirmados."],
     uncertainty: [
       "Confirmado oficialmente: data atual de 19 de novembro de 2026, plataformas PS5 e Xbox Series X|S, estado de Leonida, Vice City, Lucia Caminos e Jason Duval.",
-      "A pagina oficial descreve Jason com passado no Exercito e trabalho com traficantes locais nas Keys; Lucia saiu da Penitenciaria de Leonida depois de lutar pela familia.",
-      "A sinopse oficial fala em um servico simples que da errado e empurra a dupla para uma conspiracao criminal em Leonida.",
-      "Antagonistas centrais, estrutura de missoes, mapa completo, versao de PC, expansoes e futuro de GTA Online seguem nao confirmados.",
-      "Trailers e pagina oficial indicam redes sociais, cultura viral, praias, pantanos, vida noturna e crime moderno; leituras de casal criminoso tipo Bonnie and Clyde e satira da Florida ainda sao interpretacoes ate o lancamento."
+      "A página oficial descreve Jason com passado no Exército e trabalho com traficantes locais nas Keys; Lucia saiu da Penitenciária de Leonida depois de lutar pela família.",
+      "A sinopse oficial fala em um serviço simples que dá errado e empurra a dupla para uma conspiração criminal em Leonida.",
+      "Antagonistas centrais, estrutura de missões, mapa completo, versão de PC, expansões e futuro de GTA Online seguem não confirmados.",
+      "Trailers e página oficial indicam redes sociais, cultura viral, praias, pântanos, vida noturna e crime moderno; leituras de casal criminoso tipo Bonnie and Clyde e sátira da Florida ainda são interpretações até o lançamento."
     ],
     sources: [
       { label: "Rockstar - GTA VI", url: "https://www.rockstargames.com/VI" },
@@ -3194,17 +3196,17 @@ const developmentData = [
 const onlineTimelineData = [
   { year: "2013", title: "Lançamento", theme: "corridas, deathmatches, apartamentos, contatos e primeiros trabalhos" },
   { year: "2015", title: "Heists", theme: "assaltos cooperativos estruturados, com planejamento e finais de alta recompensa" },
-  { year: "2016", title: "Executives, Further Adventures e Bikers", theme: "CEOs, armazens, contrabando e motoclubes" },
-  { year: "2017", title: "Gunrunning e Doomsday Heist", theme: "bunkers, pesquisa de armas e guerra tecnologica com agencias" },
-  { year: "2018", title: "After Hours", theme: "nightclubs, Tony Prince e renda passiva conectada a negocios" },
+  { year: "2016", title: "Executives, Further Adventures e Bikers", theme: "CEOs, armazéns, contrabando e motoclubes" },
+  { year: "2017", title: "Gunrunning e Doomsday Heist", theme: "bunkers, pesquisa de armas e guerra tecnológica com agências" },
+  { year: "2018", title: "After Hours", theme: "nightclubs, Tony Prince e renda passiva conectada a negócios" },
   { year: "2019", title: "Diamond Casino & Resort / Casino Heist", theme: "luxo, Duggans, cassino e um dos assaltos centrais" },
-  { year: "2020", title: "The Cayo Perico Heist", theme: "ilha privada de El Rubio e assalto jogavel solo ou em equipe" },
+  { year: "2020", title: "The Cayo Perico Heist", theme: "ilha privada de El Rubio e assalto jogável solo ou em equipe" },
   { year: "2021", title: "The Contract", theme: "Franklin adulto, Agency, Dr. Dre e contratos VIP" },
-  { year: "2022-2023", title: "Los Santos Drug Wars", theme: "Dax, Fooliganz, laboratorios e acido" },
-  { year: "2023", title: "San Andreas Mercenaries", theme: "operações aereas contra Merryweather e carreira militar privada" },
-  { year: "2025", title: "Money Fronts", theme: "lavagem de dinheiro por negocios de fachada, incluindo car wash e outras frentes" },
+  { year: "2022-2023", title: "Los Santos Drug Wars", theme: "Dax, Fooliganz, laboratórios e ácido" },
+  { year: "2023", title: "San Andreas Mercenaries", theme: "operações aéreas contra Merryweather e carreira militar privada" },
+  { year: "2025", title: "Money Fronts", theme: "lavagem de dinheiro por negócios de fachada, incluindo car wash e outras frentes" },
   { year: "2025", title: "A Safehouse in the Hills", theme: "safehouse high-end, contratos e novas rotas de carreira criminal nas colinas" },
-  { year: "continuo", title: "Carreira e economia", theme: "balancos, GTA+, veiculos, criador de missoes, eventos e rotacao semanal" }
+  { year: "contínuo", title: "Carreira e economia", theme: "balanços, GTA+, veículos, criador de missões, eventos e rotação semanal" }
 ];
 
 const onlineDlcData = [
@@ -3213,16 +3215,16 @@ const onlineDlcData = [
     title: "Beach Bum Update",
     releaseDate: "19 de novembro de 2013",
     year: "2013",
-    type: "Conteudo gratuito",
+    type: "Conteúdo gratuito",
     era: "Base inicial",
     summary: "Primeiro pacote grande de GTA Online, voltado para praia, lazer e atividades leves em Los Santos.",
-    brought: ["novos veiculos de praia", "armas SNS Pistol e Broken Bottle", "roupas e tatuagens praianas", "novos jobs de corrida, deathmatch e parachuting"],
-    systems: ["expansao do catalogo inicial"],
+    brought: ["novos veículos de praia", "armas SNS Pistol e Broken Bottle", "roupas e tatuagens praianas", "novos jobs de corrida, deathmatch e parachuting"],
+    systems: ["expansão do catálogo inicial"],
     vehicles: ["BF Bifta", "Canis Kalahari", "Bravado Paradise", "Speeder"],
     modes: ["jobs de praia", "corridas", "deathmatches"],
     characters: ["jogador online"],
-    impact: "Mostrou o modelo de GTA Online como plataforma expansivel por updates gratuitos.",
-    tags: ["2013", "veiculos", "armas", "inicio"],
+    impact: "Mostrou o modelo de GTA Online como plataforma expansível por updates gratuitos.",
+    tags: ["2013", "veículos", "armas", "início"],
     sourcePage: "Beach Bum Update"
   },
   {
@@ -3230,10 +3232,10 @@ const onlineDlcData = [
     title: "Deathmatch & Race Creators Update",
     releaseDate: "11 de dezembro de 2013",
     year: "2013",
-    type: "Ferramentas de criacao",
+    type: "Ferramentas de criação",
     era: "Base inicial",
-    summary: "Liberou criadores para jogadores publicarem corridas e deathmatches proprios.",
-    brought: ["criador de corridas", "criador de deathmatches", "conteudo verificado pela Rockstar", "base para comunidade produzir jobs"],
+    summary: "Liberou criadores para jogadores publicarem corridas e deathmatches próprios.",
+    brought: ["criador de corridas", "criador de deathmatches", "conteúdo verificado pela Rockstar", "base para comunidade produzir jobs"],
     systems: ["Content Creator"],
     vehicles: [],
     modes: ["races", "deathmatches", "jobs criados pela comunidade"],
@@ -3249,13 +3251,13 @@ const onlineDlcData = [
     year: "2013",
     type: "Modo competitivo",
     era: "Base inicial",
-    summary: "Adicionou Capture, variacao de capture-the-flag adaptada ao caos de GTA Online.",
+    summary: "Adicionou Capture, variação de capture-the-flag adaptada ao caos de GTA Online.",
     brought: ["modo Capture", "variantes Contend, GTA, Hold e Raid", "novos jobs competitivos", "foco em equipes e objetivos"],
     systems: ["Capture Jobs"],
     vehicles: [],
     modes: ["Capture"],
     characters: ["jogador online"],
-    impact: "Ampliou o lado competitivo antes dos grandes negocios e heists.",
+    impact: "Ampliou o lado competitivo antes dos grandes negócios e heists.",
     tags: ["modo", "pvp", "equipes"],
     sourcePage: "Capture Update"
   },
@@ -3266,13 +3268,13 @@ const onlineDlcData = [
     year: "2013",
     type: "Evento sazonal",
     era: "Base inicial",
-    summary: "Primeiro evento natalino, com neve temporaria, roupas festivas e itens sazonais.",
-    brought: ["neve em Los Santos", "roupas natalinas", "mascaras e itens festivos", "recompensas de fim de ano"],
+    summary: "Primeiro evento natalino, com neve temporária, roupas festivas e itens sazonais.",
+    brought: ["neve em Los Santos", "roupas natalinas", "máscaras e itens festivos", "recompensas de fim de ano"],
     systems: ["eventos sazonais"],
     vehicles: [],
     modes: ["atividades livres com tema natalino"],
     characters: ["jogador online"],
-    impact: "Estabeleceu a tradicao de eventos temporarios e clima sazonal.",
+    impact: "Estabeleceu a tradição de eventos temporários e clima sazonal.",
     tags: ["evento", "natal", "sazonal"],
     sourcePage: "Holiday Gifts"
   },
@@ -3281,33 +3283,33 @@ const onlineDlcData = [
     title: "The Valentine's Day Massacre Special",
     releaseDate: "13 de fevereiro de 2014",
     year: "2014",
-    type: "Evento tematico",
+    type: "Evento temático",
     era: "Base inicial",
-    summary: "Pacote inspirado em crime dos anos 1920/1930, com carro classico, roupas e a Gusenberg Sweeper.",
-    brought: ["Albany Roosevelt", "Gusenberg Sweeper", "roupas de gangster", "jobs tematicos"],
-    systems: ["conteudo de tempo limitado no lancamento"],
+    summary: "Pacote inspirado em crime dos anos 1920/1930, com carro clássico, roupas e a Gusenberg Sweeper.",
+    brought: ["Albany Roosevelt", "Gusenberg Sweeper", "roupas de gangster", "jobs temáticos"],
+    systems: ["conteúdo de tempo limitado no lançamento"],
     vehicles: ["Albany Roosevelt"],
-    modes: ["jobs tematicos"],
+    modes: ["jobs temáticos"],
     characters: ["jogador online"],
-    impact: "Introduziu a ideia de updates como fantasia estetica especifica.",
-    tags: ["evento", "armas", "veiculos", "retro"],
+    impact: "Introduziu a ideia de updates como fantasia estética específica.",
+    tags: ["evento", "armas", "veículos", "retrô"],
     sourcePage: "The Valentine's Day Massacre Special"
   },
   {
     id: "business",
     title: "The Business Update",
-    releaseDate: "4 de marco de 2014",
+    releaseDate: "4 de março de 2014",
     year: "2014",
-    type: "Conteudo de luxo",
+    type: "Conteúdo de luxo",
     era: "Base inicial",
-    summary: "Adicionou visual executivo inicial: veiculos esportivos, jato, arma e roupas de negocios.",
+    summary: "Adicionou visual executivo inicial: veículos esportivos, jato, arma e roupas de negócios.",
     brought: ["Dinka Jester", "Grotti Turismo R", "Albany Alpha", "Vestra", "Heavy Pistol", "Special Carbine", "roupas executivas"],
-    systems: ["catalogo de luxo"],
+    systems: ["catálogo de luxo"],
     vehicles: ["Jester", "Turismo R", "Alpha", "Vestra"],
     modes: ["jobs adicionais"],
     characters: ["jogador online"],
-    impact: "Antecipou o tema CEO que so ficaria pleno em 2015 e 2016.",
-    tags: ["veiculos", "armas", "luxo"],
+    impact: "Antecipou o tema CEO que só ficaria pleno em 2015 e 2016.",
+    tags: ["veículos", "armas", "luxo"],
     sourcePage: "The Business Update"
   },
   {
@@ -3317,14 +3319,14 @@ const onlineDlcData = [
     year: "2014",
     type: "Apartamentos e luxo",
     era: "Base inicial",
-    summary: "Focou em vida de alto padrao, apartamentos adicionais e veiculos premium.",
+    summary: "Focou em vida de alto padrão, apartamentos adicionais e veículos premium.",
     brought: ["apartamentos high-end adicionais", "possibilidade de possuir mais propriedades", "Dewbauchee Massacro", "Pegassi Zentorno", "Bullpup Rifle", "Mental State"],
     systems: ["multi-propriedades", "Mental State"],
     vehicles: ["Massacro", "Zentorno", "Huntley S", "Thrust"],
     modes: ["novos jobs"],
     characters: ["jogador online"],
-    impact: "Comecou a transformar progresso em patrimonio visivel.",
-    tags: ["propriedades", "veiculos", "luxo"],
+    impact: "Começou a transformar progresso em patrimônio visível.",
+    tags: ["propriedades", "veículos", "luxo"],
     sourcePage: "The High Life Update"
   },
   {
@@ -3335,13 +3337,13 @@ const onlineDlcData = [
     type: "Estilo urbano",
     era: "Base inicial",
     summary: "Satirizou moda alternativa de Los Santos com carros compactos, roupas e armas.",
-    brought: ["veiculos compactos e classicos", "Vintage Pistol", "Antique Cavalry Dagger", "roupas hipster", "novos jobs"],
-    systems: ["customizacao estetica"],
+    brought: ["veículos compactos e clássicos", "Vintage Pistol", "Antique Cavalry Dagger", "roupas hipster", "novos jobs"],
+    systems: ["customização estética"],
     vehicles: ["Glendale", "Warrener", "Rhapsody", "Panto", "Pigalle", "Blade"],
     modes: ["jobs adicionais"],
     characters: ["jogador online"],
-    impact: "Reforcou GTA Online como vitrine de subculturas e satira urbana.",
-    tags: ["moda", "veiculos", "satira"],
+    impact: "Reforçou GTA Online como vitrine de subculturas e sátira urbana.",
+    tags: ["moda", "veículos", "sátira"],
     sourcePage: "The \"I'm Not a Hipster\" Update"
   },
   {
@@ -3351,14 +3353,14 @@ const onlineDlcData = [
     year: "2014",
     type: "Evento sazonal",
     era: "Base inicial",
-    summary: "Pacote patriotico dos EUA com monster truck, moto, armas e fogos.",
-    brought: ["Vapid Liberator", "Western Sovereign", "Musket", "Firework Launcher", "roupas patrioticas", "propriedades decoradas"],
-    systems: ["conteudo sazonal de 4 de julho"],
+    summary: "Pacote patriótico dos EUA com monster truck, moto, armas e fogos.",
+    brought: ["Vapid Liberator", "Western Sovereign", "Musket", "Firework Launcher", "roupas patrióticas", "propriedades decoradas"],
+    systems: ["conteúdo sazonal de 4 de julho"],
     vehicles: ["Liberator", "Sovereign"],
-    modes: ["jobs tematicos"],
+    modes: ["jobs temáticos"],
     characters: ["jogador online"],
-    impact: "Virou modelo para eventos patrioticos e retornos temporarios anuais.",
-    tags: ["evento", "armas", "veiculos"],
+    impact: "Virou modelo para eventos patrióticos e retornos temporários anuais.",
+    tags: ["evento", "armas", "veículos"],
     sourcePage: "The Independence Day Special"
   },
   {
@@ -3366,15 +3368,15 @@ const onlineDlcData = [
     title: "The San Andreas Flight School Update",
     releaseDate: "19 de agosto de 2014",
     year: "2014",
-    type: "Aviacao",
+    type: "Aviação",
     era: "Base inicial",
-    summary: "Expandiu atividades aereas com escola de voo, aeronaves e paraquedas.",
-    brought: ["San Andreas Flight School", "Besra", "Miljet", "Swift", "paraquedas e roupas de piloto", "novos jobs aereos"],
-    systems: ["escola de voo", "desafios aereos"],
+    summary: "Expandiu atividades aéreas com escola de voo, aeronaves e paraquedas.",
+    brought: ["San Andreas Flight School", "Besra", "Miljet", "Swift", "paraquedas e roupas de piloto", "novos jobs aéreos"],
+    systems: ["escola de voo", "desafios aéreos"],
     vehicles: ["Besra", "Miljet", "Swift"],
-    modes: ["corridas aereas", "desafios de voo"],
+    modes: ["corridas aéreas", "desafios de voo"],
     characters: ["jogador online"],
-    impact: "Deu peso ao espaco aereo antes de Smuggler's Run.",
+    impact: "Deu peso ao espaço aéreo antes de Smuggler's Run.",
     tags: ["aeronaves", "escola", "jobs"],
     sourcePage: "The San Andreas Flight School Update"
   },
@@ -3385,13 +3387,13 @@ const onlineDlcData = [
     year: "2014",
     type: "Modo competitivo",
     era: "Base inicial",
-    summary: "Refinou combates por equipes com novas armas, veiculos e jobs LTS.",
-    brought: ["novos Last Team Standing Jobs", "Heavy Shotgun", "Marksman Rifle", "Lampadati Furore GT", "roupas taticas"],
+    summary: "Refinou combates por equipes com novas armas, veículos e jobs LTS.",
+    brought: ["novos Last Team Standing Jobs", "Heavy Shotgun", "Marksman Rifle", "Lampadati Furore GT", "roupas táticas"],
     systems: ["Last Team Standing"],
     vehicles: ["Furore GT"],
     modes: ["Last Team Standing"],
     characters: ["jogador online"],
-    impact: "Fortaleceu PvP organizado antes da era de negocios.",
+    impact: "Fortaleceu PvP organizado antes da era de negócios.",
     tags: ["pvp", "armas", "equipes"],
     sourcePage: "The Last Team Standing Update"
   },
@@ -3402,26 +3404,26 @@ const onlineDlcData = [
     year: "2014",
     type: "Evento sazonal",
     era: "Base inicial",
-    summary: "Evento natalino maior, com neve, roupas, armas festivas e veiculos.",
-    brought: ["neve temporaria", "Homing Launcher", "Proximity Mines", "Vapid Slamvan", "Bravado Rat-Truck", "roupas e mascaras natalinas"],
+    summary: "Evento natalino maior, com neve, roupas, armas festivas e veículos.",
+    brought: ["neve temporária", "Homing Launcher", "Proximity Mines", "Vapid Slamvan", "Bravado Rat-Truck", "roupas e máscaras natalinas"],
     systems: ["evento de fim de ano"],
     vehicles: ["Slamvan", "Rat-Truck"],
     modes: ["jobs sazonais"],
     characters: ["jogador online"],
     impact: "Consolidou o ciclo anual de eventos sazonais.",
-    tags: ["natal", "armas", "veiculos"],
+    tags: ["natal", "armas", "veículos"],
     sourcePage: "Festive Surprise"
   },
   {
     id: "heists",
     title: "Heists Update",
-    releaseDate: "10 de marco de 2015",
+    releaseDate: "10 de março de 2015",
     year: "2015",
     type: "Assaltos cooperativos",
     era: "Era dos heists",
-    summary: "Primeiro grande salto estrutural: assaltos cooperativos com planejamento, setups, finais e funcoes de equipe.",
-    brought: ["Fleeca Job", "Prison Break", "Humane Labs Raid", "Series A Funding", "Pacific Standard Job", "apartamento high-end como sala de planejamento", "novos veiculos, roupas e equipamentos"],
-    systems: ["heists cooperativos", "setups", "finales", "papel de lider do assalto"],
+    summary: "Primeiro grande salto estrutural: assaltos cooperativos com planejamento, setups, finais e funções de equipe.",
+    brought: ["Fleeca Job", "Prison Break", "Humane Labs Raid", "Series A Funding", "Pacific Standard Job", "apartamento high-end como sala de planejamento", "novos veículos, roupas e equipamentos"],
+    systems: ["heists cooperativos", "setups", "finales", "papel de líder do assalto"],
     vehicles: ["Kuruma", "Insurgent", "Hydra", "Savage", "Mule", "Lectro"],
     modes: ["heists", "adversary modes"],
     characters: ["Lester Crest", "Agent 14", "Trevor Philips", "Ron Jakowski", "Paige Harris"],
@@ -3435,15 +3437,15 @@ const onlineDlcData = [
     releaseDate: "10 de junho de 2015",
     year: "2015",
     type: "Luxo e consumo",
-    era: "Pos-heists",
-    summary: "Pacote de ostentacao para gastar dinheiro dos heists: supercarros, aeronaves, armas e roupas caras.",
-    brought: ["veiculos de luxo", "armas douradas", "roupas premium", "acessorios e itens de status"],
-    systems: ["catalogo de luxo"],
+    era: "Pós-heists",
+    summary: "Pacote de ostentação para gastar dinheiro dos heists: supercarros, aeronaves, armas e roupas caras.",
+    brought: ["veículos de luxo", "armas douradas", "roupas premium", "acessórios e itens de status"],
+    systems: ["catálogo de luxo"],
     vehicles: ["Pegassi Osiris", "Benefactor Stirling GT", "Enus Windsor", "Albany Virgo", "Luxor Deluxe", "Swift Deluxe"],
     modes: ["jobs adicionais"],
     characters: ["jogador online"],
     impact: "Cristalizou a economia de status de GTA Online.",
-    tags: ["luxo", "veiculos", "dinheiro"],
+    tags: ["luxo", "veículos", "dinheiro"],
     sourcePage: "Ill-Gotten Gains Part 1"
   },
   {
@@ -3452,15 +3454,15 @@ const onlineDlcData = [
     releaseDate: "8 de julho de 2015",
     year: "2015",
     type: "Luxo e combate",
-    era: "Pos-heists",
-    summary: "Continuacao do pacote de ostentacao com novos veiculos, armas e itens para a elite criminosa.",
-    brought: ["novos veiculos", "Marksman Pistol", "Knuckle Dusters", "roupas e joias", "novos jobs"],
-    systems: ["catalogo de luxo"],
+    era: "Pós-heists",
+    summary: "Continuação do pacote de ostentação com novos veículos, armas e itens para a elite criminosa.",
+    brought: ["novos veículos", "Marksman Pistol", "Knuckle Dusters", "roupas e joias", "novos jobs"],
+    systems: ["catálogo de luxo"],
     vehicles: ["Coil Brawler", "Progen T20", "Vapid Chino", "Dinka Vindicator", "Invetero Coquette BlackFin"],
     modes: ["jobs adicionais"],
     characters: ["jogador online"],
     impact: "Manteve o ciclo de consumo depois dos heists.",
-    tags: ["luxo", "armas", "veiculos"],
+    tags: ["luxo", "armas", "veículos"],
     sourcePage: "Ill-Gotten Gains Part 2"
   },
   {
@@ -3470,13 +3472,13 @@ const onlineDlcData = [
     year: "2015",
     type: "Mundo aberto",
     era: "Freemode",
-    summary: "Introduziu eventos dinamicos no mapa livre, sem lobby, com competicoes surgindo durante a sessao.",
-    brought: ["Freemode Events", "Freemode Challenges", "Hunt the Beast", "King of the Castle", "Penned In", "novos modos adversarios"],
-    systems: ["eventos sem lobby", "atividades de sessao"],
+    summary: "Introduziu eventos dinâmicos no mapa livre, sem lobby, com competições surgindo durante a sessão.",
+    brought: ["Freemode Events", "Freemode Challenges", "Hunt the Beast", "King of the Castle", "Penned In", "novos modos adversários"],
+    systems: ["eventos sem lobby", "atividades de sessão"],
     vehicles: [],
     modes: ["Freemode Events", "Adversary Modes"],
     characters: ["jogador online"],
-    impact: "Fez Los Santos parecer mais vivo entre missoes formais.",
+    impact: "Fez Los Santos parecer mais vivo entre missões formais.",
     tags: ["freemode", "eventos", "pvp"],
     sourcePage: "Freemode Events Update"
   },
@@ -3485,15 +3487,15 @@ const onlineDlcData = [
     title: "GTA Online: Lowriders",
     releaseDate: "20 de outubro de 2015",
     year: "2015",
-    type: "Customizacao e missoes",
+    type: "Customização e missões",
     era: "Cultura automotiva",
-    summary: "Abriu a Benny's Original Motor Works e aprofundou a customizacao de lowriders.",
-    brought: ["Benny's Original Motor Works", "customizacoes hydraulics", "interiores e audio", "novas missoes de Lamar", "roupas e armas"],
-    systems: ["Benny's", "customizacao avancada"],
+    summary: "Abriu a Benny's Original Motor Works e aprofundou a customização de lowriders.",
+    brought: ["Benny's Original Motor Works", "customizações hydraulics", "interiores e áudio", "novas missões de Lamar", "roupas e armas"],
+    systems: ["Benny's", "customização avançada"],
     vehicles: ["Voodoo Custom", "Faction Custom", "Moonbeam Custom", "Primo Custom", "Chino Custom", "Buccaneer Custom"],
-    modes: ["missoes de Lamar"],
+    modes: ["missões de Lamar"],
     characters: ["Lamar Davis", "Benny"],
-    impact: "Criou um dos pilares de customizacao automotiva do Online.",
+    impact: "Criou um dos pilares de customização automotiva do Online.",
     tags: ["Benny's", "carros", "Lamar"],
     sourcePage: "GTA Online: Lowriders"
   },
@@ -3504,14 +3506,14 @@ const onlineDlcData = [
     year: "2015",
     type: "Evento sazonal",
     era: "Eventos",
-    summary: "Evento de Halloween com veiculos funebres, armas e modos adversarios sombrios.",
-    brought: ["Albany Lurcher", "Franken Stange", "Flashlight", "mascaras de Halloween", "Slasher Adversary Mode"],
+    summary: "Evento de Halloween com veículos fúnebres, armas e modos adversários sombrios.",
+    brought: ["Albany Lurcher", "Franken Stange", "Flashlight", "máscaras de Halloween", "Slasher Adversary Mode"],
     systems: ["evento de Halloween"],
     vehicles: ["Lurcher", "Franken Stange"],
     modes: ["Slasher"],
     characters: ["jogador online"],
-    impact: "Inaugurou uma das tradicoes sazonais mais reconheciveis do Online.",
-    tags: ["Halloween", "evento", "modo adversario"],
+    impact: "Inaugurou uma das tradições sazonais mais reconhecíveis do Online.",
+    tags: ["Halloween", "evento", "modo adversário"],
     sourcePage: "Halloween Surprise"
   },
   {
@@ -3519,16 +3521,16 @@ const onlineDlcData = [
     title: "Executives and Other Criminals",
     releaseDate: "15 de dezembro de 2015",
     year: "2015",
-    type: "Organizacoes VIP",
-    era: "Negocios",
+    type: "Organizações VIP",
+    era: "Negócios",
     summary: "Introduziu o estilo CEO/VIP inicial, iates e estrutura de guarda-costas.",
-    brought: ["sistema VIP e bodyguards", "super yachts", "apartamentos stilt", "novos veiculos armados e de luxo", "Extraction Adversary Mode"],
+    brought: ["sistema VIP e bodyguards", "super yachts", "apartamentos stilt", "novos veículos armados e de luxo", "Extraction Adversary Mode"],
     systems: ["VIP Organizations", "Bodyguards", "Yachts"],
     vehicles: ["Turreted Limo", "Schafter V12", "Cognoscenti", "SuperVolito", "Tampa"],
     modes: ["VIP Work", "Extraction"],
     characters: ["jogador online"],
-    impact: "Foi a semente direta dos negocios CEO que viriam em Finance and Felony.",
-    tags: ["VIP", "iates", "organizacoes"],
+    impact: "Foi a semente direta dos negócios CEO que viriam em Finance and Felony.",
+    tags: ["VIP", "iates", "organizações"],
     sourcePage: "GTA Online: Executives and Other Criminals"
   },
   {
@@ -3539,13 +3541,13 @@ const onlineDlcData = [
     type: "Evento sazonal",
     era: "Eventos",
     summary: "Novo pacote natalino com neve, roupas, carros e retorno de itens festivos.",
-    brought: ["neve", "Declasse Tampa", "roupas e mascaras de Natal", "itens sazonais", "retorno de conteudos festivos"],
+    brought: ["neve", "Declasse Tampa", "roupas e máscaras de Natal", "itens sazonais", "retorno de conteúdos festivos"],
     systems: ["evento de fim de ano"],
     vehicles: ["Declasse Tampa"],
     modes: ["jobs sazonais"],
     characters: ["jogador online"],
-    impact: "Reforcou a rotina anual de eventos e itens temporarios.",
-    tags: ["natal", "evento", "veiculos"],
+    impact: "Reforçou a rotina anual de eventos e itens temporários.",
+    tags: ["natal", "evento", "veículos"],
     sourcePage: "Festive Surprise 2015"
   },
   {
@@ -3553,16 +3555,16 @@ const onlineDlcData = [
     title: "January 2016 Update",
     releaseDate: "28 de janeiro de 2016",
     year: "2016",
-    type: "Modos e veiculos",
+    type: "Modos e veículos",
     era: "Adversary modes",
-    summary: "Update menor que trouxe novos veiculos de Benny's/mercado e o modo Drop Zone.",
-    brought: ["Drop Zone Adversary Mode", "Karin Sultan RS", "Bravado Banshee 900R", "novas opcoes de customizacao"],
+    summary: "Update menor que trouxe novos veículos de Benny's/mercado e o modo Drop Zone.",
+    brought: ["Drop Zone Adversary Mode", "Karin Sultan RS", "Bravado Banshee 900R", "novas opções de customização"],
     systems: ["Adversary Mode", "Benny's"],
     vehicles: ["Sultan RS", "Banshee 900R"],
     modes: ["Drop Zone"],
     characters: ["jogador online"],
-    impact: "Manteve o ritmo de conteudo entre grandes pacotes.",
-    tags: ["Benny's", "modo adversario", "carros"],
+    impact: "Manteve o ritmo de conteúdo entre grandes pacotes.",
+    tags: ["Benny's", "modo adversário", "carros"],
     sourcePage: "January 2016 Update"
   },
   {
@@ -3570,24 +3572,24 @@ const onlineDlcData = [
     title: "GTA Online: Be My Valentine",
     releaseDate: "10 de fevereiro de 2016",
     year: "2016",
-    type: "Evento tematico",
+    type: "Evento temático",
     era: "Eventos",
     summary: "Revisitou o tema Valentine's com Roosevelt Valor, roupas e Till Death Do Us Part.",
     brought: ["Albany Roosevelt Valor", "roupas vintage", "retorno de itens do Valentine's anterior", "Till Death Do Us Part"],
-    systems: ["evento tematico"],
+    systems: ["evento temático"],
     vehicles: ["Roosevelt Valor"],
     modes: ["Till Death Do Us Part"],
     characters: ["jogador online"],
-    impact: "Mostrou como updates antigos poderiam voltar em versao expandida.",
-    tags: ["evento", "retro", "modo adversario"],
+    impact: "Mostrou como updates antigos poderiam voltar em versão expandida.",
+    tags: ["evento", "retrô", "modo adversário"],
     sourcePage: "GTA Online: Be My Valentine"
   },
   {
     id: "lowriders-custom-classics",
     title: "GTA Online: Lowriders: Custom Classics",
-    releaseDate: "15 de marco de 2016",
+    releaseDate: "15 de março de 2016",
     year: "2016",
-    type: "Customizacao",
+    type: "Customização",
     era: "Cultura automotiva",
     summary: "Expandiu Benny's com novos upgrades custom, armas e o modo Sumo.",
     brought: ["novos lowriders custom", "Double Barrel Shotgun", "Compact Rifle", "Sumo Adversary Mode", "roupas e tatuagens"],
@@ -3604,16 +3606,16 @@ const onlineDlcData = [
     title: "Further Adventures in Finance and Felony",
     releaseDate: "7 de junho de 2016",
     year: "2016",
-    type: "Negocios CEO",
-    era: "Negocios",
-    summary: "Transformou VIP em CEO permanente, com escritorios, armazens e contrabando de carga.",
-    brought: ["escritorios executivos", "SecuroServ CEO", "Special Cargo", "warehouses", "novos VIP/CEO work", "veiculos executivos"],
+    type: "Negócios CEO",
+    era: "Negócios",
+    summary: "Transformou VIP em CEO permanente, com escritórios, armazéns e contrabando de carga.",
+    brought: ["escritórios executivos", "SecuroServ CEO", "Special Cargo", "warehouses", "novos VIP/CEO work", "veículos executivos"],
     systems: ["CEO", "Special Cargo", "warehouses", "assistente executiva"],
     vehicles: ["Pegassi Reaper", "Vapid FMJ", "Benefactor XLS", "Bravado Rumpo Custom", "Brickade"],
     modes: ["CEO Work", "Special Cargo sales"],
-    characters: ["Assistente do escritorio"],
+    characters: ["Assistente do escritório"],
     impact: "Criou o primeiro loop robusto de grind empresarial de GTA Online.",
-    tags: ["CEO", "carga", "escritorio", "negocios"],
+    tags: ["CEO", "carga", "escritório", "negócios"],
     sourcePage: "GTA Online: Further Adventures in Finance and Felony"
   },
   {
@@ -3624,13 +3626,13 @@ const onlineDlcData = [
     type: "Corridas stunt",
     era: "Corridas",
     summary: "Reinventou corridas com pistas irreais, tubos, rampas e objetos stunt.",
-    brought: ["Stunt Races", "criador stunt depois expandido", "veiculos esportivos e motos", "roupas de corrida"],
+    brought: ["Stunt Races", "criador stunt depois expandido", "veículos esportivos e motos", "roupas de corrida"],
     systems: ["Stunt Races", "Stunt Props"],
     vehicles: ["RE-7B", "ETR1", "Tyrus", "Omnis", "Trophy Truck", "Cliffhanger"],
     modes: ["Stunt Races", "Premium Races"],
     characters: ["jogador online"],
-    impact: "Criou uma linguagem propria para corridas arcade dentro de GTA Online.",
-    tags: ["corridas", "stunt", "veiculos"],
+    impact: "Criou uma linguagem própria para corridas arcade dentro de GTA Online.",
+    tags: ["corridas", "stunt", "veículos"],
     sourcePage: "GTA Online: Cunning Stunts"
   },
   {
@@ -3638,16 +3640,16 @@ const onlineDlcData = [
     title: "GTA Online: Bikers",
     releaseDate: "4 de outubro de 2016",
     year: "2016",
-    type: "Motoclubes e negocios",
-    era: "Negocios",
-    summary: "Adicionou clubes de moto, hierarquia MC e negocios de producao ilegal.",
-    brought: ["clubhouses", "MC President", "cargos de motoclube", "negocios de cocaine, meth, weed, counterfeit cash e document forgery", "novas motos"],
+    type: "Motoclubes e negócios",
+    era: "Negócios",
+    summary: "Adicionou clubes de moto, hierarquia MC e negócios de produção ilegal.",
+    brought: ["clubhouses", "MC President", "cargos de motoclube", "negócios de cocaine, meth, weed, counterfeit cash e document forgery", "novas motos"],
     systems: ["Motorcycle Clubs", "MC Businesses", "contracts"],
     vehicles: ["Hakuchou Drag", "Nightblade", "Avarus", "Zombie", "Daemon Custom", "Faggio Mod"],
     modes: ["Clubhouse Contracts", "MC Challenges"],
     characters: ["Malc", "LJT"],
     impact: "Deu ao jogador uma identidade criminal alternativa ao CEO.",
-    tags: ["MC", "negocios", "motos"],
+    tags: ["MC", "negócios", "motos"],
     sourcePage: "GTA Online: Bikers"
   },
   {
@@ -3655,33 +3657,33 @@ const onlineDlcData = [
     title: "GTA Online: Import/Export",
     releaseDate: "13 de dezembro de 2016",
     year: "2016",
-    type: "Roubo de veiculos",
-    era: "Negocios",
-    summary: "Adicionou Vehicle Cargo, garagens de veiculos especiais e missoes com tecnologia exagerada.",
-    brought: ["Vehicle Warehouses", "Vehicle Cargo", "Special Vehicle Work", "garagens de ate 60 veiculos", "veiculos especiais armados"],
+    type: "Roubo de veículos",
+    era: "Negócios",
+    summary: "Adicionou Vehicle Cargo, garagens de veículos especiais e missões com tecnologia exagerada.",
+    brought: ["Vehicle Warehouses", "Vehicle Cargo", "Special Vehicle Work", "garagens de até 60 veículos", "veículos especiais armados"],
     systems: ["Vehicle Cargo", "Special Vehicle Work"],
     vehicles: ["Ruiner 2000", "Rocket Voltic", "Phantom Wedge", "Ramp Buggy", "Technical Aqua", "Wastelander"],
     modes: ["steal/sell vehicles", "Special Vehicle missions"],
-    characters: ["Assistente do escritorio"],
+    characters: ["Assistente do escritório"],
     impact: "Virou um dos loops mais populares de dinheiro solo/CEO.",
-    tags: ["CEO", "carros", "veiculos especiais"],
+    tags: ["CEO", "carros", "veículos especiais"],
     sourcePage: "GTA Online: Import/Export"
   },
   {
     id: "special-vehicle-circuit",
     title: "Cunning Stunts: Special Vehicle Circuit",
-    releaseDate: "14 de marco de 2017",
+    releaseDate: "14 de março de 2017",
     year: "2017",
     type: "Corridas especiais",
     era: "Corridas",
-    summary: "Criou corridas dedicadas a veiculos especiais de Import/Export.",
+    summary: "Criou corridas dedicadas a veículos especiais de Import/Export.",
     brought: ["Special Vehicle Races", "pistas para Ruiner 2000, Rocket Voltic e Blazer Aqua", "novos carros esportivos"],
     systems: ["Special Vehicle Circuit"],
     vehicles: ["Progen GP1", "Hijak Ruston", "Turismo Classic", "Infernus Classic"],
     modes: ["Special Vehicle Races"],
     characters: ["jogador online"],
-    impact: "Amarrou corridas stunt aos veiculos especiais da economia CEO.",
-    tags: ["corridas", "veiculos especiais"],
+    impact: "Amarrou corridas stunt aos veículos especiais da economia CEO.",
+    tags: ["corridas", "veículos especiais"],
     sourcePage: "GTA Online: Cunning Stunts: Special Vehicle Circuit"
   },
   {
@@ -3690,14 +3692,14 @@ const onlineDlcData = [
     releaseDate: "13 de junho de 2017",
     year: "2017",
     type: "Bunkers e armas",
-    era: "Negocios militares",
-    summary: "Adicionou bunkers, pesquisa, fabricacao de armas e veiculos militarizados.",
+    era: "Negócios militares",
+    summary: "Adicionou bunkers, pesquisa, fabricação de armas e veículos militarizados.",
     brought: ["bunkers", "Mobile Operations Center", "research", "weaponized vehicles", "Mk II weapon upgrades", "Gunrunning sell missions"],
     systems: ["Bunker Business", "Research", "MOC", "Mk II Weapons"],
     vehicles: ["APC", "Dune FAV", "Half-track", "Oppressor", "Weaponized Tampa", "Anti-Aircraft Trailer"],
     modes: ["Gunrunning sales", "Mobile Operations"],
     characters: ["Agent 14"],
-    impact: "Mudou o equilibrio do Online ao colocar tecnologia militar no centro da economia.",
+    impact: "Mudou o equilíbrio do Online ao colocar tecnologia militar no centro da economia.",
     tags: ["bunker", "armas", "militar", "Mk II"],
     sourcePage: "GTA Online: Gunrunning"
   },
@@ -3706,10 +3708,10 @@ const onlineDlcData = [
     title: "GTA Online: Smuggler's Run",
     releaseDate: "29 de agosto de 2017",
     year: "2017",
-    type: "Contrabando aereo",
-    era: "Negocios militares",
-    summary: "Transformou hangares em negocios de carga aerea, com aeronaves customizaveis.",
-    brought: ["hangars", "Air Freight Cargo", "aeronaves novas", "customizacao de aeronaves", "Adversary Modes aereos"],
+    type: "Contrabando aéreo",
+    era: "Negócios militares",
+    summary: "Transformou hangares em negócios de carga aérea, com aeronaves customizáveis.",
+    brought: ["hangars", "Air Freight Cargo", "aeronaves novas", "customização de aeronaves", "Adversary Modes aéreos"],
     systems: ["Hangar Business", "Air Freight Cargo"],
     vehicles: ["Rogue", "Tula", "Mogul", "Molotok", "Nokota", "Hunter", "Pyro"],
     modes: ["Air Freight missions"],
@@ -3723,32 +3725,32 @@ const onlineDlcData = [
     title: "GTA Online: The Doomsday Heist",
     releaseDate: "12 de dezembro de 2017",
     year: "2017",
-    type: "Heist tecnologico",
-    era: "Agencias e tecnologia",
-    summary: "Assalto em tres atos com IAA, Avon Hertz, Clifford, bases subterraneas e ameaca de fim do mundo.",
-    brought: ["Facilities", "Doomsday Heist Acts I-III", "prep missions em freemode", "Orbital Cannon", "Avenger", "veiculos futuristas"],
+    type: "Heist tecnológico",
+    era: "Agências e tecnologia",
+    summary: "Assalto em três atos com IAA, Avon Hertz, Clifford, bases subterrâneas e ameaça de fim do mundo.",
+    brought: ["Facilities", "Doomsday Heist Acts I-III", "prep missions em freemode", "Orbital Cannon", "Avenger", "veículos futuristas"],
     systems: ["Facilities", "Doomsday Heist", "Orbital Cannon"],
     vehicles: ["Avenger", "Deluxo", "Stromberg", "Thruster", "Khanjali", "Chernobog"],
     modes: ["Doomsday Heist", "setups e preps"],
     characters: ["Lester Crest", "Agent 14", "Avon Hertz", "Clifford", "Bogdan", "ULP"],
-    impact: "Levou GTA Online para ficcao de espionagem absurda e tecnologia de alto nivel.",
+    impact: "Levou GTA Online para ficção de espionagem absurda e tecnologia de alto nível.",
     tags: ["heist", "IAA", "Facility", "tecnologia"],
     sourcePage: "GTA Online: The Doomsday Heist"
   },
   {
     id: "southern-san-andreas-super-sport-series",
     title: "Southern San Andreas Super Sport Series",
-    releaseDate: "20 de marco de 2018",
+    releaseDate: "20 de março de 2018",
     year: "2018",
     type: "Corridas e modos",
     era: "Corridas",
-    summary: "Serie de conteudos automotivos com Hotring Circuit, Target Assault e varios veiculos.",
+    summary: "Série de conteúdos automotivos com Hotring Circuit, Target Assault e vários veículos.",
     brought: ["Hotring Circuit", "Target Assault Races", "Transform Races adicionais", "novos carros e roupas"],
-    systems: ["novas series de corrida"],
+    systems: ["novas séries de corrida"],
     vehicles: ["Hotring Sabre", "GB200", "Entity XXR", "Taipan", "Flash GT", "Issi Classic"],
     modes: ["Hotring Circuit", "Target Assault"],
     characters: ["jogador online"],
-    impact: "Manteve o foco de corridas entre grandes expansoes de negocios.",
+    impact: "Manteve o foco de corridas entre grandes expansões de negócios.",
     tags: ["corridas", "carros", "Hotring"],
     sourcePage: "GTA Online: Southern San Andreas Super Sport Series"
   },
@@ -3758,14 +3760,14 @@ const onlineDlcData = [
     releaseDate: "24 de julho de 2018",
     year: "2018",
     type: "Nightclubs e renda passiva",
-    era: "Negocios conectados",
-    summary: "Trouxe Tony Prince de volta e fez nightclubs conectarem negocios anteriores em uma rede passiva.",
-    brought: ["Nightclubs", "warehouse technicians", "DJs reais", "Terrorbyte", "Oppressor Mk II", "novas missoes de promocao"],
+    era: "Negócios conectados",
+    summary: "Trouxe Tony Prince de volta e fez nightclubs conectarem negócios anteriores em uma rede passiva.",
+    brought: ["Nightclubs", "warehouse technicians", "DJs reais", "Terrorbyte", "Oppressor Mk II", "novas missões de promoção"],
     systems: ["Nightclub Business", "Technicians", "Terrorbyte Client Jobs"],
     vehicles: ["Terrorbyte", "Oppressor Mk II", "Mule Custom", "Pounder Custom", "Stafford", "Swinger"],
     modes: ["club management", "business battles", "client jobs"],
     characters: ["Tony Prince", "Lazlow Jones", "Solomun", "Dixon", "Tale of Us", "The Black Madonna"],
-    impact: "Unificou negocios antigos e virou uma das bases de renda passiva mais importantes.",
+    impact: "Unificou negócios antigos e virou uma das bases de renda passiva mais importantes.",
     tags: ["nightclub", "Tony Prince", "renda passiva"],
     sourcePage: "GTA Online: After Hours"
   },
@@ -3775,15 +3777,15 @@ const onlineDlcData = [
     releaseDate: "11 de dezembro de 2018",
     year: "2018",
     type: "Combate veicular",
-    era: "Espetaculo",
+    era: "Espetáculo",
     summary: "Adicionou Arena Workshop, ranking de arena e modos de combate veicular estilo show televisivo.",
-    brought: ["Arena Workshop", "Arena Points", "veiculos Apocalypse, Future Shock e Nightmare", "modos Arena War"],
+    brought: ["Arena Workshop", "Arena Points", "veículos Apocalypse, Future Shock e Nightmare", "modos Arena War"],
     systems: ["Arena Career", "Arena Workshop"],
     vehicles: ["Deathbike", "Sasquatch", "Imperator", "ZR380", "Bruiser", "Brutus"],
     modes: ["Carnage", "Flag War", "Here Come the Monsters", "Wreck It"],
     characters: ["Alan Jerome", "Bryony"],
-    impact: "Foi uma ramificacao mais arcade e separada da economia criminal tradicional.",
-    tags: ["arena", "veiculos", "combate"],
+    impact: "Foi uma ramificação mais arcade e separada da economia criminal tradicional.",
+    tags: ["arena", "veículos", "combate"],
     sourcePage: "GTA Online: Arena War"
   },
   {
@@ -3794,12 +3796,12 @@ const onlineDlcData = [
     type: "Cassino e propriedade",
     era: "Cassino",
     summary: "Abriu o Diamond Casino & Resort com penthouses, jogos de azar e narrativa dos Cheng contra Duggan.",
-    brought: ["Diamond Casino aberto", "Master Penthouse", "casino games", "Lucky Wheel", "Casino Store", "missoes de historia do cassino"],
+    brought: ["Diamond Casino aberto", "Master Penthouse", "casino games", "Lucky Wheel", "Casino Store", "missões de história do cassino"],
     systems: ["Casino", "Penthouses", "Membership"],
     vehicles: ["Thrax", "Paragon R", "S80RR", "Drafter", "Gauntlet Classic"],
     modes: ["Casino Story Missions", "Work Missions"],
     characters: ["Tao Cheng", "Agatha Baker", "Tom Connors", "Avery Duggan"],
-    impact: "Transformou um predio fechado desde 2013 em hub social e economico.",
+    impact: "Transformou um prédio fechado desde 2013 em hub social e econômico.",
     tags: ["cassino", "penthouse", "Cheng"],
     sourcePage: "GTA Online: The Diamond Casino & Resort"
   },
@@ -3808,10 +3810,10 @@ const onlineDlcData = [
     title: "The Diamond Casino Heist",
     releaseDate: "12 de dezembro de 2019",
     year: "2019",
-    type: "Heist flexivel",
+    type: "Heist flexível",
     era: "Cassino",
     summary: "Adicionou o Arcade como fachada e um assalto ao cassino com abordagens variadas.",
-    brought: ["Arcades", "Diamond Casino Heist", "approaches Silent & Sneaky, Big Con e Aggressive", "equipe de suporte", "novos veiculos e armas"],
+    brought: ["Arcades", "Diamond Casino Heist", "approaches Silent & Sneaky, Big Con e Aggressive", "equipe de suporte", "novos veículos e armas"],
     systems: ["Arcade Business", "Casino Heist planning", "heist approach system"],
     vehicles: ["Retinue Mk II", "Komoda", "Everon", "Sultan Classic", "Vagrant", "Zhaba"],
     modes: ["Casino Heist", "prep missions"],
@@ -3826,15 +3828,15 @@ const onlineDlcData = [
     releaseDate: "11 de agosto de 2020",
     year: "2020",
     type: "Qualidade de vida e atividades",
-    era: "Pre-Cayo",
-    summary: "Pacote intermediario com missoes de iate, carros, corridas Open Wheel e melhorias gerais.",
-    brought: ["Super Yacht Life", "novos veiculos", "Open Wheel Races adicionais", "Business Battles expandidas", "criador melhorado"],
+    era: "Pré-Cayo",
+    summary: "Pacote intermediário com missões de iate, carros, corridas Open Wheel e melhorias gerais.",
+    brought: ["Super Yacht Life", "novos veículos", "Open Wheel Races adicionais", "Business Battles expandidas", "criador melhorado"],
     systems: ["Yacht Missions", "Open Wheel"],
     vehicles: ["Coquette D10", "Tigon", "Youga Classic 4x4", "Club", "Gauntlet Classic Custom"],
     modes: ["A Superyacht Life", "Open Wheel Races"],
     characters: ["Captain Darcy"],
-    impact: "Serviu como respiro antes da maior expansao de heist da era.",
-    tags: ["iate", "corridas", "veiculos"],
+    impact: "Serviu como respiro antes da maior expansão de heist da era.",
+    tags: ["iate", "corridas", "veículos"],
     sourcePage: "GTA Online: Los Santos Summer Special"
   },
   {
@@ -3844,8 +3846,8 @@ const onlineDlcData = [
     year: "2020",
     type: "Heist e mapa novo",
     era: "Heists modernos",
-    summary: "Adicionou Cayo Perico, ilha privada de El Rubio, e o primeiro heist grande jogavel solo.",
-    brought: ["ilha Cayo Perico", "Kosatka submarine", "Cayo Perico Heist", "Music Locker", "novas armas, veiculos e radios"],
+    summary: "Adicionou Cayo Perico, ilha privada de El Rubio, e o primeiro heist grande jogável solo.",
+    brought: ["ilha Cayo Perico", "Kosatka submarine", "Cayo Perico Heist", "Music Locker", "novas armas, veículos e rádios"],
     systems: ["solo-friendly heist", "Kosatka", "intel gathering", "secondary targets"],
     vehicles: ["Kosatka", "Sparrow", "Toreador", "Winky", "RO-86 Alkonost", "Annihilator Stealth"],
     modes: ["Cayo Perico Heist", "Gather Intel", "Prep Missions"],
@@ -3861,13 +3863,13 @@ const onlineDlcData = [
     year: "2021",
     type: "Cultura automotiva",
     era: "Tuners",
-    summary: "Criou o LS Car Meet, reputacao de encontros, contratos de Auto Shop e foco em carros tuner.",
+    summary: "Criou o LS Car Meet, reputação de encontros, contratos de Auto Shop e foco em carros tuner.",
     brought: ["LS Car Meet", "Auto Shops", "Contracts", "Reputation", "Prize Ride", "Test Track", "novos carros tuner"],
     systems: ["LS Car Meet", "Auto Shop Business", "Reputation"],
     vehicles: ["Calico GTF", "Jester RR", "Remus", "ZR350", "Comet S2", "Sultan RS Classic"],
     modes: ["Street Race Series", "Pursuit Series", "Contracts"],
     characters: ["Mimi", "Sessanta", "KDJ"],
-    impact: "Foi a maior expansao automotiva desde Benny's e criou comunidade social de carros.",
+    impact: "Foi a maior expansão automotiva desde Benny's e criou comunidade social de carros.",
     tags: ["tuners", "Auto Shop", "carros"],
     sourcePage: "GTA Online: Los Santos Tuners"
   },
@@ -3876,15 +3878,15 @@ const onlineDlcData = [
     title: "The Contract",
     releaseDate: "15 de dezembro de 2021",
     year: "2021",
-    type: "Agencia e narrativa",
+    type: "Agência e narrativa",
     era: "Continuidade de GTA V",
-    summary: "Trouxe Franklin mais velho como empresario, Agency e contrato VIP com Dr. Dre.",
-    brought: ["Agencies", "VIP Contract", "Security Contracts", "Payphone Hits", "Armory", "Imani Tech", "novas musicas e estudios"],
+    summary: "Trouxe Franklin mais velho como empresário, Agency e contrato VIP com Dr. Dre.",
+    brought: ["Agencies", "VIP Contract", "Security Contracts", "Payphone Hits", "Armory", "Imani Tech", "novas músicas e estúdios"],
     systems: ["Agency Business", "VIP Contract", "Imani Tech"],
     vehicles: ["Champion", "Buffalo STX", "Deity", "Jubilee", "Ignus", "Shinobi"],
     modes: ["Security Contracts", "Payphone Hits", "Short Trips"],
     characters: ["Franklin Clinton", "Lamar Davis", "Dr. Dre", "Imani", "Anderson .Paak"],
-    impact: "Conectou explicitamente GTA Online ao futuro de Franklin apos GTA V.",
+    impact: "Conectou explicitamente GTA Online ao futuro de Franklin após GTA V.",
     tags: ["Franklin", "Agency", "Dr. Dre", "continuidade"],
     sourcePage: "GTA Online: The Contract"
   },
@@ -3895,8 +3897,8 @@ const onlineDlcData = [
     year: "2022",
     type: "Economia e qualidade de vida",
     era: "Rebalanceamento",
-    summary: "Grande update de economia, novas missoes da IAA e melhorias em negocios existentes.",
-    brought: ["Operation Paper Trail", "expansoes para CEO, MC, bunker e nightclub", "payouts melhorados", "veiculos e qualidade de vida", "vendas em sessoes privadas"],
+    summary: "Grande update de economia, novas missões da IAA e melhorias em negócios existentes.",
+    brought: ["Operation Paper Trail", "expansões para CEO, MC, bunker e nightclub", "payouts melhorados", "veículos e qualidade de vida", "vendas em sessões privadas"],
     systems: ["business boosts", "Operation Paper Trail", "private session selling"],
     vehicles: ["Torero XO", "Omnis e-GT", "Corsita", "Greenwood", "SM722"],
     modes: ["IAA missions", "business source/sell updates"],
@@ -3913,12 +3915,12 @@ const onlineDlcData = [
     type: "Drogas e Fooliganz",
     era: "Fooliganz",
     summary: "Introduziu Dax, The Freakshop, Acid Lab e a linha narrativa First Dose/Last Dose.",
-    brought: ["First Dose missions", "Last Dose missions", "The Freakshop", "Acid Lab", "Fooliganz Jobs", "novos veiculos e armas"],
+    brought: ["First Dose missions", "Last Dose missions", "The Freakshop", "Acid Lab", "Fooliganz Jobs", "novos veículos e armas"],
     systems: ["Acid Lab Business", "Fooligan Jobs"],
     vehicles: ["MTL Brickade 6x6", "Manchez Scout C", "Entity MT", "Journey II", "Toundra Panthere"],
     modes: ["First Dose", "Last Dose", "Fooligan Jobs"],
     characters: ["Dax", "Luchadora", "Labrat", "Dr. Isiah Friedlander"],
-    impact: "Criou uma progressao relativamente acessivel para jogadores solo.",
+    impact: "Criou uma progressão relativamente acessível para jogadores solo.",
     tags: ["Acid Lab", "Dax", "drogas"],
     sourcePage: "GTA Online: Los Santos Drug Wars"
   },
@@ -3927,16 +3929,16 @@ const onlineDlcData = [
     title: "San Andreas Mercenaries",
     releaseDate: "13 de junho de 2023",
     year: "2023",
-    type: "Operacoes aereas",
-    era: "Mercenarios",
-    summary: "Colocou os Los Santos Angels contra Merryweather com missoes aereas a partir do Avenger.",
-    brought: ["Project Overthrow", "LSA Operations", "Avenger Operations Terminal", "Mammoth Avenger upgrades", "novos veiculos e melhorias"],
+    type: "Operações aéreas",
+    era: "Mercenários",
+    summary: "Colocou os Los Santos Angels contra Merryweather com missões aéreas a partir do Avenger.",
+    brought: ["Project Overthrow", "LSA Operations", "Avenger Operations Terminal", "Mammoth Avenger upgrades", "novos veículos e melhorias"],
     systems: ["Avenger Operations", "LSA Operations"],
     vehicles: ["F-160 Raiju", "MonstroCiti", "Walton L35", "Ratel", "Streamer216"],
     modes: ["Project Overthrow", "LSA Operations"],
     characters: ["Charlie Reed", "Los Santos Angels"],
     impact: "Reposicionou o Avenger como base operacional e trouxe combate militar moderno.",
-    tags: ["Merryweather", "Avenger", "aereo"],
+    tags: ["Merryweather", "Avenger", "aéreo"],
     sourcePage: "GTA Online: San Andreas Mercenaries"
   },
   {
@@ -3946,13 +3948,13 @@ const onlineDlcData = [
     year: "2023",
     type: "Roubo de carros",
     era: "Roubos especializados",
-    summary: "Adicionou Salvage Yard, roubos de veiculos de alto valor e retorno de Yusuf Amir.",
-    brought: ["Salvage Yard", "Salvage Yard Robberies", "Tow Truck Service", "planejamento de roubos", "novos veiculos e Drift Races"],
+    summary: "Adicionou Salvage Yard, roubos de veículos de alto valor e retorno de Yusuf Amir.",
+    brought: ["Salvage Yard", "Salvage Yard Robberies", "Tow Truck Service", "planejamento de roubos", "novos veículos e Drift Races"],
     systems: ["Salvage Yard Business", "Tow Truck", "Vehicle Robberies"],
     vehicles: ["Turismo Omaggio", "FR36", "Dorado", "Vivanite", "Aleutian"],
     modes: ["Salvage Yard Robberies", "Drift Races"],
     characters: ["Yusuf Amir", "Jamal Amir"],
-    impact: "Trouxe uma fantasia de roubo de carros mais proxima do DNA original da serie.",
+    impact: "Trouxe uma fantasia de roubo de carros mais próxima do DNA original da série.",
     tags: ["Salvage Yard", "Yusuf", "carros"],
     sourcePage: "GTA Online: The Chop Shop"
   },
@@ -3961,16 +3963,16 @@ const onlineDlcData = [
     title: "Bottom Dollar Bounties",
     releaseDate: "25 de junho de 2024",
     year: "2024",
-    type: "Cacadores de recompensa",
-    era: "Justica privatizada",
+    type: "Caçadores de recompensa",
+    era: "Justiça privatizada",
     summary: "Transformou o jogador em operador da Bottom Dollar Bail Enforcement, com procurados e trabalhos policiais.",
-    brought: ["Bail Office", "standard bounty targets", "Most Wanted targets", "Dispatch Work", "novos veiculos de policia e utilitarios"],
+    brought: ["Bail Office", "standard bounty targets", "Most Wanted targets", "Dispatch Work", "novos veículos de polícia e utilitários"],
     systems: ["Bail Office Business", "Bounty Targets", "Dispatch Work"],
     vehicles: ["Dominator FX", "Envisage", "Impaler SZ Cruiser", "Greenwood Cruiser", "Yosemite 1500"],
     modes: ["Bounty Targets", "Dispatch Work"],
     characters: ["Maude Eccles", "Jenette Eccles", "Vincent Effenburger"],
-    impact: "Misturou fantasia policial, recompensa e economia criminal em uma atividade diaria.",
-    tags: ["bounties", "policia", "Bail Office"],
+    impact: "Misturou fantasia policial, recompensa e economia criminal em uma atividade diária.",
+    tags: ["bounties", "polícia", "Bail Office"],
     sourcePage: "GTA Online: Bottom Dollar Bounties"
   },
   {
@@ -3978,32 +3980,32 @@ const onlineDlcData = [
     title: "Agents of Sabotage",
     releaseDate: "10 de dezembro de 2024",
     year: "2024",
-    type: "Operacoes clandestinas",
+    type: "Operações clandestinas",
     era: "Sabotagem",
     summary: "Adicionou Darnell Bros Garment Factory como base e File missions com Jodi Marshall.",
-    brought: ["Darnell Bros Garment Factory", "The FIB Files", "novas missoes de infiltracao", "Terrorbyte upgrades", "novos veiculos"],
+    brought: ["Darnell Bros Garment Factory", "The FIB Files", "novas missões de infiltração", "Terrorbyte upgrades", "novos veículos"],
     systems: ["Garment Factory", "FIB Files", "hacking/infiltration jobs"],
     vehicles: ["Banshee GTS", "Chavos V6", "Jester RR Widebody", "Coquette D10 Pursuit"],
     modes: ["FIB Files", "Priority File"],
     characters: ["Jodi Marshall", "Pavel", "Lester Crest"],
-    impact: "Recuperou o espaco da Darnell Bros, historico de GTA V, como hub criminal moderno.",
+    impact: "Recuperou o espaço da Darnell Bros, histórico de GTA V, como hub criminal moderno.",
     tags: ["FIB", "sabotagem", "Garment Factory"],
     sourcePage: "GTA Online: Agents of Sabotage"
   },
   {
     id: "oscar-guzman-flies-again",
     title: "Oscar Guzman Flies Again",
-    releaseDate: "4 de marco de 2025",
+    releaseDate: "4 de março de 2025",
     year: "2025",
-    type: "Missoes e hangar",
-    era: "Contrabando aereo",
-    summary: "Continuacao de Agents of Sabotage com Oscar Guzman, McKenzie Field Hangar e uma nova linha de trafico de armas contra Eberhard Munitions.",
-    brought: ["McKenzie Field Hangar compravel", "nova serie de missoes com Oscar Guzman", "missoes de trafico de armas", "novas aeronaves e veiculos", "progressao de carreira no Enhanced"],
+    type: "Missões e hangar",
+    era: "Contrabando aéreo",
+    summary: "Continuação de Agents of Sabotage com Oscar Guzman, McKenzie Field Hangar e uma nova linha de tráfico de armas contra Eberhard Munitions.",
+    brought: ["McKenzie Field Hangar comprável", "nova série de missões com Oscar Guzman", "missões de tráfico de armas", "novas aeronaves e veículos", "progressão de carreira no Enhanced"],
     systems: ["McKenzie Field Hangar", "arms trafficking missions", "Career Progress"],
     vehicles: ["Duster 300-H", "DH-7 Iron Mule", "Titan 250 D"],
     modes: ["Oscar Guzman Flies Again missions", "arms trafficking work"],
     characters: ["Oscar Guzman", "Ron Jakowski", "Eberhard Munitions"],
-    impact: "Reaproveitou o passado de Trevor Philips Enterprises e deu ao contrabando aereo uma nova frente narrativa.",
+    impact: "Reaproveitou o passado de Trevor Philips Enterprises e deu ao contrabando aéreo uma nova frente narrativa.",
     tags: ["Oscar Guzman", "hangar", "Blaine County", "2025"],
     sourcePage: "Oscar Guzman Flies Again",
     officialSource: "https://www.rockstargames.com/newswire/article/179kk473a8a18k/gta-online-oscar-guzman-flies-again-now-available"
@@ -4015,14 +4017,14 @@ const onlineDlcData = [
     year: "2025",
     type: "Lavagem de dinheiro",
     era: "Fachadas",
-    summary: "Focou em negocios de fachada para lavar dinheiro, esconder operacoes ilegais e transformar empresas legitimas em cobertura criminal.",
-    brought: ["Hands On Car Wash como primeira fachada", "Smoke on the Water e Higgins Helitours integrados como frentes adicionais", "Mr. Faber como contato", "trabalhos legitimos para manter aparencia limpa", "renda passiva conectada a lavagem", "novos veiculos, melhorias e atividades de mapa"],
-    systems: ["Money Laundering Fronts", "business upgrades", "front income", "trabalhos legitimos", "QuickiePharm", "Safeguard deliveries"],
-    vehicles: ["Karin Everon RS", "Woodlander", "Tampa GT", "novos veiculos adicionados por drip-feed"],
+    summary: "Focou em negócios de fachada para lavar dinheiro, esconder operações ilegais e transformar empresas legítimas em cobertura criminal.",
+    brought: ["Hands On Car Wash como primeira fachada", "Smoke on the Water e Higgins Helitours integrados como frentes adicionais", "Mr. Faber como contato", "trabalhos legítimos para manter aparência limpa", "renda passiva conectada à lavagem", "novos veículos, melhorias e atividades de mapa"],
+    systems: ["Money Laundering Fronts", "business upgrades", "front income", "trabalhos legítimos", "QuickiePharm", "Safeguard deliveries"],
+    vehicles: ["Karin Everon RS", "Woodlander", "Tampa GT", "novos veículos adicionados por drip-feed"],
     modes: ["front management", "lavagem e entregas", "Cayo Perico Adversary/Survival", "Slasher em Ramius Submarine"],
     characters: ["Martin Madrazo", "Mr. Faber"],
-    impact: "Deu coesao narrativa a negocios de lavagem que GTA Online sugeria havia anos e aproximou a economia do jogador de uma rede criminosa com fachada legal.",
-    tags: ["lavagem", "negocios", "fachadas", "Mr. Faber"],
+    impact: "Deu coesão narrativa a negócios de lavagem que GTA Online sugeria havia anos e aproximou a economia do jogador de uma rede criminosa com fachada legal.",
+    tags: ["lavagem", "negócios", "fachadas", "Mr. Faber"],
     sourcePage: "GTA Online: Money Fronts",
     officialSource: "https://www.rockstargames.com/newswire/article/51322o2k393kka/gta-online-money-fronts-now-available"
   },
@@ -4033,13 +4035,13 @@ const onlineDlcData = [
     year: "2025",
     type: "Safehouse e high-end crime",
     era: "Fase atual",
-    summary: "Update de fim de 2025 centrado na compra de mansoes Prix Luxury nas colinas, com safehouse de luxo, assistente de IA e novas operacoes ligadas ao alto escalao criminal de Los Santos.",
-    brought: ["mansoes Prix Luxury compraveis", "interiores de safehouse high-end", "assistente de IA para suporte da propriedade", "beneficios de seguranca privada", "impulso de producao para negocios", "novas missoes de preparacao", "novos veiculos, roupas e recompensas"],
+    summary: "Update de fim de 2025 centrado na compra de mansões Prix Luxury nas colinas, com safehouse de luxo, assistente de IA e novas operações ligadas ao alto escalão criminal de Los Santos.",
+    brought: ["mansões Prix Luxury compráveis", "interiores de safehouse high-end", "assistente de IA para suporte da propriedade", "benefícios de segurança privada", "impulso de produção para negócios", "novas missões de preparação", "novos veículos, roupas e recompensas"],
     systems: ["Luxury Safehouse", "AI Assistant", "Private Security", "Production Boosts", "Prix Luxury prep missions"],
-    vehicles: ["novos veiculos adicionados pela atualizacao e drip-feed"],
-    modes: ["missoes da safehouse", "prep missions", "atividades de carreira", "KnoWay Out"],
+    vehicles: ["novos veículos adicionados pela atualização e drip-feed"],
+    modes: ["missões da safehouse", "prep missions", "atividades de carreira", "KnoWay Out"],
     characters: ["jogador online", "Avi Schwartzman", "Michael De Santa"],
-    impact: "Leva a fantasia de patrimonio do Online para mansoes de alto luxo e reposiciona o jogador como chefe consolidado, nao apenas operador de rua.",
+    impact: "Leva a fantasia de patrimônio do Online para mansões de alto luxo e reposiciona o jogador como chefe consolidado, não apenas operador de rua.",
     tags: ["safehouse", "luxo", "Prix Luxury", "Michael", "2025"],
     sourcePage: "GTA Online: A Safehouse in the Hills",
     officialSource: "https://www.rockstargames.com/newswire/article/51358a55o2o11o/gta-online-a-safehouse-in-the-hills-coming-december-10"
@@ -4074,31 +4076,31 @@ const connectionsData = [
   {
     title: "Catalina: San Andreas para GTA III",
     summary: "Catalina aparece em 1992 com CJ e, anos depois, trai Claude em Liberty City.",
-    type: "Conexao cronologica"
+    type: "Conexão cronológica"
   },
   {
     title: "Leone Family: Las Venturas, Liberty e GTA III",
-    summary: "Salvatore conecta San Andreas, Liberty City Stories e GTA III, mostrando a continuidade da mafia 3D.",
-    type: "Familia criminosa"
+    summary: "Salvatore conecta San Andreas, Liberty City Stories e GTA III, mostrando a continuidade da máfia 3D.",
+    type: "Família criminosa"
   },
   {
     title: "Diamantes de Liberty City",
-    summary: "GTA IV, The Lost and Damned e The Ballad of Gay Tony mostram o mesmo conflito por angulos diferentes.",
+    summary: "GTA IV, The Lost and Damned e The Ballad of Gay Tony mostram o mesmo conflito por ângulos diferentes.",
     type: "Narrativa cruzada"
   },
   {
     title: "Michael, Trevor e North Yankton",
-    summary: "A mentira de 2004 e o eixo emocional de GTA V, reativando amizade, traicao e paranoia.",
-    type: "Traicao"
+    summary: "A mentira de 2004 é o eixo emocional de GTA V, reativando amizade, traição e paranoia.",
+    type: "Traição"
   },
   {
     title: "Franklin em GTA Online",
-    summary: "The Contract confirma Franklin mais velho como empresario de sucesso, reforcando a leitura da Opcao C.",
+    summary: "The Contract confirma Franklin mais velho como empresário de sucesso, reforçando a leitura da Opção C.",
     type: "Continuidade HD"
   },
   {
     title: "Vice City 1984, 1986 e 2026",
-    summary: "Vic e Tommy definem a era 3D; Lucia e Jason retornam a cidade em outro universo narrativo.",
+    summary: "Vic e Tommy definem a era 3D; Lucia e Jason retornam à cidade em outro universo narrativo.",
     type: "Eco entre universos"
   }
 ];
@@ -4109,11 +4111,11 @@ const recommendedOrderData = [
     games: ["GTA III", "Vice City", "San Andreas", "Liberty City Stories", "Vice City Stories", "GTA IV", "Episodes from Liberty City", "Chinatown Wars", "GTA V", "GTA Online", "GTA VI"]
   },
   {
-    label: "Ordem cronologica interna",
+    label: "Ordem cronológica interna",
     games: ["London 1961", "London 1969", "Vice City Stories", "Vice City", "San Andreas", "GTA 1", "Liberty City Stories", "GTA Advance", "GTA III", "GTA IV + Episodes", "Chinatown Wars", "GTA V", "GTA Online", "GTA VI"]
   },
   {
-    label: "Ordem por impacto historico",
+    label: "Ordem por impacto histórico",
     games: ["Grand Theft Auto", "GTA III", "Vice City", "San Andreas", "GTA IV", "GTA V", "GTA Online", "GTA VI"]
   }
 ];
@@ -4121,56 +4123,56 @@ const recommendedOrderData = [
 const impactData = [
   {
     title: "Mundo aberto urbano como linguagem dominante",
-    body: "GTA III popularizou um modelo que virou vocabulario de design: mapa urbano, missoes, sistemas policiais, liberdade lateral e narrativa cinematografica."
+    body: "GTA III popularizou um modelo que virou vocabulário de design: mapa urbano, missões, sistemas policiais, liberdade lateral e narrativa cinematográfica."
   },
   {
-    title: "Satira cultural",
-    body: "Radios, anuncios, marcas falsas, talk shows e pedestres transformam cada cidade em critica de consumo, politica, midia, celebridade e paranoia americana."
+    title: "Sátira cultural",
+    body: "Rádios, anúncios, marcas falsas, talk shows e pedestres transformam cada cidade em crítica de consumo, política, mídia, celebridade e paranoia americana."
   },
   {
-    title: "Controversias",
-    body: "A serie e historicamente alvo de debates sobre violencia, classificacao indicativa, representacao e conteudo sexual. San Andreas tambem ficou associado ao caso Hot Coffee, um dos marcos de controversia em jogos."
+    title: "Controvérsias",
+    body: "A série é historicamente alvo de debates sobre violência, classificação indicativa, representação e conteúdo sexual. San Andreas também ficou associado ao caso Hot Coffee, um dos marcos de controvérsia em jogos."
   },
   {
     title: "GTA Online e economia de jogo vivo",
-    body: "GTA Online redefiniu a longevidade de GTA V, mas tambem trouxe debates sobre grind, microtransacoes, inflacao interna e preservacao do single-player tradicional."
+    body: "GTA Online redefiniu a longevidade de GTA V, mas também trouxe debates sobre grind, microtransações, inflação interna e preservação do single-player tradicional."
   }
 ];
 
 const glossaryData = [
-  { term: "2D Universe", definition: "Primeira continuidade de GTA, com camera top-down e estrutura arcade." },
+  { term: "2D Universe", definition: "Primeira continuidade de GTA, com câmera top-down e estrutura arcade." },
   { term: "3D Universe", definition: "Continuidade de GTA III, Vice City, San Andreas, Advance, LCS e VCS." },
   { term: "HD Universe", definition: "Continuidade iniciada em GTA IV, incluindo GTA V, Online e GTA VI." },
   { term: "Wanted Level", definition: "Sistema de estrelas que mede resposta policial ao jogador." },
-  { term: "Heist", definition: "Assalto planejado com preparacao, equipe e execucao." },
+  { term: "Heist", definition: "Assalto planejado com preparação, equipe e execução." },
   { term: "C.R.A.S.H.", definition: "Unidade policial corrupta de San Andreas, liderada por Tenpenny." },
-  { term: "FIB", definition: "Parodia do FBI no universo GTA." },
-  { term: "IAA", definition: "Parodia da CIA/inteligencia americana no universo GTA." },
-  { term: "NOOSE", definition: "Forca tática de resposta a ameaças de alto nivel." },
-  { term: "RAGE", definition: "Rockstar Advanced Game Engine, base tecnica da era HD." },
-  { term: "Euphoria", definition: "Tecnologia de animacao/fisica usada para reacoes corporais na era HD." },
+  { term: "FIB", definition: "Paródia do FBI no universo GTA." },
+  { term: "IAA", definition: "Paródia da CIA/inteligência americana no universo GTA." },
+  { term: "NOOSE", definition: "Força tática de resposta a ameaças de alto nível." },
+  { term: "RAGE", definition: "Rockstar Advanced Game Engine, base técnica da era HD." },
+  { term: "Euphoria", definition: "Tecnologia de animação/física usada para reações corporais na era HD." },
   { term: "Canon", definition: "Conjunto de eventos aceitos como continuidade narrativa." },
-  { term: "Easter egg", definition: "Referencia escondida, piada interna ou pista visual colocada no jogo." },
-  { term: "Prequel", definition: "Jogo ou historia que acontece antes de um titulo ja lancado." },
+  { term: "Easter egg", definition: "Referência escondida, piada interna ou pista visual colocada no jogo." },
+  { term: "Prequel", definition: "Jogo ou história que acontece antes de um título já lançado." },
   { term: "Spin-off", definition: "Entrada derivada, muitas vezes com formato, plataforma ou foco diferente." },
-  { term: "GTA Online Organization", definition: "Estrutura criada pelo jogador para negocios como CEO, MC, Agencia, Bunker ou Nightclub." },
-  { term: "Leonida", definition: "Estado ficticio de GTA VI inspirado na Florida." },
-  { term: "Vice City", definition: "Analogo de Miami, presente em 2D, 3D e HD Universe." }
+  { term: "GTA Online Organization", definition: "Estrutura criada pelo jogador para negócios como CEO, MC, Agência, Bunker ou Nightclub." },
+  { term: "Leonida", definition: "Estado fictício de GTA VI inspirado na Flórida." },
+  { term: "Vice City", definition: "Análogo de Miami, presente em 2D, 3D e HD Universe." }
 ];
 
 const glossaryDetailData = {
   "2D Universe": {
     category: "Universos",
     expanded:
-      "O 2D Universe cobre a fase original de Grand Theft Auto, quando a serie ainda era vista de cima, com ritmo arcade, pontuacao, missoes curtas e continuidade narrativa bem mais solta. Liberty City, San Andreas e Vice City ja existem como nomes, mas ainda funcionam como mapas de caos urbano, nao como cidades-personagem densas. London 1969 e London 1961 tambem entram nessa fase e sao excecoes historicas por levarem GTA para fora do imaginario criminal norte-americano que dominaria a franquia depois.",
+      "O 2D Universe cobre a fase original de Grand Theft Auto, quando a série ainda era vista de cima, com ritmo arcade, pontuação, missões curtas e continuidade narrativa bem mais solta. Liberty City, San Andreas e Vice City já existem como nomes, mas ainda funcionam como mapas de caos urbano, não como cidades-personagem densas. London 1969 e London 1961 também entram nessa fase e são exceções históricas por levarem GTA para fora do imaginário criminal norte-americano que dominaria a franquia depois.",
     importance:
-      "E o laboratorio da formula: roubo de veiculos, perseguicao policial, radios, humor acido, liberdade sistemica e crime urbano antes da virada cinematografica de GTA III.",
+      "É o laboratório da fórmula: roubo de veículos, perseguição policial, rádios, humor ácido, liberdade sistêmica e crime urbano antes da virada cinematográfica de GTA III.",
     examples: ["Grand Theft Auto", "GTA: London 1969", "GTA: London 1961", "Grand Theft Auto 2"],
     relatedTerms: ["3D Universe", "HD Universe", "Canon", "Easter egg"],
     games: ["GTA 1", "London 1969", "London 1961", "GTA 2"],
     precisionNotes: [
-      "GTA 2 e frequentemente tratado como parte da fase 2D, mas seu ano interno e tom retrofuturista sao deliberadamente nebulosos.",
-      "Nomes de cidades podem reaparecer em outros universos sem significar que sao a mesma continuidade."
+      "GTA 2 é frequentemente tratado como parte da fase 2D, mas seu ano interno e tom retrofuturista são deliberadamente nebulosos.",
+      "Nomes de cidades podem reaparecer em outros universos sem significar que são a mesma continuidade."
     ],
     tags: ["universo", "top-down", "arcade", "origem"],
     sources: [
@@ -4181,17 +4183,17 @@ const glossaryDetailData = {
   "3D Universe": {
     category: "Universos",
     expanded:
-      "O 3D Universe e a continuidade classica formada por GTA III, Vice City, San Andreas, Advance, Liberty City Stories e Vice City Stories. Ele transforma nomes antigos em lugares memoraveis, com mafias, gangues, radios, personagens recorrentes e eventos que se conectam entre jogos. Claude, Tommy Vercetti, CJ, Mike, Toni Cipriani e Victor Vance pertencem a esse bloco narrativo.",
+      "O 3D Universe é a continuidade clássica formada por GTA III, Vice City, San Andreas, Advance, Liberty City Stories e Vice City Stories. Ele transforma nomes antigos em lugares memoráveis, com máfias, gangues, rádios, personagens recorrentes e eventos que se conectam entre jogos. Claude, Tommy Vercetti, CJ, Mike, Toni Cipriani e Victor Vance pertencem a esse bloco narrativo.",
     importance:
-      "Foi a era que consolidou GTA como narrativa criminal de mundo aberto, fazendo Liberty City, Vice City e San Andreas parecerem arquivos vivos de crime, radio, politica e cultura pop.",
+      "Foi a era que consolidou GTA como narrativa criminal de mundo aberto, fazendo Liberty City, Vice City e San Andreas parecerem arquivos vivos de crime, rádio, política e cultura pop.",
     examples: ["Leone Family atravessando San Andreas, LCS e GTA III", "Catalina conectando San Andreas e GTA III", "Vice City Stories preparando o terreno para Vice City"],
     relatedTerms: ["2D Universe", "HD Universe", "Prequel", "Canon"],
     games: ["GTA III", "Vice City", "San Andreas", "GTA Advance", "Liberty City Stories", "Vice City Stories"],
     precisionNotes: [
-      "GTA Advance e top-down, mas pertence ao 3D Universe por continuidade, cidade e ligacao com GTA III.",
-      "Referencias da era 3D podem aparecer na era HD como marcas, piadas ou ecos, mas personagens centrais nao devem ser assumidos como canonicos no HD Universe."
+      "GTA Advance é top-down, mas pertence ao 3D Universe por continuidade, cidade e ligação com GTA III.",
+      "Referências da era 3D podem aparecer na era HD como marcas, piadas ou ecos, mas personagens centrais não devem ser assumidos como canônicos no HD Universe."
     ],
-    tags: ["universo", "3d", "continuidade", "mafias"],
+    tags: ["universo", "3d", "continuidade", "máfias"],
     sources: [
       { label: "GTA Wiki - 3D Universe", url: "https://gta.fandom.com/wiki/3D_Universe" },
       { label: "GTA Wiki - Universes", url: "https://gta.fandom.com/wiki/Universes" }
@@ -4200,15 +4202,15 @@ const glossaryDetailData = {
   "HD Universe": {
     category: "Universos",
     expanded:
-      "O HD Universe comeca em GTA IV e segue por Episodes from Liberty City, Chinatown Wars, GTA V, GTA Online e GTA VI. A Rockstar reinventa a continuidade com cidades mais densas, fisica mais complexa, tom mais realista e satira contemporanea. Liberty City, Los Santos e Vice City retornam reinterpretadas, com escala, geografia e canon diferentes da era 3D.",
+      "O HD Universe começa em GTA IV e segue por Episodes from Liberty City, Chinatown Wars, GTA V, GTA Online e GTA VI. A Rockstar reinventa a continuidade com cidades mais densas, física mais complexa, tom mais realista e sátira contemporânea. Liberty City, Los Santos e Vice City retornam reinterpretadas, com escala, geografia e canon diferentes da era 3D.",
     importance:
-      "E o universo atual da franquia. Ele sustenta a narrativa de Niko Bellic, Johnny Klebitz, Luis Lopez, Huang Lee, Michael, Franklin, Trevor, o protagonista de GTA Online, Lucia Caminos e Jason Duval.",
-    examples: ["GTA IV e Episodes mostram o mesmo conflito por angulos diferentes", "GTA Online continua Los Santos depois de 2013", "GTA VI leva a continuidade HD para Leonida e Vice City moderna"],
+      "É o universo atual da franquia. Ele sustenta a narrativa de Niko Bellic, Johnny Klebitz, Luis Lopez, Huang Lee, Michael, Franklin, Trevor, o protagonista de GTA Online, Lucia Caminos e Jason Duval.",
+    examples: ["GTA IV e Episodes mostram o mesmo conflito por ângulos diferentes", "GTA Online continua Los Santos depois de 2013", "GTA VI leva a continuidade HD para Leonida e Vice City moderna"],
     relatedTerms: ["Canon", "RAGE", "Euphoria", "GTA Online Organization", "Leonida"],
     games: ["GTA IV", "The Lost and Damned", "The Ballad of Gay Tony", "Chinatown Wars", "GTA V", "GTA Online", "GTA VI"],
     precisionNotes: [
-      "O HD Universe nao invalida a importancia historica da era 3D; ele separa continuidade narrativa.",
-      "GTA VI e confirmado no HD Universe por continuidade moderna de marca, tecnologia e pagina oficial, mas detalhes finos do canon so ficam completos apos o lancamento."
+      "O HD Universe não invalida a importância histórica da era 3D; ele separa continuidade narrativa.",
+      "GTA VI é confirmado no HD Universe por continuidade moderna de marca, tecnologia e página oficial, mas detalhes finos do canon só ficam completos após o lançamento."
     ],
     tags: ["universo", "hd", "canon atual", "realismo"],
     sources: [
@@ -4219,17 +4221,17 @@ const glossaryDetailData = {
   "Wanted Level": {
     category: "Sistemas",
     expanded:
-      "Wanted Level e o medidor de resposta policial de GTA. Crimes publicos, disparos, atropelamentos, invasao de areas restritas e ataques a autoridades elevam o nivel de procurado. Nas eras 2D e 3D ele costuma ir ate seis estrelas; em GTA V e GTA Online opera em escala de cinco estrelas. A logica muda por jogo, mas a fantasia e a mesma: quanto mais caos publico, mais agressiva e organizada fica a resposta do Estado.",
+      "Wanted Level é o medidor de resposta policial de GTA. Crimes públicos, disparos, atropelamentos, invasão de áreas restritas e ataques a autoridades elevam o nível de procurado. Nas eras 2D e 3D ele costuma ir até seis estrelas; em GTA V e GTA Online opera em escala de cinco estrelas. A lógica muda por jogo, mas a fantasia é a mesma: quanto mais caos público, mais agressiva e organizada fica a resposta do Estado.",
     importance:
-      "E um dos sistemas mais reconheciveis da serie, porque transforma a cidade em organismo reativo: patrulhas, barreiras, helicopteros, unidades taticas e perseguicoes contam a historia do crime sem precisar de cutscene.",
-    examples: ["seis estrelas em jogos classicos", "cinco estrelas em GTA V", "resposta automatica a areas restritas em GTA Online"],
+      "É um dos sistemas mais reconhecíveis da série, porque transforma a cidade em organismo reativo: patrulhas, barreiras, helicópteros, unidades táticas e perseguições contam a história do crime sem precisar de cutscene.",
+    examples: ["seis estrelas em jogos clássicos", "cinco estrelas em GTA V", "resposta automática a áreas restritas em GTA Online"],
     relatedTerms: ["NOOSE", "LSPD", "LCPD", "C.R.A.S.H."],
     games: ["franquia GTA"],
     precisionNotes: [
-      "A quantidade maxima de estrelas e a logica de fuga variam entre jogos.",
-      "GTA Online evita prisao tradicional do jogador e tende a usar resposta letal."
+      "A quantidade máxima de estrelas e a lógica de fuga variam entre jogos.",
+      "GTA Online evita prisão tradicional do jogador e tende a usar resposta letal."
     ],
-    tags: ["policia", "sistema", "estrelas", "perseguicao"],
+    tags: ["polícia", "sistema", "estrelas", "perseguição"],
     sources: [
       { label: "GTA Wiki - Wanted Level", url: "https://gta.fandom.com/wiki/Wanted_Level" },
       { label: "Wikipedia - Grand Theft Auto", url: "https://en.wikipedia.org/wiki/Grand_Theft_Auto" }
@@ -4238,15 +4240,15 @@ const glossaryDetailData = {
   "Heist": {
     category: "Estrutura narrativa",
     expanded:
-      "Heist e o assalto planejado, geralmente dividido em preparacao, equipe, equipamento, execucao e fuga. A ideia existe no DNA da serie desde roubos e golpes menores, mas ganha forma cinematografica em GTA V e estrutura cooperativa em GTA Online. Em vez de uma missao isolada, o heist vira campanha curta: escolher abordagem, roubar preparativos, dividir papeis e lidar com consequencias.",
+      "Heist é o assalto planejado, geralmente dividido em preparação, equipe, equipamento, execução e fuga. A ideia existe no DNA da série desde roubos e golpes menores, mas ganha forma cinematográfica em GTA V e estrutura cooperativa em GTA Online. Em vez de uma missão isolada, o heist vira campanha curta: escolher abordagem, roubar preparativos, dividir papéis e lidar com consequências.",
     importance:
-      "Os heists conectam a fantasia criminal de GTA ao design moderno de missao. No Online, eles tambem viraram o eixo economico de progressao e cooperacao.",
+      "Os heists conectam a fantasia criminal de GTA ao design moderno de missão. No Online, eles também viraram o eixo econômico de progressão e cooperação.",
     examples: ["Fleeca Job", "Pacific Standard Job", "The Doomsday Heist", "The Diamond Casino Heist", "The Cayo Perico Heist"],
     relatedTerms: ["GTA Online Organization", "Lester Crest", "IAA", "FIB"],
     games: ["GTA V", "GTA Online"],
     precisionNotes: [
-      "Nem todo roubo em GTA e chamado formalmente de heist.",
-      "Cayo Perico e historico por permitir execucao solo de um grande heist em GTA Online."
+      "Nem todo roubo em GTA é chamado formalmente de heist.",
+      "Cayo Perico é histórico por permitir execução solo de um grande heist em GTA Online."
     ],
     tags: ["heist", "assalto", "cooperativo", "planejamento"],
     sources: [
@@ -4255,69 +4257,69 @@ const glossaryDetailData = {
     ]
   },
   "C.R.A.S.H.": {
-    category: "Policia corrupta",
+    category: "Polícia corrupta",
     expanded:
-      "Community Resources Against Street Hoodlums, abreviado como C.R.A.S.H., e a unidade corrupta do LSPD que domina parte da narrativa de GTA San Andreas. Frank Tenpenny, Eddie Pulaski e Jimmy Hernandez manipulam CJ, fabricam pressoes, usam gangues como ferramenta e representam a corrupcao institucional por tras da guerra de ruas de Los Santos.",
+      "Community Resources Against Street Hoodlums, abreviado como C.R.A.S.H., é a unidade corrupta do LSPD que domina parte da narrativa de GTA San Andreas. Frank Tenpenny, Eddie Pulaski e Jimmy Hernandez manipulam CJ, fabricam pressões, usam gangues como ferramenta e representam a corrupção institucional por trás da guerra de ruas de Los Santos.",
     importance:
-      "C.R.A.S.H. e o rosto policial da tragedia de San Andreas: a historia nao e apenas gangues contra gangues, mas uma cidade onde autoridade, crime e politica se contaminam.",
-    examples: ["Tenpenny coagindo CJ", "Pulaski como executor", "Hernandez dividido entre culpa e obediencia"],
+      "C.R.A.S.H. é o rosto policial da tragédia de San Andreas: a história não é apenas gangues contra gangues, mas uma cidade onde autoridade, crime e política se contaminam.",
+    examples: ["Tenpenny coagindo CJ", "Pulaski como executor", "Hernandez dividido entre culpa e obediência"],
     relatedTerms: ["Wanted Level", "LSPD", "Canon"],
     games: ["GTA San Andreas"],
-    precisionNotes: ["C.R.A.S.H. e especifica da continuidade 3D e nao deve ser confundida com LSPD generica da era HD."],
-    tags: ["policia corrupta", "San Andreas", "Tenpenny", "LSPD"],
+    precisionNotes: ["C.R.A.S.H. é específica da continuidade 3D e não deve ser confundida com LSPD genérica da era HD."],
+    tags: ["polícia corrupta", "San Andreas", "Tenpenny", "LSPD"],
     sources: [{ label: "GTA Wiki - C.R.A.S.H.", url: "https://gta.fandom.com/wiki/C.R.A.S.H." }]
   },
   "FIB": {
-    category: "Agencias",
+    category: "Agências",
     expanded:
-      "Federal Investigation Bureau e a parodia de GTA para o FBI. Na era HD, o FIB aparece como agencia federal agressiva, burocratica e politicamente contaminada. Dave Norton e Steve Haines sao centrais em GTA V: o primeiro prende Michael numa mentira de protecao; o segundo explora Michael, Franklin e Trevor em operacoes sujas.",
+      "Federal Investigation Bureau é a paródia de GTA para o FBI. Na era HD, o FIB aparece como agência federal agressiva, burocrática e politicamente contaminada. Dave Norton e Steve Haines são centrais em GTA V: o primeiro prende Michael numa mentira de proteção; o segundo explora Michael, Franklin e Trevor em operações sujas.",
     importance:
-      "O FIB permite que GTA critique vigilancia, propaganda, conflito entre agencias e uso do crime como ferramenta de Estado.",
+      "O FIB permite que GTA critique vigilância, propaganda, conflito entre agências e uso do crime como ferramenta de Estado.",
     examples: ["Steve Haines em GTA V", "Dave Norton e o acordo de Michael", "The FIB Files em Agents of Sabotage"],
     relatedTerms: ["IAA", "NOOSE", "Wanted Level", "HD Universe"],
     games: ["GTA IV", "GTA V", "GTA Online"],
-    precisionNotes: ["A representacao varia por jogo; no HD Universe o FIB fica muito mais presente no enredo principal."],
-    tags: ["governo", "FIB", "corrupcao", "HD Universe"],
+    precisionNotes: ["A representação varia por jogo; no HD Universe o FIB fica muito mais presente no enredo principal."],
+    tags: ["governo", "FIB", "corrupção", "HD Universe"],
     sources: [{ label: "GTA Wiki - FIB", url: "https://gta.fandom.com/wiki/Federal_Investigation_Bureau" }]
   },
   "IAA": {
-    category: "Agencias",
+    category: "Agências",
     expanded:
-      "International Affairs Agency e a parodia de GTA para agencias de inteligencia como a CIA. Ela aparece em conflitos de espionagem, operacoes clandestinas e disputas com o FIB. Em GTA V e GTA Online, a IAA usa criminosos, mercenarios e intermediarios para resolver crises que oficialmente nao existem.",
+      "International Affairs Agency é a paródia de GTA para agências de inteligência como a CIA. Ela aparece em conflitos de espionagem, operações clandestinas e disputas com o FIB. Em GTA V e GTA Online, a IAA usa criminosos, mercenários e intermediários para resolver crises que oficialmente não existem.",
     importance:
-      "A IAA amplia GTA para alem de gangues e mafias: o crime tambem pode ser geopolitica, laboratorio, sabotagem e guerra de informacao.",
-    examples: ["conflito FIB versus IAA em GTA V", "Agent ULP em missao da IAA", "Operation Paper Trail"],
+      "A IAA amplia GTA para além de gangues e máfias: o crime também pode ser geopolítica, laboratório, sabotagem e guerra de informação.",
+    examples: ["conflito FIB versus IAA em GTA V", "Agent ULP em missão da IAA", "Operation Paper Trail"],
     relatedTerms: ["FIB", "NOOSE", "Heist", "HD Universe"],
     games: ["GTA IV", "GTA V", "GTA Online"],
-    precisionNotes: ["A IAA e uma satira ficcional; paralelos com agencias reais sao intencionais, mas nao equivalencias literais."],
-    tags: ["governo", "IAA", "inteligencia", "operacoes"],
+    precisionNotes: ["A IAA é uma sátira ficcional; paralelos com agências reais são intencionais, mas não equivalências literais."],
+    tags: ["governo", "IAA", "inteligência", "operações"],
     sources: [{ label: "GTA Wiki - IAA", url: "https://gta.fandom.com/wiki/International_Affairs_Agency" }]
   },
   "NOOSE": {
-    category: "Policia tática",
+    category: "Polícia tática",
     expanded:
-      "National Office of Security Enforcement e a forca tática federal do HD Universe, funcionando como resposta armada de alto nivel. Em perseguicoes intensas, missoes e eventos de GTA IV, GTA V e GTA Online, a NOOSE representa a militarizacao da resposta policial.",
+      "National Office of Security Enforcement é a força tática federal do HD Universe, funcionando como resposta armada de alto nível. Em perseguições intensas, missões e eventos de GTA IV, GTA V e GTA Online, a NOOSE representa a militarização da resposta policial.",
     importance:
-      "Ela materializa o topo da escala de repressao: quando o Wanted Level vira crise, a cidade troca patrulhas por equipes taticas, helicopteros e bloqueios pesados.",
-    examples: ["resposta de alto nivel em Liberty City", "unidades taticas em Los Santos", "missoes envolvendo N.O.O.S.E. em GTA Online"],
+      "Ela materializa o topo da escala de repressão: quando o Wanted Level vira crise, a cidade troca patrulhas por equipes táticas, helicópteros e bloqueios pesados.",
+    examples: ["resposta de alto nível em Liberty City", "unidades táticas em Los Santos", "missões envolvendo N.O.O.S.E. em GTA Online"],
     relatedTerms: ["Wanted Level", "FIB", "IAA", "LSPD"],
     games: ["GTA IV", "GTA V", "GTA Online"],
-    precisionNotes: ["Em jogos antigos, funcoes parecidas eram ocupadas por SWAT/FBI/Army; NOOSE e mais propria da era HD."],
-    tags: ["policia", "NOOSE", "tatico", "HD Universe"],
+    precisionNotes: ["Em jogos antigos, funções parecidas eram ocupadas por SWAT/FBI/Army; NOOSE é mais própria da era HD."],
+    tags: ["polícia", "NOOSE", "tático", "HD Universe"],
     sources: [{ label: "GTA Wiki - NOOSE", url: "https://gta.fandom.com/wiki/National_Office_of_Security_Enforcement" }]
   },
   "RAGE": {
     category: "Tecnologia",
     expanded:
-      "Rockstar Advanced Game Engine e a tecnologia proprietaria usada pela Rockstar na era HD. GTA IV marca a entrada da franquia nesse ciclo tecnico, combinando mundo aberto mais denso, fisica, streaming de cidade, animacao, veiculos e sistemas urbanos em escala maior. GTA V e Red Dead Redemption 2 refinam essa base; GTA VI deve representar a proxima evolucao, embora detalhes tecnicos oficiais continuem limitados.",
+      "Rockstar Advanced Game Engine é a tecnologia proprietária usada pela Rockstar na era HD. GTA IV marca a entrada da franquia nesse ciclo técnico, combinando mundo aberto mais denso, física, streaming de cidade, animação, veículos e sistemas urbanos em escala maior. GTA V e Red Dead Redemption 2 refinam essa base; GTA VI deve representar a próxima evolução, embora detalhes técnicos oficiais continuem limitados.",
     importance:
-      "RAGE e a infraestrutura que permitiu a virada de GTA para cidades mais densas, iluminacao moderna, fisica mais reativa e simulacao mais ambiciosa.",
+      "RAGE é a infraestrutura que permitiu a virada de GTA para cidades mais densas, iluminação moderna, física mais reativa e simulação mais ambiciosa.",
     examples: ["GTA IV", "GTA V", "GTA Online", "Red Dead Redemption 2"],
     relatedTerms: ["Euphoria", "HD Universe", "GTA VI"],
     games: ["GTA IV", "GTA V", "GTA Online", "GTA VI"],
     precisionNotes: [
-      "A Rockstar nao publica todos os detalhes internos da engine.",
-      "Afirmacoes sobre reconstrucoes completas para GTA VI devem ser tratadas como nao confirmadas salvo fonte oficial."
+      "A Rockstar não publica todos os detalhes internos da engine.",
+      "Afirmações sobre reconstruções completas para GTA VI devem ser tratadas como não confirmadas salvo fonte oficial."
     ],
     tags: ["engine", "RAGE", "tecnologia", "HD Universe"],
     sources: [
@@ -4328,14 +4330,14 @@ const glossaryDetailData = {
   "Euphoria": {
     category: "Tecnologia",
     expanded:
-      "Euphoria e uma tecnologia de animacao comportamental e fisica corporal associada a NaturalMotion, integrada a jogos da Rockstar na era HD. Em GTA IV ela ficou famosa pelas reacoes de corpos a impactos, quedas, atropelamentos e tiroteios, fazendo personagens parecerem menos presos a animacoes rigidas.",
+      "Euphoria é uma tecnologia de animação comportamental e física corporal associada a NaturalMotion, integrada a jogos da Rockstar na era HD. Em GTA IV ela ficou famosa pelas reações de corpos a impactos, quedas, atropelamentos e tiroteios, fazendo personagens parecerem menos presos a animações rígidas.",
     importance:
-      "A tecnologia ajudou GTA IV a parecer fisicamente diferente da era 3D: mais pesado, imprevisivel e responsivo ao choque entre pedestres, veiculos e armas.",
-    examples: ["reacoes de Niko e pedestres em GTA IV", "ragdoll mais fisico em GTA V", "quedas e colisoes em jogos da Rockstar"],
+      "A tecnologia ajudou GTA IV a parecer fisicamente diferente da era 3D: mais pesado, imprevisível e responsivo ao choque entre pedestres, veículos e armas.",
+    examples: ["reações de Niko e pedestres em GTA IV", "ragdoll mais físico em GTA V", "quedas e colisões em jogos da Rockstar"],
     relatedTerms: ["RAGE", "HD Universe", "Wanted Level"],
     games: ["GTA IV", "GTA V", "GTA Online"],
-    precisionNotes: ["Euphoria nao e a engine inteira; e uma camada/tecnologia ligada a animacao e simulacao corporal."],
-    tags: ["fisica", "animacao", "Euphoria", "RAGE"],
+    precisionNotes: ["Euphoria não é a engine inteira; é uma camada/tecnologia ligada à animação e simulação corporal."],
+    tags: ["física", "animação", "Euphoria", "RAGE"],
     sources: [
       { label: "GTA Wiki - Euphoria", url: "https://gta.fandom.com/wiki/Euphoria" },
       { label: "Wikipedia - Euphoria software", url: "https://en.wikipedia.org/wiki/Euphoria_(software)" }
@@ -4344,42 +4346,42 @@ const glossaryDetailData = {
   "Canon": {
     category: "Continuidade",
     expanded:
-      "Canon e o conjunto de eventos aceitos como continuidade narrativa. Em GTA, o termo precisa ser usado com cuidado porque a franquia separa universos, brinca com marcas recorrentes, deixa finais alternativos e usa easter eggs para referenciar jogos antigos sem necessariamente confirmar coexistencia. A Opcao C de GTA V, por exemplo, e amplamente tratada como continuidade mais aceita por GTA Online, pois Franklin, Trevor e Michael seguem vivos em aparicoes e referencias posteriores.",
+      "Canon é o conjunto de eventos aceitos como continuidade narrativa. Em GTA, o termo precisa ser usado com cuidado porque a franquia separa universos, brinca com marcas recorrentes, deixa finais alternativos e usa easter eggs para referenciar jogos antigos sem necessariamente confirmar coexistência. A Opção C de GTA V, por exemplo, é amplamente tratada como continuidade mais aceita por GTA Online, pois Franklin, Trevor e Michael seguem vivos em aparições e referências posteriores.",
     importance:
-      "Ajuda a separar historia interna, interpretacao de fa, piada visual, referencia de marketing e informacao confirmada pela Rockstar.",
-    examples: ["universos 2D/3D/HD separados", "Opcao C de GTA V reforcada por GTA Online", "referencias a marcas antigas sem canonizar personagens"],
+      "Ajuda a separar história interna, interpretação de fã, piada visual, referência de marketing e informação confirmada pela Rockstar.",
+    examples: ["universos 2D/3D/HD separados", "Opção C de GTA V reforçada por GTA Online", "referências a marcas antigas sem canonizar personagens"],
     relatedTerms: ["Easter egg", "Prequel", "Spin-off", "HD Universe"],
     games: ["franquia GTA"],
     precisionNotes: [
-      "Quando a Rockstar nao confirma uma ligacao, o dossie marca como interpretacao ou referencia/easter egg.",
-      "Canon de gameplay e canon narrativo nem sempre sao identicos."
+      "Quando a Rockstar não confirma uma ligação, o dossiê marca como interpretação ou referência/easter egg.",
+      "Canon de gameplay e canon narrativo nem sempre são idênticos."
     ],
-    tags: ["canon", "continuidade", "precisao", "lore"],
+    tags: ["canon", "continuidade", "precisão", "lore"],
     sources: [{ label: "GTA Wiki - Universes", url: "https://gta.fandom.com/wiki/Universes" }]
   },
   "Easter egg": {
-    category: "Referencias",
+    category: "Referências",
     expanded:
-      "Easter egg e uma referencia escondida, piada visual, segredo ou pista colocada no mundo do jogo. GTA usa easter eggs para comentar cultura pop, jogos anteriores, teorias da comunidade e absurdos urbanos. Eles enriquecem a leitura do mapa, mas nao devem ser tratados automaticamente como prova de canon.",
+      "Easter egg é uma referência escondida, piada visual, segredo ou pista colocada no mundo do jogo. GTA usa easter eggs para comentar cultura pop, jogos anteriores, teorias da comunidade e absurdos urbanos. Eles enriquecem a leitura do mapa, mas não devem ser tratados automaticamente como prova de canon.",
     importance:
-      "E uma camada essencial da experiencia GTA: a cidade parece viva porque guarda segredos, piadas internas, lendas urbanas e rastros para o jogador investigar.",
-    examples: ["segredos alienigenas em GTA V", "referencias a personagens de outros universos", "mensagens escondidas em mapas e placas"],
+      "É uma camada essencial da experiência GTA: a cidade parece viva porque guarda segredos, piadas internas, lendas urbanas e rastros para o jogador investigar.",
+    examples: ["segredos alienígenas em GTA V", "referências a personagens de outros universos", "mensagens escondidas em mapas e placas"],
     relatedTerms: ["Canon", "Universos", "HD Universe"],
     games: ["franquia GTA"],
-    precisionNotes: ["Um easter egg pode ser intencional e ainda assim nao alterar continuidade narrativa."],
-    tags: ["referencia", "segredo", "easter egg", "interpretacao"],
+    precisionNotes: ["Um easter egg pode ser intencional e ainda assim não alterar continuidade narrativa."],
+    tags: ["referência", "segredo", "easter egg", "interpretação"],
     sources: [{ label: "GTA Wiki - Secrets and Easter Eggs", url: "https://gta.fandom.com/wiki/Secrets_and_Easter_Eggs" }]
   },
   "Prequel": {
     category: "Estrutura narrativa",
     expanded:
-      "Prequel e uma historia lancada depois, mas ambientada antes de outro jogo. GTA usa prequels para preencher lacunas de poder: Liberty City Stories mostra Toni Cipriani e a familia Leone antes de GTA III; Vice City Stories mostra Victor Vance e Vice City antes da chegada de Tommy Vercetti.",
+      "Prequel é uma história lançada depois, mas ambientada antes de outro jogo. GTA usa prequels para preencher lacunas de poder: Liberty City Stories mostra Toni Cipriani e a família Leone antes de GTA III; Vice City Stories mostra Victor Vance e Vice City antes da chegada de Tommy Vercetti.",
     importance:
-      "Os prequels ajudam a entender como cidades e faccoes chegaram ao estado visto nos jogos principais.",
-    examples: ["Liberty City Stories antes de GTA III", "Vice City Stories antes de Vice City", "North Yankton 2004 como prologo dentro de GTA V"],
+      "Os prequels ajudam a entender como cidades e facções chegaram ao estado visto nos jogos principais.",
+    examples: ["Liberty City Stories antes de GTA III", "Vice City Stories antes de Vice City", "North Yankton 2004 como prólogo dentro de GTA V"],
     relatedTerms: ["Canon", "Spin-off", "3D Universe"],
     games: ["Liberty City Stories", "Vice City Stories", "GTA V"],
-    precisionNotes: ["Prequel e posicao cronologica, nao necessariamente menor importancia."],
+    precisionNotes: ["Prequel é posição cronológica, não necessariamente menor importância."],
     tags: ["prequel", "cronologia", "lore", "3D Universe"],
     sources: [
       { label: "GTA Wiki - Liberty City Stories", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto:_Liberty_City_Stories" },
@@ -4387,32 +4389,32 @@ const glossaryDetailData = {
     ]
   },
   "Spin-off": {
-    category: "Estrutura de serie",
+    category: "Estrutura de série",
     expanded:
-      "Spin-off e uma entrada derivada que muda escala, plataforma, formato ou foco. Em GTA, o termo pode cobrir jogos portateis, expansoes e experiencias laterais que nao seguem exatamente a numeracao principal, mas acrescentam contexto, personagens e sistemas.",
+      "Spin-off é uma entrada derivada que muda escala, plataforma, formato ou foco. Em GTA, o termo pode cobrir jogos portáteis, expansões e experiências laterais que não seguem exatamente a numeração principal, mas acrescentam contexto, personagens e sistemas.",
     importance:
-      "Sem os spin-offs, o mapa historico da saga fica incompleto: Chinatown Wars, Advance, Episodes from Liberty City e os Stories explicam redes criminosas que os jogos principais apenas sugerem.",
+      "Sem os spin-offs, o mapa histórico da saga fica incompleto: Chinatown Wars, Advance, Episodes from Liberty City e os Stories explicam redes criminosas que os jogos principais apenas sugerem.",
     examples: ["GTA Advance", "Chinatown Wars", "The Lost and Damned", "The Ballad of Gay Tony"],
     relatedTerms: ["Prequel", "Canon", "3D Universe", "HD Universe"],
     games: ["GTA Advance", "Chinatown Wars", "Episodes from Liberty City"],
-    precisionNotes: ["Spin-off nao significa nao canonico; depende do universo e do jogo."],
-    tags: ["spin-off", "expansao", "portatil", "canon"],
+    precisionNotes: ["Spin-off não significa não canônico; depende do universo e do jogo."],
+    tags: ["spin-off", "expansão", "portátil", "canon"],
     sources: [{ label: "GTA Wiki - Grand Theft Auto Wiki", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_Wiki" }]
   },
   "GTA Online Organization": {
     category: "Economia online",
     expanded:
-      "GTA Online Organization e a estrutura de organizacao criada pelo jogador para operar negocios, contratar associados e executar atividades como CEO, VIP, MC President, dono de nightclub, agencia, bunker, arcade, auto shop, salvage yard e outras frentes. Ela e menos uma faccao canonica fixa e mais um guarda-chuva de gameplay que transforma o personagem online em empresario criminoso.",
+      "GTA Online Organization é a estrutura de organização criada pelo jogador para operar negócios, contratar associados e executar atividades como CEO, VIP, MC President, dono de nightclub, agência, bunker, arcade, auto shop, salvage yard e outras frentes. Ela é menos uma facção canônica fixa e mais um guarda-chuva de gameplay que transforma o personagem online em empresário criminoso.",
     importance:
-      "E a base da carreira criminal persistente de GTA Online: o jogador deixa de ser apenas mercenario e passa a administrar cadeias de producao, roubo, lavagem, contrabando e servicos armados.",
+      "É a base da carreira criminal persistente de GTA Online: o jogador deixa de ser apenas mercenário e passa a administrar cadeias de produção, roubo, lavagem, contrabando e serviços armados.",
     examples: ["CEO Warehouses", "MC Businesses", "Bunker", "Nightclub", "Agency", "Arcade", "Auto Shop", "Salvage Yard", "Money Fronts"],
     relatedTerms: ["Heist", "GTA Online", "FIB", "IAA"],
     games: ["GTA Online"],
     precisionNotes: [
-      "A organizacao do jogador e personalizavel e nao tem nome canonico unico.",
-      "Muitos negocios sao simultaneamente sistemas de gameplay e ficcao de lavagem de dinheiro."
+      "A organização do jogador é personalizável e não tem nome canônico único.",
+      "Muitos negócios são simultaneamente sistemas de gameplay e ficção de lavagem de dinheiro."
     ],
-    tags: ["online", "CEO", "MC", "negocios", "lavagem"],
+    tags: ["online", "CEO", "MC", "negócios", "lavagem"],
     sources: [
       { label: "GTA Wiki - Organizations", url: "https://gta.fandom.com/wiki/Organizations" },
       { label: "GTA Wiki - Updates in GTA Online", url: "https://gta.fandom.com/wiki/Updates_in_GTA_Online" }
@@ -4421,15 +4423,15 @@ const glossaryDetailData = {
   "Leonida": {
     category: "Cidades e estados",
     expanded:
-      "Leonida e o estado ficticio de GTA VI, inspirado na Florida. A pagina oficial e os trailers mostram Vice City moderna, Keys, pantanos, praias, vida noturna, encontros virais, policiamento, redes sociais e criminalidade contemporanea. A Rockstar apresenta Leonida como o novo grande palco do HD Universe, com Lucia Caminos e Jason Duval presos a uma conspiracao criminal apos um servico dar errado.",
+      "Leonida é o estado fictício de GTA VI, inspirado na Flórida. A página oficial e os trailers mostram Vice City moderna, Keys, pântanos, praias, vida noturna, encontros virais, policiamento, redes sociais e criminalidade contemporânea. A Rockstar apresenta Leonida como o novo grande palco do HD Universe, com Lucia Caminos e Jason Duval presos a uma conspiração criminal após um serviço dar errado.",
     importance:
-      "Leonida marca a volta de Vice City em escala moderna e abre a proxima fase de GTA depois de mais de uma decada de Los Santos como centro da franquia.",
+      "Leonida marca a volta de Vice City em escala moderna e abre a próxima fase de GTA depois de mais de uma década de Los Santos como centro da franquia.",
     examples: ["Vice City", "Leonida Keys", "ambiente de redes sociais e cultura viral", "Lucia Caminos e Jason Duval"],
     relatedTerms: ["Vice City", "HD Universe", "Canon", "GTA VI"],
     games: ["GTA VI"],
     precisionNotes: [
-      "A data oficial atual de GTA VI e 19 de novembro de 2026.",
-      "Detalhes de mapa completo, antagonistas e sistemas ainda devem ser tratados como nao confirmados."
+      "A data oficial atual de GTA VI é 19 de novembro de 2026.",
+      "Detalhes de mapa completo, antagonistas e sistemas ainda devem ser tratados como não confirmados."
     ],
     tags: ["Leonida", "GTA VI", "Vice City", "confirmado"],
     sources: [
@@ -4440,15 +4442,15 @@ const glossaryDetailData = {
   "Vice City": {
     category: "Cidades e estados",
     expanded:
-      "Vice City e o analogo de Miami dentro de GTA. Na era 2D, aparece como uma cidade do primeiro jogo. Na era 3D, vira palco neon de drogas, cartels, luxo, praia e cinema criminal dos anos 80 em Vice City e Vice City Stories. No HD Universe, retorna em GTA VI como cidade moderna dentro de Leonida, com redes sociais, cultura viral, policia, praias, clubes e crime contemporaneo.",
+      "Vice City é o análogo de Miami dentro de GTA. Na era 2D, aparece como uma cidade do primeiro jogo. Na era 3D, vira palco neon de drogas, cartéis, luxo, praia e cinema criminal dos anos 80 em Vice City e Vice City Stories. No HD Universe, retorna em GTA VI como cidade moderna dentro de Leonida, com redes sociais, cultura viral, polícia, praias, clubes e crime contemporâneo.",
     importance:
-      "E uma das identidades urbanas mais fortes da franquia: onde Liberty City e mafia/capitalismo e Los Santos e celebridade/desigualdade, Vice City e excesso tropical, neon, golpe, trafico e reinvencao cultural.",
+      "É uma das identidades urbanas mais fortes da franquia: onde Liberty City é máfia/capitalismo e Los Santos é celebridade/desigualdade, Vice City é excesso tropical, neon, golpe, tráfico e reinvenção cultural.",
     examples: ["Victor Vance em 1984", "Tommy Vercetti em 1986", "Lucia e Jason em GTA VI"],
     relatedTerms: ["Leonida", "3D Universe", "HD Universe", "Prequel"],
     games: ["GTA 1", "Vice City Stories", "Vice City", "GTA VI"],
     precisionNotes: [
-      "Vice City da era 3D e Vice City de GTA VI nao sao a mesma continuidade.",
-      "A inspiracao em Miami e clara, mas a Rockstar usa satira e composicao ficcional, nao reproduz a cidade real literalmente."
+      "Vice City da era 3D e Vice City de GTA VI não são a mesma continuidade.",
+      "A inspiração em Miami é clara, mas a Rockstar usa sátira e composição ficcional, não reproduz a cidade real literalmente."
     ],
     tags: ["Vice City", "Miami", "neon", "GTA VI", "anos 80"],
     sources: [
@@ -4466,199 +4468,199 @@ const mediaCredit = "Imagem promocional oficial © Rockstar Games / Take-Two Int
 const glossaryDetailsByTerm = {
   "2D Universe": {
     category: "Continuidades",
-    expanded: "A primeira fase de GTA funciona como laboratorio da franquia: camera top-down, missoes curtas, pontuacao, radio, caos urbano e menos compromisso com drama cinematografico. Os nomes Liberty City, Vice City e San Andreas ja existem, mas ainda sao mapas abstratos.",
+    expanded: "A primeira fase de GTA funciona como laboratório da franquia: câmera top-down, missões curtas, pontuação, rádio, caos urbano e menos compromisso com drama cinematográfico. Os nomes Liberty City, Vice City e San Andreas já existem, mas ainda são mapas abstratos.",
     appearsIn: ["Grand Theft Auto", "GTA: London 1969", "GTA: London 1961", "Grand Theft Auto 2"],
-    examples: ["GTA 1 usa tres cidades em perspectiva de cima.", "London 1969 e London 1961 sao raras incursoes fora dos EUA.", "GTA 2 usa Anywhere City e gangues de tom retrofuturista."],
-    whyItMatters: "E onde nascem as regras basicas: roubar carros, fugir da policia, aceitar trabalhos criminosos e transformar a cidade em sistema de caos.",
+    examples: ["GTA 1 usa três cidades em perspectiva de cima.", "London 1969 e London 1961 são raras incursões fora dos EUA.", "GTA 2 usa Anywhere City e gangues de tom retrofuturista."],
+    whyItMatters: "É onde nascem as regras básicas: roubar carros, fugir da polícia, aceitar trabalhos criminosos e transformar a cidade em sistema de caos.",
     relatedTerms: ["3D Universe", "Canon", "Spin-off"],
-    precisionNotes: ["A continuidade e mais solta que nas fases posteriores.", "Cidades com o mesmo nome nao sao automaticamente a mesma versao canonica."],
+    precisionNotes: ["A continuidade é mais solta que nas fases posteriores.", "Cidades com o mesmo nome não são automaticamente a mesma versão canônica."],
     tags: ["universo", "2D", "top-down", "origem"],
     sources: [{ label: "GTA Wiki - 2D Universe", url: "https://gta.fandom.com/wiki/2D_Universe" }]
   },
   "3D Universe": {
     category: "Continuidades",
-    expanded: "A fase classica da franquia: cidades em 3D, personagens recorrentes, mafias conectadas, radios satiricas e continuidade reconhecivel. GTA III, Vice City e San Andreas criam a identidade moderna da serie.",
+    expanded: "A fase clássica da franquia: cidades em 3D, personagens recorrentes, máfias conectadas, rádios satíricas e continuidade reconhecível. GTA III, Vice City e San Andreas criam a identidade moderna da série.",
     appearsIn: ["GTA III", "Vice City", "San Andreas", "GTA Advance", "Liberty City Stories", "Vice City Stories"],
     examples: ["Salvatore Leone conecta San Andreas, Liberty City Stories e GTA III.", "Catalina aparece em San Andreas antes de trair Claude.", "Vice City Stories mostra a cidade antes de Tommy Vercetti dominar o submundo."],
-    whyItMatters: "Transformou GTA em fenomeno cultural e consolidou o modelo urbano de mundo aberto.",
+    whyItMatters: "Transformou GTA em fenômeno cultural e consolidou o modelo urbano de mundo aberto.",
     relatedTerms: ["2D Universe", "HD Universe", "Prequel", "Canon"],
-    precisionNotes: ["Nao e a mesma continuidade da era HD.", "Referencias posteriores podem ser homenagem ou easter egg."],
+    precisionNotes: ["Não é a mesma continuidade da era HD.", "Referências posteriores podem ser homenagem ou easter egg."],
     tags: ["universo", "3D", "PS2", "continuidade"],
     sources: [{ label: "GTA Wiki - 3D Universe", url: "https://gta.fandom.com/wiki/3D_Universe" }]
   },
   "HD Universe": {
     category: "Continuidades",
-    expanded: "Continuidade moderna iniciada em GTA IV, com cidades reinterpretadas, fisica mais realista, satira contemporanea e mundos mais densos. Liberty City de GTA IV nao e a mesma de GTA III; Los Santos de GTA V nao e simplesmente o mapa de San Andreas.",
+    expanded: "Continuidade moderna iniciada em GTA IV, com cidades reinterpretadas, física mais realista, sátira contemporânea e mundos mais densos. Liberty City de GTA IV não é a mesma de GTA III; Los Santos de GTA V não é simplesmente o mapa de San Andreas.",
     appearsIn: ["GTA IV", "Episodes from Liberty City", "Chinatown Wars", "GTA V", "GTA Online", "GTA VI"],
     examples: ["Niko Bellic vive na Liberty City HD.", "GTA V e GTA Online expandem Los Santos e Blaine County.", "GTA VI leva a continuidade para Leonida e Vice City moderna."],
-    whyItMatters: "E a continuidade ativa da franquia e o eixo de GTA Online, GTA V e GTA VI.",
+    whyItMatters: "É a continuidade ativa da franquia e o eixo de GTA Online, GTA V e GTA VI.",
     relatedTerms: ["Canon", "RAGE", "Euphoria", "GTA Online Organization"],
-    precisionNotes: ["Personagens antigos podem ser citados sem migrar de universo.", "GTA Online tem cronologia viva e flexivel."],
+    precisionNotes: ["Personagens antigos podem ser citados sem migrar de universo.", "GTA Online tem cronologia viva e flexível."],
     tags: ["universo", "HD", "moderno", "GTA Online"],
     sources: [{ label: "GTA Wiki - HD Universe", url: "https://gta.fandom.com/wiki/HD_Universe" }]
   },
   "Wanted Level": {
     category: "Sistemas",
-    expanded: "Wanted Level e a linguagem policial de GTA. Crimes aumentam estrelas; cada estrela amplia patrulhas, bloqueios, helicopteros, unidades taticas e perseguicoes. O sistema cria tensao imediata entre liberdade e consequencia.",
-    appearsIn: ["quase toda a serie principal"],
-    examples: ["GTA III pode escalar ate exercito e tanques.", "GTA IV e GTA V usam area de busca e linha de visao.", "GTA Online adapta a resposta policial para sessoes multiplayer."],
-    whyItMatters: "Faz a cidade reagir ao jogador e transforma improviso em perseguicao.",
+    expanded: "Wanted Level é a linguagem policial de GTA. Crimes aumentam estrelas; cada estrela amplia patrulhas, bloqueios, helicópteros, unidades táticas e perseguições. O sistema cria tensão imediata entre liberdade e consequência.",
+    appearsIn: ["quase toda a série principal"],
+    examples: ["GTA III pode escalar até exército e tanques.", "GTA IV e GTA V usam área de busca e linha de visão.", "GTA Online adapta a resposta policial para sessões multiplayer."],
+    whyItMatters: "Faz a cidade reagir ao jogador e transforma improviso em perseguição.",
     relatedTerms: ["NOOSE", "FIB", "IAA", "Canon"],
-    precisionNotes: ["A implementacao muda por jogo.", "Muitas respostas policiais sao sistema de gameplay, nao evento canonico."],
-    tags: ["policia", "sistema", "estrelas", "gameplay"],
+    precisionNotes: ["A implementação muda por jogo.", "Muitas respostas policiais são sistema de gameplay, não evento canônico."],
+    tags: ["polícia", "sistema", "estrelas", "gameplay"],
     sources: [{ label: "GTA Wiki - Wanted Level", url: "https://gta.fandom.com/wiki/Wanted_Level" }]
   },
   "Heist": {
-    category: "Estrutura de missao",
-    expanded: "Heist e o assalto planejado de GTA: reconhecimento, preparacao, equipe, equipamento, execucao, fuga e pagamento. Em GTA V organiza a campanha; em GTA Online vira pilar cooperativo, solo-friendly ou modular.",
+    category: "Estrutura de missão",
+    expanded: "Heist é o assalto planejado de GTA: reconhecimento, preparação, equipe, equipamento, execução, fuga e pagamento. Em GTA V organiza a campanha; em GTA Online vira pilar cooperativo, solo-friendly ou modular.",
     appearsIn: ["GTA V", "GTA Online", "The Doomsday Heist", "The Diamond Casino Heist", "The Cayo Perico Heist"],
-    examples: ["The Jewel Store Job define o modelo em GTA V.", "Pacific Standard marca os heists classicos do Online.", "Cayo Perico muda a economia por permitir grind solo lucrativo."],
-    whyItMatters: "Condensa a fantasia criminal moderna da serie em planejamento e recompensa.",
+    examples: ["The Jewel Store Job define o modelo em GTA V.", "Pacific Standard marca os heists clássicos do Online.", "Cayo Perico muda a economia por permitir grind solo lucrativo."],
+    whyItMatters: "Condensa a fantasia criminal moderna da série em planejamento e recompensa.",
     relatedTerms: ["GTA Online Organization", "FIB", "IAA", "Prequel"],
-    precisionNotes: ["Nem todo roubo e heist formal.", "Pagamentos e dificuldade mudam com balanceamentos do Online."],
-    tags: ["assalto", "missao", "GTA Online", "crime"],
+    precisionNotes: ["Nem todo roubo é heist formal.", "Pagamentos e dificuldade mudam com balanceamentos do Online."],
+    tags: ["assalto", "missão", "GTA Online", "crime"],
     sources: [{ label: "GTA Wiki - Heists", url: "https://gta.fandom.com/wiki/Heists" }]
   },
   "C.R.A.S.H.": {
-    category: "Organizacoes",
-    expanded: "Community Resources Against Street Hoodlums e a unidade policial corrupta de GTA San Andreas. Tenpenny, Pulaski e Hernandez representam abuso de poder, chantagem, fabricacao de provas e uso das gangues como ferramenta politica.",
+    category: "Organizações",
+    expanded: "Community Resources Against Street Hoodlums é a unidade policial corrupta de GTA San Andreas. Tenpenny, Pulaski e Hernandez representam abuso de poder, chantagem, fabricação de provas e uso das gangues como ferramenta política.",
     appearsIn: ["Grand Theft Auto: San Andreas"],
-    examples: ["Tenpenny incrimina CJ logo no retorno a Los Santos.", "C.R.A.S.H. usa CJ para remover ameacas.", "A queda de Tenpenny explode nos riots finais."],
-    whyItMatters: "E o centro politico da historia de CJ e liga gangues, policia e corrupcao sistemica.",
+    examples: ["Tenpenny incrimina CJ logo no retorno a Los Santos.", "C.R.A.S.H. usa CJ para remover ameaças.", "A queda de Tenpenny explode nos riots finais."],
+    whyItMatters: "É o centro político da história de CJ e liga gangues, polícia e corrupção sistêmica.",
     relatedTerms: ["Wanted Level", "Canon", "3D Universe"],
-    precisionNotes: ["Inspirada por escandalos reais, mas tratada como ficcao satirica."],
-    tags: ["policia corrupta", "San Andreas", "Tenpenny", "3D Universe"],
+    precisionNotes: ["Inspirada por escândalos reais, mas tratada como ficção satírica."],
+    tags: ["polícia corrupta", "San Andreas", "Tenpenny", "3D Universe"],
     sources: [{ label: "GTA Wiki - C.R.A.S.H.", url: "https://gta.fandom.com/wiki/Community_Resources_Against_Street_Hoodlums" }]
   },
   "FIB": {
-    category: "Agencias",
-    expanded: "Federal Investigation Bureau e a parodia do FBI no universo GTA. Em GTA V, Dave Norton e Steve Haines colocam Michael, Franklin e Trevor em operacoes clandestinas, disputas internas e manipulacao politica.",
+    category: "Agências",
+    expanded: "Federal Investigation Bureau é a paródia do FBI no universo GTA. Em GTA V, Dave Norton e Steve Haines colocam Michael, Franklin e Trevor em operações clandestinas, disputas internas e manipulação política.",
     appearsIn: ["GTA IV", "GTA V", "GTA Online"],
-    examples: ["Steve Haines usa os protagonistas em guerra burocratica contra a IAA.", "Dave Norton sustenta a mentira de North Yankton.", "GTA Online retoma arquivos e operacoes do FIB em updates modernos."],
-    whyItMatters: "Mostra que o Estado em GTA tambem funciona como faccao interessada.",
+    examples: ["Steve Haines usa os protagonistas em guerra burocrática contra a IAA.", "Dave Norton sustenta a mentira de North Yankton.", "GTA Online retoma arquivos e operações do FIB em updates modernos."],
+    whyItMatters: "Mostra que o Estado em GTA também funciona como facção interessada.",
     relatedTerms: ["IAA", "NOOSE", "Wanted Level", "HD Universe"],
-    precisionNotes: ["O nome e ficcional; a parodia do FBI e intencional."],
-    tags: ["governo", "FIB", "corrupcao", "HD Universe"],
+    precisionNotes: ["O nome é ficcional; a paródia do FBI é intencional."],
+    tags: ["governo", "FIB", "corrupção", "HD Universe"],
     sources: [{ label: "GTA Wiki - FIB", url: "https://gta.fandom.com/wiki/Federal_Investigation_Bureau" }]
   },
   "IAA": {
-    category: "Agencias",
-    expanded: "International Affairs Agency satiriza inteligencia externa, operacoes secretas e rivalidade burocratica com o FIB. Em GTA V e Online, aparece em interrogatorios, conspiracoes e missoes de espionagem.",
+    category: "Agências",
+    expanded: "International Affairs Agency satiriza inteligência externa, operações secretas e rivalidade burocrática com o FIB. Em GTA V e Online, aparece em interrogatórios, conspirações e missões de espionagem.",
     appearsIn: ["GTA IV", "GTA V", "GTA Online"],
-    examples: ["A disputa FIB/IAA move varias missoes de GTA V.", "The Doomsday Heist coloca inteligencia e tecnologia no centro da ameaca.", "Agent ULP reaparece em operacoes do Online."],
-    whyItMatters: "Amplia a satira politica para agencias de inteligencia e guerra secreta.",
+    examples: ["A disputa FIB/IAA move várias missões de GTA V.", "The Doomsday Heist coloca inteligência e tecnologia no centro da ameaça.", "Agent ULP reaparece em operações do Online."],
+    whyItMatters: "Amplia a sátira política para agências de inteligência e guerra secreta.",
     relatedTerms: ["FIB", "NOOSE", "Heist", "HD Universe"],
-    precisionNotes: ["E uma agencia ficcional; conexoes com a CIA sao satiricas, nao literais."],
+    precisionNotes: ["É uma agência ficcional; conexões com a CIA são satíricas, não literais."],
     tags: ["governo", "IAA", "espionagem", "HD Universe"],
     sources: [{ label: "GTA Wiki - IAA", url: "https://gta.fandom.com/wiki/International_Affairs_Agency" }]
   },
   "NOOSE": {
-    category: "Agencias",
-    expanded: "National Office of Security Enforcement e a resposta tatica pesada da era HD, misturando parodia de seguranca nacional, SWAT e forcas federais. Surge quando a situacao passa da policia comum.",
+    category: "Agências",
+    expanded: "National Office of Security Enforcement é a resposta tática pesada da era HD, misturando paródia de segurança nacional, SWAT e forças federais. Surge quando a situação passa da polícia comum.",
     appearsIn: ["GTA IV", "GTA V", "GTA Online"],
-    examples: ["Equipes taticas aparecem em perseguicoes intensas.", "Helicopteros e unidades armadas reforcam Wanted Level alto.", "Heists e missoes usam NOOSE como pressao institucional."],
+    examples: ["Equipes táticas aparecem em perseguições intensas.", "Helicópteros e unidades armadas reforçam Wanted Level alto.", "Heists e missões usam NOOSE como pressão institucional."],
     whyItMatters: "Representa a escalada do crime urbano para resposta quase militar.",
     relatedTerms: ["Wanted Level", "FIB", "IAA", "HD Universe"],
-    precisionNotes: ["O papel exato varia por jogo, missao e nivel de procurado."],
-    tags: ["policia", "tatico", "HD Universe", "governo"],
+    precisionNotes: ["O papel exato varia por jogo, missão e nível de procurado."],
+    tags: ["polícia", "tático", "HD Universe", "governo"],
     sources: [{ label: "GTA Wiki - NOOSE", url: "https://gta.fandom.com/wiki/National_Office_of_Security_Enforcement" }]
   },
   "RAGE": {
     category: "Tecnologia",
-    expanded: "Rockstar Advanced Game Engine e a engine proprietaria da Rockstar na era HD. Sustenta streaming de mapa, fisica, veiculos, clima, animacoes e sistemas urbanos em mundos grandes e densos.",
+    expanded: "Rockstar Advanced Game Engine é a engine proprietária da Rockstar na era HD. Sustenta streaming de mapa, física, veículos, clima, animações e sistemas urbanos em mundos grandes e densos.",
     appearsIn: ["GTA IV", "GTA V", "GTA Online", "Red Dead Redemption", "Red Dead Redemption 2"],
-    examples: ["GTA IV usa RAGE para direcao pesada e fisica urbana.", "GTA V amplia escala com Los Santos e Blaine County.", "GTA Online evolui a mesma base por anos de updates."],
-    whyItMatters: "Marca a virada tecnica da serie apos a era RenderWare.",
+    examples: ["GTA IV usa RAGE para direção pesada e física urbana.", "GTA V amplia escala com Los Santos e Blaine County.", "GTA Online evolui a mesma base por anos de updates."],
+    whyItMatters: "Marca a virada técnica da série após a era RenderWare.",
     relatedTerms: ["Euphoria", "HD Universe", "GTA Online Organization"],
-    precisionNotes: ["Detalhes internos de versoes da engine nem sempre sao publicos."],
+    precisionNotes: ["Detalhes internos de versões da engine nem sempre são públicos."],
     tags: ["engine", "tecnologia", "Rockstar", "HD"],
     sources: [{ label: "GTA Wiki - RAGE", url: "https://gta.fandom.com/wiki/Rockstar_Advanced_Game_Engine" }]
   },
   "Euphoria": {
     category: "Tecnologia",
-    expanded: "Euphoria e uma tecnologia de animacao procedural para reacoes corporais. Em vez de depender so de animacoes fixas, personagens podem reagir a impacto, queda, atropelamento e colisao com mais naturalidade.",
+    expanded: "Euphoria é uma tecnologia de animação procedural para reações corporais. Em vez de depender só de animações fixas, personagens podem reagir a impacto, queda, atropelamento e colisão com mais naturalidade.",
     appearsIn: ["GTA IV", "GTA V", "Red Dead Redemption"],
-    examples: ["Niko reage fisicamente a quedas e atropelamentos.", "GTA V mistura ragdoll, fisica e animacao em tiroteios.", "A tecnologia ajuda a dar peso a acidentes e perseguicoes."],
-    whyItMatters: "Foi parte importante da sensacao de realismo fisico na era HD.",
+    examples: ["Niko reage fisicamente a quedas e atropelamentos.", "GTA V mistura ragdoll, física e animação em tiroteios.", "A tecnologia ajuda a dar peso a acidentes e perseguições."],
+    whyItMatters: "Foi parte importante da sensação de realismo físico na era HD.",
     relatedTerms: ["RAGE", "HD Universe", "Wanted Level"],
-    precisionNotes: ["Nem toda reacao fisica visivel e necessariamente Euphoria; ha mistura de sistemas."],
-    tags: ["fisica", "animacao", "tecnologia", "HD"],
+    precisionNotes: ["Nem toda reação física visível é necessariamente Euphoria; há mistura de sistemas."],
+    tags: ["física", "animação", "tecnologia", "HD"],
     sources: [{ label: "GTA Wiki - Euphoria", url: "https://gta.fandom.com/wiki/Euphoria" }]
   },
   "Canon": {
     category: "Lore",
-    expanded: "Canon em GTA exige cuidado: ha universos separados, finais alternativos, eventos opcionais, piadas internas e referencias que nem sempre confirmam coexistencia. O dossie separa confirmado, interpretacao, easter egg e nao confirmado.",
+    expanded: "Canon em GTA exige cuidado: há universos separados, finais alternativos, eventos opcionais, piadas internas e referências que nem sempre confirmam coexistência. O dossiê separa confirmado, interpretação, easter egg e não confirmado.",
     appearsIn: ["toda a franquia"],
-    examples: ["A Opcao C de GTA V e a leitura mais aceita por GTA Online.", "Personagens da era 3D podem ser citados na era HD como referencia.", "GTA 2 tem ambientacao deliberadamente ambigua."],
-    whyItMatters: "Impede que referencias virem fatos duvidosos e organiza a cronologia da saga.",
+    examples: ["A Opção C de GTA V é a leitura mais aceita por GTA Online.", "Personagens da era 3D podem ser citados na era HD como referência.", "GTA 2 tem ambientação deliberadamente ambígua."],
+    whyItMatters: "Impede que referências virem fatos duvidosos e organiza a cronologia da saga.",
     relatedTerms: ["2D Universe", "3D Universe", "HD Universe", "Easter egg"],
-    precisionNotes: ["Quando algo for incerto, o site deve marcar como interpretacao ou nao confirmado."],
+    precisionNotes: ["Quando algo for incerto, o site deve marcar como interpretação ou não confirmado."],
     tags: ["canon", "lore", "continuidade"],
     sources: [{ label: "GTA Wiki - Universes", url: "https://gta.fandom.com/wiki/Universes" }]
   },
   "Easter egg": {
     category: "Lore",
-    expanded: "Easter eggs sao segredos, piadas, homenagens, pistas visuais ou referencias escondidas. Eles enriquecem o mundo, mas nem sempre devem ser tratados como prova canonica.",
+    expanded: "Easter eggs são segredos, piadas, homenagens, pistas visuais ou referências escondidas. Eles enriquecem o mundo, mas nem sempre devem ser tratados como prova canônica.",
     appearsIn: ["toda a franquia"],
-    examples: ["Misterios de Mount Chiliad.", "Referencias a jogos e personagens antigos.", "Objetos, frases e marcas falsas escondidas pelo mapa."],
-    whyItMatters: "Mantem a comunidade investigando cidades por anos e reforca o tom de arquivo secreto da serie.",
+    examples: ["Mistérios de Mount Chiliad.", "Referências a jogos e personagens antigos.", "Objetos, frases e marcas falsas escondidas pelo mapa."],
+    whyItMatters: "Mantém a comunidade investigando cidades por anos e reforça o tom de arquivo secreto da série.",
     relatedTerms: ["Canon", "HD Universe", "Spin-off"],
-    precisionNotes: ["Easter egg nao e automaticamente fato canonico.", "Alguns misterios sao deliberadamente ambiguos."],
-    tags: ["segredo", "referencia", "lore"],
+    precisionNotes: ["Easter egg não é automaticamente fato canônico.", "Alguns mistérios são deliberadamente ambíguos."],
+    tags: ["segredo", "referência", "lore"],
     sources: [{ label: "GTA Wiki - Easter Eggs", url: "https://gta.fandom.com/wiki/Easter_Eggs" }]
   },
   "Prequel": {
     category: "Estrutura narrativa",
-    expanded: "Prequel e uma historia que acontece antes de outra ja lancada. Em GTA, prequels costumam explicar guerras de mafia, ascensao de personagens e estados anteriores de uma cidade.",
-    appearsIn: ["Liberty City Stories", "Vice City Stories", "San Andreas", "prologo de GTA V"],
-    examples: ["Liberty City Stories mostra Toni Cipriani subindo na familia Leone.", "Vice City Stories mostra Vic Vance antes de Tommy.", "O prologo de GTA V mostra North Yankton em 2004."],
-    whyItMatters: "Reorganiza a saga por cronologia interna, nao por ordem de lancamento.",
+    expanded: "Prequel é uma história que acontece antes de outra já lançada. Em GTA, prequels costumam explicar guerras de máfia, ascensão de personagens e estados anteriores de uma cidade.",
+    appearsIn: ["Liberty City Stories", "Vice City Stories", "San Andreas", "prólogo de GTA V"],
+    examples: ["Liberty City Stories mostra Toni Cipriani subindo na família Leone.", "Vice City Stories mostra Vic Vance antes de Tommy.", "O prólogo de GTA V mostra North Yankton em 2004."],
+    whyItMatters: "Reorganiza a saga por cronologia interna, não por ordem de lançamento.",
     relatedTerms: ["3D Universe", "Canon", "Spin-off"],
-    precisionNotes: ["Prequel nao significa automaticamente spin-off."],
-    tags: ["cronologia", "prequel", "historia"],
+    precisionNotes: ["Prequel não significa automaticamente spin-off."],
+    tags: ["cronologia", "prequel", "história"],
     sources: [{ label: "GTA Wiki - Timeline", url: "https://gta.fandom.com/wiki/Timeline" }]
   },
   "Spin-off": {
     category: "Estrutura narrativa",
-    expanded: "Spin-off e uma entrada derivada que muda foco, plataforma, formato ou escala. Em GTA, expansoes e portateis podem ser menores que os jogos numerados, mas ainda carregar peso de lore.",
+    expanded: "Spin-off é uma entrada derivada que muda foco, plataforma, formato ou escala. Em GTA, expansões e portáteis podem ser menores que os jogos numerados, mas ainda carregar peso de lore.",
     appearsIn: ["London 1969", "London 1961", "GTA Advance", "Chinatown Wars", "Episodes from Liberty City"],
-    examples: ["Chinatown Wars tem estrutura propria e foco em Triads.", "Episodes from Liberty City mostra GTA IV por outros protagonistas.", "London 1969 e London 1961 sao expansoes historicas."],
+    examples: ["Chinatown Wars tem estrutura própria e foco em Triads.", "Episodes from Liberty City mostra GTA IV por outros protagonistas.", "London 1969 e London 1961 são expansões históricas."],
     whyItMatters: "Explica por que jogos derivados podem ser essenciais para entender cidades e personagens.",
     relatedTerms: ["Prequel", "2D Universe", "HD Universe"],
-    precisionNotes: ["Nem todo spin-off e menos canonico; Chinatown Wars pertence ao HD Universe."],
-    tags: ["spin-off", "expansao", "portatil"],
+    precisionNotes: ["Nem todo spin-off é menos canônico; Chinatown Wars pertence ao HD Universe."],
+    tags: ["spin-off", "expansão", "portátil"],
     sources: [{ label: "GTA Wiki - Grand Theft Auto", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto" }]
   },
   "GTA Online Organization": {
     category: "GTA Online",
-    expanded: "Organizacoes sao a forma como o jogador vira operador economico em GTA Online. O sistema passa por VIP/CEO, motoclubes, bunkers, nightclubs, agencias, arcades, auto shops, salvage yards, bail offices e frentes de lavagem.",
+    expanded: "Organizações são a forma como o jogador vira operador econômico em GTA Online. O sistema passa por VIP/CEO, motoclubes, bunkers, nightclubs, agências, arcades, auto shops, salvage yards, bail offices e frentes de lavagem.",
     appearsIn: ["GTA Online"],
-    examples: ["CEO gerencia Special Cargo e Vehicle Cargo.", "MC administra negocios de drogas e falsificacao.", "Nightclub conecta negocios antigos em renda passiva.", "Agency abre contratos e Payphone Hits."],
-    whyItMatters: "E a espinha dorsal da progressao moderna de GTA Online.",
+    examples: ["CEO gerencia Special Cargo e Vehicle Cargo.", "MC administra negócios de drogas e falsificação.", "Nightclub conecta negócios antigos em renda passiva.", "Agency abre contratos e Payphone Hits."],
+    whyItMatters: "É a espinha dorsal da progressão moderna de GTA Online.",
     relatedTerms: ["Heist", "HD Universe", "Wanted Level"],
     precisionNotes: ["Pagamentos e regras mudam com balanceamentos.", "Algumas atividades funcionam solo; outras foram pensadas para grupo."],
-    tags: ["online", "negocios", "CEO", "MC"],
+    tags: ["online", "negócios", "CEO", "MC"],
     sources: [{ label: "GTA Wiki - Organizations", url: "https://gta.fandom.com/wiki/Organizations" }]
   },
   "Leonida": {
     category: "Cidades e estados",
-    expanded: "Leonida e o estado de GTA VI no HD Universe, inspirado na Florida. O material oficial destaca Vice City moderna, praias, pantanos, rodovias, redes sociais, cultura viral e criminalidade contemporanea.",
+    expanded: "Leonida é o estado de GTA VI no HD Universe, inspirado na Flórida. O material oficial destaca Vice City moderna, praias, pântanos, rodovias, redes sociais, cultura viral e criminalidade contemporânea.",
     appearsIn: ["Grand Theft Auto VI"],
-    examples: ["Vice City e a cidade principal destacada.", "Leonida Keys e Port Gellhorn aparecem em materiais de GTA VI.", "Lucia Caminos e Jason Duval sao protagonistas confirmados."],
-    whyItMatters: "E o proximo grande espaco narrativo da franquia e o retorno moderno de Vice City.",
+    examples: ["Vice City é a cidade principal destacada.", "Leonida Keys e Port Gellhorn aparecem em materiais de GTA VI.", "Lucia Caminos e Jason Duval são protagonistas confirmados."],
+    whyItMatters: "É o próximo grande espaço narrativo da franquia e o retorno moderno de Vice City.",
     relatedTerms: ["Vice City", "HD Universe", "Canon"],
-    precisionNotes: ["Mapa completo e todos os distritos seguem nao confirmados ate o lancamento.", "Data oficial atual registrada no dossie: 19 de novembro de 2026."],
+    precisionNotes: ["Mapa completo e todos os distritos seguem não confirmados até o lançamento.", "Data oficial atual registrada no dossiê: 19 de novembro de 2026."],
     tags: ["GTA VI", "Leonida", "Vice City", "HD"],
     sources: [{ label: "Rockstar Games - GTA VI", url: "https://www.rockstargames.com/VI" }]
   },
   "Vice City": {
     category: "Cidades e estados",
-    expanded: "Vice City e o grande simbolo neon da serie: Miami ficcional, art deco, praia, trafico, clubes, luxo e ambicao. Na era 3D, e palco de Vic Vance e Tommy Vercetti; na era HD, retorna em GTA VI dentro de Leonida.",
+    expanded: "Vice City é o grande símbolo neon da série: Miami ficcional, art deco, praia, tráfico, clubes, luxo e ambição. Na era 3D, é palco de Vic Vance e Tommy Vercetti; na era HD, retorna em GTA VI dentro de Leonida.",
     appearsIn: ["GTA 1", "Vice City", "Vice City Stories", "GTA VI"],
     examples: ["Vice City Stories mostra a cidade antes de Tommy.", "Vice City acompanha Tommy derrubando Ricardo Diaz.", "GTA VI reinterpreta a cidade com redes sociais e crime moderno."],
     whyItMatters: "Liga nostalgia da era 3D ao futuro da franquia.",
     relatedTerms: ["Leonida", "3D Universe", "HD Universe", "Prequel"],
-    precisionNotes: ["A Vice City de GTA VI nao e literalmente a mesma continuidade da Vice City de 1986.", "Alguns grupos e eventos de GTA VI ainda nao foram confirmados."],
+    precisionNotes: ["A Vice City de GTA VI não é literalmente a mesma continuidade da Vice City de 1986.", "Alguns grupos e eventos de GTA VI ainda não foram confirmados."],
     tags: ["cidade", "Miami", "Vice City", "GTA VI"],
     sources: [{ label: "GTA Wiki - Vice City", url: "https://gta.fandom.com/wiki/Vice_City" }]
   }
@@ -4674,7 +4676,7 @@ const rsgTrilogySource = "https://www.rockstargames.com/GTATrilogy";
 
 const officialMediaData = {
   notice:
-    "Imagens promocionais oficiais e imagens de referencia externas usadas com credito e link para a fonte. O projeto e um arquivo editorial de fa e nao afirma propriedade sobre as artes.",
+    "Imagens promocionais oficiais e imagens de referência externas usadas com crédito e link para a fonte. O projeto é um arquivo editorial de fã e não afirma propriedade sobre as artes.",
   hero: {
     src: "https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_01_landscape.0e2a6544.jpg",
     alt: "Arte oficial de Grand Theft Auto VI com Lucia e Jason",
@@ -4691,16 +4693,16 @@ const officialMediaData = {
     position: "center"
   },
   sources: [
-    { label: "GTA VI - pagina oficial", url: rsgVI, note: "Hero, personagens e sinopse de Lucia/Jason." },
-    { label: "GTA VI - screenshots oficiais", url: rsgVIScreens, note: "Screenshots de Lucia, Jason, Vice City, Leonida e regioes." },
+    { label: "GTA VI - página oficial", url: rsgVI, note: "Hero, personagens e sinopse de Lucia/Jason." },
+    { label: "GTA VI - screenshots oficiais", url: rsgVIScreens, note: "Screenshots de Lucia, Jason, Vice City, Leonida e regiões." },
     { label: "GTA VI - artworks e wallpapers", url: rsgVIArtwork, note: "Artes oficiais, postcards e wallpapers." },
-    { label: "GTA V - pagina oficial", url: rsgVSource, note: "Imagens promocionais atuais de Los Santos e GTA V." },
-    { label: "GTA Online - pagina oficial", url: rsgOnlineSource, note: "Imagens de atualizacoes e plataforma online." },
-    { label: "GTA Trilogy - pagina oficial", url: rsgTrilogySource, note: "Artes e screenshots da trilogia 3D remasterizada." },
-    { label: "GTA Wiki / Fandom - personagens e locais", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_Wiki", note: "Imagens de referencia para fichas de personagens, cidades e estados quando a pagina oficial nao entrega retrato especifico." },
-    { label: "GTA Wiki / Fandom - perfis de criadores", url: "https://gta.fandom.com/wiki/Category:Developers", note: "Fotos publicas e perfis de criadores, produtores, diretores e desenvolvedores ligados a GTA." },
-    { label: "Wikimedia Commons - fotos historicas", url: "https://commons.wikimedia.org/", note: "Fotos de David Jones e Mike Dailly usadas com credito de fonte." },
-    { label: "Paginas oficiais dos jogos Rockstar", url: rsgGamesSource, note: "Screenshots oficiais de GTA 1, GTA 2, GTA III, Vice City, San Andreas, LCS, VCS, GTA IV, EFLC e Chinatown Wars." }
+    { label: "GTA V - página oficial", url: rsgVSource, note: "Imagens promocionais atuais de Los Santos e GTA V." },
+    { label: "GTA Online - página oficial", url: rsgOnlineSource, note: "Imagens de atualizações e plataforma online." },
+    { label: "GTA Trilogy - página oficial", url: rsgTrilogySource, note: "Artes e screenshots da trilogia 3D remasterizada." },
+    { label: "GTA Wiki / Fandom - personagens e locais", url: "https://gta.fandom.com/wiki/Grand_Theft_Auto_Wiki", note: "Imagens de referência para fichas de personagens, cidades e estados quando a página oficial não entrega retrato específico." },
+    { label: "GTA Wiki / Fandom - perfis de criadores", url: "https://gta.fandom.com/wiki/Category:Developers", note: "Fotos públicas e perfis de criadores, produtores, diretores e desenvolvedores ligados a GTA." },
+    { label: "Wikimedia Commons - fotos históricas", url: "https://commons.wikimedia.org/", note: "Fotos de David Jones e Mike Dailly usadas com crédito de fonte." },
+    { label: "Páginas oficiais dos jogos Rockstar", url: rsgGamesSource, note: "Screenshots oficiais de GTA 1, GTA 2, GTA III, Vice City, San Andreas, LCS, VCS, GTA IV, EFLC e Chinatown Wars." }
   ]
 };
 
@@ -4724,7 +4726,7 @@ const gtaWikiImage = (page, src, options = {}) => ({
   ...options
 });
 
-const realPersonCredit = "Foto publica usada com credito e link para a fonte indicada.";
+const realPersonCredit = "Foto pública usada com crédito e link para a fonte indicada.";
 const realPersonImage = (name, src, source, caption = name, options = {}) => ({
   src,
   alt: `Foto de ${name}`,
@@ -5410,12 +5412,12 @@ const rockstarPeopleData = [
       { position: "center 18%" }
     ),
     summary:
-      "Figura central do nascimento da DMA Design em Dundee. Antes de GTA existir, Jones ja tinha transformado a DMA em um estudio respeitado com Lemmings; depois, ajudou a conduzir a ideia que se tornaria Grand Theft Auto.",
+      "Figura central do nascimento da DMA Design em Dundee. Antes de GTA existir, Jones já tinha transformado a DMA em um estúdio respeitado com Lemmings; depois, ajudou a conduzir a ideia que se tornaria Grand Theft Auto.",
     contributions: [
-      "Fundou a DMA Design no fim dos anos 1980, em Dundee, Escocia.",
-      "Ajudou a construir a cultura tecnica que gerou Lemmings, Menace, Blood Money e, mais tarde, GTA.",
+      "Fundou a DMA Design no fim dos anos 1980, em Dundee, Escócia.",
+      "Ajudou a construir a cultura técnica que gerou Lemmings, Menace, Blood Money e, mais tarde, GTA.",
       "Co-criador associado a Grand Theft Auto ao lado de Mike Dailly e da equipe da DMA.",
-      "Representa a ponte entre a cena britanica de microcomputadores, a ambicao de cidades simuladas e o futuro da Rockstar North."
+      "Representa a ponte entre a cena britânica de microcomputadores, a ambição de cidades simuladas e o futuro da Rockstar North."
     ],
     games: ["Lemmings", "Grand Theft Auto", "Body Harvest"],
     tags: ["criador", "DMA Design", "produtor", "Dundee"],
@@ -5439,15 +5441,15 @@ const rockstarPeopleData = [
       { position: "center 18%" }
     ),
     summary:
-      "Um dos nomes mais importantes da fase inicial da DMA. E frequentemente citado como designer de Lemmings e criador do prototipo original que levaria a Grand Theft Auto, quando a ideia ainda orbitava Race'n'Chase.",
+      "Um dos nomes mais importantes da fase inicial da DMA. É frequentemente citado como designer de Lemmings e criador do protótipo original que levaria a Grand Theft Auto, quando a ideia ainda orbitava Race'n'Chase.",
     contributions: [
-      "Foi um dos primeiros funcionarios da DMA Design.",
-      "Trabalhou em Lemmings, marco que deu reputacao internacional ao estudio.",
-      "Criou prototipos e tecnologia ligados ao conceito original de Grand Theft Auto.",
-      "Ajuda a explicar por que GTA nasceu primeiro como sistema urbano e so depois ganhou a forma de saga criminal cinematografica."
+      "Foi um dos primeiros funcionários da DMA Design.",
+      "Trabalhou em Lemmings, marco que deu reputação internacional ao estúdio.",
+      "Criou protótipos e tecnologia ligados ao conceito original de Grand Theft Auto.",
+      "Ajuda a explicar por que GTA nasceu primeiro como sistema urbano e só depois ganhou a forma de saga criminal cinematográfica."
     ],
     games: ["Lemmings", "Race'n'Chase", "Grand Theft Auto"],
-    tags: ["criador", "programacao", "prototipo", "DMA Design"],
+    tags: ["criador", "programação", "protótipo", "DMA Design"],
     sources: [
       { label: "Wikipedia - Mike Dailly", url: "https://en.wikipedia.org/wiki/Mike_Dailly_(game_designer)" },
       { label: "GTA Wiki - Mike Dailly", url: "https://gta.fandom.com/wiki/Mike_Dailly" },
@@ -5468,15 +5470,15 @@ const rockstarPeopleData = [
       { position: "center 18%" }
     ),
     summary:
-      "O nome mais associado ao comando publico da Rockstar. Vindo da BMG Interactive, Sam Houser ajudou a transformar GTA de jogo transgressor em uma franquia de escala cultural, com identidade de musica, cinema, satira e marketing.",
+      "O nome mais associado ao comando público da Rockstar. Vindo da BMG Interactive, Sam Houser ajudou a transformar GTA de jogo transgressor em uma franquia de escala cultural, com identidade de música, cinema, sátira e marketing.",
     contributions: [
       "Co-fundou a Rockstar Games em 1998 com Dan Houser, Terry Donovan, Jamie King e Gary J. Foreman.",
       "Foi um dos defensores do potencial de GTA dentro da estrutura BMG/Take-Two.",
-      "Consolidou a Rockstar como selo autoral, com controle forte de tom, trilha, campanha e postura publica.",
-      "Supervisionou a passagem de GTA III, era 3D, era HD, GTA V, GTA Online e o caminho ate GTA VI."
+      "Consolidou a Rockstar como selo autoral, com controle forte de tom, trilha, campanha e postura pública.",
+      "Supervisionou a passagem de GTA III, era 3D, era HD, GTA V, GTA Online e o caminho até GTA VI."
     ],
     games: ["GTA III", "Vice City", "San Andreas", "GTA IV", "GTA V", "GTA Online", "GTA VI"],
-    tags: ["fundador", "presidente", "Rockstar Games", "producao"],
+    tags: ["fundador", "presidente", "Rockstar Games", "produção"],
     sources: [
       { label: "GTA Wiki - Sam Houser", url: "https://gta.fandom.com/wiki/Sam_Houser" },
       { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" },
@@ -5497,26 +5499,26 @@ const rockstarPeopleData = [
       { position: "center 16%" }
     ),
     summary:
-      "Foi uma das vozes centrais da escrita da Rockstar durante a fase em que GTA virou satira de massa. Seu trabalho ajuda a explicar o dialogo agressivo, as radios, os personagens contraditorios e o olhar acido sobre os EUA.",
+      "Foi uma das vozes centrais da escrita da Rockstar durante a fase em que GTA virou sátira de massa. Seu trabalho ajuda a explicar o diálogo agressivo, as rádios, os personagens contraditórios e o olhar ácido sobre os EUA.",
     contributions: [
       "Co-fundou a Rockstar Games e atuou como vice-presidente criativo por muitos anos.",
-      "Teve papel importante em roteiro, dialogo e tom satirico em GTA e Red Dead.",
-      "Ajudou a transformar cidades em ambientes narrativos cheios de radio, propaganda, televisao e cultura pop falsa.",
-      "Saiu da Rockstar em 2020, encerrando uma das fases editoriais mais marcantes do estudio."
+      "Teve papel importante em roteiro, diálogo e tom satírico em GTA e Red Dead.",
+      "Ajudou a transformar cidades em ambientes narrativos cheios de rádio, propaganda, televisão e cultura pop falsa.",
+      "Saiu da Rockstar em 2020, encerrando uma das fases editoriais mais marcantes do estúdio."
     ],
     games: ["GTA III", "Vice City", "San Andreas", "GTA IV", "GTA V", "Red Dead Redemption"],
-    tags: ["fundador", "roteiro", "satira", "producao criativa"],
+    tags: ["fundador", "roteiro", "sátira", "produção criativa"],
     sources: [
       { label: "GTA Wiki - Dan Houser", url: "https://gta.fandom.com/wiki/Dan_Houser" },
       { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" },
-      { label: "Take-Two - saida de Dan Houser", url: "https://ir.take2games.com/news-releases/news-release-details/rockstar-games-announces-dan-housers-departure" }
+      { label: "Take-Two - saída de Dan Houser", url: "https://ir.take2games.com/news-releases/news-release-details/rockstar-games-announces-dan-housers-departure" }
     ]
   },
   {
     id: "terry-donovan",
     name: "Terry Donovan",
     role: "Co-fundador e executivo da Rockstar",
-    era: "Rockstar / Negocios",
+    era: "Rockstar / Negócios",
     city: "Nova York",
     media: realPersonImage(
       "Terry Donovan",
@@ -5526,15 +5528,15 @@ const rockstarPeopleData = [
       { position: "center 16%" }
     ),
     summary:
-      "Parte do grupo fundador que deu forma empresarial a Rockstar Games. Sua importancia esta na montagem do selo, na operacao de publicacao e na aproximacao entre jogo, musica, clubes e cultura urbana.",
+      "Parte do grupo fundador que deu forma empresarial à Rockstar Games. Sua importância está na montagem do selo, na operação de publicação e na aproximação entre jogo, música, clubes e cultura urbana.",
     contributions: [
       "Co-fundou a Rockstar Games em 1998.",
-      "Atuou em funcoes executivas durante a consolidacao da marca.",
-      "Participou do periodo em que GTA passou de franquia controversa para evento global.",
-      "Representa a dimensao de negocios e cultura pop que diferenciou a Rockstar de uma publicadora tradicional."
+      "Atuou em funções executivas durante a consolidação da marca.",
+      "Participou do período em que GTA passou de franquia controversa para evento global.",
+      "Representa a dimensão de negócios e cultura pop que diferenciou a Rockstar de uma publicadora tradicional."
     ],
     games: ["GTA III", "Vice City", "San Andreas", "GTA IV"],
-    tags: ["fundador", "executivo", "publicacao", "Rockstar Games"],
+    tags: ["fundador", "executivo", "publicação", "Rockstar Games"],
     sources: [
       { label: "GTA Wiki - Terry Donovan", url: "https://gta.fandom.com/wiki/Terry_Donovan" },
       { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" }
@@ -5543,8 +5545,8 @@ const rockstarPeopleData = [
   {
     id: "jamie-king",
     name: "Jamie King",
-    role: "Co-fundador e lideranca de producao",
-    era: "Rockstar / Producao",
+    role: "Co-fundador e liderança de produção",
+    era: "Rockstar / Produção",
     city: "Nova York",
     media: realPersonImage(
       "Jamie King",
@@ -5554,15 +5556,15 @@ const rockstarPeopleData = [
       { position: "center 18%" }
     ),
     summary:
-      "Um dos cinco fundadores da Rockstar. Teve papel na estruturacao de producao e tecnologia da empresa em sua fase de crescimento, antes de sair e participar da fundacao da 4mm Games.",
+      "Um dos cinco fundadores da Rockstar. Teve papel na estruturação de produção e tecnologia da empresa em sua fase de crescimento, antes de sair e participar da fundação da 4mm Games.",
     contributions: [
       "Co-fundou a Rockstar Games junto aos Housers, Terry Donovan e Gary J. Foreman.",
-      "Ajudou a escalar a operacao da Rockstar no periodo GTA III, Vice City e San Andreas.",
+      "Ajudou a escalar a operação da Rockstar no período GTA III, Vice City e San Andreas.",
       "Foi citado, ao lado de Gary Foreman, como participante de franquias como GTA, Midnight Club, Max Payne e Bully.",
       "Depois da Rockstar, fundou a 4mm Games com Gary Foreman e outros executivos."
     ],
     games: ["GTA III", "Vice City", "San Andreas", "Midnight Club", "Bully"],
-    tags: ["fundador", "producao", "tecnologia", "Rockstar Games"],
+    tags: ["fundador", "produção", "tecnologia", "Rockstar Games"],
     sources: [
       { label: "GTA Wiki - Jamie King", url: "https://gta.fandom.com/wiki/Jamie_King" },
       { label: "GameSpot - 4mm Games", url: "https://www.gamespot.com/articles/rockstar-founders-load-4mm/1100-6210102/" },
@@ -5583,12 +5585,12 @@ const rockstarPeopleData = [
       { position: "center 18%" }
     ),
     summary:
-      "O fundador menos lembrado pelo grande publico, mas essencial na formacao inicial da Rockstar. E citado em registros historicos como um dos cinco fundadores e depois aparece ligado a funcoes tecnicas e de producao fora da empresa.",
+      "O fundador menos lembrado pelo grande público, mas essencial na formação inicial da Rockstar. É citado em registros históricos como um dos cinco fundadores e depois aparece ligado a funções técnicas e de produção fora da empresa.",
     contributions: [
       "Co-fundou a Rockstar Games em 1998.",
-      "Participou da fase que transformou a marca em uma estrutura de publicacao global.",
-      "Foi associado a contribuicoes em GTA, Midnight Club, Max Payne e Bully em cobertura sobre sua saida para a 4mm Games.",
-      "A presenca dele no dossie corrige a tendencia comum de reduzir a fundacao da Rockstar apenas aos irmaos Houser."
+      "Participou da fase que transformou a marca em uma estrutura de publicação global.",
+      "Foi associado a contribuições em GTA, Midnight Club, Max Payne e Bully em cobertura sobre sua saída para a 4mm Games.",
+      "A presença dele no dossiê corrige a tendência comum de reduzir a fundação da Rockstar apenas aos irmãos Houser."
     ],
     games: ["GTA", "Midnight Club", "Max Payne", "Bully"],
     tags: ["fundador", "produtor", "tecnologia", "Rockstar Games"],
@@ -5612,12 +5614,12 @@ const rockstarPeopleData = [
       { position: "center 16%" }
     ),
     summary:
-      "Produtor-chave da fase em que a antiga DMA virou Rockstar North e GTA se tornou uma maquina de mundo aberto. Benzies e associado a GTA III, Vice City, San Andreas, GTA IV e GTA V.",
+      "Produtor-chave da fase em que a antiga DMA virou Rockstar North e GTA se tornou uma máquina de mundo aberto. Benzies é associado a GTA III, Vice City, San Andreas, GTA IV e GTA V.",
     contributions: [
-      "Entrou na DMA/Rockstar North antes da explosao global da serie.",
-      "Teve papel central na producao de GTA III, jogo que redefiniu o modelo moderno de mundo aberto.",
-      "Ajudou a coordenar a escalada tecnica e produtiva da era 3D para a era HD.",
-      "Sua saida apos GTA V marcou o fim de uma fase importante da lideranca historica da Rockstar North."
+      "Entrou na DMA/Rockstar North antes da explosão global da série.",
+      "Teve papel central na produção de GTA III, jogo que redefiniu o modelo moderno de mundo aberto.",
+      "Ajudou a coordenar a escalada técnica e produtiva da era 3D para a era HD.",
+      "Sua saída após GTA V marcou o fim de uma fase importante da liderança histórica da Rockstar North."
     ],
     games: ["GTA III", "Vice City", "San Andreas", "GTA IV", "GTA V"],
     tags: ["produtor", "Rockstar North", "mundo aberto", "era 3D"],
@@ -5641,12 +5643,12 @@ const rockstarPeopleData = [
       { position: "center 18%" }
     ),
     summary:
-      "Nome fundamental para a identidade visual das cidades da Rockstar. Garbut e associado ao desenho de mundos que parecem observados, documentados e satirizados ao mesmo tempo.",
+      "Nome fundamental para a identidade visual das cidades da Rockstar. Garbut é associado ao desenho de mundos que parecem observados, documentados e satirizados ao mesmo tempo.",
     contributions: [
-      "Trabalhou na construcao visual de cidades como Liberty City, Vice City, San Andreas e Los Santos.",
-      "Ajudou a definir a linguagem de mapa urbano, arquitetura, bairro, luz e atmosfera da serie.",
-      "E uma das figuras que explicam por que cada GTA moderno parece uma cidade-personagem.",
-      "Na fase HD, sua area se torna ainda mais importante: detalhe ambiental, escala, fotografia e leitura urbana passam a ser narrativa."
+      "Trabalhou na construção visual de cidades como Liberty City, Vice City, San Andreas e Los Santos.",
+      "Ajudou a definir a linguagem de mapa urbano, arquitetura, bairro, luz e atmosfera da série.",
+      "É uma das figuras que explicam por que cada GTA moderno parece uma cidade-personagem.",
+      "Na fase HD, sua área se torna ainda mais importante: detalhe ambiental, escala, fotografia e leitura urbana passam a ser narrativa."
     ],
     games: ["GTA III", "Vice City", "San Andreas", "GTA IV", "GTA V", "GTA VI"],
     tags: ["arte", "mundo aberto", "cidades", "Rockstar North"],
@@ -5658,7 +5660,7 @@ const rockstarPeopleData = [
   {
     id: "obbe-vermeij",
     name: "Obbe Vermeij",
-    role: "Programador e diretor tecnico",
+    role: "Programador e diretor técnico",
     era: "Rockstar North / Tecnologia",
     city: "Edimburgo",
     media: realPersonImage(
@@ -5669,15 +5671,15 @@ const rockstarPeopleData = [
       { position: "center 16%" }
     ),
     summary:
-      "Programador historico da Rockstar North, conhecido tambem por registrar memorias tecnicas em seu blog. Seu trabalho ajuda a iluminar os bastidores de streaming, sistemas urbanos e limites de hardware da era PS2.",
+      "Programador histórico da Rockstar North, conhecido também por registrar memórias técnicas em seu blog. Seu trabalho ajuda a iluminar os bastidores de streaming, sistemas urbanos e limites de hardware da era PS2.",
     contributions: [
-      "Atuou em tecnologia e programacao durante a fase GTA III, Vice City e San Andreas.",
-      "Ajuda a explicar os compromissos tecnicos por tras de trafego, clima, streaming de mapa e comportamento urbano.",
-      "Suas anotacoes publicas viraram fonte rara sobre como a equipe pensava problemas tecnicos internamente.",
-      "Mostra que a magia da era 3D tambem veio de engenharia invisivel, nao apenas de roteiro e marketing."
+      "Atuou em tecnologia e programação durante a fase GTA III, Vice City e San Andreas.",
+      "Ajuda a explicar os compromissos técnicos por trás de tráfego, clima, streaming de mapa e comportamento urbano.",
+      "Suas anotações públicas viraram fonte rara sobre como a equipe pensava problemas técnicos internamente.",
+      "Mostra que a magia da era 3D também veio de engenharia invisível, não apenas de roteiro e marketing."
     ],
     games: ["GTA III", "Vice City", "San Andreas", "GTA IV"],
-    tags: ["programacao", "direcao tecnica", "Rockstar North", "era PS2"],
+    tags: ["programação", "direção técnica", "Rockstar North", "era PS2"],
     sources: [
       { label: "GTA Wiki - Obbe Vermeij", url: "https://gta.fandom.com/wiki/Obbe_Vermeij" },
       { label: "Inside Rockstar North", url: "https://insiderockstarnorth.blogspot.com/" },
@@ -5698,15 +5700,15 @@ const rockstarPeopleData = [
       { position: "center 18%" }
     ),
     summary:
-      "Lideranca de design ligada a jogos modernos da Rockstar. Seu perfil representa a fase em que GTA deixa de ser apenas missao e mapa para virar ecossistema de atividades, economia, veiculos, upgrades e assaltos.",
+      "Liderança de design ligada a jogos modernos da Rockstar. Seu perfil representa a fase em que GTA deixa de ser apenas missão e mapa para virar ecossistema de atividades, economia, veículos, upgrades e assaltos.",
     contributions: [
-      "Atuou em funcoes de design e producao em projetos da Rockstar.",
-      "E associado a decisoes de sistemas, progressao e experiencia de jogador na fase moderna.",
-      "Ajuda a conectar GTA V e GTA Online a uma leitura de design de longo prazo, com conteudo vivo e atividades persistentes.",
-      "No dossie, aparece como parte da geracao que levou a franquia para escala de servico e replay."
+      "Atuou em funções de design e produção em projetos da Rockstar.",
+      "É associado a decisões de sistemas, progressão e experiência de jogador na fase moderna.",
+      "Ajuda a conectar GTA V e GTA Online a uma leitura de design de longo prazo, com conteúdo vivo e atividades persistentes.",
+      "No dossiê, aparece como parte da geração que levou a franquia para escala de serviço e replay."
     ],
     games: ["GTA IV", "GTA V", "GTA Online", "Red Dead Redemption"],
-    tags: ["design", "producao", "GTA Online", "sistemas"],
+    tags: ["design", "produção", "GTA Online", "sistemas"],
     sources: [
       { label: "GTA Wiki - Imran Sarwar", url: "https://gta.fandom.com/wiki/Imran_Sarwar" },
       { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" }
@@ -5715,8 +5717,8 @@ const rockstarPeopleData = [
   {
     id: "rob-nelson",
     name: "Rob Nelson",
-    role: "Diretor e produtor senior",
-    era: "Rockstar / Producao global",
+    role: "Diretor e produtor sênior",
+    era: "Rockstar / Produção global",
     city: "Rockstar North",
     media: realPersonImage(
       "Rob Nelson",
@@ -5726,15 +5728,15 @@ const rockstarPeopleData = [
       { position: "center 18%" }
     ),
     summary:
-      "Parte da lideranca moderna da Rockstar, quando a empresa passa a operar com equipes globais e producoes de escala gigantesca. E um nome importante para entender o salto de GTA V/Online para a estrutura contemporanea da empresa.",
+      "Parte da liderança moderna da Rockstar, quando a empresa passa a operar com equipes globais e produções de escala gigantesca. É um nome importante para entender o salto de GTA V/Online para a estrutura contemporânea da empresa.",
     contributions: [
-      "Representa a fase de producao integrada entre multiplos estudios Rockstar.",
-      "Aparece em creditos e entrevistas publicas ligadas a grandes projetos modernos da empresa.",
-      "Ajuda a contextualizar a Rockstar atual: menos estudio unico, mais rede internacional de equipes.",
-      "No site, funciona como ponte entre a historia classica de Rockstar North e a operacao global que sustenta GTA Online e GTA VI."
+      "Representa a fase de produção integrada entre múltiplos estúdios Rockstar.",
+      "Aparece em créditos e entrevistas públicas ligadas a grandes projetos modernos da empresa.",
+      "Ajuda a contextualizar a Rockstar atual: menos estúdio único, mais rede internacional de equipes.",
+      "No site, funciona como ponte entre a história clássica de Rockstar North e a operação global que sustenta GTA Online e GTA VI."
     ],
     games: ["GTA V", "GTA Online", "Red Dead Redemption 2"],
-    tags: ["producao", "lideranca", "Rockstar", "era HD"],
+    tags: ["produção", "liderança", "Rockstar", "era HD"],
     sources: [
       { label: "GTA Wiki - Rob Nelson", url: "https://gta.fandom.com/wiki/Rob_Nelson" },
       { label: "Rockstar Games", url: "https://en.wikipedia.org/wiki/Rockstar_Games" }
@@ -5743,8 +5745,8 @@ const rockstarPeopleData = [
   {
     id: "lazlow-jones",
     name: "Lazlow Jones",
-    role: "Roteirista, produtor de audio e personalidade de radio",
-    era: "Rockstar / Radio",
+    role: "Roteirista, produtor de áudio e personalidade de rádio",
+    era: "Rockstar / Rádio",
     city: "Nova York",
     media: realPersonImage(
       "Lazlow Jones",
@@ -5754,15 +5756,15 @@ const rockstarPeopleData = [
       { position: "center 16%" }
     ),
     summary:
-      "Ajudou a dar voz ao GTA moderno. Radios, comerciais falsos, entrevistas absurdas, apresentadores e a propria caricatura 'Lazlow' fizeram a cidade parecer viva mesmo quando o jogador so estava dirigindo.",
+      "Ajudou a dar voz ao GTA moderno. Rádios, comerciais falsos, entrevistas absurdas, apresentadores e a própria caricatura 'Lazlow' fizeram a cidade parecer viva mesmo quando o jogador só estava dirigindo.",
     contributions: [
-      "Trabalhou em escrita, producao de audio e radio dentro da Rockstar.",
-      "Foi uma das figuras por tras da identidade satirica das estacoes de radio.",
-      "Aparece tambem como personagem em varios jogos, misturando bastidor e ficcao.",
-      "Saiu da Rockstar em 2020, depois de uma longa fase ligada a GTA, Red Dead e a cultura sonora do estudio."
+      "Trabalhou em escrita, produção de áudio e rádio dentro da Rockstar.",
+      "Foi uma das figuras por trás da identidade satírica das estações de rádio.",
+      "Aparece também como personagem em vários jogos, misturando bastidor e ficção.",
+      "Saiu da Rockstar em 2020, depois de uma longa fase ligada a GTA, Red Dead e a cultura sonora do estúdio."
     ],
     games: ["GTA III", "Vice City", "San Andreas", "GTA IV", "GTA V", "GTA Online"],
-    tags: ["audio", "radio", "roteiro", "satira"],
+    tags: ["áudio", "rádio", "roteiro", "sátira"],
     sources: [
       { label: "GTA Wiki - Lazlow Jones", url: "https://gta.fandom.com/wiki/Lazlow_Jones" },
       { label: "Wikipedia - Lazlow Jones", url: "https://en.wikipedia.org/wiki/Lazlow_Jones" }
