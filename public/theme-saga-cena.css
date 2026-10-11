@@ -12,8 +12,26 @@
 .sgc-cena{position:absolute;left:calc(50% - var(--sgc-w) / 2);top:calc(50% - var(--sgc-w) * .3);width:var(--sgc-w);height:calc(var(--sgc-w) * .6);
   font-size:calc(var(--sgc-w) / 100);transform-origin:0 0;will-change:transform}
 .sgc-svg{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible}
+/* sala desfocada (profundidade de campo) e um pouco mais escura que o primeiro plano */
+.sgc-fundo{filter:blur(.32em) saturate(.85) brightness(.82)}
 .sgc-aparelho{position:absolute;inset:0;will-change:transform,opacity}
 .sgc-cena img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* ---------- fotos do hardware ---------- */
+.sgc-cena img.sgc-foto{position:absolute;object-fit:fill;user-select:none;-webkit-user-drag:none;
+  filter:drop-shadow(0 .35em .45em rgba(0,0,0,.5)) drop-shadow(0 .08em .1em rgba(0,0,0,.55))}
+.sgc-wrap[data-sgc-sala="90s"] .sgc-cena img.sgc-foto{filter:drop-shadow(0 .35em .45em rgba(0,0,0,.5)) drop-shadow(0 .08em .1em rgba(0,0,0,.55)) sepia(.14) saturate(1.05) brightness(.9)}
+.sgc-wrap[data-sgc-sala="2000s"] .sgc-cena img.sgc-foto{filter:drop-shadow(0 .35em .45em rgba(0,0,0,.55)) drop-shadow(0 .08em .1em rgba(0,0,0,.55)) brightness(.86) contrast(1.04)}
+.sgc-wrap[data-sgc-sala="hd"] .sgc-cena img.sgc-foto{filter:drop-shadow(0 .3em .5em rgba(0,0,0,.6)) drop-shadow(0 .06em .1em rgba(0,0,0,.6)) brightness(.8) contrast(1.06)}
+.sgc-sombra{position:absolute;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(0,0,0,.62),rgba(0,0,0,.32) 55%,transparent)}
+/* luz de cena: vinheta e um toque da cor do jogo vindo da tela */
+.sgc-luz{position:absolute;inset:-2%;pointer-events:none;z-index:2;
+  background:radial-gradient(ellipse 70% 75% at 50% 46%,transparent 55%,rgba(0,0,0,.5) 100%)}
+.sgc-poco{position:absolute;border-radius:50%;opacity:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 58%,#141312 0 34%,#2b2a27 52%,#5d5b56 74%,#8f8b84 90%,#b5b1aa)}
+.sgc-midia-clip{position:absolute;inset:0;z-index:5;pointer-events:none}
+.sgc-led[data-cor="verde"]{background:#b9ffc6;box-shadow:0 0 .3em .08em #3dff6a,0 0 1em .25em rgba(61,255,106,.45)}
 
 /* ---------- LEDs ---------- */
 .sgc-leds{position:absolute;inset:0;opacity:0;pointer-events:none}
@@ -30,12 +48,10 @@
 .sgc-bandeja{position:absolute;inset:0;will-change:transform;transform:translate3d(0,calc(var(--sgc-prof) * -1),0)}
 .sgc-bandeja-topo{position:absolute;left:1%;right:1%;top:0;height:var(--sgc-prof);border-radius:0 0 .2em .2em;
   background:radial-gradient(ellipse var(--rx,46%) var(--ry,40%) at 50% 50%,#0b0b0d 0 92%,transparent 96%),linear-gradient(180deg,#26282d,#3a3d44)}
-.sgc-bandeja-placa{position:absolute;left:0;right:0;top:var(--sgc-prof);bottom:0;background:linear-gradient(180deg,#1d1f24,#0c0d10);box-shadow:inset 0 .08em 0 rgba(255,255,255,.12)}
-.sgc-bandeja[data-cor="bege"] .sgc-bandeja-topo{background:radial-gradient(ellipse var(--rx,46%) var(--ry,40%) at 50% 50%,#2a2924 0 92%,transparent 96%),linear-gradient(180deg,#3a3830,#56534a)}
-.sgc-bandeja[data-cor="bege"] .sgc-bandeja-placa{background:linear-gradient(180deg,#e2d9bc,#c5bb9a);box-shadow:inset 0 .06em 0 #fff8e0}
+.sgc-bandeja-placa{position:absolute;left:0;right:0;top:var(--sgc-prof);bottom:0;background-color:#d9d2bd;background-repeat:no-repeat;box-shadow:0 .06em .12em rgba(0,0,0,.35)}
+.sgc-bandeja[data-cor="bege"] .sgc-bandeja-topo{background:radial-gradient(ellipse var(--rx,46%) var(--ry,40%) at 50% 50%,#25241f 0 88%,#5c584c 93%,transparent 97%),linear-gradient(180deg,#8d8673,#c8c0a6 70%,#d8d0b6)}
 .sgc-bandeja[data-cor="branco"] .sgc-bandeja-topo{background:radial-gradient(ellipse var(--rx,46%) var(--ry,40%) at 50% 50%,#9ea3ab 0 92%,transparent 96%),linear-gradient(180deg,#c9ccd2,#e6e8ec)}
 .sgc-bandeja[data-cor="branco"] .sgc-bandeja-placa{background:linear-gradient(180deg,#f2f3f5,#d7dade)}
-.sgc-bandeja-placa::after{content:attr(data-marca);position:absolute;right:6%;top:50%;transform:translateY(-50%);font:700 .3em/1 system-ui,sans-serif;letter-spacing:.1em;color:#6d6550;white-space:pre}
 .sgc-bandeja-disco{position:absolute;left:50%;top:calc(var(--sgc-prof) / 2);width:10em;height:10em;opacity:0}
 
 /* ---------- caixa 3D ---------- */
@@ -134,23 +150,23 @@
 /* ---------- tampa do PS1 ---------- */
 .sgc-tampa{position:absolute;z-index:6;transform-origin:50% 0;will-change:transform}
 .sgc-tampa>div{position:absolute;inset:0;border-radius:50%}
-.sgc-tampa-cima{background:radial-gradient(ellipse at 50% 40%,#dcd9d3,#b9b5ae 70%,#a29e97);box-shadow:inset 0 -.15em .2em rgba(0,0,0,.25),0 .1em .2em rgba(0,0,0,.3)}
-.sgc-tampa-cima::after{content:"";position:absolute;inset:22% 30%;border-radius:50%;border:.08em solid rgba(0,0,0,.12)}
-.sgc-tampa-baixo{background:radial-gradient(ellipse,#3a3936,#22211f 70%);opacity:0;box-shadow:inset 0 0 0 .2em #8e8a84}
+.sgc-tampa-cima{background-repeat:no-repeat;filter:sepia(.14) saturate(1.05) brightness(.9)}
+.sgc-tampa-baixo{background:radial-gradient(ellipse at 50% 40%,#a9a59e,#86827b 60%,#6b6862);opacity:0;box-shadow:inset 0 0 0 .18em #c4c0b9,inset 0 0 1.2em rgba(0,0,0,.35)}
+.sgc-tampa-baixo::after{content:"";position:absolute;left:50%;top:50%;width:18%;height:18%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,#55524d 0 40%,#77736c 45% 100%)}
 .sgc-tampa[data-aberta="1"] .sgc-tampa-baixo{opacity:1}
 .sgc-tampa[data-aberta="1"] .sgc-tampa-cima{opacity:0}
 
 /* ---------- pulso e brilho ---------- */
-.sgc-pulso{position:absolute;width:14em;height:14em;margin:-7em 0 0 -7em;opacity:0;pointer-events:none;z-index:6;
+.sgc-pulso{position:absolute;width:9em;height:9em;margin:-4.5em 0 0 -4.5em;opacity:0;pointer-events:none;z-index:6;
   transform-origin:50% 50%}
 .sgc-pulso::before{content:"";position:absolute;inset:0;border-radius:50%;transform:scale(var(--sx),var(--sy));
-  border:.3em solid color-mix(in srgb,var(--sgc-ac) 80%,#fff);box-shadow:0 0 1.2em var(--sgc-ac),inset 0 0 1.2em var(--sgc-ac)}
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--sgc-ac) 45%,#fff) 0,color-mix(in srgb,var(--sgc-ac) 30%,transparent) 35%,transparent 100%);mix-blend-mode:screen;filter:blur(.4em)}
 .sgc-pulso{margin:0}
 .sgc-brilho{position:absolute;pointer-events:none;opacity:0;mix-blend-mode:screen;z-index:2;
   background:radial-gradient(closest-side,color-mix(in srgb,var(--sgc-ac) 55%,#fff) 0,color-mix(in srgb,var(--sgc-ac) 35%,transparent) 30%,transparent 100%)}
 
 /* ---------- tela (fica fora da cena, desenhada no tamanho do zoom final) ---------- */
-.sgc-tela{position:absolute;left:0;top:0;opacity:0;visibility:hidden;overflow:hidden;background:#000;transform-origin:50% 50%;will-change:transform,opacity;z-index:4;
+.sgc-tela{position:absolute;left:0;top:0;opacity:0;visibility:hidden;overflow:hidden;background:#000;transform-origin:0 0;will-change:transform,opacity;z-index:4;
   container-type:normal}
 .sgc-tela-conteudo{position:absolute;inset:0;will-change:transform,opacity}
 .sgc-tela-fundo{position:absolute;inset:-6%;background:linear-gradient(135deg,color-mix(in srgb,var(--sgc-ac) 45%,#000),var(--sgc-bg))}
@@ -173,6 +189,12 @@
 .sgc-tela-flash{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,#fff 0,#e9f1ff 40%,#b9c8ff 100%);opacity:0;pointer-events:none}
 .sgc-tela-vidro{position:absolute;inset:0;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.12),transparent 30%)}
 .sgc-tela[data-tipo="crt"] .sgc-tela-vidro{background:radial-gradient(ellipse 60% 40% at 30% 20%,rgba(255,255,255,.12),transparent 70%)}
+
+/* segunda tela (DS): só um brilho com a arte */
+.sgc-tela2{position:absolute;left:0;top:0;width:100px;height:100px;transform-origin:0 0;overflow:hidden;opacity:0;pointer-events:none;
+  background:linear-gradient(150deg,color-mix(in srgb,var(--sgc-ac) 55%,#000),#0b0c10)}
+.sgc-tela2 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;filter:saturate(1.2)}
+.sgc-tela2-faixa{position:absolute;left:0;right:0;bottom:8px;text-align:center;font:400 13px/1 var(--gt-font,sans-serif);color:#fff;text-shadow:0 0 6px #000;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 6px}
 
 /* ---------- textos, escurecimento e final ---------- */
 .sgc-escuro{position:absolute;inset:0;background:#000;opacity:.92;pointer-events:none;z-index:5;will-change:opacity}

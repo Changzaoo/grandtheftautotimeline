@@ -697,6 +697,9 @@ const SagaSection = ({ onOpenDossier }) => {
       {saga.map((cap, i) => (
         <SgCapitulo key={cap.tema} cap={cap} index={i} total={saga.length} onOpenDossier={abrir} forcar={alvo === cap.tema} />
       ))}
+      <p className="sg-creditos">
+        Fotos dos aparelhos via Wikimedia Commons: Evan-Amos e CHG (domínio público); MBlairMartin (PC Gateway 2000), Morn (TV Loewe Planus) e Osh33m/Soberian (PlayStation 5), sob licença CC BY-SA 4.0. Capas e imagens dos jogos: Rockstar Games, via GTA Wiki.
+      </p>
     </section>
   );
 };

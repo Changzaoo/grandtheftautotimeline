@@ -7,6 +7,9 @@
  * transform/opacity, em requestAnimationFrame e sem estado React por quadro.
  * Coordenadas da cena: viewBox 1000 × 600 (x/10 % e y/6 % no HTML;
  * 1em dentro de .sgc-cena = 10 unidades da cena).
+ * O hardware é foto real recortada (assets/saga); a sala é ilustrada e fica
+ * desfocada atrás, os móveis ficam nítidos. A tela de cada foto é um
+ * quadrilátero: a imagem ligada é projetada nele (matrix3d) e vira retângulo no zoom.
  */
 
 const sagaClamp = (v, a = 0, b = 1) => (v < a ? a : v > b ? b : v);
@@ -33,76 +36,201 @@ const SAGA_MIDIAS = {
 
 const SAGA_PLAT_MIDIA = { pc: "PC CD-ROM", ps1: "PlayStation", ps2: "PlayStation 2 · DVD", gba: "Game Boy Advance", psp: "PSP", ps3: "PS3 · Blu-ray", x360: "Xbox 360 · DVD", ds: "Nintendo DS", ps4: "PS4 · Blu-ray", ps5: "PS5 · Blu-ray" };
 
-/* ---------- aparelhos: geometria das peças animadas ----------
- * tela: retângulo exato da tela no SVG · leds: luzes do aparelho · led2: luz da TV
- * caixa: centro onde a caixa pousa · entrada: como a mídia entra
- * alvo: ponto de chegada (s = escala, sy = achatamento ao deitar)
+/* ---------- fotos reais do hardware (assets/saga, créditos em CREDITOS.md) ----------
+ * [largura, altura] em px de cada recorte; as peças das cenas guardam só x/y/largura
+ * em unidades da cena e todas as medidas internas (tela, fenda, LED) em % da foto,
+ * então tudo acompanha a escala.
  */
-const SAGA_TV_HD = { x: 220, y: 64, w: 480, h: 270, r: 2, tipo: "plana" };
+const SAGA_FOTOS = {
+  pc: [1100, 1238], tvcrt: [1400, 992], tvhd: [1400, 1083],
+  ps1: [1400, 618], ps2: [1400, 540], ps3: [1400, 560], ps4: [1400, 674], x360: [1400, 633], ps5: [558, 1300],
+  gba: [1200, 782], psp: [1300, 707], ds: [1100, 914]
+};
+const sagaFotoSrc = (f) => "assets/saga/" + f + ".webp";
+
+/* tela de vidro de cada TV/monitor (TL, TR, BR, BL em % da foto) */
+const SAGA_Q_CRT = [[15.6, 10.9], [85.6, 10.7], [84.3, 82.1], [17.4, 83.5]];
+const SAGA_Q_HD = [[5.6, 7.1], [94.2, 7.0], [94.0, 71.7], [6.2, 72.0]];
+
+/* ---------- aparelhos ----------
+ * pecas  fotos na cena (f = foto, x/y/w em unidades da cena; sombra = [cx, cy, rx, ry] em % da peça)
+ * tela   quadrilátero da tela na foto (peça, q, r = raio em fração da largura)
+ * tela2  segunda tela (DS) · leds / led2: luz do aparelho / da TV (p = ponto, a→b = barra)
+ * entrada: como a mídia entra
+ *   bandeja  gaveta frontal (PC) · r = face da gaveta na foto, prof = curso
+ *   tampa    tampa que abre (PS1) · c = centro, r = raios
+ *   fenda    a→b = boca da fenda; u/v = eixos da mídia já deitada no plano do aparelho
+ *            (u = largura, v = profundidade, em % da foto); fica = quanto sobra para fora
+ *   fendaZ   fenda vista de frente (PS5 em pé): o disco entra de lado e some
+ */
 const SAGA_APARELHOS = {
   pc: {
-    sala: "90s", tela: { x: 378, y: 146, w: 204, h: 153, r: 12, tipo: "crt" },
-    leds: [{ x: 668, y: 330, w: 7, h: 7 }], led2: { x: 572, y: 338 },
-    caixa: { x: 268, y: 296 }, entrada: "bandeja",
-    bandeja: { x: 647, y: 214, w: 100, prof: 46, placa: 10, cor: "bege" },
-    alvo: { x: 697, y: 237, s: 0.84, sy: 0.3 }
+    sala: "90s", movel: "mesa90",
+    pecas: [{ f: "pc", x: 340, y: 96, w: 300, sombra: [50, 99, 52, 2.4] }],
+    tela: { peca: 0, q: [[19, 9.2], [83, 9.2], [83, 50.6], [19, 50.6]], r: 0.03, tipo: "crt" },
+    leds: [{ peca: 0, p: [18.2, 85.6], w: 4, h: 3, cor: "verde" }], led2: { peca: 0, p: [69.5, 62.2] },
+    caixa: { x: 222, y: 292 }, entrada: "bandeja",
+    bandeja: { peca: 0, r: [59.3, 77.9, 86.3, 80.8], prof: 28, cor: "bege" }
   },
   ps1: {
-    sala: "90s", tela: { x: 352, y: 116, w: 296, h: 222, r: 16, tipo: "crt" },
-    leds: [{ x: 427, y: 505, w: 5.5, h: 5 }], led2: { x: 362, y: 361 },
-    caixa: { x: 732, y: 296 }, entrada: "tampa",
-    tampa: { x: 548, y: 516, w: 128, h: 40 },
-    alvo: { x: 548, y: 517, s: 1.12, sy: 0.3 }
+    sala: "90s", movel: "rack90",
+    pecas: [{ f: "tvcrt", x: 335, y: 136, w: 330, sombra: [50, 99, 47, 2] }, { f: "ps1", x: 330, y: 428, w: 350, sombra: [56, 95, 44, 7] }],
+    tela: { peca: 0, q: SAGA_Q_CRT, r: 0.035, tipo: "crt" },
+    leds: [{ peca: 1, p: [33.6, 46.6], w: 3.6, h: 2.6, cor: "verde" }], led2: { peca: 0, p: [41.4, 92.4] },
+    caixa: { x: 772, y: 292 }, entrada: "tampa",
+    tampa: { peca: 1, c: [64.1, 37.2], r: [19.1, 24.2] }
   },
   ps2: {
-    sala: "2000s", tela: { x: 344, y: 108, w: 312, h: 234, r: 10, tipo: "crt" },
-    leds: [{ x: 590, y: 447, w: 5, h: 5 }], led2: { x: 642, y: 361 },
-    caixa: { x: 740, y: 296 }, entrada: "bandeja",
-    bandeja: { x: 372, y: 440, w: 196, prof: 54, placa: 22, cor: "preto" },
-    alvo: { x: 470, y: 467, s: 1.22, sy: 0.3 }
+    sala: "2000s", movel: "rack00",
+    pecas: [{ f: "tvcrt", x: 335, y: 136, w: 330, sombra: [50, 99, 47, 2] }, { f: "ps2", x: 318, y: 438, w: 380, sombra: [58, 92, 42, 8] }],
+    tela: { peca: 0, q: SAGA_Q_CRT, r: 0.035, tipo: "crt" },
+    leds: [{ peca: 1, p: [83.1, 76.6], w: 3, h: 3, cor: "verde" }], led2: { peca: 0, p: [41.4, 92.4] },
+    caixa: { x: 778, y: 292 }, entrada: "fenda",
+    fenda: { peca: 1, a: [57, 57.5], b: [82, 67.5], u: [20.6, 8.3], v: [6.8, -14.4] }
   },
   gba: {
-    sala: "2000s", mesa: true, tela: { x: 377, y: 362, w: 146, h: 98, r: 2, tipo: "lcd" },
-    leds: [{ x: 366, y: 467, w: 5, h: 5 }],
-    caixa: { x: 726, y: 316 }, entrada: "encaixe",
-    alvo: { x: 450, y: 236, fy: 332, corte: 324, some: false, s: 1 }
+    sala: "2000s", movel: "mesa", mesa: true,
+    pecas: [{ f: "gba", x: 240, y: 300, w: 420, sombra: [50, 60, 49, 40] }],
+    tela: { peca: 0, q: [[37.9, 18.0], [74.0, 35.8], [62.6, 71.2], [25.7, 50.6]], r: 0.01, tipo: "lcd" },
+    leds: [{ peca: 0, p: [85.2, 39.3], w: 4, h: 3.4, cor: "verde" }],
+    caixa: { x: 780, y: 300 }, entrada: "fenda",
+    fenda: { peca: 0, a: [44, 4.8], b: [72, 19.3], u: [28.5, 10.5], v: [-13.6, 33.4], fica: 0.42, borda: 0.6 }
   },
   psp: {
-    sala: "2000s", mesa: true, tela: { x: 341, y: 358, w: 218, h: 124, r: 2, tipo: "lcd" },
-    leds: [{ x: 286, y: 478, w: 5, h: 4 }],
-    caixa: { x: 738, y: 298 }, entrada: "encaixe",
-    alvo: { x: 450, y: 252, fy: 404, corte: 340, some: true, s: 1 }
+    sala: "2000s", movel: "mesa", mesa: true,
+    pecas: [{ f: "psp", x: 225, y: 318, w: 450, sombra: [50, 58, 49, 40] }],
+    tela: { peca: 0, q: [[24.4, 7.9], [78.3, 23.6], [70.8, 81.9], [17.3, 64.7]], r: 0.01, tipo: "lcd" },
+    leds: [{ peca: 0, p: [91.4, 76.4], w: 3.4, h: 3, cor: "verde" }],
+    caixa: { x: 782, y: 300 }, entrada: "fenda",
+    fenda: { peca: 0, a: [37, 4.9], b: [63, 12.5], u: [26, 7.6], v: [-3.3, 49.8], borda: 0.9 }
   },
   ps3: {
-    sala: "hd", tela: SAGA_TV_HD, leds: [{ x: 772, y: 376, w: 4.5, h: 4.5 }], led2: { x: 460, y: 340 },
+    sala: "hd", movel: "rackHd",
+    pecas: [{ f: "tvhd", x: 215, y: 96, w: 400, sombra: [50, 98, 24, 2.4] }, { f: "ps3", x: 585, y: 296, w: 300, sombra: [62, 93, 38, 9] }],
+    tela: { peca: 0, q: SAGA_Q_HD, r: 0.004, tipo: "plana" },
+    leds: [{ peca: 1, p: [79.6, 83.4], w: 3, h: 3 }], led2: { peca: 0, p: [92.7, 86.3] },
     caixa: { x: 300, y: 282 }, entrada: "fenda",
-    alvo: { x: 660, y: 379.8, s: 0.84 }
+    fenda: { peca: 1, a: [58.2, 59.8], b: [81.4, 74.3], u: [21.4, 13.3], v: [8.5, -17] }
   },
   x360: {
-    sala: "hd", tela: SAGA_TV_HD, leds: [{ x: 764, y: 364, w: 21, h: 21, forma: "anel" }], led2: { x: 460, y: 340 },
-    caixa: { x: 300, y: 282 }, entrada: "bandeja",
-    bandeja: { x: 606, y: 359, w: 124, prof: 38, placa: 11, cor: "branco" },
-    alvo: { x: 668, y: 378, s: 0.98, sy: 0.28 }
+    sala: "hd", movel: "rackHd",
+    pecas: [{ f: "tvhd", x: 215, y: 96, w: 400, sombra: [50, 98, 24, 2.4] }, { f: "x360", x: 585, y: 282, w: 300, sombra: [60, 92, 40, 10] }],
+    tela: { peca: 0, q: SAGA_Q_HD, r: 0.004, tipo: "plana" },
+    leds: [{ peca: 1, p: [66.4, 80.5], w: 19, h: 19, forma: "anel" }], led2: { peca: 0, p: [92.7, 86.3] },
+    caixa: { x: 300, y: 282 }, entrada: "fenda",
+    fenda: { peca: 1, a: [36, 51], b: [59, 63.5], u: [21.8, 11.8], v: [7.4, -17.5] }
   },
   ds: {
-    sala: "hd", mesa: true, tela: { x: 375, y: 183, w: 150, h: 112, r: 2, tipo: "lcd" },
-    leds: [{ x: 577, y: 335, w: 5, h: 5 }],
-    caixa: { x: 734, y: 330 }, entrada: "encaixe",
-    alvo: { x: 450, y: 96, fy: 206, corte: 151, some: true, s: 1 }
+    sala: "hd", movel: "mesaHd", mesa: true,
+    pecas: [{ f: "ds", x: 252, y: 222, w: 400, sombra: [52, 72, 46, 26] }],
+    tela: { peca: 0, q: [[49.0, 11.7], [80.4, 22.6], [69.4, 47.3], [38.6, 35.8]], r: 0.01, tipo: "lcd" },
+    tela2: { peca: 0, q: [[31.6, 49.1], [63.9, 60.2], [52.5, 80.5], [20.2, 69.4]] },
+    leds: [{ peca: 0, p: [79.6, 57.6], w: 3.4, h: 3, cor: "verde" }],
+    caixa: { x: 784, y: 320 }, entrada: "fenda",
+    fenda: { peca: 0, a: [56.2, 6.9], b: [73.8, 12.9], u: [17.7, 6.2], v: [-7.6, 18.7], borda: 0.9 }
   },
   ps4: {
-    sala: "hd", tela: SAGA_TV_HD, leds: [{ x: 648, y: 355, w: 2.4, h: 26, forma: "barra", rot: 9 }], led2: { x: 460, y: 340 },
+    sala: "hd", movel: "rackHd",
+    pecas: [{ f: "tvhd", x: 215, y: 96, w: 400, sombra: [50, 98, 24, 2.4] }, { f: "ps4", x: 588, y: 280, w: 292, sombra: [58, 90, 42, 11] }],
+    tela: { peca: 0, q: SAGA_Q_HD, r: 0.004, tipo: "plana" },
+    leds: [{ peca: 1, a: [33.6, 44.6], b: [72, 23.2], t: 2.2, forma: "barra" }], led2: { peca: 0, p: [92.7, 86.3] },
     caixa: { x: 300, y: 282 }, entrada: "fenda",
-    alvo: { x: 662, y: 384.2, s: 0.8 }
+    fenda: { peca: 1, a: [33.5, 46.5], b: [53, 85], u: [13.6, 26.8], v: [17.3, -10.6] }
   },
   ps5: {
-    sala: "hd", tela: { x: 196, y: 92, w: 456, h: 256, r: 2, tipo: "plana" },
-    leds: [{ x: 722.3, y: 276, w: 2.6, h: 200, forma: "barra" }, { x: 749.8, y: 276, w: 2.6, h: 200, forma: "barra" }],
-    led2: { x: 424, y: 354 },
-    caixa: { x: 290, y: 296 }, entrada: "fendaV",
-    alvo: { x: 770.5, y: 346, s: 0.8 }
+    sala: "hd", movel: "rackHd",
+    pecas: [{ f: "tvhd", x: 190, y: 96, w: 400, sombra: [50, 98, 24, 2.4] }, { f: "ps5", x: 664, y: 92, w: 140, sombra: [50, 98, 40, 2.4] }],
+    tela: { peca: 0, q: SAGA_Q_HD, r: 0.004, tipo: "plana" },
+    leds: [{ peca: 1, a: [37.4, 8], b: [37.4, 76], t: 1.6, forma: "barra" }, { peca: 1, a: [69, 8], b: [69, 76], t: 1.6, forma: "barra" }],
+    led2: { peca: 0, p: [92.7, 86.3] },
+    caixa: { x: 290, y: 296 }, entrada: "fendaZ",
+    fenda: { peca: 1, a: [69.6, 54], b: [69.6, 80], u: [3, 0], v: [0, 26] }
   }
 };
+
+/* ---------- geometria derivada (unidades da cena) ---------- */
+const sagaAdd = (a, b, s = 1) => [a[0] + b[0] * s, a[1] + b[1] * s];
+const sagaMix = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+const sagaLen = (v) => Math.hypot(v[0], v[1]) || 1;
+
+function sagaGeo(ap, midia) {
+  const pecas = ap.pecas.map((pc) => { const d = SAGA_FOTOS[pc.f]; return Object.assign({}, pc, { h: pc.w * d[1] / d[0] }); });
+  const pt = (i, f) => [pecas[i].x + f[0] / 100 * pecas[i].w, pecas[i].y + f[1] / 100 * pecas[i].h];
+  const vec = (i, f) => [f[0] / 100 * pecas[i].w, f[1] / 100 * pecas[i].h];
+  const q = ap.tela.q.map((f) => pt(ap.tela.peca, f));
+  const xs = q.map((p) => p[0]), ys = q.map((p) => p[1]);
+  const x0 = Math.min.apply(null, xs), y0 = Math.min.apply(null, ys);
+  const t = { x: x0, y: y0, w: Math.max.apply(null, xs) - x0, h: Math.max.apply(null, ys) - y0, r: ap.tela.r || 0, tipo: ap.tela.tipo };
+  const caixaB = [[t.x, t.y], [t.x + t.w, t.y], [t.x + t.w, t.y + t.h], [t.x, t.y + t.h]];
+  const q2 = ap.tela2 ? ap.tela2.q.map((f) => pt(ap.tela2.peca, f)) : null;
+  const leds = (ap.leds || []).map((l) => {
+    if (l.a) {
+      const a = pt(l.peca, l.a), b = pt(l.peca, l.b);
+      return { x: (a[0] + b[0]) / 2, y: (a[1] + b[1]) / 2, w: sagaLen([b[0] - a[0], b[1] - a[1]]), h: l.t || 2, rot: Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI, forma: l.forma || "barra", cor: l.cor };
+    }
+    const p = pt(l.peca, l.p);
+    return { x: p[0], y: p[1], w: l.w || 4, h: l.h || 4, rot: 0, forma: l.forma || "ponto", cor: l.cor };
+  });
+  const led2 = ap.led2 ? pt(ap.led2.peca, ap.led2.p) : null;
+  const mw = midia.w, mh = midia.h;
+  const I = { tipo: ap.entrada, clip: "", fim: 0.7, some: true };
+
+  if (ap.entrada === "bandeja") {
+    const b = ap.bandeja, r0 = pt(b.peca, [b.r[0], b.r[1]]), r1 = pt(b.peca, [b.r[2], b.r[3]]);
+    const bw = r1[0] - r0[0], placa = r1[1] - r0[1];
+    const s = 0.86 * bw / 100, sy = 0.34;
+    I.bandeja = { x: r0[0], y: r0[1], w: bw, prof: b.prof, placa, cor: b.cor, s, sy, foto: b.peca };
+    I.c1 = [r0[0] + bw / 2, r0[1] + b.prof / 2];
+    I.c0 = [I.c1[0], I.c1[1] - 46];
+    I.M = [s * 100 / mw, 0, 0, s * sy * 100 / mh];
+    I.fim = 0.66;
+    I.pulso = { x: I.c1[0], y: r0[1] + 4, sx: 1, sy: 0.3, rot: 0 };
+  } else if (ap.entrada === "tampa") {
+    const tp = ap.tampa, c = pt(tp.peca, tp.c), R = vec(tp.peca, tp.r);
+    I.tampa = { x: c[0] - R[0], y: c[1] - R[1], w: R[0] * 2, h: R[1] * 2, foto: tp.peca };
+    I.c1 = [c[0], c[1] + 1.5];
+    I.c0 = [c[0], c[1] - 44];
+    I.M = [R[0] * 2 * 0.88 / mw, 0, 0, R[1] * 2 * 0.88 / mh];
+    I.fim = 0.67;
+    I.pulso = { x: c[0], y: c[1], sx: 1, sy: R[1] / R[0], rot: 0 };
+  } else {
+    const fd = ap.fenda, a = pt(fd.peca, fd.a), b = pt(fd.peca, fd.b), U = vec(fd.peca, fd.u), V = vec(fd.peca, fd.v);
+    const m = sagaMix(a, b, 0.5);
+    I.M = [U[0] / mw, U[1] / mw, V[0] / mh, V[1] / mh];
+    const ang = Math.atan2(b[1] - a[1], b[0] - a[0]);
+    I.pulso = { x: m[0], y: m[1], sx: 1, sy: 0.2, rot: ang * 180 / Math.PI };
+    if (ap.entrada === "fendaZ") {
+      I.c0 = m; I.c1 = m;
+      I.pulso = { x: m[0], y: m[1], sx: 0.14, sy: 1, rot: 0 };
+    } else {
+      const fica = fd.fica || 0;
+      I.c0 = sagaAdd(m, V, -0.58);
+      I.c1 = sagaAdd(m, V, fica ? 0.5 - fica : 0.62);
+      I.some = !fica;
+      const ab = [b[0] - a[0], b[1] - a[1]], L = sagaLen(ab), u = [ab[0] / L, ab[1] / L], n = [V[0] / sagaLen(V), V[1] / sagaLen(V)];
+      const e = L * (fd.borda || 0.14);
+      const A = sagaAdd(a, u, -e), B = sagaAdd(b, u, e);
+      const poli = [A, B, sagaAdd(B, n, -1400), sagaAdd(A, n, -1400)];
+      I.clip = "polygon(" + poli.map((p) => (p[0] / 10).toFixed(3) + "% " + (p[1] / 6).toFixed(3) + "%").join(",") + ")";
+    }
+  }
+  return { pecas, q, q2, t, caixaB, leds, led2, I };
+}
+
+/* homografia: retângulo W×H → quadrilátero d (TL, TR, BR, BL), como matrix3d */
+function sagaHomog(W, H, d) {
+  const x0 = d[0][0], y0 = d[0][1], x1 = d[1][0], y1 = d[1][1], x2 = d[2][0], y2 = d[2][1], x3 = d[3][0], y3 = d[3][1];
+  const dx1 = x1 - x2, dx2 = x3 - x2, dx3 = x0 - x1 + x2 - x3, dy1 = y1 - y2, dy2 = y3 - y2, dy3 = y0 - y1 + y2 - y3;
+  let g = 0, h = 0;
+  const det = dx1 * dy2 - dx2 * dy1;
+  if (Math.abs(det) > 1e-9 && (Math.abs(dx3) > 1e-6 || Math.abs(dy3) > 1e-6)) {
+    g = (dx3 * dy2 - dx2 * dy3) / det;
+    h = (dx1 * dy3 - dx3 * dy1) / det;
+  }
+  const a = x1 - x0 + g * x1, b = x3 - x0 + h * x3, e = y1 - y0 + g * y1, f = y3 - y0 + h * y3;
+  const n = (v) => (Math.abs(v) < 1e-12 ? "0" : v.toFixed(9));
+  return `matrix3d(${n(a / W)},${n(e / W)},0,${n(g / W)},${n(b / H)},${n(f / H)},0,${n(h / H)},0,0,1,0,${x0.toFixed(2)},${y0.toFixed(2)},0,1)`;
+}
 
 /* ---------- prédios das janelas (determinístico, igual no SSR) ---------- */
 function sagaPredios(x0, x1, base, seed, hMin, hMax) {
@@ -155,30 +283,34 @@ function SagaDefs({ P }) {
       <linearGradient id={P + "ceu90"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#0a0d26" /><stop offset=".7" stopColor="#2b1c46" /><stop offset="1" stopColor="#5b2c3e" /></linearGradient>
       <linearGradient id={P + "ceu00"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#050a1c" /><stop offset="1" stopColor="#173158" /></linearGradient>
       <linearGradient id={P + "ceuHd"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#03040a" /><stop offset=".75" stopColor="#0e1630" /><stop offset="1" stopColor="#1f1d38" /></linearGradient>
-      <linearGradient id={P + "madeira"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#9a6a40" /><stop offset="1" stopColor="#6b4426" /></linearGradient>
       <linearGradient id={P + "madeiraEsc"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#6a4225" /><stop offset="1" stopColor="#3d2414" /></linearGradient>
       <linearGradient id={P + "mesa00"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#5a3c27" /><stop offset=".25" stopColor="#7a5338" /><stop offset="1" stopColor="#3a2518" /></linearGradient>
       <linearGradient id={P + "mesaHd"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#1d1510" /><stop offset=".3" stopColor="#2f2219" /><stop offset="1" stopColor="#120c08" /></linearGradient>
-      <linearGradient id={P + "armario00"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#262a33" /><stop offset="1" stopColor="#14161b" /></linearGradient>
       <linearGradient id={P + "rackHd"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#1c1612" /><stop offset="1" stopColor="#0c0907" /></linearGradient>
-      <linearGradient id={P + "bege"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ece5cf" /><stop offset="1" stopColor="#cdc3a3" /></linearGradient>
-      <linearGradient id={P + "cinzaPs1"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#d9d6d0" /><stop offset="1" stopColor="#b9b5ae" /></linearGradient>
-      <linearGradient id={P + "preto"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#2e3138" /><stop offset="1" stopColor="#0c0d10" /></linearGradient>
-      <linearGradient id={P + "pretoBrilho"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#3b3f48" /><stop offset=".45" stopColor="#15171b" /><stop offset="1" stopColor="#08090b" /></linearGradient>
-      <linearGradient id={P + "tvCrt"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#3b3c42" /><stop offset="1" stopColor="#1a1b1f" /></linearGradient>
-      <linearGradient id={P + "branco"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ffffff" /><stop offset="1" stopColor="#d3d7de" /></linearGradient>
-      <linearGradient id={P + "prata"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#dfe3e8" /><stop offset=".5" stopColor="#b5bbc4" /><stop offset="1" stopColor="#8c929b" /></linearGradient>
-      <linearGradient id={P + "roxo"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#7b6cc4" /><stop offset="1" stopColor="#4a3c92" /></linearGradient>
-      <radialGradient id={P + "vidroCrt"} cx=".42" cy=".38" r=".8"><stop offset="0" stopColor="#2c3633" /><stop offset=".7" stopColor="#141a19" /><stop offset="1" stopColor="#070909" /></radialGradient>
-      <linearGradient id={P + "vidroPlano"} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#1a1d24" /><stop offset=".5" stopColor="#0a0b0e" /><stop offset="1" stopColor="#040405" /></linearGradient>
       <radialGradient id={P + "luzAc"}><stop offset="0" style={ac} stopOpacity=".5" /><stop offset=".45" style={ac} stopOpacity=".16" /><stop offset="1" style={ac} stopOpacity="0" /></radialGradient>
-      <radialGradient id={P + "luzAc2"}><stop offset="0" style={ac2} stopOpacity=".35" /><stop offset="1" style={ac2} stopOpacity="0" /></radialGradient>
       <radialGradient id={P + "luzQuente"}><stop offset="0" stopColor="#ffd9a0" stopOpacity=".55" /><stop offset=".5" stopColor="#ffb870" stopOpacity=".14" /><stop offset="1" stopColor="#ffb870" stopOpacity="0" /></radialGradient>
       <radialGradient id={P + "sombra"}><stop offset="0" stopColor="#000" stopOpacity=".6" /><stop offset="1" stopColor="#000" stopOpacity="0" /></radialGradient>
       <linearGradient id={P + "facho"} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#cfe0ff" stopOpacity=".13" /><stop offset="1" stopColor="#cfe0ff" stopOpacity="0" /></linearGradient>
       <linearGradient id={P + "fita"} x1="0" y1="0" x2="1" y2="0"><stop offset="0" style={ac} stopOpacity="0" /><stop offset=".15" style={ac} stopOpacity="1" /><stop offset=".85" style={ac} stopOpacity="1" /><stop offset="1" style={ac} stopOpacity="0" /></linearGradient>
       <linearGradient id={P + "reflexo"} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#fff" stopOpacity=".09" /><stop offset=".5" stopColor="#fff" stopOpacity=".02" /><stop offset="1" stopColor="#fff" stopOpacity="0" /></linearGradient>
       <linearGradient id={P + "cortina"} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#5a1f17" /><stop offset=".3" stopColor="#7e3424" /><stop offset=".55" stopColor="#4c1a12" /><stop offset=".8" stopColor="#74301f" /><stop offset="1" stopColor="#4a1810" /></linearGradient>
+      <linearGradient id={P + "tampo90"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#5e3a22" /><stop offset=".55" stopColor="#8a5a36" /><stop offset="1" stopColor="#a8744a" /></linearGradient>
+      <linearGradient id={P + "borda90"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#7a4c2b" /><stop offset=".25" stopColor="#5a361d" /><stop offset="1" stopColor="#2e1a0d" /></linearGradient>
+      <radialGradient id={P + "luzTampo"} cx=".5" cy=".1" r=".75"><stop offset="0" stopColor="#ffe2b8" stopOpacity=".28" /><stop offset=".6" stopColor="#ffd6a0" stopOpacity=".06" /><stop offset="1" stopColor="#000" stopOpacity=".25" /></radialGradient>
+      <linearGradient id={P + "ladoEsc"} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#000" stopOpacity=".4" /><stop offset="1" stopColor="#000" stopOpacity="0" /></linearGradient>
+      <linearGradient id={P + "ladoLuz"} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#000" stopOpacity=".45" /><stop offset=".35" stopColor="#fff" stopOpacity=".04" /><stop offset=".65" stopColor="#fff" stopOpacity=".02" /><stop offset="1" stopColor="#000" stopOpacity=".5" /></linearGradient>
+      <linearGradient id={P + "tampo00"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#1a1d24" /><stop offset=".6" stopColor="#2d323c" /><stop offset="1" stopColor="#3c424e" /></linearGradient>
+      <linearGradient id={P + "nicho"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#000" stopOpacity=".9" /><stop offset="1" stopColor="#000" stopOpacity="0" /></linearGradient>
+      <linearGradient id={P + "vidroFume"} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#9fb2d6" stopOpacity=".1" /><stop offset=".4" stopColor="#9fb2d6" stopOpacity=".02" /><stop offset="1" stopColor="#000" stopOpacity=".3" /></linearGradient>
+      <linearGradient id={P + "tampoHd"} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#24190f" /><stop offset="1" stopColor="#4a3524" /></linearGradient>
+      <radialGradient id={P + "vinhetaMesa"} cx=".46" cy=".25" r=".85"><stop offset=".45" stopColor="#000" stopOpacity="0" /><stop offset="1" stopColor="#000" stopOpacity=".6" /></radialGradient>
+      <linearGradient id={P + "canecaLuz"} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#000" stopOpacity=".35" /><stop offset=".3" stopColor="#fff" stopOpacity=".25" /><stop offset=".55" stopColor="#fff" stopOpacity="0" /><stop offset="1" stopColor="#000" stopOpacity=".45" /></linearGradient>
+      <linearGradient id={P + "lataLuz"} x1="0" y1="0" x2="1" y2="0"><stop offset="0" stopColor="#000" stopOpacity=".45" /><stop offset=".22" stopColor="#fff" stopOpacity=".35" /><stop offset=".4" stopColor="#fff" stopOpacity="0" /><stop offset="1" stopColor="#000" stopOpacity=".55" /></linearGradient>
+      <radialGradient id={P + "tapeteLuz"} cx=".5" cy=".2" r=".8"><stop offset="0" stopColor="#fff" stopOpacity=".08" /><stop offset="1" stopColor="#000" stopOpacity=".55" /></radialGradient>
+      <clipPath id={P + "clipTampo90"}><path d="M124 384 L876 384 L912 452 L88 452 Z" /></clipPath>
+      <clipPath id={P + "clipTampoRack"}><path d="M292 360 L708 360 L726 382 L274 382 Z" /></clipPath>
+      <clipPath id={P + "clipTampoHd"}><path d="M160 398 L840 398 L858 414 L142 414 Z" /></clipPath>
+      <clipPath id={P + "clipMesa"}><rect y="292" width="1000" height="308" /></clipPath>
       <clipPath id={P + "jan90"}><rect x="62" y="82" width="156" height="200" /></clipPath>
       <clipPath id={P + "jan00"}><rect x="62" y="86" width="156" height="210" /></clipPath>
       <clipPath id={P + "janHd"}><rect x="22" y="40" width="148" height="430" /></clipPath>
@@ -327,442 +459,170 @@ function SagaSalaHd({ P, tv }) {
   );
 }
 
-/* ---------- móveis ---------- */
-function SagaMovel({ P, ap }) {
-  const u = (n) => `url(#${P}${n})`;
-  if (ap === "pc") return (
-    <g>
-      <ellipse cx="500" cy="528" rx="420" ry="16" fill={u("sombra")} />
-      <path d="M130 376 L870 376 L892 398 L108 398 Z" fill={u("madeira")} />
-      <path d="M130 376 L870 376" stroke="#c08c5c" strokeWidth="1.5" opacity=".7" />
-      <rect x="108" y="398" width="784" height="13" fill="#4a2c17" />
-      <rect x="130" y="411" width="24" height="111" fill="#55331c" />
-      <rect x="690" y="411" width="182" height="111" fill={u("madeiraEsc")} />
-      {[0, 1, 2].map((i) => (
-        <g key={i}><rect x="700" y={418 + i * 34} width="162" height="28" rx="2" fill="#5e3a20" stroke="#2c180b" /><rect x="770" y={430 + i * 34} width="22" height="4" rx="2" fill="#c9a26a" /></g>
-      ))}
-    </g>
-  );
-  if (ap === "ps1") return (
-    <g>
-      <ellipse cx="500" cy="522" rx="260" ry="12" fill={u("sombra")} />
-      <path d="M282 368 L718 368 L732 384 L268 384 Z" fill={u("madeira")} />
-      <rect x="268" y="384" width="464" height="10" fill="#4a2c17" />
-      <rect x="278" y="394" width="444" height="122" fill={u("madeiraEsc")} />
-      <rect x="290" y="404" width="204" height="102" rx="3" fill="#5a3820" stroke="#2c180b" strokeWidth="2" />
-      <rect x="506" y="404" width="204" height="102" rx="3" fill="#5a3820" stroke="#2c180b" strokeWidth="2" />
-      <rect x="304" y="416" width="176" height="78" rx="2" fill="none" stroke="#7a5030" opacity=".5" />
-      <rect x="520" y="416" width="176" height="78" rx="2" fill="none" stroke="#7a5030" opacity=".5" />
-      <circle cx="482" cy="455" r="4" fill="#d6b27a" /><circle cx="518" cy="455" r="4" fill="#d6b27a" />
-      <rect x="288" y="516" width="14" height="7" fill="#2c180b" /><rect x="698" y="516" width="14" height="7" fill="#2c180b" />
-    </g>
-  );
-  if (ap === "ps2") return (
-    <g>
-      <ellipse cx="500" cy="524" rx="280" ry="12" fill={u("sombra")} />
-      <path d="M262 368 L738 368 L752 386 L248 386 Z" fill="#30343d" />
-      <path d="M262 368 L738 368" stroke="#5a606c" strokeWidth="1.5" />
-      <rect x="248" y="386" width="504" height="134" fill={u("armario00")} />
-      <rect x="270" y="400" width="460" height="108" rx="3" fill="#07080a" />
-      <rect x="270" y="400" width="460" height="18" fill="#000" opacity=".5" />
-      {Array.from({ length: 8 }).map((_, i) => <rect key={i} x={280 + i * 9} y={446 + (i % 3) * 2} width="7.5" height={58 - (i % 3) * 2} fill={["#1d2a6b", "#0d0d10", "#1d2a6b", "#2b2e35", "#14306a", "#0d0d10", "#3a3d45", "#1d2a6b"][i]} stroke="#000" strokeWidth=".5" />)}
-      <rect x="258" y="520" width="18" height="6" fill="#9aa0a8" /><rect x="724" y="520" width="18" height="6" fill="#9aa0a8" />
-      <rect x="664" y="458" width="40" height="46" rx="2" fill="#121419" />
-      <circle cx="684" cy="482" r="12" fill="#1c1f26" stroke="#2b2f38" />
-    </g>
-  );
-  if (ap === "gba" || ap === "psp") return (
-    <g>
-      <rect y="322" width="1000" height="278" fill={u("mesa00")} />
-      <rect y="322" width="1000" height="4" fill="#a87a52" opacity=".7" />
-      {[0, 1, 2, 3].map((i) => <path key={i} d={`M0 ${380 + i * 52} Q300 ${360 + i * 52} 520 ${392 + i * 52} T1000 ${376 + i * 52}`} stroke="#2a1a10" strokeWidth="2" fill="none" opacity=".25" />)}
-      <ellipse cx="450" cy="440" rx="380" ry="150" fill={u("luzQuente")} opacity=".7" />
-      {/* lata de refrigerante e caderno */}
-      <ellipse cx="205" cy="362" rx="22" ry="6" fill="#000" opacity=".35" />
-      <rect x="186" y="296" width="38" height="64" rx="5" style={{ fill: "var(--gt-ac2, #c33)" }} />
-      <rect x="186" y="296" width="38" height="64" rx="5" fill="#000" opacity=".25" />
-      <rect x="190" y="300" width="8" height="56" fill="#fff" opacity=".18" />
-      <ellipse cx="205" cy="297" rx="19" ry="5" fill="#c9ced6" />
-      <g transform="rotate(-12 170 480)">
-        <rect x="96" y="420" width="150" height="112" rx="3" fill="#e9e3d2" />
-        {[0, 1, 2, 3, 4, 5, 6].map((i) => <line key={i} x1="104" y1={436 + i * 13} x2="238" y2={436 + i * 13} stroke="#8fa7c7" strokeWidth="1" />)}
-        <rect x="96" y="420" width="10" height="112" fill="#c94a4a" opacity=".7" />
-        <rect x="150" y="396" width="8" height="96" rx="2" fill="#e9b93a" transform="rotate(64 154 444)" />
-      </g>
-    </g>
-  );
-  if (ap === "ds") return (
-    <g>
-      <rect y="300" width="1000" height="300" fill={u("mesaHd")} />
-      <rect y="300" width="1000" height="3" fill="#6a4c36" opacity=".8" />
-      <ellipse cx="450" cy="420" rx="420" ry="140" fill={u("luzAc")} opacity=".35" />
-      <rect y="306" width="1000" height="40" fill="#fff" opacity=".025" />
-      {/* caneca e stylus */}
-      <ellipse cx="190" cy="372" rx="44" ry="10" fill="#000" opacity=".4" />
-      <ellipse cx="190" cy="366" rx="40" ry="9" fill="#3a2a20" />
-      <rect x="164" y="300" width="52" height="64" rx="6" fill="#e6e1d8" />
-      <ellipse cx="190" cy="301" rx="26" ry="6" fill="#3b2216" />
-      <path d="M216 316 Q240 318 238 336 Q236 352 216 350" stroke="#e6e1d8" strokeWidth="7" fill="none" />
-      <rect x="640" y="470" width="110" height="4" rx="2" fill="#cfd3da" transform="rotate(-18 695 472)" />
-    </g>
-  );
-  /* ps3, x360, ps4, ps5: rack baixo com fita de LED */
-  return (
-    <g>
-      <ellipse cx="500" cy="552" rx="420" ry="30" fill={u("luzAc")} opacity=".8" />
-      <path d="M170 402 L830 402 L846 416 L154 416 Z" fill="#3b2b20" />
-      <path d="M170 402 L830 402" stroke="#6a4f3c" strokeWidth="1.5" />
-      <rect x="154" y="416" width="692" height="100" fill={u("rackHd")} />
-      <rect x="166" y="426" width="204" height="82" rx="2" fill="#1d1611" />
-      <rect x="630" y="426" width="204" height="82" rx="2" fill="#1d1611" />
-      {Array.from({ length: 16 }).map((_, i) => <rect key={i} x={172 + i * 12.4} y="430" width="2" height="74" fill="#000" opacity=".35" />)}
-      {Array.from({ length: 16 }).map((_, i) => <rect key={"b" + i} x={636 + i * 12.4} y="430" width="2" height="74" fill="#000" opacity=".35" />)}
-      <rect x="380" y="426" width="240" height="82" rx="2" fill="#050506" />
-      <rect x="380" y="426" width="240" height="14" fill="#000" opacity=".6" />
-      <rect x="396" y="476" width="128" height="30" rx="2" fill="#16171a" stroke="#26282d" />
-      <rect x="404" y="484" width="44" height="10" rx="1.5" fill="#05080a" />
-      <text x="426" y="492" textAnchor="middle" fontFamily="monospace" fontSize="7" style={{ fill: "var(--gt-ac, #2ec5ff)" }} opacity=".8">HDMI 1</text>
-      <circle cx="500" cy="490" r="9" fill="#202227" stroke="#33363d" /><circle cx="500" cy="490" r="5" fill="#2a2d33" />
-      {Array.from({ length: 7 }).map((_, i) => <rect key={i} x={544 + i * 9} y={452 + (i % 2) * 3} width="7.5" height={54 - (i % 2) * 3} fill={["#1f4fa8", "#0f3a8a", "#1f4fa8", "#7a1e1e", "#0f3a8a", "#2a5fc0", "#1f4fa8"][i]} stroke="#000" strokeWidth=".5" />)}
-      <rect x="168" y="516" width="664" height="4" fill={u("fita")} />
-      <rect x="176" y="520" width="6" height="18" fill="#3a3c42" /><rect x="818" y="520" width="6" height="18" fill="#3a3c42" />
-    </g>
-  );
-}
-
-/* ---------- controles ---------- */
-function SagaControle({ tipo, x, y }) {
-  const corpo = { ps1: "#c4c1bb", ps2: "#18191d", ps3: "#16171b", ps4: "#1b1d22", x360: "#eef0f3", ps5: "#f4f5f7" }[tipo] || "#1b1d22";
-  const det = { ps1: "#8e8a83", ps2: "#2c2e35", ps3: "#2c2e35", ps4: "#30333b", x360: "#c3c7cd", ps5: "#202227" }[tipo] || "#2c2e35";
-  const analog = tipo !== "ps1";
-  return (
-    <g transform={`translate(${x} ${y})`}>
-      <ellipse cx="0" cy="24" rx="68" ry="8" fill="#000" opacity=".4" />
-      <path d="M-52 -10 Q-40 -20 0 -18 Q40 -20 52 -10 Q70 18 58 28 Q46 34 38 20 L-38 20 Q-46 34 -58 28 Q-70 18 -52 -10 Z" fill={corpo} />
-      {tipo === "ps5" && <path d="M-20 -18 L20 -18 L16 14 L-16 14 Z" fill="#202227" />}
-      {tipo === "ps4" && <rect x="-18" y="-17" width="36" height="16" rx="3" fill="#25282f" stroke="#3a3e47" />}
-      {tipo === "ps4" && <rect x="-14" y="-20" width="28" height="2.5" rx="1" style={{ fill: "var(--gt-ac, #2ec5ff)" }} opacity=".9" />}
-      <rect x="-42" y="-6" width="16" height="5" rx="1" fill={det} /><rect x="-36.5" y="-11.5" width="5" height="16" rx="1" fill={det} />
-      {tipo === "x360" ? (
-        <g><circle cx="36" cy="-10" r="3.2" fill="#e8b92b" /><circle cx="43" cy="-4" r="3.2" fill="#d6463c" /><circle cx="29" cy="-4" r="3.2" fill="#3c76d6" /><circle cx="36" cy="2" r="3.2" fill="#4caf50" /><circle cx="0" cy="-8" r="4.5" fill="#9fb69a" /></g>
-      ) : (
-        <g><circle cx="36" cy="-11" r="3" fill={det} /><circle cx="43" cy="-5" r="3" fill={det} /><circle cx="29" cy="-5" r="3" fill={det} /><circle cx="36" cy="1" r="3" fill={det} /></g>
-      )}
-      {analog && <g><circle cx="-14" cy="8" r="7" fill={det} /><circle cx="14" cy="8" r="7" fill={det} /><circle cx="-14" cy="8" r="4" fill="#000" opacity=".3" /><circle cx="14" cy="8" r="4" fill="#000" opacity=".3" /></g>}
-      {!analog && <g><rect x="-10" y="-6" width="7" height="3" rx="1.5" fill={det} /><rect x="3" y="-6" width="7" height="3" rx="1.5" fill={det} /></g>}
-    </g>
-  );
-}
-
-function SagaTvPlana({ P, t, base }) {
-  const u = (n) => `url(#${P}${n})`;
-  const cx = t.x + t.w / 2, fundo = t.y + t.h + 12;
-  return (
-    <g>
-      <rect x={cx - 18} y={fundo} width="36" height={base - fundo - 6} fill="#16181c" />
-      <path d={`M${cx - 86} ${base} L${cx + 86} ${base} L${cx + 74} ${base - 7} L${cx - 74} ${base - 7} Z`} fill="#24272d" />
-      <rect x={t.x - 10} y={t.y - 10} width={t.w + 20} height={t.h + 22} rx="6" fill="#0b0c0f" stroke="#2a2d33" strokeWidth="1.5" />
-      <rect x={t.x} y={t.y} width={t.w} height={t.h} fill={u("vidroPlano")} />
-      <path d={`M${t.x} ${t.y} L${t.x + t.w * 0.55} ${t.y} L${t.x + t.w * 0.18} ${t.y + t.h} L${t.x} ${t.y + t.h} Z`} fill={u("reflexo")} />
-      <rect x={cx - 14} y={t.y + t.h + 3} width="28" height="3" rx="1.5" fill="#2a2d33" />
-      <circle cx={cx} cy={t.y + t.h + 6} r="1.8" fill="#b3261e" />
-    </g>
-  );
-}
-
-/* ---------- aparelhos ---------- */
-function SagaArte({ P, ap }) {
-  const u = (n) => `url(#${P}${n})`;
-  if (ap === "pc") {
-    const teclas = [];
-    for (let r = 0; r < 4; r++) for (let c = 0; c < 17; c++) teclas.push(<rect key={r + "-" + c} x={338 - r * 3 + c * 16.2 + r * 0.4} y={405 + r * 8.2} width={c === 16 && r === 1 ? 10 : 13} height="6" rx="1.2" fill="#dcd3b8" stroke="#a89e7e" strokeWidth=".6" />);
-    return (
-      <g>
-        {/* caixas de som */}
-        <ellipse cx="314" cy="380" rx="34" ry="5" fill={u("sombra")} />
-        <rect x="292" y="292" width="44" height="88" rx="6" fill={u("bege")} stroke="#a89e7e" />
-        <circle cx="314" cy="302" r="5" fill="#6d6550" />
-        <circle cx="314" cy="338" r="15" fill="#7d7458" /><circle cx="314" cy="338" r="9" fill="#5a5340" /><circle cx="314" cy="338" r="3" fill="#3a3528" />
-        {/* monitor CRT bege */}
-        <ellipse cx="480" cy="384" rx="160" ry="9" fill={u("sombra")} />
-        <path d="M372 114 L588 114 L566 84 Q480 72 394 84 Z" fill="#b8ae8f" />
-        {[0, 1, 2, 3, 4, 5, 6].map((i) => <line key={i} x1={420 + i * 20} y1="89" x2={417 + i * 20} y2="106" stroke="#958b6b" strokeWidth="3" strokeLinecap="round" />)}
-        <path d="M440 360 L520 360 L532 380 L428 380 Z" fill="#c4ba9a" />
-        <ellipse cx="480" cy="380" rx="64" ry="6" fill="#b5ab8b" />
-        <rect x="345" y="112" width="270" height="252" rx="16" fill={u("bege")} />
-        <rect x="346" y="113" width="268" height="250" rx="15" fill="none" stroke="#fffbea" strokeOpacity=".55" strokeWidth="2" />
-        <rect x="364" y="132" width="232" height="181" rx="18" fill="#a2977a" />
-        <rect x="368" y="136" width="224" height="173" rx="16" fill="#1a1d1b" />
-        <rect x="378" y="146" width="204" height="153" rx="12" fill={u("vidroCrt")} />
-        <path d="M388 156 Q440 148 492 151 Q430 168 392 214 Z" fill="#fff" opacity=".06" />
-        <rect x="452" y="324" width="56" height="10" rx="2" fill="#8d8466" />
-        <rect x="372" y="330" width="44" height="7" rx="3.5" fill="#b5ab8b" />
-        <circle cx="530" cy="338" r="4" fill="#b5ab8b" /><circle cx="546" cy="338" r="4" fill="#b5ab8b" />
-        <rect x="584" y="331" width="18" height="13" rx="3" fill="#cfc5a5" stroke="#9c9272" />
-        <circle cx="572" cy="338" r="2.6" fill="#ff7a2a" />
-        {/* gabinete torre */}
-        <ellipse cx="695" cy="386" rx="86" ry="7" fill={u("sombra")} />
-        <path d="M630 172 L760 172 L750 160 L640 160 Z" fill="#d8cfb3" />
-        <rect x="630" y="170" width="130" height="214" rx="5" fill={u("bege")} stroke="#a89e7e" strokeWidth="1" />
-        <rect x="643" y="196" width="104" height="32" rx="2" fill="#d2c9ab" stroke="#a89e7e" />
-        <rect x="647" y="214" width="100" height="10" fill="#1d1a14" />
-        <rect x="726" y="201" width="14" height="6" rx="1.5" fill="#b4aa8a" stroke="#958b6b" strokeWidth=".6" />
-        <circle cx="715" cy="204" r="1.8" fill="#6b5f3f" />
-        <circle cx="654" cy="204" r="2.4" fill="#5d5640" /><circle cx="664" cy="204" r="2.4" fill="#8a8160" />
-        <rect x="643" y="234" width="104" height="24" rx="2" fill="#d8cfb2" stroke="#b0a686" />
-        <rect x="660" y="268" width="72" height="20" rx="2" fill="#d0c7a9" stroke="#a89e7e" />
-        <rect x="668" y="277" width="48" height="3.5" rx="1" fill="#3a352a" />
-        <rect x="720" y="281" width="8" height="4" fill="#b3a989" />
-        <rect x="648" y="300" width="38" height="20" rx="2" fill="#151310" />
-        <text x="667" y="315.5" textAnchor="middle" fontFamily="monospace" fontSize="14" fontWeight="700" fill="#ff3b2f" opacity=".9">66</text>
-        <circle cx="668" cy="330" r="3" fill="#3d4a33" /><circle cx="680" cy="330" r="3" fill="#4a3d26" />
-        <rect x="700" y="300" width="46" height="26" rx="4" fill="#cdc3a2" stroke="#9c9272" />
-        <rect x="712" y="334" width="22" height="8" rx="2" fill="#c0b696" stroke="#9c9272" strokeWidth=".6" />
-        <circle cx="738" cy="356" r="5" fill="#b4aa8a" stroke="#8d8466" />
-        {[0, 1, 2, 3, 4].map((i) => <rect key={i} x="646" y={350 + i * 6} width="60" height="2.5" rx="1" fill="#a99f7f" />)}
-        {/* teclado e mouse */}
-        <path d="M470 402 Q480 392 520 386" stroke="#6d6550" strokeWidth="2" fill="none" />
-        <path d="M332 400 L606 400 L622 440 L316 440 Z" fill={u("bege")} stroke="#a89e7e" />
-        {teclas}
-        <path d="M672 404 C672 392 690 394 700 384" stroke="#6d6550" strokeWidth="2" fill="none" />
-        <ellipse cx="672" cy="424" rx="14" ry="19" fill={u("bege")} stroke="#a89e7e" />
-        <line x1="672" y1="406" x2="672" y2="418" stroke="#a89e7e" />
-        {/* caneca */}
-        <rect x="792" y="350" width="28" height="30" rx="3" fill="#c94a3a" />
-        <path d="M820 356 Q832 358 830 366 Q828 374 820 372" stroke="#c94a3a" strokeWidth="4" fill="none" />
-        <rect x="798" y="336" width="3" height="18" fill="#e9b93a" transform="rotate(-10 799 345)" /><rect x="808" y="332" width="3" height="20" fill="#3c76d6" transform="rotate(8 809 342)" />
-      </g>
-    );
+/* ---------- móveis (nítidos, com luz suave; a sala atrás fica desfocada) ---------- */
+function SagaVeios({ x0, x1, y0, y1, n = 7, cor = "#000", op = 0.12, seed = 3 }) {
+  let s = seed;
+  const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  const out = [];
+  for (let i = 0; i < n; i++) {
+    const y = y0 + (y1 - y0) * (i + 0.3 + rnd() * 0.4) / n;
+    const a = (rnd() - 0.5) * (y1 - y0) / n * 0.8;
+    out.push(<path key={i} d={`M${x0} ${y.toFixed(1)} C${x0 + (x1 - x0) * 0.3} ${(y + a).toFixed(1)} ${x0 + (x1 - x0) * 0.65} ${(y - a).toFixed(1)} ${x1} ${(y + a * 0.5).toFixed(1)}`} stroke={cor} strokeWidth={0.8 + rnd() * 1.2} fill="none" opacity={op * (0.5 + rnd())} />);
   }
-  if (ap === "ps1") return (
-    <g>
-      {/* TV CRT com antena */}
-      <ellipse cx="500" cy="372" rx="200" ry="8" fill={u("sombra")} />
-      <path d="M480 68 L412 10" stroke="#9aa0a8" strokeWidth="3" /><path d="M520 68 L598 16" stroke="#9aa0a8" strokeWidth="3" />
-      <circle cx="412" cy="10" r="4" fill="#c9ced6" /><circle cx="598" cy="16" r="4" fill="#c9ced6" />
-      <ellipse cx="500" cy="70" rx="34" ry="9" fill="#18191c" />
-      <path d="M335 94 L665 94 L640 72 Q500 62 360 72 Z" fill="#1d1e22" />
-      <rect x="320" y="92" width="360" height="280" rx="18" fill={u("tvCrt")} />
-      <rect x="321" y="93" width="358" height="278" rx="17" fill="none" stroke="#5a5c63" strokeOpacity=".6" />
-      <rect x="340" y="106" width="320" height="244" rx="22" fill="#111215" />
-      <rect x="352" y="116" width="296" height="222" rx="16" fill={u("vidroCrt")} />
-      <path d="M362 126 Q430 118 500 121 Q420 140 366 196 Z" fill="#fff" opacity=".06" />
-      {Array.from({ length: 9 }).map((_, i) => <rect key={i} x={566 + i * 10} y="355" width="5" height="12" rx="2" fill="#0c0c0e" />)}
-      <rect x="380" y="356" width="18" height="8" rx="2" fill="#2c2d33" /><rect x="404" y="356" width="18" height="8" rx="2" fill="#2c2d33" /><rect x="428" y="356" width="18" height="8" rx="2" fill="#2c2d33" />
-      <circle cx="362" cy="361" r="2.6" fill="#c92a20" />
-      {/* PlayStation no chão */}
-      <path d="M700 560 C660 560 640 572 628 562" stroke="#7d7a74" strokeWidth="3" fill="none" />
-      <ellipse cx="500" cy="574" rx="156" ry="10" fill={u("sombra")} />
-      <path d="M386 490 L614 490 Q622 490 624 498 L634 544 L366 544 L376 498 Q378 490 386 490 Z" fill={u("cinzaPs1")} />
-      <path d="M386 490 L614 490" stroke="#f1f0ec" strokeWidth="1.6" />
-      <path d="M370 540 L630 540" stroke="#000" strokeOpacity=".08" strokeWidth="3" />
-      <path d="M366 544 L634 544 L634 565 Q634 571 628 571 L372 571 Q366 571 366 565 Z" fill="#a4a19b" />
-      <path d="M366 544 L634 544" stroke="#c9c6c0" strokeWidth="1" />
-      <rect x="384" y="550" width="36" height="3" rx="1" fill="#55524d" /><rect x="430" y="550" width="36" height="3" rx="1" fill="#55524d" />
-      <rect x="386" y="556" width="32" height="10" rx="3" fill="#6d6a64" /><rect x="432" y="556" width="32" height="10" rx="3" fill="#6d6a64" />
-      {Array.from({ length: 8 }).map((_, i) => <line key={i} x1={530 + i * 11} y1="552" x2={530 + i * 11} y2="565" stroke="#8d8a84" strokeWidth="3" strokeLinecap="round" />)}
-      <ellipse cx="548" cy="516" rx="70" ry="23" fill="#c4c0b9" stroke="#a9a59e" />
-      <ellipse cx="548" cy="516" rx="64" ry="20" fill="#2a2927" />
-      <ellipse cx="548" cy="518" rx="58" ry="16" fill="#1a1918" />
-      <ellipse cx="548" cy="516" rx="9" ry="3" fill="#8a8781" />
-      <ellipse cx="410" cy="500" rx="11" ry="3.8" fill="#a7a39d" stroke="#8e8a84" strokeWidth=".7" />
-      <ellipse cx="444" cy="500" rx="11" ry="3.8" fill="#a7a39d" stroke="#8e8a84" strokeWidth=".7" />
-      <ellipse cx="426" cy="522" rx="17" ry="6.5" fill="#b9b5af" stroke="#8e8a84" />
-      <ellipse cx="426" cy="521" rx="11" ry="3.5" fill="#cfccc6" />
-      <circle cx="427" cy="505" r="2.2" fill="#3c4a3a" />
-      <text x="398" y="538" fontFamily="Arial, sans-serif" fontSize="8.5" fontStyle="italic" fill="#8a867f">PlayStation</text>
-      <SagaControle tipo="ps1" x={712} y={566} />
-    </g>
-  );
-  if (ap === "ps2") return (
-    <g>
-      {/* TV CRT prata, tela plana */}
-      <ellipse cx="500" cy="372" rx="210" ry="8" fill={u("sombra")} />
-      <path d="M326 92 L674 92 L652 70 Q500 58 348 70 Z" fill="#3c3f45" />
-      <rect x="310" y="90" width="380" height="282" rx="12" fill={u("prata")} />
-      <rect x="311" y="91" width="378" height="280" rx="11" fill="none" stroke="#fff" strokeOpacity=".4" />
-      <rect x="330" y="100" width="340" height="250" rx="8" fill="#141519" />
-      <rect x="344" y="108" width="312" height="234" rx="10" fill={u("vidroCrt")} />
-      <path d="M354 118 Q430 110 504 113 Q420 132 358 190 Z" fill="#fff" opacity=".06" />
-      {Array.from({ length: 7 }).map((_, i) => <rect key={i} x="328" y={354 + i * 2.4} width="56" height="1.2" fill="#6c727b" />)}
-      {Array.from({ length: 7 }).map((_, i) => <rect key={"d" + i} x="572" y={354 + i * 2.4} width="56" height="1.2" fill="#6c727b" />)}
-      <rect x="476" y="356" width="48" height="8" rx="2" fill="#8c929b" />
-      <circle cx="642" cy="361" r="2.6" fill="#c92a20" />
-      {/* PlayStation 2 na estante */}
-      <path d="M368 414 L632 414 L640 432 L360 432 Z" fill="#1c1e23" />
-      {Array.from({ length: 6 }).map((_, i) => <path key={i} d={`M${368 - i * 1.4} ${416 + i * 2.8} L${632 + i * 1.4} ${416 + i * 2.8}`} stroke="#2c2f36" strokeWidth="1" />)}
-      <path d="M368 414 L632 414" stroke="#3a3d45" strokeWidth="1.2" />
-      <rect x="360" y="432" width="280" height="72" rx="3" fill={u("preto")} />
-      <rect x="360" y="432" width="280" height="1.4" fill="#3d4049" />
-      <rect x="370" y="438" width="200" height="26" rx="2" fill="#101115" />
-      <rect x="372" y="440" width="196" height="22" fill="#030304" />
-      <rect x="360" y="467" width="280" height="2.6" fill="#050506" />
-      {Array.from({ length: 4 }).map((_, i) => <rect key={i} x="360" y={472 + i * 7.5} width="280" height="1.1" fill="#26292f" />)}
-      <rect x="578" y="440" width="54" height="24" fill="#17181c" />
-      <rect x="582" y="442" width="46" height="9" rx="2" fill="#2a2c33" />
-      <rect x="582" y="454" width="46" height="8" rx="2" fill="#2a2c33" />
-      <path d="M612 455.5 L616 459.5 L608 459.5 Z" fill="#4a4d55" />
-      <circle cx="590" cy="458" r="1.8" fill="#2b5cff" opacity=".9" />
-      <rect x="374" y="474" width="40" height="14" rx="4" fill="#0a0a0c" stroke="#2b2d33" /><rect x="422" y="474" width="40" height="14" rx="4" fill="#0a0a0c" stroke="#2b2d33" />
-      <rect x="378" y="492" width="32" height="5" rx="1" fill="#050506" stroke="#25272d" strokeWidth=".6" /><rect x="426" y="492" width="32" height="5" rx="1" fill="#050506" stroke="#25272d" strokeWidth=".6" />
-      {Array.from({ length: 9 }).map((_, i) => <line key={i} x1={566 + i * 7.5} y1="472" x2={566 + i * 7.5} y2="500" stroke="#2f323a" strokeWidth="1.4" />)}
-      <text x="500" y="496" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="7.5" fontStyle="italic" fontWeight="700" fill="#3d63c9">PlayStation 2</text>
-      <path d="M394 484 C420 520 520 540 590 548" stroke="#121317" strokeWidth="3" fill="none" />
-      <SagaControle tipo="ps2" x={636} y={562} />
-    </g>
-  );
-  if (ap === "gba") return (
-    <g>
-      <ellipse cx="452" cy="514" rx="186" ry="16" fill={u("sombra")} />
-      <rect x="280" y="322" width="340" height="192" rx="86" ry="96" fill={u("roxo")} />
-      <path d="M306 380 Q312 336 380 326 L520 326 Q588 336 594 380" stroke="#a69ae0" strokeWidth="3" fill="none" opacity=".6" />
-      <path d="M300 354 Q306 328 354 322 L364 330 Q318 334 310 358 Z" fill="#a49bd2" />
-      <path d="M600 354 Q594 328 546 322 L536 330 Q582 334 590 358 Z" fill="#a49bd2" />
-      <rect x="384" y="318" width="132" height="6" rx="2" fill="#2a2240" />
-      <rect x="356" y="344" width="188" height="130" rx="10" fill="#34313f" />
-      <rect x="377" y="362" width="146" height="98" fill="#10150f" />
-      <rect x="377" y="362" width="146" height="98" fill={u("reflexo")} />
-      <circle cx="366" cy="467" r="2.6" fill="#2f3a2a" />
-      <rect x="312" y="394" width="20" height="50" rx="3" fill="#2a2733" /><rect x="297" y="409" width="50" height="20" rx="3" fill="#2a2733" />
-      <circle cx="322" cy="419" r="4" fill="#3a3646" />
-      <circle cx="588" cy="404" r="14" fill="#2a2733" /><circle cx="558" cy="428" r="14" fill="#2a2733" />
-      <circle cx="584" cy="400" r="6" fill="#fff" opacity=".08" /><circle cx="554" cy="424" r="6" fill="#fff" opacity=".08" />
-      <circle cx="330" cy="472" r="5" fill="#2a2733" /><circle cx="330" cy="490" r="5" fill="#2a2733" />
-      {Array.from({ length: 18 }).map((_, i) => <circle key={i} cx={568 + (i % 6) * 6} cy={462 + Math.floor(i / 6) * 7} r="1.7" fill="#2a2240" />)}
-      <path d="M296 470 Q330 512 450 514 Q570 512 604 470" stroke="#2c2363" strokeWidth="4" fill="none" opacity=".5" />
-    </g>
-  );
-  if (ap === "psp") return (
-    <g>
-      <ellipse cx="452" cy="506" rx="206" ry="14" fill={u("sombra")} />
-      <rect x="260" y="336" width="380" height="168" rx="84" fill={u("pretoBrilho")} />
-      <rect x="260.5" y="336.5" width="379" height="167" rx="83.5" fill="none" stroke="#7a808a" strokeOpacity=".55" />
-      <path d="M300 352 Q306 338 340 336 L346 341 Q312 344 304 358 Z" fill="#4a4f58" />
-      <path d="M600 352 Q594 338 560 336 L554 341 Q588 344 596 358 Z" fill="#4a4f58" />
-      <rect x="334" y="350" width="232" height="140" rx="4" fill="#040506" />
-      <rect x="341" y="358" width="218" height="124" fill="#090b0e" />
-      <rect x="341" y="358" width="218" height="124" fill={u("reflexo")} />
-      <rect x="295" y="376" width="14" height="16" rx="3" fill="#3a3e46" /><rect x="295" y="405" width="14" height="16" rx="3" fill="#3a3e46" />
-      <rect x="279" y="391" width="16" height="14" rx="3" fill="#3a3e46" /><rect x="309" y="391" width="16" height="14" rx="3" fill="#3a3e46" />
-      <circle cx="298" cy="450" r="13" fill="#25282e" stroke="#4a4f58" /><circle cx="298" cy="450" r="8" fill="#3d4149" />
-      <circle cx="600" cy="382" r="10" fill="#30333a" /><circle cx="620" cy="402" r="10" fill="#30333a" /><circle cx="600" cy="422" r="10" fill="#30333a" /><circle cx="580" cy="402" r="10" fill="#30333a" />
-      <path d="M600 377 L605 386 L595 386 Z" fill="none" stroke="#77c3a0" strokeWidth="1.4" />
-      <circle cx="620" cy="402" r="4" fill="none" stroke="#e28a8a" strokeWidth="1.4" />
-      <path d="M596 418 L604 426 M604 418 L596 426" stroke="#8fb0e8" strokeWidth="1.4" />
-      <rect x="576" y="398" width="8" height="8" fill="none" stroke="#d99ad0" strokeWidth="1.4" />
-      {[360, 384, 408, 470, 494, 522, 548].map((x, i) => <rect key={i} x={x} y="494" width="18" height="5" rx="2.5" fill="#3a3e46" />)}
-      <circle cx="286" cy="478" r="2.2" fill="#263326" /><circle cx="286" cy="488" r="2.2" fill="#2a2a2a" />
-    </g>
-  );
-  if (ap === "ds") return (
-    <g>
-      <ellipse cx="452" cy="470" rx="210" ry="14" fill={u("sombra")} />
-      <rect x="290" y="150" width="320" height="178" rx="16" fill={u("branco")} stroke="#c5cad2" />
-      <rect x="298" y="158" width="304" height="162" rx="11" fill="none" stroke="#000" strokeOpacity=".06" />
-      <rect x="369" y="177" width="162" height="124" rx="3" fill="#1b1d22" />
-      <rect x="375" y="183" width="150" height="112" fill="#0b0d10" />
-      <rect x="375" y="183" width="150" height="112" fill={u("reflexo")} />
-      {Array.from({ length: 6 }).map((_, i) => <circle key={i} cx={326 + (i % 2) * 8} cy={226 + Math.floor(i / 2) * 9} r="1.8" fill="#b4b9c1" />)}
-      {Array.from({ length: 6 }).map((_, i) => <circle key={"d" + i} cx={566 + (i % 2) * 8} cy={226 + Math.floor(i / 2) * 9} r="1.8" fill="#b4b9c1" />)}
-      <rect x="300" y="326" width="300" height="18" rx="9" fill={u("prata")} />
-      <rect x="330" y="327" width="240" height="16" rx="3" fill="#e6e9ee" />
-      <circle cx="577" cy="335" r="2.4" fill="#2f3a2a" />
-      <path d="M296 344 L604 344 Q612 344 614 352 L632 452 Q634 462 624 462 L276 462 Q266 462 268 452 L286 352 Q288 344 296 344 Z" fill={u("branco")} />
-      <path d="M268 456 L632 456 L630 470 Q628 474 620 474 L280 474 Q272 474 270 470 Z" fill="#c8ccd3" />
-      <path d="M383 356 L517 356 L522 432 L378 432 Z" fill="#1b1d22" />
-      <path d="M388 360 L512 360 L516 428 L384 428 Z" fill="#0b0d10" />
-      <rect x="323" y="374" width="15" height="38" rx="2" fill="#3b3f47" /><rect x="311" y="386" width="39" height="14" rx="2" fill="#3b3f47" />
-      <ellipse cx="572" cy="374" rx="9" ry="7" fill="#3b3f47" /><ellipse cx="590" cy="390" rx="9" ry="7" fill="#3b3f47" />
-      <ellipse cx="572" cy="406" rx="9" ry="7" fill="#3b3f47" /><ellipse cx="554" cy="390" rx="9" ry="7" fill="#3b3f47" />
-      <ellipse cx="566" cy="432" rx="5" ry="3.5" fill="#9aa0a8" /><ellipse cx="566" cy="444" rx="5" ry="3.5" fill="#9aa0a8" />
-    </g>
-  );
-  const tv = ap === "ps5" ? SAGA_APARELHOS.ps5.tela : SAGA_TV_HD;
+  return <g>{out}</g>;
+}
+
+function SagaTapete({ P, cor }) {
+  const u = (n) => `url(#${P}${n})`;
   return (
     <g>
-      <SagaTvPlana P={P} t={tv} base={402} />
-      {ap === "ps3" && (
-        <g>
-          <ellipse cx="690" cy="404" rx="118" ry="7" fill={u("sombra")} />
-          <path d="M590 368 C612 330 768 330 790 368 Z" fill={u("pretoBrilho")} />
-          <path d="M606 360 C640 338 740 338 774 360" stroke="#fff" strokeOpacity=".28" strokeWidth="1.6" fill="none" />
-          <path d="M630 350 C660 342 720 342 750 350" stroke="#fff" strokeOpacity=".12" strokeWidth="5" fill="none" />
-          <text x="690" y="362" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="6.5" letterSpacing="1.6" fill="#a7adb6" opacity=".8">PLAYSTATION 3</text>
-          <rect x="590" y="366" width="200" height="36" rx="3" fill={u("pretoBrilho")} />
-          <rect x="590" y="366" width="200" height="1.8" fill="#cfd4db" />
-          <rect x="590" y="400" width="200" height="2" fill="#000" />
-          <rect x="604" y="378" width="112" height="3.6" rx="1.8" fill="#000" />
-          <rect x="604" y="376.4" width="112" height=".8" fill="#6a6f78" />
-          <rect x="740" y="375" width="16" height="1.6" fill="#6a6f78" /><rect x="740" y="388" width="16" height="1.6" fill="#6a6f78" />
-          <path d="M745 372 L748 369 L751 372" stroke="#6a6f78" strokeWidth=".8" fill="none" />
-          <circle cx="772" cy="376" r="2" fill="#3a2a22" />
-          {[0, 1, 2, 3].map((i) => <rect key={i} x={604 + i * 9} y="391" width="6" height="2.6" fill="#050505" stroke="#2b2e34" strokeWidth=".4" />)}
-          <line x1="600" y1="388" x2="730" y2="388" stroke="#2a2c31" />
-          <SagaControle tipo="ps3" x={360} y={562} />
+      <path d="M232 534 L768 534 L860 600 L140 600 Z" fill={cor} />
+      <path d="M232 534 L768 534 L860 600 L140 600 Z" fill={u("tapeteLuz")} />
+      <path d="M252 540 L748 540 L828 596 L172 596 Z" fill="none" stroke="#fff" strokeOpacity=".08" strokeWidth="2" />
+    </g>
+  );
+}
+
+function SagaMovel({ P, movel }) {
+  const u = (n) => `url(#${P}${n})`;
+  if (movel === "mesa90") return (
+    <g>
+      <ellipse cx="500" cy="530" rx="440" ry="16" fill={u("sombra")} />
+      {/* pés e gaveteiro */}
+      <rect x="108" y="466" width="22" height="58" fill="#3a2213" />
+      <rect x="108" y="466" width="22" height="58" fill={u("ladoEsc")} />
+      <rect x="690" y="466" width="210" height="58" fill={u("madeiraEsc")} />
+      {[0, 1].map((i) => (
+        <g key={i}>
+          <rect x="702" y={472 + i * 25} width="186" height="20" rx="1.5" fill="#5a381f" />
+          <rect x="702" y={472 + i * 25} width="186" height="1.2" fill="#a77a4e" opacity=".5" />
+          <rect x="784" y={480 + i * 25} width="22" height="3.5" rx="1.7" fill="#c9a979" />
         </g>
-      )}
-      {ap === "x360" && (
-        <g>
-          <ellipse cx="690" cy="404" rx="110" ry="7" fill={u("sombra")} />
-          <path d="M604 338 L776 338 L784 352 L596 352 Z" fill="#e9ebee" />
-          {Array.from({ length: 10 }).map((_, i) => <line key={i} x1={640 + i * 10} y1="341" x2={638 + i * 10} y2="349" stroke="#c3c7cd" strokeWidth="1.2" />)}
-          <rect x="596" y="352" width="188" height="50" rx="5" fill={u("branco")} />
-          <path d="M596 367 Q690 381 784 367 L784 374 Q690 388 596 374 Z" fill="#000" opacity=".06" />
-          <rect x="604" y="357" width="128" height="15" rx="2" fill="#e6e8ec" stroke="#c9ccd2" />
-          <rect x="606" y="359" width="124" height="11" fill="#25272b" />
-          <rect x="737" y="360" width="9" height="7" rx="2" fill="#d8dbe0" stroke="#bfc3c9" />
-          <circle cx="764" cy="364" r="10.5" fill="#e3e6ea" stroke="#bcc0c6" />
-          <circle cx="764" cy="364" r="5.5" fill="#f5f6f8" stroke="#cdd0d5" />
-          <rect x="612" y="380" width="46" height="9" rx="2" fill="#d5d8de" stroke="#b8bcc3" /><rect x="666" y="380" width="46" height="9" rx="2" fill="#d5d8de" stroke="#b8bcc3" />
-          <rect x="722" y="381" width="14" height="6" rx="1.5" fill="#d0d3d9" stroke="#b8bcc3" />
-          <rect x="596" y="394" width="188" height="8" rx="3" fill="#c9ccd2" />
-          <text x="690" y="400" textAnchor="middle" fontFamily="Arial, sans-serif" fontSize="5" letterSpacing="1.2" fill="#8d939b">XBOX 360</text>
-          <SagaControle tipo="x360" x={360} y={562} />
+      ))}
+      {/* tampo em perspectiva */}
+      <path d="M124 384 L876 384 L912 452 L88 452 Z" fill={u("tampo90")} />
+      <g clipPath={u("clipTampo90")}><SagaVeios x0={88} x1={912} y0={386} y1={452} n={9} cor="#2a160a" op={0.16} seed={11} /></g>
+      <path d="M124 384 L876 384 L912 452 L88 452 Z" fill={u("luzTampo")} />
+      <path d="M88 452 L912 452" stroke="#e2b98a" strokeOpacity=".55" strokeWidth="1.4" />
+      <rect x="88" y="452" width="824" height="15" fill={u("borda90")} />
+      <rect x="88" y="467" width="824" height="3" fill="#000" opacity=".35" />
+    </g>
+  );
+  if (movel === "rack90") return (
+    <g>
+      <SagaTapete P={P} cor="#5b2a20" />
+      <ellipse cx="500" cy="524" rx="250" ry="10" fill={u("sombra")} />
+      <path d="M292 360 L708 360 L726 382 L274 382 Z" fill={u("tampo90")} />
+      <g clipPath={u("clipTampoRack")}><SagaVeios x0={274} x1={726} y0={360} y1={382} n={4} cor="#2a160a" op={0.18} seed={5} /></g>
+      <path d="M274 382 L726 382" stroke="#e2b98a" strokeOpacity=".5" strokeWidth="1.2" />
+      <rect x="274" y="382" width="452" height="10" fill={u("borda90")} />
+      <rect x="282" y="392" width="436" height="128" fill={u("madeiraEsc")} />
+      <rect x="282" y="392" width="436" height="6" fill="#000" opacity=".35" />
+      {[0, 1].map((i) => (
+        <g key={i}>
+          <rect x={292 + i * 214} y="402" width="202" height="108" rx="2" fill="#4c2e19" />
+          <rect x={300 + i * 214} y="410" width="186" height="92" rx="2" fill="none" stroke="#2a170b" strokeWidth="2" />
+          <rect x={300 + i * 214} y="410" width="186" height="1.4" fill="#9c6e44" opacity=".45" />
         </g>
-      )}
-      {ap === "ps4" && (
-        <g>
-          <ellipse cx="690" cy="404" rx="108" ry="7" fill={u("sombra")} />
-          <path d="M606 342 L774 342 L782 368 L598 368 Z" fill="#17191d" />
-          <path d="M606 342 L652 342 L648 368 L598 368 Z" fill="#30343c" />
-          <path d="M610 344 L650 344 L647 352 L606 352 Z" fill="#fff" opacity=".08" />
-          <path d="M598 368 L782 368 L778 382 L602 382 Z" fill={u("preto")} />
-          <rect x="602" y="382" width="176" height="4.5" fill="#030304" />
-          <path d="M602 386.5 L778 386.5 L784 402 L596 402 Z" fill="#141619" />
-          <rect x="612" y="383" width="100" height="2.4" fill="#000" />
-          <rect x="612" y="382.3" width="100" height=".6" fill="#4a4d55" />
-          <rect x="738" y="383" width="9" height="2" fill="#3a3d45" /><rect x="752" y="383" width="9" height="2" fill="#3a3d45" />
-          <line x1="650" y1="342" x2="646" y2="368" stroke="#0a0b0d" strokeWidth="2.6" />
-          <SagaControle tipo="ps4" x={360} y={562} />
+      ))}
+      <circle cx="486" cy="456" r="3.6" fill="#caa36d" /><circle cx="514" cy="456" r="3.6" fill="#caa36d" />
+      <rect x="282" y="392" width="436" height="128" fill={u("ladoLuz")} />
+    </g>
+  );
+  if (movel === "rack00") return (
+    <g>
+      <SagaTapete P={P} cor="#262c3c" />
+      <ellipse cx="500" cy="524" rx="260" ry="10" fill={u("sombra")} />
+      <path d="M288 360 L712 360 L732 382 L268 382 Z" fill={u("tampo00")} />
+      <path d="M268 382 L732 382" stroke="#9aa3b5" strokeOpacity=".45" strokeWidth="1.2" />
+      <rect x="268" y="382" width="464" height="9" fill="#14171d" />
+      {/* nicho aberto com vidro fumê */}
+      <rect x="276" y="391" width="448" height="112" fill="#06070a" />
+      <rect x="276" y="391" width="448" height="40" fill={u("nicho")} />
+      {Array.from({ length: 9 }).map((_, i) => <rect key={i} x={292 + i * 9.5} y={452 + (i % 3) * 2} width="8" height={46 - (i % 3) * 2} fill={["#1d2a6b", "#0d0d10", "#26315e", "#2b2e35", "#14306a", "#0d0d10", "#3a3d45", "#1d2a6b", "#202533"][i]} />)}
+      <rect x="590" y="472" width="120" height="26" rx="2" fill="#111318" stroke="#23262e" />
+      <rect x="600" y="482" width="44" height="3" rx="1" fill="#05060a" />
+      <rect x="268" y="503" width="464" height="11" fill="#14171d" />
+      <rect x="276" y="391" width="448" height="112" fill={u("vidroFume")} />
+      <rect x="284" y="514" width="10" height="10" fill="#8a919c" /><rect x="706" y="514" width="10" height="10" fill="#8a919c" />
+    </g>
+  );
+  if (movel === "rackHd") return (
+    <g transform="translate(512 0) scale(1.06 1) translate(-500 0)">
+      <ellipse cx="500" cy="552" rx="430" ry="26" fill={u("luzAc")} opacity=".55" />
+      <ellipse cx="500" cy="522" rx="380" ry="10" fill={u("sombra")} />
+      <path d="M160 398 L840 398 L858 414 L142 414 Z" fill={u("tampoHd")} />
+      <g clipPath={u("clipTampoHd")}><SagaVeios x0={142} x1={858} y0={398} y1={414} n={3} cor="#000" op={0.25} seed={21} /></g>
+      <path d="M142 414 L858 414" stroke="#8a6d55" strokeOpacity=".5" strokeWidth="1.1" />
+      <rect x="142" y="414" width="716" height="98" fill={u("rackHd")} />
+      <rect x="142" y="414" width="716" height="5" fill="#000" opacity=".4" />
+      {[0, 1, 2].map((i) => (
+        <g key={i}>
+          <rect x={154 + i * 236} y="424" width="220" height="80" rx="1.5" fill="#1a130e" />
+          {Array.from({ length: 17 }).map((_, j) => <rect key={j} x={160 + i * 236 + j * 12.6} y="428" width="2" height="72" fill="#000" opacity=".32" />)}
         </g>
-      )}
-      {ap === "ps5" && (
-        <g>
-          <ellipse cx="736" cy="404" rx="52" ry="6" fill={u("sombra")} />
-          <ellipse cx="736" cy="401" rx="30" ry="4" fill="#0e0f12" />
-          <rect x="722" y="168" width="28" height="234" fill="#121317" />
-          <path d="M722 160 C698 164 690 200 692 250 L696 386 C697 398 708 402 722 402 Z" fill={u("branco")} />
-          <path d="M750 160 C776 164 786 204 784 252 L786 388 C785 398 772 402 750 402 Z" fill={u("branco")} />
-          <path d="M700 230 C702 196 708 176 718 168" stroke="#fff" strokeWidth="2" fill="none" opacity=".9" />
-          <path d="M762 290 Q782 296 782 344 Q782 388 762 394" stroke="#c4c9d1" strokeWidth="1.5" fill="none" />
-          <rect x="769" y="306" width="3" height="80" rx="1.5" fill="#22252a" />
-          <circle cx="736" cy="182" r="3" fill="#2a2d33" /><circle cx="736" cy="194" r="2" fill="#2a2d33" />
-          <rect x="730" y="374" width="5" height="8" rx="1" fill="#2a2d33" /><rect x="738" y="374" width="5" height="8" rx="1" fill="#2a2d33" />
-          {Array.from({ length: 14 }).map((_, i) => <circle key={i} cx={736} cy={220 + i * 10} r=".9" fill="#2a2d33" />)}
-          <rect x="721" y="176" width="2.6" height="200" fill="#1c1e22" /><rect x="748.5" y="176" width="2.6" height="200" fill="#1c1e22" />
-          <g transform="translate(380 560)">
-            <ellipse cx="0" cy="24" rx="68" ry="8" fill="#000" opacity=".45" />
-            <path d="M-52 -10 Q-40 -20 0 -18 Q40 -20 52 -10 Q70 18 58 28 Q46 34 38 20 L-38 20 Q-46 34 -58 28 Q-70 18 -52 -10 Z" fill="#eef0f3" />
-            <path d="M-22 -18 L22 -18 L18 12 L-18 12 Z" fill="#1d1f24" />
-            <rect x="-19" y="-16" width="38" height="14" rx="2" fill="#f7f8fa" />
-            <circle cx="-14" cy="8" r="7" fill="#1d1f24" /><circle cx="14" cy="8" r="7" fill="#1d1f24" />
-            <path d="M-40 -6 h14 M-33 -13 v14" stroke="#9aa0a8" strokeWidth="4" />
-            {[[36, -11], [43, -5], [29, -5], [36, 1]].map((b, i) => <circle key={i} cx={b[0]} cy={b[1]} r="2.8" fill="#c3c7cd" />)}
-          </g>
+      ))}
+      <rect x="142" y="414" width="716" height="98" fill={u("ladoLuz")} />
+      <rect x="150" y="512" width="700" height="3" fill={u("fita")} />
+      <rect x="160" y="515" width="6" height="12" fill="#2a2c31" /><rect x="834" y="515" width="6" height="12" fill="#2a2c31" />
+    </g>
+  );
+  /* mesa (portáteis) */
+  const hd = movel === "mesaHd";
+  return (
+    <g>
+      <rect y="286" width="1000" height="314" fill={u(hd ? "mesaHd" : "mesa00")} />
+      {Array.from({ length: 9 }).map((_, i) => {
+        const x = -60 + i * 140;
+        return <path key={i} d={`M${500 + (x - 500) * 0.55} 286 L${x} 600`} stroke="#000" strokeOpacity={hd ? 0.35 : 0.22} strokeWidth="1.6" />;
+      })}
+      <g clipPath={u("clipMesa")}><SagaVeios x0={0} x1={1000} y0={292} y1={600} n={14} cor={hd ? "#000" : "#2a1a10"} op={hd ? 0.2 : 0.14} seed={hd ? 41 : 17} /></g>
+      <rect y="286" width="1000" height="2.5" fill={hd ? "#7a5a42" : "#c39368"} opacity=".7" />
+      <rect y="288.5" width="1000" height="10" fill="#000" opacity=".18" />
+      <ellipse cx="450" cy="450" rx="430" ry="170" fill={u(hd ? "luzAc" : "luzQuente")} opacity={hd ? 0.32 : 0.55} />
+      <rect y="286" width="1000" height="314" fill={u("vinhetaMesa")} />
+      {hd ? (
+        <g opacity=".9">
+          <ellipse cx="170" cy="380" rx="48" ry="11" fill="#000" opacity=".45" />
+          <path d="M126 308 L126 368 Q126 382 170 382 Q214 382 214 368 L214 308 Z" fill="#dcd7cd" />
+          <path d="M126 308 L126 368 Q126 382 170 382 Q214 382 214 368 L214 308 Z" fill={u("canecaLuz")} />
+          <ellipse cx="170" cy="308" rx="44" ry="10" fill="#efebe3" /><ellipse cx="170" cy="309" rx="38" ry="7.5" fill="#2a170d" />
+          <path d="M214 322 Q244 324 242 344 Q240 362 214 360" stroke="#d2ccc1" strokeWidth="8" fill="none" />
+        </g>
+      ) : (
+        <g opacity=".92">
+          <ellipse cx="168" cy="376" rx="34" ry="9" fill="#000" opacity=".45" />
+          <rect x="140" y="292" width="56" height="82" rx="7" style={{ fill: "var(--gt-ac2, #c33)" }} />
+          <rect x="140" y="292" width="56" height="82" rx="7" fill={u("lataLuz")} />
+          <ellipse cx="168" cy="293" rx="28" ry="7" fill="#cfd4dc" /><ellipse cx="168" cy="293" rx="22" ry="5" fill="#9aa1ab" />
         </g>
       )}
     </g>
   );
+}
+
+/* ---------- aparelho: fotos reais compostas ---------- */
+function SagaFotos({ geo }) {
+  return geo.pecas.map((pc, i) => {
+    const s = pc.sombra || [50, 97, 46, 4];
+    const sx = pc.x + (s[0] - s[2]) / 100 * pc.w, sy = pc.y + (s[1] - s[3]) / 100 * pc.h;
+    return (
+      <React.Fragment key={i}>
+        <span className="sgc-sombra" style={{ left: sx / 10 + "%", top: sy / 6 + "%", width: (s[2] * 2 / 100 * pc.w) / 10 + "%", height: (s[3] * 2 / 100 * pc.h) / 6 + "%" }} />
+        <img className="sgc-foto" data-foto={pc.f} src={sagaFotoSrc(pc.f)} alt="" decoding="async" loading="lazy" draggable="false"
+          style={{ left: pc.x / 10 + "%", top: pc.y / 6 + "%", width: pc.w / 10 + "%", height: pc.h / 6 + "%" }} />
+      </React.Fragment>
+    );
+  });
+}
+
+/* recorte da foto como fundo de um elemento (gaveta, tampa) */
+function sagaRecorte(pc, x, y) {
+  return {
+    backgroundImage: `url(${sagaFotoSrc(pc.f)})`,
+    backgroundSize: `${pc.w / 10}em ${pc.h / 10}em`,
+    backgroundPosition: `${-(x - pc.x) / 10}em ${-(y - pc.y) / 10}em`
+  };
 }
 
 /* ---------- mídia (disco, UMD, cartuchos) ---------- */
@@ -827,7 +687,9 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
   const base = apKey === "ps1" ? "ps1" : apKey === "ps2" ? "ps2" : midiaKey === "bd" ? "bd" : "cd";
   const platMidia = SAGA_PLAT_MIDIA[apKey] || cap.plataforma || "";
   const nn = (n) => String(n).padStart(2, "0");
-  const t = ap.tela;
+  const geo = React.useMemo(() => sagaGeo(ap, midia), [apKey, midiaKey]);
+  const t = geo.t;
+  const I = geo.I;
   const caixa = midia.caixa;
 
   const els = React.useRef({});
@@ -838,9 +700,9 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
     const wrap = E.wrap, palco = E.palco, cena = E.cena;
     if (!wrap || !palco || !cena || typeof window === "undefined") return;
     const dir = ap.caixa.x > 500 ? 1 : -1;
-    const ent = ap.entrada;
-    const discoTipo = midia.tipo === "disco" || midia.tipo === "umd";
+    const ent = I.tipo;
     const rotor = E.midia && E.midia.querySelector("[data-sgc-rotor]");
+    const ehCart = midia.tipo.indexOf("cart") === 0;
     let G = null;
     let ultimo = "";
 
@@ -856,8 +718,9 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
         const s = E.tela.style;
         s.width = tw * Z + "px"; s.height = th * Z + "px";
         s.fontSize = (tw * Z) / 28 + "px";
-        s.borderRadius = t.r * k * Z + "px";
+        s.borderRadius = t.r * tw * Z + "px";
       }
+      if (E.tela2 && geo.q2) E.tela2.style.transform = sagaHomog(100, 100, geo.q2.map((p) => [p[0] * k, p[1] * k]));
       ultimo = "";
     };
 
@@ -879,8 +742,8 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
       /* caixa */
       const ci = sagaEase.out(sagaSeg(p, 0.08, 0.22));
       const co = sagaEase.in(sagaSeg(p, 0.64, 0.76));
-      let bx = ap.caixa.x + dir * (1 - ci) * 560 + dir * co * 600;
-      let by = ap.caixa.y + (1 - ci) * 70 - Math.sin(ci * Math.PI) * 30 - Math.sin(co * Math.PI) * 20;
+      const bx = ap.caixa.x + dir * (1 - ci) * 560 + dir * co * 600;
+      const by = ap.caixa.y + (1 - ci) * 70 - Math.sin(ci * Math.PI) * 30 - Math.sin(co * Math.PI) * 20;
       if (E.caixa) {
         E.caixa.style.transform = `translate3d(${px(bx)},${px(by)},0) translate(-50%,-50%)`;
         E.caixa.style.opacity = sagaSeg(p, 0.08, 0.12) * (1 - co);
@@ -897,83 +760,75 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
         E.capa.style.transform = `translateZ(${caixa.d / 20}em) rotateY(${(-a * 158).toFixed(2)}deg)`;
       }
 
-      /* bandeja / tampa */
+      /* gaveta / tampa */
       const abre = sagaEase.inOut(sagaSeg(p, 0.3, 0.4));
       const fechaB = sagaEase.inOut(sagaSeg(p, 0.66, 0.72));
       const fechaT = sagaEase.inOut(sagaSeg(p, 0.67, 0.72));
-      if (E.bandeja && ap.bandeja) {
+      if (E.bandeja && I.bandeja) {
         const out = abre * (1 - fechaB);
-        E.bandeja.style.transform = `translate3d(0,${px((out - 1) * ap.bandeja.prof)},0)`;
+        E.bandeja.style.transform = `translate3d(0,${px((out - 1) * I.bandeja.prof)},0)`;
       }
       if (E.bandejaDisco) E.bandejaDisco.style.opacity = p >= 0.66 ? 1 : 0;
-      if (E.tampa && ap.tampa) {
+      if (E.tampa && I.tampa) {
         const out = abre * (1 - fechaT);
-        const sy = sagaLerp(1, -2.7, out);
+        const sy = sagaLerp(1, -1.75, out);
         E.tampa.style.transform = `${sobeAp} scale(1,${sy.toFixed(3)})`;
         E.tampa.style.opacity = d;
         E.tampa.setAttribute("data-aberta", sy < 0 ? "1" : "0");
+        if (E.poco) E.poco.style.opacity = sagaSeg(out, 0, 0.35);
       }
 
       /* mídia */
       const M = E.midia;
       if (M) {
         const bx0 = ap.caixa.x, by0 = ap.caixa.y;
-        let x = bx0, y = by0, s = 1, sx = 1, sy = 1, rot = 0, spin = 0, op = 1, clip = "";
-        const A = ap.alvo;
-        let ax = A.x, ay = A.y;
-        if (ent === "bandeja" || ent === "tampa") ay = A.y - 56;
-        if (ent === "encaixe") ay = A.y;
-        const sA = ent === "encaixe" ? 1 : A.s;
+        let x = bx0, y = by0, s = 1, rot = 0, spin = 0, op = 1;
+        let mat = null;
         const ri = sagaEase.out(sagaSeg(p, 0.34, 0.44));
-        const f = sagaEase.inOut(sagaSeg(p, 0.44, 0.62));
         const y0 = by0 - 84;
         if (p < 0.44) {
           y = sagaLerp(by0, y0, ri); s = 1 + 0.12 * ri; spin = ri * 120;
-          rot = midia.tipo.indexOf("cart") === 0 ? -dir * 10 * ri : 0;
+          rot = ehCart ? -dir * 10 * ri : 0;
         } else {
-          const cxp = (bx0 + ax) / 2, cyp = Math.min(y0, ay) - 150;
+          const f = sagaEase.inOut(sagaSeg(p, 0.44, 0.62));
+          const c0 = I.c0;
+          const cxp = (bx0 + c0[0]) / 2, cyp = Math.min(y0, c0[1]) - 150;
           const u1 = 1 - f;
-          x = u1 * u1 * bx0 + 2 * u1 * f * cxp + f * f * ax;
-          y = u1 * u1 * y0 + 2 * u1 * f * cyp + f * f * ay;
-          s = sagaLerp(1.12, sA, f) * (1 + 0.16 * Math.sin(f * Math.PI));
+          x = u1 * u1 * bx0 + 2 * u1 * f * cxp + f * f * c0[0];
+          y = u1 * u1 * y0 + 2 * u1 * f * cyp + f * f * c0[1];
+          s = sagaLerp(1.12, 1, f) * (1 + 0.16 * Math.sin(f * Math.PI));
           spin = 120 + f * 900;
-          rot = midia.tipo.indexOf("cart") === 0 ? -dir * 10 * (1 - f) + dir * Math.sin(f * Math.PI) * 24 : 0;
-          if ((ent === "bandeja" || ent === "tampa") && A.sy) sy = sagaLerp(1, A.sy, sagaEase.inOut(sagaSeg(f, 0.45, 1)));
-          if (ent === "fenda" || ent === "fendaV") {
-            const a2 = sagaEase.inOut(sagaSeg(p, 0.62, 0.66));
-            if (ent === "fenda") sy = sagaLerp(1, 0.045, a2); else sx = sagaLerp(1, 0.045, a2);
-            const n2 = sagaEase.in(sagaSeg(p, 0.66, 0.7));
-            s *= 1 - 0.18 * n2; op = 1 - n2;
-            if (ent === "fenda") y -= 3 * n2;
-            spin += sagaEase.out(sagaSeg(p, 0.62, 0.66)) * 180;
+          rot = ehCart ? -dir * 10 * (1 - f) + dir * Math.sin(f * Math.PI) * 24 : 0;
+          const cs = Math.cos(rot * Math.PI / 180) * s, sn = Math.sin(rot * Math.PI / 180) * s;
+          const M0 = [cs, sn, -sn, cs];
+          const mm = ent === "fendaZ" ? sagaEase.inOut(sagaSeg(p, 0.6, 0.665)) : sagaEase.inOut(sagaSeg(f, 0.5, 1));
+          mat = M0.map((v, i) => sagaLerp(v, I.M[i], mm));
+          /* encaixe */
+          const n = sagaEase.inOut(sagaSeg(p, 0.62, I.fim));
+          if (p > 0.62) {
+            x = sagaLerp(I.c0[0], I.c1[0], n); y = sagaLerp(I.c0[1], I.c1[1], n);
+            spin += sagaEase.out(sagaSeg(p, 0.62, I.fim)) * 160;
           }
-          if (ent === "bandeja" || ent === "tampa") {
-            const fimL = ent === "tampa" ? 0.67 : 0.66;
-            const l = sagaEase.outQuart(sagaSeg(p, 0.62, fimL));
-            y = sagaLerp(y, A.y, l);
-            spin += sagaEase.out(sagaSeg(p, 0.62, fimL)) * 160;
-            if (ent === "bandeja" && p >= 0.66) op = 0;
-            if (ent === "tampa" && p >= 0.72) op = 0;
+          if (ent === "fendaZ") {
+            const n2 = sagaEase.inQuad(sagaSeg(p, 0.655, 0.7));
+            mat = mat.map((v) => v * (1 - 0.14 * n2));
+            op = 1 - n2;
           }
-          if (ent === "encaixe") {
-            const n = sagaEase.inOut(sagaSeg(p, 0.62, 0.7));
-            y = sagaLerp(y, A.fy, n);
-            const h = midia.h * s;
-            const corte = sagaClamp((y + h / 2 - A.corte) / h) * 100;
-            if (p >= 0.6) clip = `inset(0 0 ${corte.toFixed(2)}% 0)`;
-            if (A.some && p >= 0.7) op = 0;
-          }
+          if (ent === "bandeja" && p >= 0.66) op = 0;
+          if (ent === "tampa" && p >= 0.72) op = 0;
+          if (ent === "fenda" && I.some && p >= 0.7) op = 0;
         }
         const visivel = p >= 0.34 && op > 0.001;
         M.style.opacity = visivel ? op : 0;
         M.style.visibility = visivel ? "visible" : "hidden";
         if (visivel) {
-          M.style.transform = `translate3d(${px(x)},${px(y)},0) translate(-50%,-50%) rotate(${rot.toFixed(2)}deg) scale(${(s * sx).toFixed(4)},${(s * sy).toFixed(4)})`;
-          M.style.clipPath = clip;
+          const m = mat || [Math.cos(rot * Math.PI / 180) * s, Math.sin(rot * Math.PI / 180) * s, -Math.sin(rot * Math.PI / 180) * s, Math.cos(rot * Math.PI / 180) * s];
+          M.style.transform = `translate3d(${px(x)},${px(y)},0) translate(-50%,-50%) matrix(${m.map((v) => v.toFixed(5)).join(",")},0,0)`;
           if (rotor) rotor.style.transform = `rotate(${spin.toFixed(1)}deg)`;
         }
+        if (E.midiaClip) E.midiaClip.style.clipPath = I.clip && p >= 0.6 ? I.clip : "";
         if (E.replica) E.replica.style.opacity = p < 0.34 ? 1 : 0;
-        M.setAttribute("data-voando", p > 0.34 && p < 0.66 ? "1" : "0");
+        M.setAttribute("data-voando", p > 0.34 && p < 0.6 ? "1" : "0");
       }
 
       /* pulso de encaixe */
@@ -981,7 +836,7 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
         const q = sagaSeg(p, ent === "bandeja" ? 0.69 : 0.64, ent === "bandeja" ? 0.79 : 0.76);
         const vis = q > 0 && q < 1;
         E.pulso.style.opacity = vis ? Math.sin(q * Math.PI) * 0.9 : 0;
-        if (vis) E.pulso.style.transform = `translate(-50%,-50%) scale(${(0.35 + q * 1.1).toFixed(3)})`;
+        if (vis) E.pulso.style.transform = `translate(-50%,-50%) rotate(${I.pulso.rot.toFixed(2)}deg) scale(${(0.35 + q * 1.1).toFixed(3)})`;
       }
 
       /* LEDs */
@@ -996,13 +851,19 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
       const esc = Math.pow(G.Z, z);
       const Sx = sagaLerp(G.ox + G.Lx, G.sw / 2, z), Sy = sagaLerp(G.oy + G.Ly, G.sh / 2, z);
       cena.style.transform = z > 0 ? `translate3d(${(Sx - G.ox - esc * G.Lx).toFixed(2)}px,${(Sy - G.oy - esc * G.Ly).toFixed(2)}px,0) scale(${esc.toFixed(4)})` : "";
+      let cop = 1;
       if (E.tela) {
         E.tela.style.opacity = ligada ? 1 : 0;
         E.tela.style.visibility = ligada ? "visible" : "hidden";
         if (ligada) {
-          const W = G.tw * G.Z, H = G.th * G.Z;
-          E.tela.style.transform = `translate3d(${(Sx - W / 2).toFixed(2)}px,${(Sy - H / 2).toFixed(2)}px,0) scale(${(esc / G.Z).toFixed(5)})`;
-          let csx = 1, csy = 1, flash = 0, cop = 1, cs = 1;
+          /* o quadrilátero da foto vira o retângulo da tela cheia durante o zoom */
+          const zq = sagaEase.inOut(sagaSeg(z, 0, 0.7));
+          const D = geo.q.map((qp, i) => {
+            const m = sagaMix(qp, geo.caixaB[i], zq);
+            return [Sx + esc * (m[0] * k - G.Lx), Sy + esc * (m[1] * k - G.Ly)];
+          });
+          E.tela.style.transform = sagaHomog(G.tw * G.Z, G.th * G.Z, D);
+          let csx = 1, csy = 1, flash = 0, cs = 1;
           if (t.tipo === "crt") {
             const a = sagaEase.out(sagaSeg(tp, 0, 0.16));
             const b = sagaEase.outQuart(sagaSeg(tp, 0.16, 0.5));
@@ -1022,6 +883,7 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
           if (E.telaInfo) { E.telaInfo.style.opacity = ti; E.telaInfo.style.transform = `translate3d(${((1 - ti) * 1.2).toFixed(3)}em,0,0)`; }
         }
       }
+      if (E.tela2) E.tela2.style.opacity = ligada ? cop * sagaSeg(tp, 0.1, 0.6) : 0;
       if (E.brilho) E.brilho.style.opacity = 0.75 * sagaEase.out(sagaSeg(p, 0.74, 0.84));
 
       /* textos e final */
@@ -1073,12 +935,7 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
   const pos = (x, y, w, h) => ({ left: x / 10 + "%", top: y / 6 + "%", width: w / 10 + "%", height: h / 6 + "%" });
   const tvBrilho = pos(t.x + t.w / 2 - t.w * 1.6, t.y + t.h / 2 - t.h * 1.9, t.w * 3.2, t.h * 3.8);
   const tvParaSala = sala === "hd" && !ap.mesa ? t : null;
-  const bnd = ap.bandeja;
-  const pulsoPos = ap.entrada === "bandeja" ? { x: bnd.x + bnd.w / 2, y: bnd.y + 6, sy: 0.3 }
-    : ap.entrada === "tampa" ? { x: ap.tampa.x, y: ap.tampa.y, sy: 0.28 }
-    : ap.entrada === "fenda" ? { x: ap.alvo.x, y: ap.alvo.y, sy: 0.16 }
-    : ap.entrada === "fendaV" ? { x: ap.alvo.x, y: ap.alvo.y, sx: 0.16 }
-    : { x: ap.alvo.x, y: ap.alvo.corte, sy: 0.26 };
+  const bnd = I.bandeja, tmp = I.tampa;
   const arteImg = (cls) => img ? <img className={cls} src={img} alt="" decoding="async" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /> : null;
 
   return (
@@ -1086,33 +943,41 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
       <h2 className="sgc-sr">{titulo} — {cap.plataforma}, {cap.ano}</h2>
       <div className="sgc-palco" ref={r("palco")} aria-hidden="true">
         <div className="sgc-cena" ref={r("cena")}>
-          <svg className="sgc-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" focusable="false">
+          <svg className="sgc-svg sgc-fundo" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" focusable="false">
             <SagaDefs P={P} />
             {sala === "90s" ? <SagaSala90 P={P} /> : sala === "hd" ? <SagaSalaHd P={P} tv={tvParaSala} /> : <SagaSala00 P={P} />}
-            <SagaMovel P={P} ap={apKey} />
+          </svg>
+          <svg className="sgc-svg sgc-moveis" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <SagaMovel P={P} movel={ap.movel} />
           </svg>
           <div className="sgc-aparelho" ref={r("aparelho")}>
-            <svg className="sgc-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" focusable="false">
-              <SagaArte P={P} ap={apKey} />
-            </svg>
+            <SagaFotos geo={geo} />
+            {tmp && <span className="sgc-poco" ref={r("poco")} style={pos(tmp.x, tmp.y, tmp.w, tmp.h)} />}
             {bnd && (
               <div className="sgc-bandeja-clip" style={pos(bnd.x, bnd.y, bnd.w, bnd.prof + bnd.placa)}>
-                <div className="sgc-bandeja" data-cor={bnd.cor} ref={r("bandeja")} style={{ "--sgc-prof": bnd.prof / (bnd.prof + bnd.placa) * 100 + "%", "--rx": (ap.alvo.s * 50 / bnd.w * 100 * 1.08).toFixed(1) + "%", "--ry": (ap.alvo.s * ap.alvo.sy * 50 / bnd.prof * 100 * 1.15).toFixed(1) + "%" }}>
+                <div className="sgc-bandeja" data-cor={bnd.cor} ref={r("bandeja")} style={{ "--sgc-prof": bnd.prof / (bnd.prof + bnd.placa) * 100 + "%", "--rx": (bnd.s * 50 / bnd.w * 100 * 1.1).toFixed(1) + "%", "--ry": (bnd.s * bnd.sy * 50 / bnd.prof * 100 * 1.18).toFixed(1) + "%" }}>
                   <div className="sgc-bandeja-topo" />
-                  <div className="sgc-bandeja-placa" data-marca={{ pc: "CD-ROM  52×", ps2: "", x360: "" }[apKey] || ""} />
-                  <div className="sgc-bandeja-disco" ref={r("bandejaDisco")} style={{ transform: `translate(-50%,-50%) scale(${ap.alvo.s},${(ap.alvo.s * ap.alvo.sy).toFixed(3)})` }}>
+                  <div className="sgc-bandeja-placa" style={sagaRecorte(geo.pecas[bnd.foto], bnd.x, bnd.y)} />
+                  <div className="sgc-bandeja-disco" ref={r("bandejaDisco")} style={{ transform: `translate(-50%,-50%) scale(${bnd.s.toFixed(3)},${(bnd.s * bnd.sy).toFixed(3)})` }}>
                     <SagaMidiaArte midia={midiaKey} base={base} img={img} titulo={tt.m} plat={platMidia} uid={P + "anel1"} />
                   </div>
                 </div>
               </div>
             )}
+            {geo.q2 && (
+              <div className="sgc-tela2" ref={r("tela2")}>
+                {arteImg("")}
+                <span className="sgc-tela2-faixa">{tt.m}</span>
+              </div>
+            )}
             <div className="sgc-leds" ref={r("leds")}>
-              {ap.leds.map((l, i) => (
-                <span key={i} className="sgc-led" data-forma={l.forma || "ponto"} style={{ left: l.x / 10 + "%", top: l.y / 6 + "%", width: l.w / 10 + "em", height: l.h / 10 + "em", transform: `translate(-50%,-50%) rotate(${l.rot || 0}deg)` }} />
+              {geo.leds.map((l, i) => (
+                <span key={i} className="sgc-led" data-forma={l.forma} data-cor={l.cor || ""} style={{ left: l.x / 10 + "%", top: l.y / 6 + "%", width: l.w / 10 + "em", height: l.h / 10 + "em", transform: `translate(-50%,-50%) rotate(${l.rot.toFixed(2)}deg)` }} />
               ))}
             </div>
-            {ap.led2 && <span className="sgc-led sgc-led2" ref={r("led2")} style={{ left: ap.led2.x / 10 + "%", top: ap.led2.y / 6 + "%" }} />}
+            {geo.led2 && <span className="sgc-led sgc-led2" ref={r("led2")} style={{ left: geo.led2[0] / 10 + "%", top: geo.led2[1] / 6 + "%" }} />}
           </div>
+          <div className="sgc-luz" />
 
           <div className="sgc-caixa" ref={r("caixa")} data-estilo={caixa.estilo} style={{ "--w": caixa.w / 10 + "em", "--h": caixa.h / 10 + "em", "--d": caixa.d / 10 + "em" }}>
             <div className="sgc-caixa-corpo" ref={r("caixaCorpo")}>
@@ -1132,16 +997,18 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
             </div>
           </div>
 
-          <div className="sgc-midia" ref={r("midia")} data-tipo={midia.tipo} style={{ width: midia.w / 10 + "em", height: midia.h / 10 + "em" }}>
-            <SagaMidiaArte midia={midiaKey} base={base} img={img} titulo={tt.m} plat={platMidia} uid={P + "anel3"} />
+          <div className="sgc-midia-clip" ref={r("midiaClip")}>
+            <div className="sgc-midia" ref={r("midia")} data-tipo={midia.tipo} style={{ width: midia.w / 10 + "em", height: midia.h / 10 + "em" }}>
+              <SagaMidiaArte midia={midiaKey} base={base} img={img} titulo={tt.m} plat={platMidia} uid={P + "anel3"} />
+            </div>
           </div>
 
-          {ap.tampa && (
-            <div className="sgc-tampa" ref={r("tampa")} style={pos(ap.tampa.x - ap.tampa.w / 2, ap.tampa.y - ap.tampa.h / 2, ap.tampa.w, ap.tampa.h)}>
-              <div className="sgc-tampa-cima" /><div className="sgc-tampa-baixo" />
+          {tmp && (
+            <div className="sgc-tampa" ref={r("tampa")} style={pos(tmp.x, tmp.y, tmp.w, tmp.h)}>
+              <div className="sgc-tampa-cima" style={sagaRecorte(geo.pecas[tmp.foto], tmp.x, tmp.y)} /><div className="sgc-tampa-baixo" />
             </div>
           )}
-          <span className="sgc-pulso" ref={r("pulso")} style={{ left: pulsoPos.x / 10 + "%", top: pulsoPos.y / 6 + "%", "--sx": pulsoPos.sx || 1, "--sy": pulsoPos.sy || 1 }} />
+          <span className="sgc-pulso" ref={r("pulso")} style={{ left: I.pulso.x / 10 + "%", top: I.pulso.y / 6 + "%", "--sx": I.pulso.sx, "--sy": I.pulso.sy }} />
           <div className="sgc-brilho" ref={r("brilho")} data-tipo={t.tipo} style={tvBrilho} />
         </div>
 
