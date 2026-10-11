@@ -30,9 +30,38 @@ const SAGA_MIDIAS = {
   dvd: { tipo: "disco", w: 100, h: 100, caixa: { w: 118, h: 166, d: 14, estilo: "dvd" } },
   bd: { tipo: "disco", w: 100, h: 100, caixa: { w: 120, h: 152, d: 12, estilo: "bd" } },
   umd: { tipo: "umd", w: 96, h: 100, caixa: { w: 116, h: 186, d: 14, estilo: "umd" } },
-  "cartucho-gba": { tipo: "cart-gba", w: 132, h: 80, caixa: { w: 150, h: 150, d: 26, estilo: "papelao" } },
-  "cartucho-ds": { tipo: "cart-ds", w: 80, h: 74, caixa: { w: 122, h: 132, d: 14, estilo: "ds" } }
+  "cartucho-gba": { tipo: "cart-gba", w: 132, h: 76, caixa: { w: 150, h: 150, d: 26, estilo: "papelao" } },
+  "cartucho-ds": { tipo: "cart-ds", w: 76, h: 80, caixa: { w: 122, h: 132, d: 14, estilo: "ds" } }
 };
+
+/* ---------- caixa e mídia originais de cada capítulo (assets/saga/midia, fontes em CREDITOS.md) ----------
+ * <tema>-caixa.webp   frente da caixa (scan da capa original da plataforma)
+ * <tema>-disco.webp   disco / UMD / cartucho recortado com alfa (o nome é o mesmo para todos)
+ * <tema>-lombada.webp scan da lombada, quando existe (senão a lombada usa a própria capa)
+ * a = largura/altura da frente; caixa = troca de estojo (big box de PC, Xbox 360, PS5).
+ * GTA VI ainda não tem disco nem caixa física: a capa oficial (GTAVI-CoverArt) vai num
+ * estojo de PS5 com a faixa "PS5" e o disco é um rótulo genérico de PS5 com essa capa.
+ */
+const SAGA_PC_BOX = { h: 168, d: 30, estilo: "pc" };
+const SAGA_MIDIA_REAL = {
+  gta1: { a: 427 / 520, lombada: 1, caixa: SAGA_PC_BOX },
+  london: { a: 468 / 480 },
+  gta2: { a: 411 / 520, caixa: SAGA_PC_BOX },
+  gta3: { a: 368 / 520, lombada: 1 },
+  vc: { a: 368 / 520, lombada: 1 },
+  sa: { a: 368 / 520, lombada: 1 },
+  advance: { a: 1 },
+  lcs: { a: 324 / 560, lombada: 1 },
+  vcs: { a: 324 / 560, lombada: 1 },
+  gta4: { a: 454 / 520, lombada: 1 },
+  tlad: { a: 333 / 458, lombada: 1, caixa: { estilo: "x360" } },
+  cw: { a: 572 / 520, lombada: 1 },
+  tbogt: { a: 355 / 520, lombada: 1, caixa: { estilo: "x360" } },
+  gta5: { a: 454 / 520, lombada: 1 },
+  online: { a: 414 / 520 },
+  gta6: { a: 0.82, ps5: 1, caixa: { estilo: "ps5" } }
+};
+const sagaMidiaSrc = (tema, k) => "assets/saga/midia/" + tema + "-" + k + ".webp";
 
 const SAGA_PLAT_MIDIA = { pc: "PC CD-ROM", ps1: "PlayStation", ps2: "PlayStation 2 · DVD", gba: "Game Boy Advance", psp: "PSP", ps3: "PS3 · Blu-ray", x360: "Xbox 360 · DVD", ds: "Nintendo DS", ps4: "PS4 · Blu-ray", ps5: "PS5 · Blu-ray" };
 
@@ -626,8 +655,20 @@ function sagaRecorte(pc, x, y) {
 }
 
 /* ---------- mídia (disco, UMD, cartuchos) ---------- */
-function SagaMidiaArte({ midia, base, img, titulo, plat, uid }) {
+function SagaMidiaArte({ midia, base, img, titulo, plat, uid, real }) {
   const m = SAGA_MIDIAS[midia] || SAGA_MIDIAS.dvd;
+  if (real) {
+    /* scan original recortado: o disco gira inteiro (rotor), UMD e cartuchos não */
+    const foto = <img className="sgc-real-img" src={real} alt="" decoding="async" loading="lazy" draggable="false" />;
+    const tam = { width: m.w / 10 + "em", height: m.h / 10 + "em" };
+    if (m.tipo === "disco") return (
+      <div className="sgc-disco sgc-disco-real" style={tam}>
+        <div className="sgc-disco-rotor" data-sgc-rotor="">{foto}</div>
+        <div className="sgc-disco-brilho" />
+      </div>
+    );
+    return <div className="sgc-real" data-tipo={m.tipo} style={tam}>{foto}</div>;
+  }
   const arte = img ? <img src={img} alt="" decoding="async" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /> : null;
   if (m.tipo === "disco") return (
     <div className="sgc-disco" data-base={base}>
@@ -690,7 +731,14 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
   const geo = React.useMemo(() => sagaGeo(ap, midia), [apKey, midiaKey]);
   const t = geo.t;
   const I = geo.I;
-  const caixa = midia.caixa;
+  const real = SAGA_MIDIA_REAL[cap.tema] || null;
+  const realMidia = real ? sagaMidiaSrc(cap.tema, "disco") : null;
+  const realCaixa = real ? sagaMidiaSrc(cap.tema, "caixa") : null;
+  const caixa = real ? (() => {
+    const c = Object.assign({}, midia.caixa, real.caixa || {});
+    c.w = Math.round(c.h * real.a);
+    return c;
+  })() : midia.caixa;
 
   const els = React.useRef({});
   const r = (k) => (el) => { els.current[k] = el; };
@@ -929,7 +977,7 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
       if (raf) cancelAnimationFrame(raf);
       window.removeEventListener("resize", aoRedimensionar);
     };
-  }, [apKey, midiaKey]);
+  }, [apKey, midiaKey, cap.tema]);
 
   /* ---- posições em % da cena ---- */
   const pos = (x, y, w, h) => ({ left: x / 10 + "%", top: y / 6 + "%", width: w / 10 + "%", height: h / 6 + "%" });
@@ -959,7 +1007,7 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
                   <div className="sgc-bandeja-topo" />
                   <div className="sgc-bandeja-placa" style={sagaRecorte(geo.pecas[bnd.foto], bnd.x, bnd.y)} />
                   <div className="sgc-bandeja-disco" ref={r("bandejaDisco")} style={{ transform: `translate(-50%,-50%) scale(${bnd.s.toFixed(3)},${(bnd.s * bnd.sy).toFixed(3)})` }}>
-                    <SagaMidiaArte midia={midiaKey} base={base} img={img} titulo={tt.m} plat={platMidia} uid={P + "anel1"} />
+                    <SagaMidiaArte midia={midiaKey} base={base} img={img} titulo={tt.m} plat={platMidia} uid={P + "anel1"} real={realMidia} />
                   </div>
                 </div>
               </div>
@@ -979,27 +1027,40 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
           </div>
           <div className="sgc-luz" />
 
-          <div className="sgc-caixa" ref={r("caixa")} data-estilo={caixa.estilo} style={{ "--w": caixa.w / 10 + "em", "--h": caixa.h / 10 + "em", "--d": caixa.d / 10 + "em" }}>
+          <div className="sgc-caixa" ref={r("caixa")} data-estilo={caixa.estilo} data-real={real ? "1" : undefined} style={{ "--w": caixa.w / 10 + "em", "--h": caixa.h / 10 + "em", "--d": caixa.d / 10 + "em" }}>
             <div className="sgc-caixa-corpo" ref={r("caixaCorpo")}>
               <div className="sgc-caixa-fundo">
                 <div className="sgc-caixa-midia" ref={r("replica")}>
-                  <SagaMidiaArte midia={midiaKey} base={base} img={img} titulo={tt.m} plat={platMidia} uid={P + "anel2"} />
+                  <SagaMidiaArte midia={midiaKey} base={base} img={img} titulo={tt.m} plat={platMidia} uid={P + "anel2"} real={realMidia} />
                 </div>
               </div>
-              <div className="sgc-caixa-lado sgc-caixa-lombada"><em>{platMidia.split(" · ")[0]}</em><span>{titulo}</span><b>R</b></div>
+              {real ? (
+                /* lombada: scan original; sem scan, a borda da própria capa impressa */
+                <div className="sgc-caixa-lado sgc-caixa-lombada" data-scan={real.lombada ? "1" : "0"}
+                  style={{ backgroundImage: `url(${real.lombada ? sagaMidiaSrc(cap.tema, "lombada") : realCaixa})` }} />
+              ) : (
+                <div className="sgc-caixa-lado sgc-caixa-lombada"><em>{platMidia.split(" · ")[0]}</em><span>{titulo}</span><b>R</b></div>
+              )}
               <div className="sgc-caixa-lado sgc-caixa-dir" />
               <div className="sgc-caixa-topo" />
               <div className="sgc-caixa-base" />
               <div className="sgc-caixa-capa" ref={r("capa")}>
-                <div className="sgc-capa-frente">{arteImg("")}<span className="sgc-capa-selo">{cap.plataforma}</span></div>
-                <div className="sgc-capa-verso"><b>{tt.m}</b><i /><i /><i /><i /><i /></div>
+                {real ? (
+                  <div className="sgc-capa-frente" data-real="1">
+                    {real.ps5 && <span className="sgc-capa-ps5">PS5</span>}
+                    <img className="sgc-capa-scan" src={realCaixa} alt="" decoding="async" loading="lazy" draggable="false" />
+                  </div>
+                ) : (
+                  <div className="sgc-capa-frente">{arteImg("")}<span className="sgc-capa-selo">{cap.plataforma}</span></div>
+                )}
+                {real ? <div className="sgc-capa-verso" data-real="1" /> : <div className="sgc-capa-verso"><b>{tt.m}</b><i /><i /><i /><i /><i /></div>}
               </div>
             </div>
           </div>
 
           <div className="sgc-midia-clip" ref={r("midiaClip")}>
             <div className="sgc-midia" ref={r("midia")} data-tipo={midia.tipo} style={{ width: midia.w / 10 + "em", height: midia.h / 10 + "em" }}>
-              <SagaMidiaArte midia={midiaKey} base={base} img={img} titulo={tt.m} plat={platMidia} uid={P + "anel3"} />
+              <SagaMidiaArte midia={midiaKey} base={base} img={img} titulo={tt.m} plat={platMidia} uid={P + "anel3"} real={realMidia} />
             </div>
           </div>
 

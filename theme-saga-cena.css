@@ -147,6 +147,55 @@
 .sgc-cart-ds .sgc-cart-marca{left:8%;right:auto;top:auto;bottom:12%;color:#cfd2d8}
 .sgc-cart-contatos{position:absolute;left:10%;right:10%;bottom:2%;height:7%;background:repeating-linear-gradient(90deg,#d8b04a 0 .32em,transparent .32em .5em)}
 
+/* ---------- caixa e mídia originais (scans em assets/saga/midia) ---------- */
+.sgc-cena img.sgc-real-img{object-fit:contain;user-select:none;-webkit-user-drag:none}
+.sgc-disco.sgc-disco-real{background:none;-webkit-mask:none;mask:none;box-shadow:none}
+.sgc-disco-real .sgc-disco-brilho{opacity:.55;
+  -webkit-mask:radial-gradient(circle,transparent 0 13%,#000 14% 97%,transparent 98.5%);mask:radial-gradient(circle,transparent 0 13%,#000 14% 97%,transparent 98.5%)}
+.sgc-real{position:relative}
+.sgc-real img{filter:drop-shadow(0 .05em .06em rgba(0,0,0,.45))}
+
+/* estojo: cor do plástico por plataforma */
+.sgc-caixa[data-real]{--plast:#0c0c0e;--forro:#121316}
+.sgc-caixa[data-real][data-estilo="bd"],.sgc-caixa[data-real][data-estilo="ps5"]{--plast:#1f4f9a;--forro:#0f2a57}
+.sgc-caixa[data-real][data-estilo="x360"]{--plast:#4f9b2c;--forro:#1d3d12}
+.sgc-caixa[data-real][data-estilo="umd"]{--plast:#2b2e34;--forro:#121316}
+.sgc-caixa[data-real][data-estilo="ds"]{--plast:#2a2d33;--forro:#16181c}
+.sgc-caixa[data-real][data-estilo="jewel"]{--plast:#15161a;--forro:#0b0b0d}
+.sgc-caixa[data-real][data-estilo="papelao"],.sgc-caixa[data-real][data-estilo="pc"]{--plast:#d9c49a;--forro:#c9ad7c}
+.sgc-capa-frente[data-real]{background:var(--plast);box-shadow:0 0 0 .04em rgba(0,0,0,.6);border-radius:.3em}
+.sgc-cena .sgc-capa-frente[data-real] img.sgc-capa-scan{position:absolute;left:.2em;top:.2em;width:calc(100% - .4em);height:calc(100% - .4em);object-fit:cover;border-radius:.06em}
+/* plástico transparente por cima da capa + filme do lacre (shrink-wrap) */
+.sgc-capa-frente[data-real]::after{z-index:2;border-radius:inherit;
+  background:linear-gradient(112deg,rgba(255,255,255,.34) 0,rgba(255,255,255,.07) 16%,transparent 32%,transparent 58%,rgba(255,255,255,.13) 70%,rgba(255,255,255,.03) 78%,transparent 88%),
+    linear-gradient(180deg,rgba(255,255,255,.1),transparent 7%,transparent 93%,rgba(0,0,0,.22)),
+    radial-gradient(ellipse 30% 9% at 76% 6%,rgba(255,255,255,.18),transparent 70%);
+  box-shadow:inset 0 0 0 .07em rgba(255,255,255,.2),inset 0 0 .7em rgba(0,0,0,.28)}
+.sgc-caixa[data-estilo="papelao"] .sgc-capa-frente[data-real],.sgc-caixa[data-estilo="pc"] .sgc-capa-frente[data-real]{border-radius:.08em}
+.sgc-cena .sgc-caixa[data-estilo="papelao"] .sgc-capa-frente[data-real] img.sgc-capa-scan,
+.sgc-cena .sgc-caixa[data-estilo="pc"] .sgc-capa-frente[data-real] img.sgc-capa-scan{left:0;top:0;width:100%;height:100%;border-radius:.08em}
+.sgc-caixa[data-estilo="papelao"] .sgc-capa-frente[data-real]::after,.sgc-caixa[data-estilo="pc"] .sgc-capa-frente[data-real]::after{opacity:.7}
+/* jewel case do PS1: dobradiça à esquerda e encarte por trás da tampa transparente */
+.sgc-cena .sgc-caixa[data-estilo="jewel"] .sgc-capa-frente[data-real] img.sgc-capa-scan{left:.7em;width:calc(100% - .9em)}
+.sgc-caixa[data-estilo="jewel"] .sgc-capa-frente[data-real]::before{content:"";position:absolute;left:0;top:0;bottom:0;width:.6em;z-index:1;
+  background:linear-gradient(90deg,#2a2b30,#0b0b0d 45%,#3a3c42 80%,#111)}
+/* GTA VI: estojo de PS5 genérico (ainda não há caixa física) */
+.sgc-capa-ps5{position:absolute;left:.2em;right:.2em;top:.2em;height:11%;z-index:1;display:flex;align-items:center;padding-left:.45em;
+  background:#f3f4f6;color:#0b0b0d;font:900 1.05em/1 system-ui,sans-serif;letter-spacing:.02em;border-radius:.06em .06em 0 0}
+.sgc-cena .sgc-capa-ps5+img.sgc-capa-scan{top:calc(.2em + 11%);height:calc(89% - .4em)}
+/* lombada real (ou a borda da capa, quando não há scan) e laterais */
+.sgc-caixa-lombada[data-scan]{padding:0;background-size:100% 100%;background-repeat:no-repeat;background-color:var(--plast);box-shadow:inset .06em 0 .1em rgba(255,255,255,.18),inset -.08em 0 .14em rgba(0,0,0,.45)}
+.sgc-caixa-lombada[data-scan="0"]{background-size:auto 100%;background-position:0 0;box-shadow:inset 0 0 0 99em rgba(0,0,0,.28)}
+.sgc-caixa[data-real] .sgc-caixa-dir,.sgc-caixa[data-real] .sgc-caixa-topo,.sgc-caixa[data-real] .sgc-caixa-base{opacity:1;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--plast) 85%,#fff),color-mix(in srgb,var(--plast) 70%,#000))}
+.sgc-caixa[data-real] .sgc-caixa-fundo{background:radial-gradient(circle,color-mix(in srgb,var(--plast) 60%,#fff) 0 6.5%,var(--forro) 7% 16%,color-mix(in srgb,var(--forro) 80%,#fff) 16.5% 17%,var(--forro) 17.5%);
+  box-shadow:inset 0 0 0 .22em var(--plast),inset 0 0 1.5em rgba(0,0,0,.7)}
+.sgc-caixa[data-real][data-estilo="pc"] .sgc-caixa-fundo,.sgc-caixa[data-real][data-estilo="papelao"] .sgc-caixa-fundo{
+  background:linear-gradient(180deg,#d6bd8e,#b8965f);box-shadow:inset 0 0 0 .4em #c9ab78,inset 0 0 0 .55em rgba(0,0,0,.25),inset 0 0 2em rgba(0,0,0,.35)}
+.sgc-capa-verso[data-real]{padding:0;background:linear-gradient(160deg,color-mix(in srgb,var(--forro) 80%,#fff),var(--forro) 40%,color-mix(in srgb,var(--forro) 70%,#000));
+  box-shadow:inset 0 0 0 .22em var(--plast),inset 0 0 1.4em rgba(0,0,0,.55)}
+.sgc-caixa[data-estilo="papelao"] .sgc-capa-verso[data-real],.sgc-caixa[data-estilo="pc"] .sgc-capa-verso[data-real]{background:linear-gradient(180deg,#dcc59a,#bf9f6c);box-shadow:inset 0 0 1.2em rgba(0,0,0,.3)}
+
 /* ---------- tampa do PS1 ---------- */
 .sgc-tampa{position:absolute;z-index:6;transform-origin:50% 0;will-change:transform}
 .sgc-tampa>div{position:absolute;inset:0;border-radius:50%}
