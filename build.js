@@ -160,6 +160,16 @@ function copyThree(){
   process.stdout.write("  - root vendor/three.min.js\n");
 }
 
+/* hls.js (vendor/hls.min.js, versionado no repo): carregado sob demanda pelo
+ * DvPlayer (sections-videos.jsx) só quando um vídeo é aberto. */
+function copyHls(){
+  const src = path.join(ROOT, "vendor", "hls.min.js");
+  if(!fs.existsSync(src)){ throw new Error("Missing vendor/hls.min.js"); }
+  ensureDir(VENDOR);
+  fs.copyFileSync(src, path.join(VENDOR, "hls.min.js"));
+  process.stdout.write("  - vendor/hls.min.js\n");
+}
+
 function copyStatic(){
   ensureDir(PUBLIC);
   for(const file of STATIC_FILES){
@@ -182,6 +192,7 @@ process.stdout.write("Copying React production build...\n");
 copyReact();
 process.stdout.write("Copying Three.js build...\n");
 copyThree();
+copyHls();
 process.stdout.write("Transpiling JSX...\n");
 buildBundle();
 /* Por último: HTML pré-renderizado por rota e idioma, sitemap, robots, 404
