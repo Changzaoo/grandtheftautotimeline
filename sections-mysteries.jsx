@@ -188,7 +188,7 @@ const MystCaseCard = ({ mystCase, fileNo, statuses }) => {
     : "";
 
   return (
-    <article className={`card myst-card${open ? " open" : ""}`}>
+    <article className={`card myst-card${open ? " open" : ""}`} data-gta={window.gtaTema(mystCase.gameId)}>
       <Corners />
       <div className="myst-card-top">
         <span className="myst-file-no">
@@ -285,7 +285,7 @@ const MysteriesSection = () => {
   const activeStatus = statuses.find((s) => s.id === statusFilter);
 
   return (
-    <section id="mysteries" className="dossier-section dossier-shell">
+    <section id="mysteries" data-gta={gameFilter !== "all" ? window.gtaTema(gameFilter) : undefined} className="dossier-section dossier-shell gta-secao">
       <MystStyles />
       <div className="vi-grain" aria-hidden="true" />
       <div className="wrap">

@@ -21,7 +21,7 @@ const XtGameTabs = ({ games, value, onChange, counts, label }) => (
       Todos
     </button>
     {games.map((game) => (
-      <button key={game.id} type="button" role="tab" aria-selected={value === game.id}
+      <button key={game.id} type="button" role="tab" aria-selected={value === game.id} data-gta={window.gtaTema(game.id)}
         className={value === game.id ? "vi-btn vi-btn--sm" : "vi-btn vi-btn--ghost vi-btn--sm"}
         onClick={() => onChange(game.id)} title={game.name}>
         {game.short} <small style={{ opacity: .7 }}>({counts[game.id] || 0})</small>
@@ -67,7 +67,7 @@ const CheatsSection = () => {
   const total = data.cheats.filter((cheat) => (gameId === "all" || cheat.gameId === gameId) && matches(cheat)).length;
 
   return (
-    <section id="cheats" className="dossier-section dossier-shell alt xt-section">
+    <section id="cheats" data-gta={gameId !== "all" ? window.gtaTema(gameId) : undefined} className="dossier-section dossier-shell alt xt-section gta-secao">
       <div className="wrap">
         <DossierSectionHead
           eyebrow="Arquivo de códigos"
@@ -106,7 +106,7 @@ const CheatsSection = () => {
           const rows = data.cheats.filter((cheat) => cheat.gameId === game.id && matches(cheat));
           if (!rows.length) return null;
           return (
-            <article key={game.id} className="xt-block card" id={"cheats-" + game.id}>
+            <article key={game.id} className="xt-block card" data-gta={window.gtaTema(game.id)} id={"cheats-" + game.id}>
               <header className="xt-block-head">
                 <h3>Códigos de {game.name} <small>{game.year}</small></h3>
                 <p>{game.note}</p>
@@ -173,7 +173,7 @@ const RadiosSection = () => {
   const total = data.stations.filter((station) => (gameId === "all" || station.gameId === gameId) && matches(station)).length;
 
   return (
-    <section id="radios" className="dossier-section dossier-shell xt-section">
+    <section id="radios" data-gta={gameId !== "all" ? window.gtaTema(gameId) : undefined} className="dossier-section dossier-shell xt-section gta-secao">
       <div className="wrap">
         <DossierSectionHead
           eyebrow="Sintonize"
@@ -200,7 +200,7 @@ const RadiosSection = () => {
           const rows = data.stations.filter((station) => station.gameId === game.id && matches(station));
           if (!rows.length) return null;
           return (
-            <article key={game.id} className="xt-block card" id={"radios-" + game.id}>
+            <article key={game.id} className="xt-block card" data-gta={window.gtaTema(game.id)} id={"radios-" + game.id}>
               <header className="xt-block-head">
                 <h3>Rádios de {game.name} <small>{game.year}</small></h3>
                 <p>{game.note}</p>

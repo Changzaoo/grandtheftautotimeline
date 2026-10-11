@@ -2319,3 +2319,125 @@ button.vi-cat-media:disabled{cursor:default}
   .xt-table tbody th{white-space:normal}
   .xt-pad{min-width:170px}
 }
+
+/* ===== §V — Vídeos do dossiê (sections-videos.jsx) ===== */
+.dv-intro{padding:clamp(14px,2.4vw,22px);margin-bottom:16px}
+.dv-intro p{margin:0;max-width:88ch;font-size:14.5px;line-height:1.65;color:#e6d6e8}
+.dv-game.on{background:linear-gradient(135deg,color-mix(in srgb,var(--dv-ac) 30%,transparent),rgba(18,7,42,.7));border-color:var(--dv-ac)}
+.dv-game.on small{color:var(--dv-ac)}
+.dv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:clamp(10px,1.6vw,18px);margin-top:16px}
+.dv-card{appearance:none;border:0;padding:0;margin:0;font:inherit;color:inherit;text-align:left;cursor:pointer;background:none;display:flex;flex-direction:column;gap:8px;min-width:0}
+.dv-card-img{position:relative;display:block;aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:#0a0712;border:1px solid rgba(255,255,255,.12);box-shadow:0 14px 30px rgba(0,0,0,.35);transition:transform .2s ease,border-color .2s ease}
+.dv-card-img img{width:100%;height:100%;object-fit:cover;display:block}
+.dv-card-img i{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:20px;color:#0a0712;background:var(--dv-ac,#ffd166);box-shadow:0 0 0 6px rgba(0,0,0,.25);opacity:.92;transition:transform .2s ease}
+.dv-card-img em{position:absolute;right:8px;bottom:8px;font:600 11px/1 "Space Mono",ui-monospace,monospace;font-style:normal;padding:4px 6px;border-radius:6px;background:rgba(0,0,0,.7);color:#fff}
+.dv-card:hover .dv-card-img,.dv-card:focus-visible .dv-card-img{transform:translateY(-3px);border-color:var(--dv-ac,#ffd166)}
+.dv-card:hover .dv-card-img i{transform:scale(1.08)}
+.dv-card-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.dv-card-txt small{font:600 10.5px/1.2 "Space Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--dv-ac,#ffd166)}
+.dv-card-txt strong{font-size:14px;line-height:1.3;color:var(--vi-cream,#fff3e0)}
+.dv-episodio{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:clamp(12px,2vw,22px);padding:clamp(12px,2vw,18px);margin-top:4px}
+.dv-ep-player{aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:#05030b}
+.dv-ep-player video{width:100%;height:100%;display:block;background:#000}
+.dv-ep-info small{font:600 11px/1.2 "Space Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--vi-gold)}
+.dv-ep-info h3{margin:6px 0 10px;font-size:clamp(17px,2vw,21px);line-height:1.25;color:var(--vi-cream,#fff3e0)}
+.dv-ep-caps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;max-height:260px;overflow:auto}
+.dv-ep-caps button{appearance:none;border:0;background:rgba(255,255,255,.05);color:#e6d6e8;font:inherit;font-size:13px;text-align:left;width:100%;padding:7px 10px;border-radius:8px;cursor:pointer}
+.dv-ep-caps button:hover{background:rgba(255,209,102,.16)}
+.dv-ep-caps b{font-family:"Space Mono",ui-monospace,monospace;color:var(--vi-gold);margin-right:8px}
+.dv-reels{position:fixed;inset:0;z-index:1200;background:rgba(4,2,10,.94);display:flex;align-items:center;justify-content:center;padding:16px}
+.dv-reels-frame{position:relative;height:min(92vh,calc((100vw - 32px) * 16 / 9));aspect-ratio:9/16;max-width:100%;border-radius:18px;overflow:hidden;background:#000;box-shadow:0 0 0 2px var(--dv-ac,#ffd166),0 30px 80px rgba(0,0,0,.6)}
+.dv-reels-frame video{width:100%;height:100%;display:block;object-fit:contain;background:#000}
+.dv-reels-meta{position:absolute;left:0;right:0;top:0;padding:12px 14px 30px;display:flex;flex-direction:column;gap:2px;background:linear-gradient(rgba(0,0,0,.7),transparent);pointer-events:none}
+.dv-reels-meta small{font:600 10.5px/1.2 "Space Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--dv-ac,#ffd166)}
+.dv-reels-meta strong{font-size:15px;color:#fff}
+.dv-reels-meta span{font-size:12.5px;color:#ddd}
+.dv-reels-x{position:fixed;top:12px;right:14px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.6);color:#fff;font-size:26px;line-height:1;cursor:pointer}
+.dv-reels-nav{position:fixed;top:50%;width:48px;height:48px;margin-top:-24px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.55);color:#fff;font-size:30px;line-height:1;cursor:pointer}
+.dv-reels-nav:disabled{opacity:.25;cursor:default}
+.dv-reels-prev{left:max(12px,calc(50vw - 46vh * 9 / 16 - 70px))}
+.dv-reels-next{right:max(12px,calc(50vw - 46vh * 9 / 16 - 70px))}
+@media (max-width:760px){
+  .dv-episodio{grid-template-columns:1fr}
+  .dv-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dv-reels{padding:0}
+  .dv-reels-frame{height:100vh;height:100dvh;border-radius:0;box-shadow:none}
+  .dv-reels-nav{display:none}
+}
+
+/* ===== §T — Tema por jogo: [data-gta="<chave>"] (data-temas-gta.jsx) =====
+ * A área que apresenta um GTA redefine as variáveis do site com a identidade
+ * daquele jogo (as mesmas das séries em vídeo). Tudo dentro herda. */
+[data-gta="gta1"]{--gt-ac:#ffd23f;--gt-ac2:#e4252b;--gt-bg:#16120a;--gt-font:"VT323",ui-monospace,monospace;--gt-fs:1.22;--gt-pat:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 2px,transparent 2px 4px)}
+[data-gta="london"]{--gt-ac:#ff4655;--gt-ac2:#5b8cff;--gt-bg:#111a36;--gt-font:"Shrikhand",Georgia,serif;--gt-fs:1;--gt-pat:radial-gradient(rgba(255,255,255,.08) 1.5px,transparent 2px) 0 0/12px 12px}
+[data-gta="gta2"]{--gt-ac:#9dff3b;--gt-ac2:#ff7a1a;--gt-bg:#0b1109;--gt-font:"Audiowide",sans-serif;--gt-fs:.94;--gt-pat:linear-gradient(rgba(157,255,59,.07) 1px,transparent 1px) 0 0/26px 26px,linear-gradient(90deg,rgba(157,255,59,.07) 1px,transparent 1px) 0 0/26px 26px}
+[data-gta="gta3"]{--gt-ac:#f5c400;--gt-ac2:#9aa3b0;--gt-bg:#0e1014;--gt-font:"Oswald",sans-serif;--gt-fs:1.04;--gt-pat:repeating-linear-gradient(100deg,rgba(200,210,230,.06) 0 1px,transparent 1px 22px)}
+[data-gta="vc"]{--gt-ac:#ff3fa4;--gt-ac2:#25e8ff;--gt-bg:#1b0631;--gt-font:"Kaushan Script",cursive;--gt-fs:1.08;--gt-pat:linear-gradient(180deg,rgba(255,63,164,.2),transparent 45%,rgba(37,232,255,.13))}
+[data-gta="sa"]{--gt-ac:#4fd14f;--gt-ac2:#ffb02e;--gt-bg:#10180b;--gt-font:"Permanent Marker",cursive;--gt-fs:1;--gt-pat:radial-gradient(ellipse at 85% 0%,rgba(255,176,46,.24),transparent 60%)}
+[data-gta="advance"]{--gt-ac:#8bd450;--gt-ac2:#c7f08a;--gt-bg:#121d13;--gt-font:"Silkscreen",ui-monospace,monospace;--gt-fs:.86;--gt-pat:linear-gradient(rgba(0,0,0,.22) 1px,transparent 1px) 0 0/4px 4px,linear-gradient(90deg,rgba(0,0,0,.22) 1px,transparent 1px) 0 0/4px 4px}
+[data-gta="lcs"]{--gt-ac:#e04a3a;--gt-ac2:#e8d9b0;--gt-bg:#1b1511;--gt-font:"Playfair Display",Georgia,serif;--gt-fs:1.02;--gt-pat:repeating-linear-gradient(0deg,rgba(232,217,176,.05) 0 1px,transparent 1px 9px)}
+[data-gta="vcs"]{--gt-ac:#ff8a1f;--gt-ac2:#b5c95a;--gt-bg:#1f110a;--gt-font:"Righteous",sans-serif;--gt-fs:1;--gt-pat:linear-gradient(160deg,rgba(255,138,31,.22),transparent 55%)}
+[data-gta="gta4"]{--gt-ac:#dbe5ec;--gt-ac2:#e0213f;--gt-bg:#0e1218;--gt-font:"Barlow Condensed",sans-serif;--gt-fs:1.08;--gt-pat:linear-gradient(180deg,rgba(160,190,230,.09),transparent 60%)}
+[data-gta="tlad"]{--gt-ac:#ee7426;--gt-ac2:#c9bca9;--gt-bg:#160f0a;--gt-font:"Rye",Georgia,serif;--gt-fs:.95;--gt-pat:repeating-linear-gradient(115deg,rgba(255,240,220,.045) 0 2px,transparent 2px 40px)}
+[data-gta="cw"]{--gt-ac:#ff3b3b;--gt-ac2:#ffc61a;--gt-bg:#1f0708;--gt-font:"Bangers",cursive;--gt-fs:1.12;--gt-pat:radial-gradient(rgba(255,198,26,.15) 2px,transparent 2.5px) 0 0/14px 14px}
+[data-gta="tbogt"]{--gt-ac:#ff4fc3;--gt-ac2:#ffd36b;--gt-bg:#1c0618;--gt-font:"Abril Fatface",Georgia,serif;--gt-fs:1;--gt-pat:radial-gradient(circle at 15% 8%,rgba(255,211,107,.26),transparent 40%),radial-gradient(circle at 92% 92%,rgba(255,79,195,.22),transparent 45%)}
+[data-gta="gta5"]{--gt-ac:#5cdc82;--gt-ac2:#ffb347;--gt-bg:#08160e;--gt-font:"Anton",sans-serif;--gt-fs:1.04;--gt-pat:linear-gradient(180deg,rgba(255,179,71,.2),transparent 50%)}
+[data-gta="online"]{--gt-ac:#2ec5ff;--gt-ac2:#ff3d7f;--gt-bg:#060c16;--gt-font:"Chakra Petch",sans-serif;--gt-fs:1;--gt-pat:linear-gradient(rgba(46,197,255,.07) 1px,transparent 1px) 0 0/22px 22px,linear-gradient(90deg,rgba(46,197,255,.07) 1px,transparent 1px) 0 0/22px 22px}
+[data-gta="gta6"]{--gt-ac:#ff4fa0;--gt-ac2:#ffb23e;--gt-bg:#190626;--gt-font:"Big Shoulders Display",sans-serif;--gt-fs:1.08;--gt-pat:linear-gradient(160deg,rgba(255,79,160,.24),transparent 50%,rgba(255,178,62,.16))}
+
+/* as variáveis do site passam a ser as do jogo */
+[data-gta]{
+  --vi-gold:var(--gt-ac);
+  --vi-pink:var(--gt-ac2);
+  --vi-pink-2:var(--gt-ac2);
+  --vi-coral:color-mix(in srgb,var(--gt-ac) 50%,var(--gt-ac2));
+  --vi-glass:color-mix(in srgb,var(--gt-bg) 90%,transparent);
+  --vi-glass-2:color-mix(in srgb,var(--gt-bg) 80%,transparent);
+  --vi-edge:color-mix(in srgb,var(--gt-ac) 30%,transparent);
+  --vi-edge-hi:color-mix(in srgb,var(--gt-ac) 65%,transparent);
+  --vi-glow-pink:0 0 26px color-mix(in srgb,var(--gt-ac2) 40%,transparent);
+  --vi-glow-gold:0 0 26px color-mix(in srgb,var(--gt-ac) 38%,transparent);
+  --vi-grad-sunset:linear-gradient(90deg,var(--gt-ac2),var(--gt-ac));
+  --money:var(--gt-ac);
+  --neon:var(--gt-ac2);
+  --evidence:var(--gt-ac);
+  --dv-ac:var(--gt-ac);
+  --dv-ac2:var(--gt-ac2);
+}
+/* blocos que mostram o jogo: fundo, textura e borda do tema */
+.card[data-gta],.dossier-shell .card[data-gta],.gta-area[data-gta] .card,.dossier-modal[data-gta],.xt-block[data-gta]{
+  background:var(--gt-pat),linear-gradient(165deg,color-mix(in srgb,var(--gt-bg) 94%,var(--gt-ac) 6%),var(--gt-bg));
+  border-color:color-mix(in srgb,var(--gt-ac) 45%,transparent);
+  box-shadow:0 14px 34px rgba(0,0,0,.35),inset 0 0 0 1px color-mix(in srgb,var(--gt-ac) 14%,transparent);
+}
+.gta-area[data-gta]{position:relative;margin-top:4px;padding:clamp(10px,1.8vw,18px);border-radius:16px;
+  background:var(--gt-pat),linear-gradient(170deg,color-mix(in srgb,var(--gt-bg) 85%,var(--gt-ac) 15%),var(--gt-bg) 70%);
+  border:1px solid color-mix(in srgb,var(--gt-ac) 35%,transparent);transition:background .35s ease}
+/* títulos na fonte do jogo */
+[data-gta] h2,[data-gta] h3,[data-gta] .dz-body h3,[data-gta] .xt-block-head h3,[data-gta] .dv-card-txt strong,[data-gta] .mv-game-text strong,[data-gta] .myst-card h3,.dossier-modal[data-gta] header h2{
+  font-family:var(--gt-font);letter-spacing:normal;
+}
+[data-gta] .dz-body h3,[data-gta] .xt-block-head h3{font-size:calc(1em * var(--gt-fs,1))}
+.dossier-modal[data-gta] header h2{font-size:calc(clamp(24px,3.4vw,40px) * var(--gt-fs,1));color:var(--gt-ac)}
+[data-gta] .dz-kicker,[data-gta] .dz-badge,[data-gta] .myst-game-chip,[data-gta] .vi-badge{color:var(--gt-ac);border-color:color-mix(in srgb,var(--gt-ac) 50%,transparent)}
+[data-gta] .dz-badge{background:color-mix(in srgb,var(--gt-bg) 70%,transparent)}
+.dossier-modal[data-gta] header{border-bottom-color:color-mix(in srgb,var(--gt-ac) 40%,transparent)}
+/* abas de jogo: cada uma já na cor do seu GTA */
+button[data-gta].vi-btn--ghost{border-color:color-mix(in srgb,var(--gt-ac) 45%,transparent);color:var(--gt-ac)}
+button[data-gta].vi-btn:not(.vi-btn--ghost){background:linear-gradient(90deg,var(--gt-ac),var(--gt-ac2));color:#0b0b0b;border-color:transparent}
+button[data-gta].mv-game{border-color:color-mix(in srgb,var(--gt-ac) 35%,transparent)}
+button[data-gta].mv-game.on{background:linear-gradient(135deg,color-mix(in srgb,var(--gt-ac) 32%,transparent),color-mix(in srgb,var(--gt-bg) 85%,transparent));border-color:var(--gt-ac)}
+button[data-gta].mv-game small{color:var(--gt-ac)}
+@media (max-width:760px){
+  .gta-area[data-gta]{padding:10px 8px;border-radius:12px;margin-left:-4px;margin-right:-4px}
+  .dossier-modal[data-gta] header h2{font-size:calc(24px * var(--gt-fs,1))}
+}
+@media (prefers-reduced-motion:reduce){.gta-area[data-gta]{transition:none}}
+.dossier-modal[data-gta] header{background:var(--gt-pat),linear-gradient(180deg,color-mix(in srgb,var(--gt-bg) 88%,var(--gt-ac) 12%),var(--gt-bg))}
+.dossier-modal[data-gta] header h2{background:none;-webkit-text-fill-color:var(--gt-ac);color:var(--gt-ac);text-shadow:0 0 22px color-mix(in srgb,var(--gt-ac) 35%,transparent)}
+.dossier-modal[data-gta] .dossier-modal-field{background:color-mix(in srgb,var(--gt-ac) 5%,transparent);border-color:color-mix(in srgb,var(--gt-ac) 26%,transparent)}
+.dossier-modal[data-gta] .dossier-cover-art{background:linear-gradient(135deg,color-mix(in srgb,var(--gt-ac) 22%,var(--gt-bg)),var(--gt-bg))}
+/* seção inteira no tema do jogo escolhido (missões, vídeos, códigos, rádios, easter eggs, mistérios) */
+.dossier-section.gta-secao[data-gta]{background:var(--gt-pat),radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--gt-ac) 16%,transparent),transparent 60%),linear-gradient(180deg,color-mix(in srgb,var(--gt-bg) 92%,var(--gt-ac) 8%),var(--gt-bg));transition:background .4s ease}
+.dossier-section.gta-secao[data-gta] .dossier-section-head h2,.dossier-section.gta-secao[data-gta] .dossier-section-head [class*="title"]{font-family:var(--gt-font);background:none;-webkit-text-fill-color:var(--gt-ac);color:var(--gt-ac)}
+.dossier-section.gta-secao[data-gta] .gta-area[data-gta]{background:transparent;border-color:color-mix(in srgb,var(--gt-ac) 22%,transparent)}

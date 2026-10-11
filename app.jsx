@@ -35,6 +35,8 @@ const MystSec     = typeof MysteriesSection !== "undefined" ? M(MysteriesSection
 const VIMechSec   = typeof VIMechanicsSection !== "undefined" ? M(VIMechanicsSection) : null;
 const VICatSec    = typeof VICatalogSection !== "undefined" ? M(VICatalogSection) : null;
 const MissionVideosSec = typeof MissionVideosSection !== "undefined" ? M(MissionVideosSection) : null;
+const VideosSec = typeof VideosSection !== "undefined" ? M(VideosSection) : null;
+const SagaSec = typeof SagaSection !== "undefined" ? M(SagaSection) : null;
 
 /* ---- Scroll reveal ----
  * One shared IntersectionObserver toggles a class as elements enter/leave the
@@ -116,7 +118,11 @@ function App(){
    * renderizado; numa página de tema, só as seções daquela rota. */
   const route = (window.__ROUTE && window.__ROUTE.route) || null;
   const only = route && route.sections;
-  const show = (id) => !only || only.indexOf(id) !== -1;
+  /* Página principal: a saga jogo a jogo (sections-saga.jsx) substitui as
+   * seções por assunto — elas continuam inteiras nas páginas de tema. */
+  const saga = !only && typeof SagaSection !== "undefined";
+  const SAGA_FORA = ["games", "videos", "missions", "vehicles", "weapons", "development", "gtaonline", "vi-characters", "vi-places", "gta6", "vi-mechanics", "vi-catalog", "cheats", "radios", "eastereggs", "mysteries", "characters"];
+  const show = (id) => (only ? only.indexOf(id) !== -1 : !(saga && SAGA_FORA.indexOf(id) !== -1));
   const [active, setActive] = React.useState(only ? only[0] : "overview");
   /* i18n: quando o idioma muda, `version` muda e a árvore inteira remonta
    * (key no Fragment abaixo), reavaliando todos os fallbacks __t/__tt. */
@@ -131,7 +137,7 @@ function App(){
   // e o menu acompanha exatamente onde o usuário está. Só <App> + nav
   // re-renderizam; as seções memoizadas não são tocadas.
   React.useEffect(() => {
-    const ids = (window.dossierNavData || NAV).map((n) => n.id).filter((id) => document.getElementById(id));
+    const ids = (window.dossierNavAtual ? window.dossierNavAtual() : (window.dossierNavData || NAV)).map((n) => n.id).filter((id) => document.getElementById(id));
     if (!ids.length) return;
     let raf = 0;
     const compute = () => {
@@ -204,8 +210,10 @@ function App(){
       <main id="conteudo">
         {only && <RouteHead route={route} />}
         {show("overview") && (VIHeroSec ? <VIHeroSec /> : <HeroSec />)}
+        {saga && SagaSec && <SagaSec onOpenDossier={setDossier} />}
         {show("timeline") && <TimelineSec onOpenDossier={setDossier} />}
         {show("games") && <GamesSec onOpenDossier={setDossier} />}
+        {show("videos") && VideosSec && <VideosSec />}
         {show("missions") && (MissionVideosSec ? <MissionVideosSec onOpenDossier={setDossier} /> : <MissionsSec onOpenDossier={setDossier} />)}
         {show("vehicles") && <VehiclesSec onOpenDossier={setDossier} />}
         {show("weapons") && <WeaponsSec onOpenDossier={setDossier} />}

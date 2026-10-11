@@ -2,7 +2,18 @@
 
 const gtaDossierNamespace = window.Dossier || {};
 
-const dossierNav = () => window.dossierNavData || window.NAV || [
+/* Na página principal (saga jogo a jogo) o menu lista os jogos; nas páginas de tema, os assuntos. */
+const dossierNavSaga = () => {
+  const rota = window.__ROUTE && window.__ROUTE.route;
+  if ((rota && rota.sections) || !window.sagaNavData || typeof SagaSection === "undefined") return null;
+  const base = window.dossierNavData || [];
+  const geral = ["timeline", "cities", "gangs", "universes", "rockstar", "glossary"];
+  const itens = [base.find((n) => n.id === "overview") || { id: "overview", label: "Visão Geral" }, ...window.sagaNavData,
+    ...geral.map((id) => base.find((n) => n.id === id)).filter(Boolean)];
+  return itens.map((n, i) => ({ ...n, k: String(i + 1).padStart(2, "0") }));
+};
+window.dossierNavAtual = () => dossierNavSaga() || window.dossierNavData || window.NAV || [];
+const dossierNav = () => dossierNavSaga() || window.dossierNavData || window.NAV || [
   { id: "overview", label: "Visão Geral", k: "01" },
   { id: "timeline", label: "Timeline Cronológica", k: "02" },
   { id: "games", label: "Jogos", k: "03" },
@@ -366,13 +377,14 @@ const DzFallback = ({ label, icon }) => (
   </div>
 );
 
-const DzCard = ({ media, fallback, badge, kicker, title, summary, facts = [], chips = [], onOpen, variant = "stack", thumb = "", className = "", cta, id }) => {
+const DzCard = ({ media, fallback, badge, kicker, title, summary, facts = [], chips = [], onOpen, variant = "stack", thumb = "", className = "", cta, id, tema }) => {
   const rows = facts.filter((row) => row && dzHasValue(row[1]));
   const chipList = asList(chips).filter(Boolean).slice(0, 2);
   const hasMedia = Boolean(media?.src);
   return (
     <article
       id={id}
+      data-gta={window.gtaTema(tema) || undefined}
       className={`card dz-card dz-card--${variant} ${className}`}
       role={onOpen ? "button" : undefined}
       tabIndex={onOpen ? 0 : undefined}
@@ -955,6 +967,7 @@ const TimelineDossierSection = ({ onOpenDossier }) => {
           <div className="dz-grid dz-grid--timeline">
             {chronologyItems.map((item) => (
               <DzCard
+                tema={item.game?.id}
                 key={`${item.year}-${item.title}`}
                 variant="row"
                 media={item.game?.media}
@@ -972,6 +985,7 @@ const TimelineDossierSection = ({ onOpenDossier }) => {
           <div className="dz-grid">
             {releaseItems.map(({ year, title, game }) => (
               <DzCard
+                tema={game?.id}
                 key={`${year}-${title}`}
                 media={game?.media}
                 fallback={<DzFallback label={title} />}
@@ -993,6 +1007,7 @@ const TimelineDossierSection = ({ onOpenDossier }) => {
 
 const GameDossierCard = ({ game, onOpen }) => (
   <DzCard
+    tema={game.id}
     media={game.media}
     fallback={<DzFallback label={game.title} icon="file" />}
     badge={game.releaseYear}
@@ -1318,6 +1333,7 @@ const MissionDossierCard = ({ mission, onOpen }) => {
   const media = mission.media || game?.media;
   return (
     <DzCard
+      tema={mission.gameId}
       media={media}
       fallback={<DzFallback label={mission.title} icon="database" />}
       badge={mission.totalLabel}
@@ -2116,6 +2132,7 @@ const VehicleDossierCard = ({ vehicle, onOpen }) => {
   const media = vehicle.media || game?.media;
   return (
     <DzCard
+      tema={vehicle.gameId}
       media={media}
       fallback={<DzFallback label={vehicle.title} icon="car" />}
       badge={vehicle.totalLabel}
@@ -2696,6 +2713,7 @@ const WeaponDossierCard = ({ weapon, onOpen }) => {
   const media = weapon.media || game?.media;
   return (
     <DzCard
+      tema={weapon.gameId}
       media={media}
       fallback={<DzFallback label={weapon.title} icon="weapon" />}
       badge={weapon.totalLabel}
@@ -2797,6 +2815,7 @@ const DevelopmentDossierSection = ({ onOpenDossier }) => {
             const lead = dzDeep(item.gameId)?.stats?.[0];
             return (
               <DzCard
+                tema={item.gameId}
                 key={item.id}
                 media={game?.media}
                 fallback={<DzFallback label={item.title} icon="file" />}
@@ -2854,6 +2873,7 @@ const CharactersDossierSection = ({ onOpenDossier }) => {
         <div className="dz-grid dz-grid--rows">
           {filtered.map((character) => (
             <DzCard
+              tema={asList(character.games)[0]}
               key={character.id}
               variant="row"
               thumb="portrait"
@@ -3210,6 +3230,7 @@ const GTAOnlineDossierSection = ({ onOpenDossier }) => {
         <div className="dz-grid">
           {filteredDlc.length ? filteredDlc.map((item) => (
             <DzCard
+              tema="online"
               key={item.id}
               media={item.media}
               fallback={<DzFallback label={item.title} icon="star" />}
@@ -3239,6 +3260,7 @@ const GTAOnlineDossierSection = ({ onOpenDossier }) => {
         <div className="dz-grid">
           {onlineTimelineData.map((item) => (
             <DzCard
+              tema="online"
               key={`${item.year}-${item.title}`}
               media={item.media}
               fallback={<DzFallback label={item.title} icon="star" />}
@@ -3966,10 +3988,18 @@ const DossierRecordModal = ({ record, onClose, onOpen }) => {
     type === "timeline" ? `${item.year} · ${item.universe} · ${item.city}` :
     item.universe || "Arquivo";
   const sideNote = item.releaseYear || item.year || item.period || item.era || item.category || "";
+  /* Tema do jogo no modal: o próprio jogo, o jogo do registro ou o primeiro jogo do personagem. */
+  const temaModal = window.gtaTema(
+    type === "game" ? item.id :
+    type === "onlineDlc" ? "online" :
+    type === "timeline" ? timelineGame?.id :
+    type === "character" ? asList(item.games)[0] :
+    item.gameId
+  );
 
   return (
     <div className="dossier-modal-back dossier-shell" onClick={onClose}>
-      <article className="dossier-modal" ref={shellRef} onClick={(e) => e.stopPropagation()}>
+      <article className="dossier-modal" data-gta={temaModal || undefined} ref={shellRef} onClick={(e) => e.stopPropagation()}>
         <header>
           <div>
             <span>Dossiê completo</span>

@@ -71,7 +71,10 @@ const check = (cond, msg) => { if (cond) console.log("ok:", msg); else { console
   /* O href do menu é a página do tema (/missions/); a seção vem da rota. */
   const href3 = links[3] ? links[3].getAttribute("href") : "";
   check(href3.charAt(0) === "/", `menu aponta para a página do tema (${href3})`);
-  const target = href3 && window.__seoParse(href3).route.sections[0];
+  /* Na página principal o menu lista os capítulos da saga (/#jogo-gta2). */
+  const hashAlvo = href3.indexOf("#") !== -1 ? href3.split("#")[1] : "";
+  const rotaAlvo = !hashAlvo && href3 ? window.__seoParse(href3).route : null;
+  const target = hashAlvo || (rotaAlvo && rotaAlvo.sections && rotaAlvo.sections[0]);
   check(!!document.getElementById(target), `seção alvo existe (#${target})`);
 
   /* 1. clique simples deve rolar */
@@ -113,9 +116,10 @@ const check = (cond, msg) => { if (cond) console.log("ok:", msg); else { console
 
   /* Trailers: a miniatura é um botão e o clique traz o player oficial para
    * dentro da página (antes o card só levava para o YouTube em outra aba). */
+  /* Os trailers ficam no capítulo de GTA VI, que só monta perto da tela. */
   const thumb = document.querySelector("button.vi-trailer-thumb");
-  check(!!thumb, "miniatura de trailer é botão (toca na própria página)");
-  check(!!document.querySelector("button.vi-trailer-thumb img[src*='i.ytimg.com']"), "miniatura vem do YouTube");
+  if (!thumb) console.log("(trailers ainda não montados — capítulo GTA VI é carregado ao rolar)");
+  else check(!!document.querySelector("button.vi-trailer-thumb img[src*='i.ytimg.com']"), "miniatura vem do YouTube");
   check(document.querySelectorAll("iframe").length === 0, "nenhum iframe carregado antes do clique");
   if (thumb) {
     await act(async () => {

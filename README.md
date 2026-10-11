@@ -119,7 +119,7 @@ A base curada de GTA VI (lançamento, edições, Extended Look, **mecânicas** c
 
 ## SEO, rotas e pré-render (out/2026)
 
-Endereço canônico: **https://gta.vnmax.org** (`SEO_SITE.origin` em `data-seo.jsx` — é o único lugar a trocar se o domínio mudar).
+Endereço canônico: **https://www.gtatimeline.app** (`SEO_SITE.origin` em `data-seo.jsx` — é o único lugar a trocar se o domínio mudar).
 
 - `data-seo.jsx` é a fonte única das rotas: o dossiê completo (`/`) e uma página por tema (`/games/`, `/cheats/`, `/gta-6/`, `/easter-eggs/` …), cada uma com `title`, `heading` e `description` próprios. pt-BR mora na raiz; os outros 12 idiomas em `/<código em minúsculas>/` (`/en/games/`, `/zh-cn/`).
 - `scripts/prerender.js` roda no fim de `npm run build`: monta a App num jsdom e grava o HTML já renderizado de cada rota × idioma (260 páginas), com canonical, hreflang, Open Graph/Twitter, JSON-LD (WebSite, BreadcrumbList, VideoGame, FAQPage, ItemList), além de `sitemap.xml`, `robots.txt` e `404.html`. Esses arquivos são gerados (estão no `.gitignore`); a Vercel recria tudo a cada deploy.

@@ -56,7 +56,7 @@ const EggCard = ({ egg }) => {
   const hidden = !!egg.spoiler && !revealed;
 
   return (
-    <article className="card" style={{ position: "relative", padding: "12px 14px 14px", display: "flex", flexDirection: "column", gap: 7 }}>
+    <article className="card" data-gta={window.gtaTema(egg.gameId)} style={{ position: "relative", padding: "12px 14px 14px", display: "flex", flexDirection: "column", gap: 7 }}>
       <Corners />
       <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
         <span className="vi-badge" style={{ fontSize: 9, padding: "3px 9px" }}>
@@ -133,7 +133,7 @@ const EasterEggsSection = () => {
   }, []);
 
   return (
-    <section id="eastereggs" className="dossier-section dossier-shell vi-sky vi-sky--dusk">
+    <section id="eastereggs" data-gta={gameId !== "all" ? window.gtaTema(gameId) : undefined} className="dossier-section dossier-shell vi-sky vi-sky--dusk gta-secao">
       <div className="wrap">
         <div className="tape">{__T("egg.ui.tape", "ARQUIVO SECRETO · NÃO DIVULGAR")}</div>
         <DossierSectionHead
@@ -166,6 +166,7 @@ const EasterEggsSection = () => {
               type="button"
               role="tab"
               aria-selected={gameId === game.id}
+              data-gta={window.gtaTema(game.id)}
               className={gameId === game.id ? "vi-btn vi-btn--sm" : "vi-btn vi-btn--ghost vi-btn--sm"}
               onClick={() => setGameId(game.id)}
               title={__TT("egg", game.id, "name", game.name)}

@@ -3,6 +3,8 @@
 const SOURCES = [
   "components.jsx",
   "data.jsx",
+  "data-temas-gta.jsx",
+  "data-saga.jsx",
   "data-gta.jsx",
   "data-dossier.jsx",
   "data-deep.jsx",
@@ -27,11 +29,14 @@ const SOURCES = [
   "sections-rockstar.jsx",
   "sections-dossier.jsx",
   "sections-missions.jsx",
+  "sections-videos.jsx",
   "sections-vi.jsx",
   "sections-vi-catalog.jsx",
   "sections-easter-eggs.jsx",
   "sections-mysteries.jsx",
   "sections-extras.jsx",
+  "sections-saga-cena.jsx",
+  "sections-saga.jsx",
   "app.jsx",
   "enhance.jsx"
 ];

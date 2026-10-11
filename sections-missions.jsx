@@ -221,7 +221,7 @@ const MissionVideosSection = ({ onOpenDossier }) => {
   const withVideo = games.reduce((sum, g) => sum + (g.withVideo || 0), 0);
 
   return (
-    <section id="missions" ref={sectionRef} className="dossier-section dossier-shell mission-section mv-section">
+    <section id="missions" ref={sectionRef} data-gta={(game && window.gtaTema(game.id)) || undefined} className="dossier-section dossier-shell mission-section mv-section gta-secao">
       <div className="wrap">
         <DossierSectionHead
           eyebrow="Operações · gameplay sem comentários"
@@ -257,7 +257,7 @@ const MissionVideosSection = ({ onOpenDossier }) => {
                 const media = mvGameMedia(g.id);
                 const on = g.id === game.id;
                 return (
-                  <button key={g.id} type="button" role="tab" aria-selected={on} className={`mv-game ${on ? "on" : ""}`} onClick={() => pickGame(g.id)}>
+                  <button key={g.id} type="button" role="tab" aria-selected={on} data-gta={window.gtaTema(g.id)} className={`mv-game ${on ? "on" : ""}`} onClick={() => pickGame(g.id)}>
                     <span className="mv-game-cover">{media && media.src ? <img src={media.src} alt="" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /> : null}</span>
                     <span className="mv-game-text">
                       <strong>{g.name}</strong>
@@ -268,6 +268,7 @@ const MissionVideosSection = ({ onOpenDossier }) => {
               })}
             </div>
 
+            <div className="gta-area" data-gta={window.gtaTema(game.id)}>
             <MissionGameBrief gameId={game.id} onOpenDossier={onOpenDossier} />
 
             {game.dossierOnly ? (
@@ -346,6 +347,7 @@ const MissionVideosSection = ({ onOpenDossier }) => {
               {data.note}{" "}
               {game.wiki && <a href={game.wiki} target="_blank" rel="noreferrer">Lista completa no GTA Wiki</a>}
             </p>
+            </div>
           </>
         )}
       </div>

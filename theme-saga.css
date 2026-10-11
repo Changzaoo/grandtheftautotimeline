@@ -1,0 +1,278 @@
+/* ============ A SAGA, JOGO A JOGO (sections-saga.jsx) ============
+ * Tudo usa as variáveis de tema de cada jogo (theme-vi.css §T):
+ * --gt-ac --gt-ac2 --gt-bg --gt-font --gt-fs --gt-pat.
+ * 01. tema do site inteiro (<html data-gta>)  02. fundo fixo  03. capítulo
+ * 04. cabeçalho  05. sub-seções  06. vídeos  07. missões + player
+ * 08. filas, grades, tabelas  09. celular  10. movimento reduzido
+ */
+
+/* ---------------------------------------------- 01. o site inteiro no tema */
+html[data-gta]{background-color:var(--gt-bg);transition:background-color .9s ease}
+/* o corpo fica transparente para o fundo fixo (.sg-fundos) aparecer */
+html[data-gta] body{background:transparent}
+html[data-gta] ::selection{background:var(--gt-ac);color:var(--gt-bg)}
+html[data-gta]{scrollbar-color:var(--gt-ac) var(--gt-bg)}
+
+/* barra do topo e navegação de baixo (celular) */
+.dossier-hud,.dossier-bottom-nav{transition:background .9s ease,border-color .9s ease,box-shadow .9s ease}
+html[data-gta] .dossier-hud{
+  background:var(--gt-pat),linear-gradient(180deg,color-mix(in srgb,var(--gt-bg) 90%,transparent),color-mix(in srgb,var(--gt-bg) 74%,transparent));
+  border-bottom-color:color-mix(in srgb,var(--gt-ac) 38%,transparent);
+  box-shadow:0 10px 30px -14px color-mix(in srgb,var(--gt-ac) 45%,transparent);
+}
+html[data-gta] .dossier-hud nav,
+html[data-gta] .dossier-bottom-nav{
+  border-color:color-mix(in srgb,var(--gt-ac) 26%,transparent);
+  background:color-mix(in srgb,var(--gt-bg) 70%,transparent);
+}
+html[data-gta] .dossier-bottom-nav{background:var(--gt-pat),color-mix(in srgb,var(--gt-bg) 92%,transparent)}
+html[data-gta] .dossier-hud nav a,
+html[data-gta] .dossier-bottom-nav a{font-family:inherit;color:color-mix(in srgb,var(--vi-cream,#fff5ec) 82%,var(--gt-ac))}
+html[data-gta] .dossier-hud nav a:hover,
+html[data-gta] .dossier-bottom-nav a:hover{background:color-mix(in srgb,var(--gt-ac) 16%,transparent);border-color:color-mix(in srgb,var(--gt-ac) 35%,transparent);color:#fff}
+html[data-gta] .dossier-hud nav a.active,
+html[data-gta] .dossier-bottom-nav a.active{
+  background:linear-gradient(180deg,var(--gt-ac),color-mix(in srgb,var(--gt-ac) 78%,var(--gt-ac2)));
+  border-color:transparent;color:var(--gt-bg);
+  box-shadow:0 0 18px color-mix(in srgb,var(--gt-ac) 45%,transparent);
+}
+html[data-gta] .dossier-hud nav a.active span,
+html[data-gta] .dossier-bottom-nav a.active span{color:var(--gt-bg);opacity:.8}
+html[data-gta] .dossier-menu{border-color:color-mix(in srgb,var(--gt-ac) 40%,transparent);color:var(--gt-ac)}
+html[data-gta] .dossier-back-top{border-color:color-mix(in srgb,var(--gt-ac) 45%,transparent);color:var(--gt-ac)}
+
+/* seções dentro dos capítulos: transparentes, o fundo do jogo aparece */
+.sg-cap .dossier-section,
+.sg-cap .dossier-section.alt,
+.sg-cap .dossier-section.gta-secao[data-gta]{background:transparent}
+.sg-cap .dossier-section + .dossier-section{border-top-color:color-mix(in srgb,var(--gt-ac) 16%,transparent)}
+
+/* ---------------------------------------------- 02. fundo fixo (crossfade) */
+.sg-fundos{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.sg-fundo{
+  position:absolute;inset:0;opacity:0;transition:opacity .9s ease;
+  background:
+    var(--gt-pat),
+    radial-gradient(ellipse 80% 55% at 50% -8%,color-mix(in srgb,var(--gt-ac) 24%,transparent),transparent 70%),
+    radial-gradient(ellipse 60% 50% at 100% 100%,color-mix(in srgb,var(--gt-ac2) 14%,transparent),transparent 70%),
+    var(--gt-bg);
+}
+.sg-fundo.on{opacity:1}
+
+/* ---------------------------------------------- 03. capítulo */
+.sg-saga{position:relative;color:var(--vi-cream,#fff5ec)}
+.sg-cap{position:relative;padding:0 0 clamp(56px,8vw,120px);color:var(--vi-cream,#fff5ec)}
+.sg-cap + .sg-cap{border-top:1px solid color-mix(in srgb,var(--gt-ac) 22%,transparent)}
+.sg-cap-wrap{position:relative;padding-top:clamp(40px,6vw,88px);--sg-gut:36px}
+@media (max-width:700px){.sg-cap-wrap{--sg-gut:18px}}
+@media (max-width:480px){.sg-cap-wrap{--sg-gut:12px}}
+.sg-cap :where(img){max-width:100%}
+.sg-blocos{display:flex;flex-direction:column;gap:clamp(40px,5vw,72px);margin-top:clamp(36px,5vw,64px);min-width:0}
+.sg-espera{min-height:900px}
+
+/* ---------------------------------------------- 04. cabeçalho do capítulo */
+.sg-head{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.85fr);gap:clamp(22px,4vw,56px);align-items:center}
+.sg-head-txt{min-width:0}
+.sg-head-num{display:flex;align-items:center;gap:12px;font:700 11px/1 "Space Mono",ui-monospace,monospace;letter-spacing:.24em;text-transform:uppercase;color:var(--gt-ac)}
+.sg-head-num i{flex:0 0 46px;height:1px;background:linear-gradient(90deg,var(--gt-ac),var(--gt-ac2))}
+.sg-head-num span:last-child{opacity:.55}
+.sg-cap .sg-head-titulo{
+  margin:14px 0 18px;font-family:var(--gt-font);font-weight:400;
+  font-size:calc(clamp(40px,6.8vw,104px) * var(--gt-fs,1));line-height:.95;letter-spacing:normal;
+  color:var(--gt-ac);-webkit-text-fill-color:var(--gt-ac);background:none;
+  text-shadow:0 0 34px color-mix(in srgb,var(--gt-ac) 38%,transparent),0 3px 0 color-mix(in srgb,var(--gt-ac2) 45%,transparent);
+  overflow-wrap:anywhere;text-wrap:balance;
+}
+.sg-head-fatos{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px;padding:0}
+.sg-head-fatos div{padding:9px 13px;border:1px solid color-mix(in srgb,var(--gt-ac) 30%,transparent);border-radius:12px;background:color-mix(in srgb,var(--gt-bg) 72%,transparent);min-width:0}
+.sg-head-fatos dt{font:700 9.5px/1 "Space Mono",ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;color:var(--gt-ac2);margin-bottom:5px}
+.sg-head-fatos dd{margin:0;font-size:14px;font-weight:600;line-height:1.3}
+.sg-head-sum{margin:0 0 20px;max-width:62ch;font-size:clamp(15px,1.3vw,18px);line-height:1.6;color:color-mix(in srgb,var(--vi-cream,#fff5ec) 88%,transparent)}
+.sg-head-acoes{display:flex;flex-wrap:wrap;gap:10px}
+.sg-cap .vi-btn:not(.vi-btn--ghost){background:linear-gradient(90deg,var(--gt-ac),color-mix(in srgb,var(--gt-ac) 60%,var(--gt-ac2)));color:var(--gt-bg);border-color:transparent}
+.sg-cap .vi-btn--ghost{border-color:color-mix(in srgb,var(--gt-ac) 45%,transparent);color:var(--gt-ac)}
+.sg-indice{display:flex;flex-wrap:wrap;gap:6px;margin-top:22px}
+.sg-indice a{padding:6px 11px;border-radius:999px;border:1px solid color-mix(in srgb,var(--gt-ac) 28%,transparent);font:600 11px/1.1 "Space Mono",ui-monospace,monospace;letter-spacing:.06em;color:color-mix(in srgb,var(--vi-cream,#fff5ec) 85%,var(--gt-ac));text-decoration:none;background:color-mix(in srgb,var(--gt-bg) 60%,transparent);transition:background .2s ease,color .2s ease}
+.sg-indice a:hover,.sg-indice a:focus-visible{background:var(--gt-ac);color:var(--gt-bg)}
+.sg-head-capa{position:relative;aspect-ratio:4/5;max-height:560px;width:100%;border-radius:20px;overflow:hidden;
+  border:1px solid color-mix(in srgb,var(--gt-ac) 45%,transparent);
+  background:var(--gt-pat),linear-gradient(160deg,color-mix(in srgb,var(--gt-ac) 22%,var(--gt-bg)),var(--gt-bg));
+  box-shadow:0 30px 70px -30px rgba(0,0,0,.7),0 0 0 6px color-mix(in srgb,var(--gt-bg) 60%,transparent),0 0 50px -10px color-mix(in srgb,var(--gt-ac) 40%,transparent)}
+.sg-head-capa .official-media{position:absolute;inset:0;margin:0;width:100%;height:100%}
+.sg-head-capa .official-media img,.sg-head-capa .official-media video{width:100%;height:100%;object-fit:cover;display:block}
+.sg-head-capa figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 12px 8px;font-size:10px;background:linear-gradient(transparent,rgba(0,0,0,.7));color:rgba(255,255,255,.75)}
+.sg-head-ano{position:absolute;right:10px;top:6px;font-family:var(--gt-font);font-size:calc(clamp(34px,4.6vw,64px) * var(--gt-fs,1));line-height:1;color:var(--gt-ac);text-shadow:0 2px 14px rgba(0,0,0,.7);pointer-events:none}
+
+/* ---------------------------------------------- 05. sub-seções */
+.sg-bloco{position:relative;min-width:0;scroll-margin-top:84px}
+.sg-bloco-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--gt-ac) 24%,transparent)}
+.sg-bloco-kicker{display:block;font:700 10px/1.2 "Space Mono",ui-monospace,monospace;letter-spacing:.22em;text-transform:uppercase;color:var(--gt-ac2);margin-bottom:6px}
+.sg-cap .sg-bloco-titulo{margin:0;font-family:var(--gt-font);font-weight:400;font-size:calc(clamp(26px,3.2vw,42px) * var(--gt-fs,1));line-height:1;color:var(--gt-ac);-webkit-text-fill-color:var(--gt-ac);background:none;letter-spacing:normal}
+.sg-bloco-extra{display:flex;align-items:center;gap:10px}
+.sg-conta{font:700 11px/1 "Space Mono",ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;padding:7px 11px;border-radius:999px;border:1px solid color-mix(in srgb,var(--gt-ac) 40%,transparent);color:var(--gt-ac)}
+.sg-par{margin:0 0 14px;font-size:15px;line-height:1.7;color:color-mix(in srgb,var(--vi-cream,#fff5ec) 86%,transparent);max-width:78ch}
+.sg-par--lead{font-size:clamp(16px,1.35vw,18.5px);color:var(--vi-cream,#fff5ec)}
+.sg-par b{color:var(--gt-ac);font-weight:700}
+.sg-chips{display:flex;flex-wrap:wrap;gap:6px}
+.sg-chip{padding:5px 10px;border-radius:999px;font-size:12px;line-height:1.2;border:1px solid color-mix(in srgb,var(--gt-ac) 30%,transparent);background:color-mix(in srgb,var(--gt-ac) 8%,color-mix(in srgb,var(--gt-bg) 70%,transparent));color:var(--vi-cream,#fff5ec)}
+.sg-listas{display:grid;gap:12px;margin:18px 0 0}
+.sg-listas div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:start}
+.sg-listas dt{font:700 10px/2.2 "Space Mono",ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--gt-ac2)}
+.sg-listas dd{margin:0;min-width:0}
+.sg-vazio{padding:18px;border:1px dashed color-mix(in srgb,var(--gt-ac) 35%,transparent);border-radius:14px;font:600 12px/1.4 "Space Mono",ui-monospace,monospace;color:color-mix(in srgb,var(--vi-cream,#fff5ec) 70%,transparent)}
+.sg-mais{display:flex;justify-content:center;margin-top:16px}
+.sg-extra{margin-top:26px}
+
+/* história: texto + vídeo em destaque ao lado */
+.sg-hist{display:block}
+.sg-hist--video{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
+.sg-hist-txt{min-width:0}
+.sg-hist-video{position:sticky;top:90px}
+
+/* bastidores */
+.sg-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-top:8px}
+.sg-stats div{padding:14px;border-radius:14px;border:1px solid color-mix(in srgb,var(--gt-ac) 28%,transparent);background:var(--gt-pat),color-mix(in srgb,var(--gt-bg) 78%,transparent);display:flex;flex-direction:column;gap:6px;min-width:0}
+.sg-stats strong{font-family:var(--gt-font);font-weight:400;font-size:calc(26px * var(--gt-fs,1));line-height:1;color:var(--gt-ac);overflow-wrap:anywhere}
+.sg-stats span{font-size:12px;line-height:1.35;color:color-mix(in srgb,var(--vi-cream,#fff5ec) 75%,transparent)}
+
+/* veículos / armas: cartão + destaques */
+.sg-duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px;align-items:start}
+.sg-destaques{display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:16px;border:1px solid color-mix(in srgb,var(--gt-ac) 22%,transparent);background:color-mix(in srgb,var(--gt-bg) 62%,transparent);min-width:0}
+.sg-destaques .sg-bloco-kicker{margin:4px 0 0}
+
+/* GTA VI: as seções completas do jogo dentro do capítulo */
+.sg-vi{margin:0 calc(-1 * clamp(0px,2vw,24px));min-width:0}
+.sg-vi > .dossier-section{padding:40px 0}
+.sg-vi .wrap{padding-left:clamp(0px,2vw,24px);padding-right:clamp(0px,2vw,24px)}
+
+/* ---------------------------------------------- 06. vídeos da série (9:16) */
+.sg-vfila{display:flex;gap:14px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding:4px 2px 12px;margin-top:18px;scrollbar-width:thin;scrollbar-color:var(--gt-ac) transparent}
+.sg-vfila > div{flex:0 0 clamp(150px,15vw,190px);scroll-snap-align:start}
+.sg-vcard{all:unset;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;width:100%;cursor:pointer;color:var(--vi-cream,#fff5ec)}
+.sg-vcard-img{position:relative;display:block;aspect-ratio:9/16;border-radius:16px;overflow:hidden;background:var(--gt-bg);border:1px solid color-mix(in srgb,var(--gt-ac) 40%,transparent);box-shadow:0 14px 30px -16px rgba(0,0,0,.8);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.sg-vcard-img img{width:100%;height:100%;object-fit:cover;display:block}
+.sg-vcard-play{position:absolute;left:8px;right:8px;bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 10px;border-radius:999px;font:700 11px/1 "Space Mono",ui-monospace,monospace;letter-spacing:.04em;background:var(--gt-ac);color:var(--gt-bg);box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.sg-vcard-play i{font-style:normal;font-size:10px}
+.sg-vcard-txt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.sg-vcard-txt small{font:700 9.5px/1.2 "Space Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--gt-ac2)}
+.sg-vcard-txt strong{font-size:13.5px;line-height:1.25;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sg-vcard:hover .sg-vcard-img,.sg-vcard:focus-visible .sg-vcard-img{transform:translateY(-3px);border-color:var(--gt-ac);box-shadow:0 18px 36px -14px color-mix(in srgb,var(--gt-ac) 55%,transparent)}
+.sg-vcard:focus-visible{outline:2px solid var(--gt-ac);outline-offset:4px;border-radius:16px}
+.sg-vcard--destaque .sg-vcard-img{border-radius:20px;border-width:2px;border-color:var(--gt-ac);box-shadow:0 0 0 5px color-mix(in srgb,var(--gt-bg) 70%,transparent),0 24px 60px -20px color-mix(in srgb,var(--gt-ac) 60%,transparent)}
+.sg-vcard--destaque .sg-vcard-play{font-size:12.5px;padding:11px 14px}
+.sg-vcard--destaque .sg-vcard-txt strong{font-family:var(--gt-font);font-weight:400;font-size:calc(18px * var(--gt-fs,1))}
+.sg-bloco--episodio .dv-episodio{margin:0}
+
+/* ---------------------------------------------- 07. missões + player */
+.sg-mfila{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding:4px 2px 12px;margin-top:18px;scrollbar-width:thin;scrollbar-color:var(--gt-ac) transparent}
+.sg-mfila > .sg-mis{flex:0 0 clamp(200px,19vw,250px);scroll-snap-align:start}
+.sg-mfila--grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));overflow:visible;scroll-snap-type:none}
+.sg-mis{all:unset;box-sizing:border-box;display:flex;flex-direction:column;cursor:pointer;border-radius:14px;overflow:hidden;border:1px solid color-mix(in srgb,var(--gt-ac) 24%,transparent);background:color-mix(in srgb,var(--gt-bg) 80%,transparent);color:var(--vi-cream,#fff5ec);transition:border-color .2s ease,transform .2s ease;min-width:0}
+.sg-mis:hover:not(:disabled),.sg-mis:focus-visible{border-color:var(--gt-ac);transform:translateY(-2px)}
+.sg-mis:focus-visible{outline:2px solid var(--gt-ac);outline-offset:2px}
+.sg-mis:disabled{cursor:default;opacity:.6}
+.sg-mis-img{position:relative;display:block;aspect-ratio:16/9;background:var(--gt-pat),var(--gt-bg)}
+.sg-mis-img img{width:100%;height:100%;object-fit:cover;display:block}
+.sg-mis-img em{position:absolute;inset:0;display:grid;place-items:center;font:600 11px "Space Mono",ui-monospace,monospace;font-style:normal;color:color-mix(in srgb,var(--vi-cream,#fff5ec) 55%,transparent)}
+.sg-mis-img b{position:absolute;right:6px;bottom:6px;padding:3px 6px;border-radius:6px;font:700 10px/1 "Space Mono",ui-monospace,monospace;background:rgba(0,0,0,.75);color:#fff}
+.sg-mis-img i{position:absolute;left:50%;top:50%;width:38px;height:38px;margin:-19px 0 0 -19px;display:grid;place-items:center;border-radius:50%;background:var(--gt-ac);color:var(--gt-bg);font-style:normal;font-size:13px;opacity:0;transform:scale(.8);transition:opacity .2s ease,transform .2s ease}
+.sg-mis:hover .sg-mis-img i,.sg-mis:focus-visible .sg-mis-img i{opacity:1;transform:none}
+.sg-mis-txt{display:flex;flex-direction:column;gap:3px;padding:10px 12px 12px;min-width:0}
+.sg-mis-txt small{font:700 10px/1 "Space Mono",ui-monospace,monospace;color:var(--gt-ac)}
+.sg-mis-txt strong{font-size:14px;line-height:1.25;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sg-mis-txt span{font-size:11.5px;line-height:1.3;color:color-mix(in srgb,var(--vi-cream,#fff5ec) 62%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.sg-player{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;padding:clamp(10px,3vw,40px);background:color-mix(in srgb,var(--gt-bg,#05030c) 55%,rgba(0,0,0,.9));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--vi-cream,#fff5ec)}
+.sg-player-box{width:min(1100px,100%);max-height:100%;overflow:auto;display:flex;flex-direction:column;gap:12px}
+.sg-player-tela{position:relative;aspect-ratio:16/9;width:100%;border-radius:16px;overflow:hidden;background:#000;box-shadow:0 0 0 2px var(--gt-ac,#ffd166),0 30px 80px rgba(0,0,0,.6)}
+.sg-player-tela iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.sg-player-info{display:flex;flex-direction:column;gap:4px}
+.sg-player-info small{font:700 10.5px/1.2 "Space Mono",ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--gt-ac,#ffd166)}
+.sg-player-info strong{font-family:var(--gt-font,inherit);font-weight:400;font-size:calc(clamp(20px,2.4vw,30px) * var(--gt-fs,1));line-height:1.05;color:#fff}
+.sg-player-info p{margin:2px 0 0;font-size:14px;line-height:1.5;color:rgba(255,255,255,.8);max-width:80ch}
+.sg-player-cred{font-size:11px;color:rgba(255,255,255,.5)}
+.sg-player-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;font:700 11px "Space Mono",ui-monospace,monospace;color:rgba(255,255,255,.7)}
+.sg-player .vi-btn--ghost{border-color:color-mix(in srgb,var(--gt-ac,#ffd166) 50%,transparent);color:var(--gt-ac,#ffd166)}
+.sg-player .vi-btn:disabled{opacity:.35;cursor:default}
+.sg-player-x{position:absolute;top:10px;right:12px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.55);color:#fff;font-size:26px;line-height:1;cursor:pointer}
+.sg-player-x:hover{background:var(--gt-ac,#ffd166);color:var(--gt-bg,#000)}
+
+/* ---------------------------------------------- 08. filas, grades, tabela, rádios */
+.sg-grade{display:grid;gap:14px;min-width:0}
+.sg-grade--2{grid-template-columns:repeat(auto-fill,minmax(min(100%,380px),1fr))}
+.sg-grade--3{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.sg-grade > *{min-width:0}
+
+/* personagens: fila horizontal com o próximo cartão aparecendo */
+.sg-cfila{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding:4px 2px 14px;margin-top:4px;scrollbar-width:thin;scrollbar-color:var(--gt-ac) transparent}
+.sg-vfila + .sg-cfila{margin-top:14px}
+.sg-cfila-item{flex:0 0 clamp(300px,30vw,400px);scroll-snap-align:start;display:flex;min-width:0}
+.sg-cfila-item > .dz-card{flex:1;min-width:0;height:100%}
+
+.sg-tabela-wrap{overflow-x:auto;border-radius:16px;border:1px solid color-mix(in srgb,var(--gt-ac) 26%,transparent);background:var(--gt-pat),color-mix(in srgb,var(--gt-bg) 82%,transparent)}
+.sg-tabela{width:100%;border-collapse:collapse;font-size:14px}
+.sg-tabela th,.sg-tabela td{padding:10px 14px;text-align:left;vertical-align:top;border-bottom:1px solid color-mix(in srgb,var(--gt-ac) 14%,transparent)}
+.sg-tabela thead th{font:700 10px/1.2 "Space Mono",ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--gt-ac2);background:color-mix(in srgb,var(--gt-bg) 70%,transparent)}
+.sg-tabela tbody tr:last-child > *{border-bottom:0}
+.sg-tabela tbody tr:hover{background:color-mix(in srgb,var(--gt-ac) 7%,transparent)}
+.sg-tabela code{font:700 13px/1.3 "Space Mono",ui-monospace,monospace;color:var(--gt-ac);word-break:break-word}
+.sg-pad{font-family:"Space Mono",ui-monospace,monospace;font-size:12px;color:color-mix(in srgb,var(--vi-cream,#fff5ec) 75%,transparent)}
+
+.sg-radios{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:10px}
+.sg-radios li{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border-radius:14px;border:1px solid color-mix(in srgb,var(--gt-ac) 24%,transparent);background:color-mix(in srgb,var(--gt-bg) 76%,transparent);min-width:0}
+.sg-radios strong{font-family:var(--gt-font);font-weight:400;font-size:calc(19px * var(--gt-fs,1));line-height:1.1;color:var(--gt-ac)}
+.sg-radio-gen{font:700 10.5px/1.3 "Space Mono",ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--gt-ac2)}
+.sg-radio-dj{font-size:12.5px;line-height:1.4;color:color-mix(in srgb,var(--vi-cream,#fff5ec) 72%,transparent)}
+
+/* ---------------------------------------------- 09. tablet e celular */
+@media (max-width:980px){
+  .sg-head{grid-template-columns:minmax(0,1fr) minmax(0,.8fr)}
+}
+@media (max-width:760px){
+  .sg-cap-wrap{padding-top:32px}
+  .sg-head{grid-template-columns:1fr;gap:20px}
+  /* capa vira faixa larga acima do texto */
+  .sg-head-capa{order:-1;aspect-ratio:16/10;max-height:none;border-radius:16px}
+  .sg-cap .sg-head-titulo{font-size:calc(clamp(36px,11vw,60px) * var(--gt-fs,1));margin:10px 0 14px}
+  .sg-head-fatos{gap:8px}
+  .sg-head-fatos div{padding:8px 11px;flex:1 1 calc(50% - 8px)}
+  .sg-head-acoes .vi-btn{width:100%;justify-content:center;text-align:center}
+  .sg-indice{flex-wrap:nowrap;overflow-x:auto;margin-right:calc(-1 * var(--sg-gut));padding-right:var(--sg-gut);padding-bottom:4px;scrollbar-width:none}
+  .sg-indice::-webkit-scrollbar{display:none}
+  .sg-indice a{flex:0 0 auto;padding:9px 13px}
+  .sg-blocos{gap:44px;margin-top:36px}
+  /* história: vídeo em destaque em cima do texto */
+  .sg-hist--video{grid-template-columns:1fr}
+  .sg-hist-video{position:static;width:min(240px,62vw);margin:0 auto}
+  .sg-listas div{grid-template-columns:1fr;gap:6px}
+  .sg-listas dt{line-height:1.2}
+  /* filas horizontais encostam na borda e deixam o próximo cartão aparecer */
+  .sg-vfila,.sg-mfila:not(.sg-mfila--grade),.sg-cfila{margin-left:calc(-1 * var(--sg-gut));margin-right:calc(-1 * var(--sg-gut));padding-left:var(--sg-gut);padding-right:var(--sg-gut);scroll-padding-left:var(--sg-gut)}
+  .sg-vfila > div{flex-basis:42vw}
+  .sg-mfila > .sg-mis{flex-basis:68vw}
+  .sg-mfila--grade{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .sg-cfila-item{flex-basis:84vw}
+  .sg-grade--2,.sg-grade--3{grid-template-columns:1fr}
+  .sg-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  /* tabela de códigos vira lista de fichas */
+  .sg-tabela thead{display:none}
+  .sg-tabela,.sg-tabela tbody,.sg-tabela tr,.sg-tabela th,.sg-tabela td{display:block;width:auto}
+  .sg-tabela tr{padding:10px 14px;border-bottom:1px solid color-mix(in srgb,var(--gt-ac) 14%,transparent)}
+  .sg-tabela tbody tr:last-child{border-bottom:0}
+  .sg-tabela th,.sg-tabela td{padding:2px 0;border:0}
+  .sg-tabela td.sg-pad::before{content:"PS: ";color:var(--gt-ac2)}
+  .sg-player{padding:0;align-items:stretch}
+  .sg-player-box{justify-content:center;padding:56px 12px 16px}
+  .sg-player-tela{border-radius:10px}
+  .sg-vi{margin:0}
+}
+@media (hover:none){
+  .sg-mis-img i{opacity:.92;transform:none;width:32px;height:32px;margin:-16px 0 0 -16px;font-size:11px}
+}
+
+/* ---------------------------------------------- 10. movimento reduzido */
+@media (prefers-reduced-motion:reduce){
+  html[data-gta],.sg-fundo,.dossier-hud,.dossier-bottom-nav{transition:none}
+  .sg-vcard-img,.sg-mis,.sg-mis-img i{transition:none}
+  .sg-vcard:hover .sg-vcard-img,.sg-mis:hover:not(:disabled){transform:none}
+}

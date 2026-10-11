@@ -12,7 +12,7 @@
  * Ordem no bundle: ANTES de i18n.jsx (o boot do idioma lê window.__ROUTE).
  */
 window.SEO_SITE = {
-  origin: "https://gta.vnmax.org",
+  origin: "https://www.gtatimeline.app",
   name: "Dossiê GTA",
   defaultLang: "pt-BR"
 };
@@ -38,6 +38,13 @@ window.SEO_ROUTES = [
     title: "Todos os jogos de GTA: história, protagonistas e legado",
     heading: "Todos os jogos de Grand Theft Auto",
     description: "Ficha de cada jogo da série GTA, de 1997 a GTA VI: ano, cidade, protagonista, enredo, bastidores de desenvolvimento e por que cada um importa."
+  },
+  {
+    id: "videos", slug: "videos", sections: ["videos"],
+    label: "Vídeos",
+    title: "Vídeos de GTA: a história, os segredos e os bastidores de cada jogo",
+    heading: "Vídeos do Dossiê GTA",
+    description: "Uma série em vídeo para cada Grand Theft Auto, de GTA 1 a GTA VI: história, bastidores, mistérios, easter eggs, veículos, armas, rádios e códigos."
   },
   {
     id: "missions", slug: "missions", sections: ["missions"],

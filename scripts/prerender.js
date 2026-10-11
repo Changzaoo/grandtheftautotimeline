@@ -171,6 +171,8 @@ ${ogAlt}
   <link rel="stylesheet" href="styles.css${v}"/>
   <link rel="stylesheet" href="theme-neo.css${v}"/>
   <link rel="stylesheet" href="theme-vi.css${v}"/>
+  <link rel="stylesheet" href="theme-saga.css${v}"/>
+  <link rel="stylesheet" href="theme-saga-cena.css${v}"/>
   <link rel="stylesheet" href="theme-glass.css${v}"/>
   ${structuredData(lang, route, meta, extra)}
 </head>
@@ -350,6 +352,8 @@ function write404() {
   <link rel="stylesheet" href="styles.css?v=${version}"/>
   <link rel="stylesheet" href="theme-neo.css?v=${version}"/>
   <link rel="stylesheet" href="theme-vi.css?v=${version}"/>
+  <link rel="stylesheet" href="theme-saga.css?v=${version}"/>
+  <link rel="stylesheet" href="theme-saga-cena.css?v=${version}"/>
 </head>
 <body>
   <main class="route-head dossier-shell" style="min-height:100vh;padding-top:12vh">
