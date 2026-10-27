@@ -456,7 +456,7 @@ function SagaMovel({ P, movel }) {
 }
 
 /* ---------- aparelho: fotos reais compostas ---------- */
-function SagaFotos({ geo }) {
+function SagaFotos({ geo, reflexo }) {
   return geo.pecas.map((pc, i) => {
     const s = pc.sombra || [50, 97, 46, 4];
     const sx = pc.x + (s[0] - s[2]) / 100 * pc.w, sy = pc.y + (s[1] - s[3]) / 100 * pc.h;
@@ -465,6 +465,11 @@ function SagaFotos({ geo }) {
         <span className="sgc-sombra" style={{ left: sx / 10 + "%", top: sy / 6 + "%", width: (s[2] * 2 / 100 * pc.w) / 10 + "%", height: (s[3] * 2 / 100 * pc.h) / 6 + "%" }} />
         <img className="sgc-foto" data-foto={pc.f} src={sagaFotoSrc(pc.f)} alt="" decoding="async" loading="lazy" draggable="false"
           style={{ left: pc.x / 10 + "%", top: pc.y / 6 + "%", width: pc.w / 10 + "%", height: pc.h / 6 + "%" }} />
+        {reflexo && (
+          /* reflexo no tampo: a mesma foto espelhada, esmaecida a partir da base */
+          <img className="sgc-reflexo" src={sagaFotoSrc(pc.f)} alt="" decoding="async" loading="lazy" draggable="false" aria-hidden="true"
+            style={{ left: pc.x / 10 + "%", top: (pc.y + pc.h) / 6 + "%", width: pc.w / 10 + "%", height: pc.h / 6 + "%" }} />
+        )}
       </React.Fragment>
     );
   });
@@ -805,11 +810,18 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
       return () => window.removeEventListener("resize", aoRedimensionar);
     }
 
-    const liga = () => { if (!ouvindo) { ouvindo = true; window.addEventListener("scroll", agenda, { passive: true }); agenda(); } };
+    /* ao se aproximar, as imagens (fotos, caixa, mídia) deixam de ser lazy:
+     * num salto rápido pelo menu elas já estão carregadas quando a cena entra */
+    let carregou = false;
+    const carrega = () => {
+      if (carregou) return; carregou = true;
+      wrap.querySelectorAll('img[loading="lazy"]').forEach((im) => { im.loading = "eager"; });
+    };
+    const liga = () => { carrega(); if (!ouvindo) { ouvindo = true; window.addEventListener("scroll", agenda, { passive: true }); agenda(); } };
     const desliga = () => { if (ouvindo) { ouvindo = false; window.removeEventListener("scroll", agenda); } };
     let io = null;
     if (typeof window.IntersectionObserver === "function") {
-      io = new IntersectionObserver((ents) => { ents.forEach((en) => (en.isIntersecting ? liga() : desliga())); }, { rootMargin: "100% 0px 100% 0px" });
+      io = new IntersectionObserver((ents) => { ents.forEach((en) => (en.isIntersecting ? liga() : desliga())); }, { rootMargin: "200% 0px 150% 0px" });
       io.observe(wrap);
     } else liga();
     quadro();
@@ -838,7 +850,7 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
             <SagaMovel P={P} movel={ap.movel} />
           </svg>
           <div className="sgc-aparelho" ref={r("aparelho")}>
-            <SagaFotos geo={geo} />
+            <SagaFotos geo={geo} reflexo={!ap.mesa} />
             {tmp && <span className="sgc-poco" ref={r("poco")} style={pos(tmp.x, tmp.y, tmp.w, tmp.h)} />}
             {bnd && (
               <div className="sgc-bandeja-clip" style={pos(bnd.x, bnd.y, bnd.w, bnd.prof + bnd.placa)}>
