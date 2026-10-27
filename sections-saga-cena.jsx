@@ -138,7 +138,7 @@ const SAGA_APARELHOS = {
     pecas: [{ f: "tvhd", x: 215, y: 96, w: 400, sombra: [50, 98, 24, 2.4] }, { f: "ps3", x: 585, y: 296, w: 300, sombra: [62, 93, 38, 9] }],
     tela: { peca: 0, q: SAGA_Q_HD, r: 0.004, tipo: "plana" },
     leds: [{ peca: 1, p: [79.6, 83.4], w: 3, h: 3 }], led2: { peca: 0, p: [92.7, 86.3] },
-    caixa: { x: 300, y: 282 }, entrada: "fenda",
+    caixa: { x: 150, y: 282 }, entrada: "fenda",
     fenda: { peca: 1, a: [58.2, 59.8], b: [81.4, 74.3], u: [21.4, 13.3], v: [8.5, -17] }
   },
   x360: {
@@ -146,7 +146,7 @@ const SAGA_APARELHOS = {
     pecas: [{ f: "tvhd", x: 215, y: 96, w: 400, sombra: [50, 98, 24, 2.4] }, { f: "x360", x: 585, y: 282, w: 300, sombra: [60, 92, 40, 10] }],
     tela: { peca: 0, q: SAGA_Q_HD, r: 0.004, tipo: "plana" },
     leds: [{ peca: 1, p: [66.4, 80.5], w: 19, h: 19, forma: "anel" }], led2: { peca: 0, p: [92.7, 86.3] },
-    caixa: { x: 300, y: 282 }, entrada: "fenda",
+    caixa: { x: 150, y: 282 }, entrada: "fenda",
     fenda: { peca: 1, a: [36, 51], b: [59, 63.5], u: [21.8, 11.8], v: [7.4, -17.5] }
   },
   ds: {
@@ -163,7 +163,7 @@ const SAGA_APARELHOS = {
     pecas: [{ f: "tvhd", x: 215, y: 96, w: 400, sombra: [50, 98, 24, 2.4] }, { f: "ps4", x: 588, y: 280, w: 292, sombra: [58, 90, 42, 11] }],
     tela: { peca: 0, q: SAGA_Q_HD, r: 0.004, tipo: "plana" },
     leds: [{ peca: 1, a: [33.6, 44.6], b: [72, 23.2], t: 2.2, forma: "barra" }], led2: { peca: 0, p: [92.7, 86.3] },
-    caixa: { x: 300, y: 282 }, entrada: "fenda",
+    caixa: { x: 150, y: 282 }, entrada: "fenda",
     fenda: { peca: 1, a: [33.5, 46.5], b: [53, 85], u: [13.6, 26.8], v: [17.3, -10.6] }
   },
   ps5: {
@@ -172,7 +172,7 @@ const SAGA_APARELHOS = {
     tela: { peca: 0, q: SAGA_Q_HD, r: 0.004, tipo: "plana" },
     leds: [{ peca: 1, a: [37.4, 8], b: [37.4, 76], t: 1.6, forma: "barra" }, { peca: 1, a: [69, 8], b: [69, 76], t: 1.6, forma: "barra" }],
     led2: { peca: 0, p: [92.7, 86.3] },
-    caixa: { x: 290, y: 296 }, entrada: "fendaZ",
+    caixa: { x: 150, y: 296 }, entrada: "fendaZ",
     fenda: { peca: 1, a: [69.6, 54], b: [69.6, 80], u: [3, 0], v: [0, 26] }
   }
 };
@@ -262,40 +262,6 @@ function sagaHomog(W, H, d) {
 }
 
 /* ---------- prédios das janelas (determinístico, igual no SSR) ---------- */
-function sagaPredios(x0, x1, base, seed, hMin, hMax) {
-  let s = seed;
-  const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
-  const out = [];
-  let x = x0;
-  while (x < x1) {
-    const w = 12 + rnd() * 22;
-    const h = hMin + rnd() * (hMax - hMin);
-    const b = { x, y: base - h, w, h, j: [] };
-    for (let yy = base - h + 6; yy < base - 5; yy += 8)
-      for (let xx = x + 3; xx < x + w - 4; xx += 6) if (rnd() < 0.3) b.j.push([xx, yy]);
-    out.push(b);
-    x += w + 1.5;
-  }
-  return out;
-}
-const SAGA_PREDIOS_90 = sagaPredios(56, 226, 290, 7, 30, 150);
-const SAGA_PREDIOS_00 = sagaPredios(56, 226, 300, 19, 40, 170);
-const SAGA_PREDIOS_HD = sagaPredios(20, 172, 470, 31, 120, 400);
-
-function SagaPredios({ lista, cor, luz }) {
-  return (
-    <g>
-      {lista.map((b, i) => (
-        <g key={i}>
-          <rect x={b.x} y={b.y} width={b.w} height={b.h} fill={cor} />
-          {b.j.map((j, k) => <rect key={k} x={j[0]} y={j[1]} width="3" height="4" fill={luz} opacity={0.55 + ((i + k) % 3) * 0.15} />)}
-        </g>
-      ))}
-    </g>
-  );
-}
-
-/* ---------- gradientes (ids únicos por instância) ---------- */
 function SagaDefs({ P }) {
   const ac = { stopColor: "var(--gt-ac, #f5c400)" };
   const ac2 = { stopColor: "var(--gt-ac2, #ff3fa4)" };
@@ -348,147 +314,6 @@ function SagaDefs({ P }) {
 }
 
 /* ---------- salas ---------- */
-function SagaPlanta({ x, y, esc = 1, cor = "#2f6b3a" }) {
-  const folhas = [[-26, -40, -35], [22, -46, 30], [-8, -62, -8], [30, -24, 60], [-34, -18, -70], [8, -38, 12], [-18, -52, -28]];
-  return (
-    <g transform={`translate(${x} ${y}) scale(${esc})`}>
-      <ellipse cx="0" cy="2" rx="34" ry="6" fill="#000" opacity=".35" />
-      {folhas.map((f, i) => (
-        <ellipse key={i} cx={f[0]} cy={f[1]} rx="9" ry="26" transform={`rotate(${f[2]} ${f[0]} ${f[1]})`} fill={cor} opacity={0.75 + (i % 3) * 0.1} />
-      ))}
-      <path d="M-22 -14 L22 -14 L16 2 L-16 2 Z" fill="#8a4b2c" />
-      <rect x="-24" y="-18" width="48" height="6" rx="2" fill="#a35d38" />
-    </g>
-  );
-}
-
-function SagaSala90({ P }) {
-  const u = (n) => `url(#${P}${n})`;
-  return (
-    <g>
-      <rect width="1000" height="520" fill={u("parede90")} />
-      <rect width="1000" height="338" fill={u("listras")} />
-      <rect y="336" width="1000" height="12" fill="#2b170c" />
-      <rect y="337" width="1000" height="2" fill="#8a5a38" opacity=".55" />
-      <rect y="348" width="1000" height="160" fill="#3a2114" />
-      {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-        <g key={i}><rect x={i * 128 + 10} y="362" width="108" height="132" rx="3" fill="#43271a" stroke="#22120a" strokeWidth="2" /><rect x={i * 128 + 12} y="364" width="104" height="2" fill="#6e4630" opacity=".6" /></g>
-      ))}
-      <rect y="506" width="1000" height="14" fill="#22130a" />
-      <rect y="520" width="1000" height="80" fill={u("chao90")} />
-      {[0, 1, 2, 3, 4].map((i) => <line key={i} x1="0" y1={530 + i * 16} x2="1000" y2={530 + i * 16} stroke="#1c0f07" strokeWidth="1.5" opacity=".7" />)}
-      {[80, 260, 470, 690, 880, 160, 380, 600, 820].map((x, i) => <line key={i} x1={x} y1={530 + (i % 5) * 16} x2={x} y2={546 + (i % 5) * 16} stroke="#1c0f07" strokeWidth="1.5" opacity=".6" />)}
-      {/* janela com a cidade à noite */}
-      <rect x="50" y="70" width="180" height="224" fill="#2a170c" />
-      <g clipPath={u("jan90")}>
-        <rect x="62" y="82" width="156" height="200" fill={u("ceu90")} />
-        <circle cx="186" cy="112" r="11" fill="#f4e7c4" opacity=".9" />
-        <SagaPredios lista={SAGA_PREDIOS_90} cor="#120c1c" luz="#ffcf6b" />
-      </g>
-      <rect x="137" y="82" width="6" height="200" fill="#2a170c" />
-      <rect x="62" y="178" width="156" height="6" fill="#2a170c" />
-      <rect x="44" y="290" width="192" height="10" rx="2" fill="#3d2414" />
-      <path d="M36 60 L80 60 Q72 180 88 312 L36 312 Z" fill={u("cortina")} />
-      <path d="M244 60 L200 60 Q208 180 192 312 L244 312 Z" fill={u("cortina")} />
-      <rect x="28" y="54" width="226" height="8" rx="4" fill="#1f120a" />
-      <polygon points="80,90 220,90 470,520 160,520" fill={u("facho")} />
-      {[[190, 300], [230, 360], [260, 420], [210, 450], [300, 470], [250, 260], [320, 400]].map((d, i) => <circle key={i} cx={d[0]} cy={d[1]} r={1 + (i % 2)} fill="#fff" opacity=".22" />)}
-      {/* quadro */}
-      <rect x="772" y="112" width="96" height="74" fill="#2a170c" />
-      <rect x="779" y="119" width="82" height="60" fill="#1f2a3a" />
-      <path d="M779 165 L805 142 L822 158 L838 136 L861 165 L861 179 L779 179 Z" fill="#3a5a4a" />
-      <circle cx="845" cy="132" r="6" fill="#e9c97a" opacity=".8" />
-      {/* abajur de pé */}
-      <ellipse cx="910" cy="220" rx="190" ry="210" fill={u("luzQuente")} />
-      <ellipse cx="910" cy="220" rx="150" ry="170" fill={u("luzAc")} opacity=".7" />
-      <rect x="907" y="226" width="5" height="290" fill="#2a1a10" />
-      <ellipse cx="910" cy="516" rx="26" ry="5" fill="#1a0f08" />
-      <path d="M872 168 L948 168 L962 228 L858 228 Z" fill="#e8c88f" />
-      <path d="M872 168 L948 168 L962 228 L858 228 Z" fill="#fff3d6" opacity=".35" />
-      <ellipse cx="910" cy="228" rx="52" ry="5" fill="#fff1c9" opacity=".8" />
-      <SagaPlanta x={130} y={516} esc={1.15} cor="#3a6b34" />
-    </g>
-  );
-}
-
-function SagaSala00({ P }) {
-  const u = (n) => `url(#${P}${n})`;
-  return (
-    <g>
-      <rect width="1000" height="520" fill={u("parede00")} />
-      <ellipse cx="500" cy="0" rx="520" ry="300" fill={u("luzAc")} opacity=".5" />
-      <rect y="506" width="1000" height="14" fill="#0b1020" />
-      <rect y="520" width="1000" height="80" fill={u("chao00")} />
-      {[0, 1, 2, 3, 4, 5].map((i) => <line key={i} x1="0" y1={526 + i * 13} x2="1000" y2={526 + i * 13} stroke="#0c111d" strokeWidth="1" opacity=".5" />)}
-      {/* janela com persiana */}
-      <rect x="50" y="74" width="180" height="234" rx="3" fill="#cfd6e2" />
-      <g clipPath={u("jan00")}>
-        <rect x="62" y="86" width="156" height="210" fill={u("ceu00")} />
-        <SagaPredios lista={SAGA_PREDIOS_00} cor="#070b18" luz="#9fd3ff" />
-        {Array.from({ length: 12 }).map((_, i) => <rect key={i} x="62" y={88 + i * 8} width="156" height="5" fill="#dfe5ee" opacity=".92" />)}
-      </g>
-      <rect x="138" y="86" width="4" height="210" fill="#cfd6e2" />
-      <polygon points="64,186 216,186 520,520 120,520" fill={u("facho")} />
-      {/* pôsteres genéricos */}
-      <g transform="rotate(-2 815 170)">
-        <rect x="764" y="84" width="104" height="150" fill="#f1ece0" />
-        <rect x="770" y="90" width="92" height="138" fill="#22122e" />
-        <circle cx="816" cy="168" r="34" style={{ fill: "var(--gt-ac2, #ff3fa4)" }} opacity=".85" />
-        {[0, 1, 2, 3].map((i) => <rect key={i} x="770" y={170 + i * 9} width="92" height="3" fill="#22122e" />)}
-        <path d="M774 214 L790 200 L846 200 L860 214 Z" fill="#0a0a12" />
-        <circle cx="792" cy="216" r="6" fill="#0a0a12" /><circle cx="842" cy="216" r="6" fill="#0a0a12" />
-        <rect x="778" y="98" width="60" height="8" style={{ fill: "var(--gt-ac, #f5c400)" }} />
-      </g>
-      <g transform="rotate(3 920 170)">
-        <rect x="880" y="104" width="84" height="118" fill="#e9e4d6" />
-        <rect x="886" y="110" width="72" height="106" fill="#0f2a3a" />
-        <path d="M922 120 L930 146 L957 146 L935 162 L943 188 L922 172 L901 188 L909 162 L887 146 L914 146 Z" style={{ fill: "var(--gt-ac, #f5c400)" }} opacity=".9" />
-        <rect x="892" y="196" width="60" height="5" fill="#e9e4d6" opacity=".6" />
-      </g>
-      {/* prateleira de CDs */}
-      <rect x="250" y="64" width="0" height="0" />
-      <rect x="836" y="300" width="130" height="8" fill="#0a0e1a" />
-      {Array.from({ length: 14 }).map((_, i) => <rect key={i} x={840 + i * 8.6} y={256 + (i % 4)} width="7" height={44 - (i % 4)} fill={["#c94a4a", "#3c6fd1", "#e2c14a", "#2e9e7a", "#9a4ad1", "#d9d9d9", "#e07a2e"][i % 7]} opacity=".85" />)}
-      {/* pufe */}
-      <ellipse cx="900" cy="560" rx="80" ry="10" fill="#000" opacity=".35" />
-      <path d="M826 556 Q820 470 900 460 Q980 470 974 556 Q900 572 826 556 Z" fill="#20305a" />
-      <path d="M846 500 Q900 476 954 500" stroke="#2c4278" strokeWidth="6" fill="none" opacity=".7" />
-      <SagaPlanta x={92} y={520} esc={0.95} cor="#2f7a4a" />
-    </g>
-  );
-}
-
-function SagaSalaHd({ P, tv }) {
-  const u = (n) => `url(#${P}${n})`;
-  return (
-    <g>
-      <rect width="1000" height="520" fill={u("paredeHd")} />
-      <rect x="196" y="0" width="608" height="520" fill={u("ripas")} opacity=".9" />
-      <rect x="196" y="0" width="608" height="520" fill="#000" opacity=".25" />
-      {tv && <ellipse cx={tv.x + tv.w / 2} cy={tv.y + tv.h / 2} rx={tv.w * 0.78} ry={tv.h * 0.9} fill={u("luzAc")} />}
-      {tv && <rect x={tv.x + 8} y={tv.y + tv.h * 0.5 - 2} width={tv.w - 16} height="4" fill={u("fita")} opacity=".5" />}
-      <rect y="514" width="1000" height="6" fill="#050607" />
-      <rect y="520" width="1000" height="80" fill={u("chaoHd")} />
-      <rect y="520" width="1000" height="3" fill="#fff" opacity=".04" />
-      {/* janela alta */}
-      <rect x="14" y="32" width="164" height="446" fill="#050608" />
-      <g clipPath={u("janHd")}>
-        <rect x="22" y="40" width="148" height="430" fill={u("ceuHd")} />
-        <SagaPredios lista={SAGA_PREDIOS_HD} cor="#05070e" luz="#ffd28a" />
-        <rect x="22" y="40" width="148" height="430" fill={u("reflexo")} />
-      </g>
-      <rect x="94" y="40" width="3" height="430" fill="#050608" />
-      {/* luminária de arco */}
-      <path d="M940 516 L940 140 Q940 70 860 70" stroke="#2a2c31" strokeWidth="5" fill="none" />
-      <ellipse cx="940" cy="516" rx="22" ry="5" fill="#1b1c20" />
-      <path d="M836 66 Q860 52 884 66 L880 78 L840 78 Z" fill="#30333a" />
-      <ellipse cx="860" cy="100" rx="120" ry="120" fill={u("luzQuente")} opacity=".7" />
-      <SagaPlanta x={890} y={520} esc={1.5} cor="#2c5e3a" />
-    </g>
-  );
-}
-
-/* ---------- móveis (nítidos, com luz suave; a sala atrás fica desfocada) ---------- */
 function SagaVeios({ x0, x1, y0, y1, n = 7, cor = "#000", op = 0.12, seed = 3 }) {
   let s = seed;
   const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
@@ -740,6 +565,15 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
     return c;
   })() : midia.caixa;
 
+  /* a caixa repousa de pé no móvel, ao lado do aparelho (base na base da foto
+   * do aparelho); ao abrir, é "pega" e trazida para perto da câmera */
+  const chaoY = ap.mesa ? ap.caixa.y + caixa.h / 2 : geo.pecas[geo.pecas.length - 1].y + geo.pecas[geo.pecas.length - 1].h - 6;
+  const boxY = chaoY - caixa.h / 2;
+  const dirBox = ap.caixa.x > 500 ? 1 : -1;
+  /* à direita (consoles de mesa) a caixa vem até perto do centro; à esquerda
+   * (cenas HD, TV no centro) sobe quase no lugar, para não cobrir a TV */
+  const pegaX = dirBox > 0 ? 675 : 245, pegaY = boxY - 92, pegaS = dirBox > 0 ? 1.38 : 1.28;
+
   const els = React.useRef({});
   const r = (k) => (el) => { els.current[k] = el; };
 
@@ -787,24 +621,32 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
       const sobeAp = `translate3d(0,${px((1 - d) * 46)},0)`;
       if (E.aparelho) { E.aparelho.style.transform = sobeAp; E.aparelho.style.opacity = d; }
 
-      /* caixa */
-      const ci = sagaEase.out(sagaSeg(p, 0.08, 0.22));
-      const co = sagaEase.in(sagaSeg(p, 0.64, 0.76));
-      const bx = ap.caixa.x + dir * (1 - ci) * 560 + dir * co * 600;
-      const by = ap.caixa.y + (1 - ci) * 70 - Math.sin(ci * Math.PI) * 30 - Math.sin(co * Math.PI) * 20;
+      /* caixa: entra deslizando pelo móvel, para de pé ao lado do aparelho,
+       * é pega (sobe e cresce para a câmera), abre, solta a mídia, fecha e
+       * volta ao lugar — e fica lá, como uma caixa de verdade */
+      const ci = sagaEase.out(sagaSeg(p, 0.05, 0.18));
+      const lift = sagaEase.inOut(sagaSeg(p, 0.19, 0.3)) * (1 - sagaEase.inOut(sagaSeg(p, 0.68, 0.8)));
+      const bxR = ap.caixa.x + dir * (1 - ci) * 640;
+      const byR = boxY + (1 - ci) * 30;
+      const bx = sagaLerp(bxR, pegaX, lift), by = sagaLerp(byR, pegaY, lift);
+      const bs = 1 + (pegaS - 1) * lift;
       if (E.caixa) {
-        E.caixa.style.transform = `translate3d(${px(bx)},${px(by)},0) translate(-50%,-50%)`;
-        E.caixa.style.opacity = sagaSeg(p, 0.08, 0.12) * (1 - co);
-        E.caixa.style.visibility = p < 0.08 || co >= 1 ? "hidden" : "visible";
+        E.caixa.style.transform = `translate3d(${px(bx)},${px(by)},0) translate(-50%,-50%) scale(${bs.toFixed(4)})`;
+        E.caixa.style.opacity = sagaSeg(p, 0.05, 0.09);
+        E.caixa.style.visibility = p < 0.05 ? "hidden" : "visible";
+      }
+      if (E.caixaSombra) {
+        E.caixaSombra.style.transform = `translate3d(${px(bxR)},${px(chaoY)},0) translate(-50%,-50%) scale(${(1 + lift * 0.5).toFixed(3)},${(1 + lift * 0.3).toFixed(3)})`;
+        E.caixaSombra.style.opacity = sagaSeg(p, 0.05, 0.12) * (1 - lift * 0.75);
       }
       if (E.caixaCorpo) {
-        const ry = dir * ((1 - ci) * -62 + 14 * (1 - sagaSeg(p, 0.22, 0.3))) - dir * co * 40;
-        const rz = dir * (1 - ci) * 16;
-        const rx = (1 - ci) * 12 + 6;
+        const ry = dir * ((1 - ci) * -70 + 14 - lift * 24);
+        const rz = dir * (1 - ci) * 10;
+        const rx = 6 + (1 - ci) * 10 + lift * 3;
         E.caixaCorpo.style.transform = `rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) rotateZ(${rz.toFixed(2)}deg)`;
       }
       if (E.capa) {
-        const a = sagaEase.inOut(sagaSeg(p, 0.22, 0.34));
+        const a = sagaEase.inOut(sagaSeg(p, 0.24, 0.36)) * (1 - sagaEase.inOut(sagaSeg(p, 0.63, 0.71)));
         E.capa.style.transform = `translateZ(${caixa.d / 20}em) rotateY(${(-a * 158).toFixed(2)}deg)`;
       }
 
@@ -829,13 +671,13 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
       /* mídia */
       const M = E.midia;
       if (M) {
-        const bx0 = ap.caixa.x, by0 = ap.caixa.y;
-        let x = bx0, y = by0, s = 1, rot = 0, spin = 0, op = 1;
+        const bx0 = pegaX, by0 = pegaY;
+        let x = bx0, y = by0, s = pegaS, rot = 0, spin = 0, op = 1;
         let mat = null;
         const ri = sagaEase.out(sagaSeg(p, 0.34, 0.44));
-        const y0 = by0 - 84;
+        const y0 = by0 - 96;
         if (p < 0.44) {
-          y = sagaLerp(by0, y0, ri); s = 1 + 0.12 * ri; spin = ri * 120;
+          y = sagaLerp(by0, y0, ri); s = pegaS + 0.1 * ri; spin = ri * 120;
           rot = ehCart ? -dir * 10 * ri : 0;
         } else {
           const f = sagaEase.inOut(sagaSeg(p, 0.44, 0.62));
@@ -844,7 +686,7 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
           const u1 = 1 - f;
           x = u1 * u1 * bx0 + 2 * u1 * f * cxp + f * f * c0[0];
           y = u1 * u1 * y0 + 2 * u1 * f * cyp + f * f * c0[1];
-          s = sagaLerp(1.12, 1, f) * (1 + 0.16 * Math.sin(f * Math.PI));
+          s = sagaLerp(pegaS + 0.1, 1, f) * (1 + 0.12 * Math.sin(f * Math.PI));
           spin = 120 + f * 900;
           rot = ehCart ? -dir * 10 * (1 - f) + dir * Math.sin(f * Math.PI) * 24 : 0;
           const cs = Math.cos(rot * Math.PI / 180) * s, sn = Math.sin(rot * Math.PI / 180) * s;
@@ -935,7 +777,7 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
       if (E.brilho) E.brilho.style.opacity = 0.75 * sagaEase.out(sagaSeg(p, 0.74, 0.84));
 
       /* textos e final */
-      const tOp = sagaEase.out(sagaSeg(entrada, 0.35, 1)) * (1 - sagaSeg(p, 0.8, 0.88)) * (dir < 0 ? 1 - 0.8 * sagaSeg(p, 0.12, 0.24) * (1 - sagaSeg(p, 0.66, 0.74)) : 1);
+      const tOp = sagaEase.out(sagaSeg(entrada, 0.35, 1)) * (1 - sagaSeg(p, 0.8, 0.88)) * (dir < 0 ? 1 - 0.85 * sagaSeg(p, 0.17, 0.28) * (1 - sagaSeg(p, 0.7, 0.8)) : 1);
       if (E.texto) { E.texto.style.opacity = tOp; E.texto.style.transform = `translate3d(0,${((1 - sagaEase.out(sagaSeg(entrada, 0.35, 1))) * 24 - sagaSeg(p, 0.8, 0.88) * 20).toFixed(1)}px,0)`; }
       if (E.dica) E.dica.style.opacity = Math.min(eEnt, 1 - sagaSeg(p, 0.01, 0.07));
       if (E.fim) E.fim.style.opacity = sagaEase.inOut(sagaSeg(p, 0.9, 0.99));
@@ -982,7 +824,6 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
   /* ---- posições em % da cena ---- */
   const pos = (x, y, w, h) => ({ left: x / 10 + "%", top: y / 6 + "%", width: w / 10 + "%", height: h / 6 + "%" });
   const tvBrilho = pos(t.x + t.w / 2 - t.w * 1.6, t.y + t.h / 2 - t.h * 1.9, t.w * 3.2, t.h * 3.8);
-  const tvParaSala = sala === "hd" && !ap.mesa ? t : null;
   const bnd = I.bandeja, tmp = I.tampa;
   const arteImg = (cls) => img ? <img className={cls} src={img} alt="" decoding="async" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" /> : null;
 
@@ -991,11 +832,9 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
       <h2 className="sgc-sr">{titulo} — {cap.plataforma}, {cap.ano}</h2>
       <div className="sgc-palco" ref={r("palco")} aria-hidden="true">
         <div className="sgc-cena" ref={r("cena")}>
-          <svg className="sgc-svg sgc-fundo" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" focusable="false">
-            <SagaDefs P={P} />
-            {sala === "90s" ? <SagaSala90 P={P} /> : sala === "hd" ? <SagaSalaHd P={P} tv={tvParaSala} /> : <SagaSala00 P={P} />}
-          </svg>
+          <div className="sgc-fundo" />
           <svg className="sgc-svg sgc-moveis" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <SagaDefs P={P} />
             <SagaMovel P={P} movel={ap.movel} />
           </svg>
           <div className="sgc-aparelho" ref={r("aparelho")}>
@@ -1027,6 +866,7 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
           </div>
           <div className="sgc-luz" />
 
+          <span className="sgc-caixa-sombra" ref={r("caixaSombra")} style={{ width: caixa.w * 1.3 / 10 + "em", height: caixa.d * 2.6 / 10 + "em" }} />
           <div className="sgc-caixa" ref={r("caixa")} data-estilo={caixa.estilo} data-real={real ? "1" : undefined} style={{ "--w": caixa.w / 10 + "em", "--h": caixa.h / 10 + "em", "--d": caixa.d / 10 + "em" }}>
             <div className="sgc-caixa-corpo" ref={r("caixaCorpo")}>
               <div className="sgc-caixa-fundo">
@@ -1053,7 +893,7 @@ function SagaCena({ cap, game, index = 0, total = 16 }) {
                 ) : (
                   <div className="sgc-capa-frente">{arteImg("")}<span className="sgc-capa-selo">{cap.plataforma}</span></div>
                 )}
-                {real ? <div className="sgc-capa-verso" data-real="1" /> : <div className="sgc-capa-verso"><b>{tt.m}</b><i /><i /><i /><i /><i /></div>}
+                {real ? <div className="sgc-capa-verso" data-real="1" style={{ backgroundImage: `url(${realCaixa})` }} /> : <div className="sgc-capa-verso"><b>{tt.m}</b><i /><i /><i /><i /><i /></div>}
               </div>
             </div>
           </div>
